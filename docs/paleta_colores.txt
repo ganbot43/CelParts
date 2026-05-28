@@ -1,0 +1,182 @@
+🎨 Paleta base — Branding Joymar (Versión Clara)
+
+Color primario (magenta elegante): #B01883
+Color secundario (blanco principal): #FFFFFF
+
+🎨 Colores complementarios
+
+Magenta oscuro (hover / profundidad): #7A0F5C
+Magenta claro (acentos suaves): #D94CB0
+Amarillo cocina / acento cálido: #F7D21E
+Amarillo intenso (promociones): #FFD735
+Gris claro (fondos suaves / UI): #F5F5F5
+Gris medio (bordes / cards): #D9D9D9
+Gris oscuro (texto principal): #2B2B2B
+Negro suave (contraste elegante): #121212
+
+⚙️ Instrucciones de implementación
+
+1. Fondo general
+
+Base principal: blanco #FFFFFF para transmitir limpieza, cocina y hogar.
+
+Alternativa para secciones:
+gris muy claro #F5F5F5.
+
+Evitar fondos negros extensos para no perder sensación de limpieza y practicidad.
+
+2. Header / Navbar
+
+Fondo: blanco #FFFFFF
+Texto: #2B2B2B
+
+Logo:
+versión original o dark sobre fondo claro.
+
+CTA principal:
+Fondo: #B01883
+Texto: #FFFFFF
+
+Hover:
+#7A0F5C
+
+Border bottom sutil:
+#EAEAEA
+
+3. Botones
+Primarios
+
+Fondo: #B01883
+Texto: #FFFFFF
+
+Hover:
+#7A0F5C
+
+Sombra:
+rgba(176, 24, 131, 0.25)
+
+Secundarios
+
+Borde: #F7D21E
+Texto: #B01883
+Fondo: transparente
+
+Hover:
+Fondo #F7D21E
+Texto #121212
+
+4. Tipografía
+
+Títulos:
+#2B2B2B
+
+Texto general:
+#555555
+
+Texto secundario:
+#777777
+
+Precios/promociones:
+#B01883 o #F7D21E
+
+5. Secciones destacadas
+
+Fondos:
+blanco o gris claro #F5F5F5
+
+Íconos y detalles:
+#B01883 y #F7D21E
+
+Separadores:
+#EAEAEA
+
+👉 La web debe sentirse:
+limpia, moderna, cálida y comercial.
+
+6. Cards / Productos
+
+Fondo:
+#FFFFFF
+
+Bordes:
+#E5E5E5
+
+Títulos:
+#2B2B2B
+
+Texto:
+#666666
+
+Hover:
+border #B01883
+shadow suave magenta:
+
+box-shadow: 0 10px 30px rgba(176, 24, 131, 0.12);
+7. Iconografía
+
+Base:
+#555555
+
+Activo/importante:
+#B01883
+
+Promociones/ofertas:
+#F7D21E
+
+8. Formularios
+
+Inputs:
+Fondo: #FFFFFF
+Borde: #D9D9D9
+Texto: #2B2B2B
+
+Focus:
+Borde #B01883
+
+Glow:
+rgba(176, 24, 131, 0.15)
+
+Botón enviar:
+estilo CTA principal.
+
+9. Footer
+
+Fondo:
+#121212
+
+Texto:
+#FFFFFF
+
+Links:
+#D9D9D9
+
+Hover:
+#F7D21E
+
+🎯 Objetivo visual
+
+Transmitir:
+
+✔ Cocina y hogar
+✔ Limpieza y organización
+✔ Productos útiles y modernos
+✔ Confianza para comprar
+✔ Sensación comercial y amigable
+
+La web debe sentirse:
+“premium pero accesible”.
+
+💡 Extra pro
+
+Gradiente recomendado:
+
+linear-gradient(135deg, #B01883, #F7D21E)
+
+Glow elegante:
+
+box-shadow: 0 0 18px rgba(176, 24, 131, 0.18);
+
+Color para badges “Nuevo / Oferta”:
+
+background: #FFD735;
+color: #121212;

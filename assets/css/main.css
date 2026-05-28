@@ -1,0 +1,256 @@
+@import "tailwindcss";
+
+@theme {
+    --v-red: #E31E24;
+    --v-red-dark: #B31217;
+    --v-red-light: #FF4C4C;
+    --v-yellow: #FFC107;
+    --v-yellow-spark: #FFD54A;
+    --v-black: #000000;
+    --v-dark-alt: #121212;
+    --v-gray-light: #D9D9D9;
+    --v-white: #FFFFFF;
+}
+
+:root {
+    --brand-primary: var(--v-red);
+    --brand-primary-hover: var(--v-red-dark);
+    --brand-accent: var(--v-yellow);
+    --brand-accent-spark: var(--v-yellow-spark);
+    --brand-black: var(--v-black);
+    --brand-dark-alt: var(--v-dark-alt);
+    --brand-text: var(--v-gray-light);
+    --brand-white: var(--v-white);
+    --scrollbar-track: #f5f5f5;
+    --scrollbar-thumb: #B01883;
+    --scrollbar-thumb-hover: #F7D21E;
+}
+
+body {
+    font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--brand-text);
+    background-color: var(--brand-white);
+    overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 104px;
+    scrollbar-gutter: stable;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+section[id] {
+    scroll-margin-top: 104px;
+}
+
+/* Scrollbar — landing (scope fuera del admin) */
+html:not(:has(.smart-panel-admin))::-webkit-scrollbar,
+body:not(:has(.smart-panel-admin)) *::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+html:not(:has(.smart-panel-admin))::-webkit-scrollbar-track,
+body:not(:has(.smart-panel-admin)) *::-webkit-scrollbar-track {
+    background: linear-gradient(180deg, #111111 0%, #1a1a1a 100%);
+}
+
+html:not(:has(.smart-panel-admin))::-webkit-scrollbar-thumb,
+body:not(:has(.smart-panel-admin)) *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--scrollbar-thumb) 0%, var(--v-red-dark) 100%);
+    border-radius: 999px;
+    border: 2px solid var(--scrollbar-track);
+}
+
+html:not(:has(.smart-panel-admin))::-webkit-scrollbar-thumb:hover,
+body:not(:has(.smart-panel-admin)) *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--scrollbar-thumb-hover) 0%, var(--scrollbar-thumb) 100%);
+}
+
+/* Firefox */
+html:not(:has(.smart-panel-admin)) {
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: auto;
+}
+
+@media (max-width: 768px) {
+
+    html:not(:has(.smart-panel-admin))::-webkit-scrollbar,
+    body:not(:has(.smart-panel-admin)) *::-webkit-scrollbar {
+        width: 9px;
+        height: 9px;
+    }
+}
+
+.grecaptcha-badge {
+    visibility: hidden !important;
+    bottom: 90px !important;
+    right: 15px !important;
+    z-index: 9999 !important;
+}
+
+::selection {
+    background-color: var(--brand-accent);
+    color: var(--brand-black);
+}
+
+h1,
+h2,
+h3,
+.display-serif {
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Utilities y componentes temáticos para Vulcano Fireworks */
+
+:root {
+    --glow-red: 0 0 18px rgba(227, 30, 36, 0.45);
+    --glow-yellow: 0 0 18px rgba(255, 193, 7, 0.35);
+}
+
+.fire-gradient {
+    background: linear-gradient(135deg, var(--v-red), var(--v-yellow));
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.btn-primary {
+    background-color: var(--brand-primary);
+    color: var(--brand-white);
+    padding: 0.66rem 1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+    box-shadow: var(--glow-red);
+}
+
+.btn-primary:hover {
+    background-color: var(--brand-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(179, 18, 23, 0.25);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--brand-primary);
+    border: 2px solid var(--brand-primary);
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    transition: background-color .12s ease, color .12s ease;
+}
+
+.btn-outline:hover {
+    background: var(--brand-primary);
+    color: var(--brand-white);
+}
+
+/* Header y footer */
+.site-header,
+.site-footer {
+    background-color: var(--brand-black);
+    color: var(--brand-white);
+}
+
+.site-header a,
+.site-footer a {
+    color: var(--v-gray-light);
+}
+
+.site-header a:hover,
+.site-footer a:hover {
+    color: var(--brand-primary);
+}
+
+/* Cards / productos */
+.card,
+.product-card {
+    background-color: var(--brand-dark-alt);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--brand-white);
+    border-radius: 12px;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), var(--glow-red);
+    border-color: var(--brand-accent-spark);
+}
+
+/* Separadores y líneas de acento */
+.accent-line {
+    height: 4px;
+    background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+    border-radius: 4px;
+}
+
+/* Formularios */
+input[type="text"],
+input[type="email"],
+textarea {
+    background: transparent;
+    border: 1px solid #333333;
+    color: var(--brand-white);
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: var(--glow-red);
+}
+
+/* Utility glow */
+.glow-red {
+    box-shadow: var(--glow-red);
+}
+
+.glow-yellow {
+    box-shadow: var(--glow-yellow);
+}
+
+/* Footer small text */
+.footer-note {
+    color: var(--v-gray-light);
+    opacity: 0.9;
+}
+
+/* Responsive tweaks for dark hero */
+.hero-section {
+    background-color: var(--brand-black);
+    color: var(--brand-white);
+}
+
+
+
+:root {
+    --font-display: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+    font-family: var(--font-body);
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+}

@@ -1,0 +1,54 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Nuxt build and cache
+.nuxt
+.output
+.vite-cache
+
+# Dependency directories
+node_modules/
+
+# Tailwind cache
+tailwind.config.js
+tailwind.config.cjs
+
+# Dist and build files
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+
+# SQLite database
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# Uploaded images
+public/uploads/

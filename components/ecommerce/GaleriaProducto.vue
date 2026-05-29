@@ -94,11 +94,11 @@ watch(
 
 <style scoped>
 .galeria-producto {
-  --jm-magenta: #b01883;
-  --jm-magenta-glow: rgba(176, 24, 131, 0.22);
-  --jm-magenta-line: rgba(176, 24, 131, 0.2);
+  --kite-green: #2D6A4F;
+  --kite-green-glow: rgba(45, 106, 79, 0.22);
+  --kite-green-line: rgba(45, 106, 79, 0.2);
   --jm-card-border: #e8e8e8;
-  --jm-card-border-hover: rgba(176, 24, 131, 0.35);
+  --jm-card-border-hover: rgba(45, 106, 79, 0.35);
   --jm-img-bg: #f5f5f5;
   --radius: 14px;
   --radius-sm: 10px;
@@ -142,9 +142,9 @@ watch(
 .galeria-imagen-principal-contenedor:hover {
   border-color: var(--jm-card-border-hover);
   box-shadow:
-    0 0 0 1px var(--jm-magenta-line),
+    0 0 0 1px var(--kite-green-line),
     0 12px 40px rgba(0, 0, 0, 0.08),
-    0 0 28px var(--jm-magenta-glow);
+    0 0 28px var(--kite-green-glow);
 }
 
 .galeria-imagen-principal {
@@ -203,7 +203,7 @@ watch(
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: var(--jm-magenta);
+  background: var(--kite-green);
   color: #fff;
   font-size: 0.62rem;
   font-weight: 800;
@@ -211,13 +211,13 @@ watch(
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: 999px;
-  box-shadow: 0 2px 10px var(--jm-magenta-glow);
+  box-shadow: 0 2px 10px var(--kite-green-glow);
 }
 
 .galeria-insignia-icono {
   width: 12px;
   height: 12px;
-  color: #f7d21e;
+  color: #E9C46A;
   flex-shrink: 0;
 }
 
@@ -231,7 +231,7 @@ watch(
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(176, 24, 131, 0.75);
+  background: rgba(45, 106, 79, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 3px 9px;
   border-radius: 999px;
@@ -269,14 +269,14 @@ watch(
 }
 
 .galeria-miniatura-boton:hover {
-  border-color: rgba(176, 24, 131, 0.3);
+  border-color: rgba(45, 106, 79, 0.3);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--jm-magenta-glow);
+  box-shadow: 0 4px 12px var(--kite-green-glow);
 }
 
 .galeria-miniatura-boton.activa {
-  border: 1.5px solid var(--jm-magenta);
-  box-shadow: 0 0 0 1px var(--jm-magenta-line);
+  border: 1.5px solid var(--kite-green);
+  box-shadow: 0 0 0 1px var(--kite-green-line);
 }
 
 .galeria-miniatura-imagen {

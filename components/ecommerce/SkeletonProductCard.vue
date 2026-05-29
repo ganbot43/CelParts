@@ -40,18 +40,21 @@ const props = withDefaults(defineProps<{ count?: number }>(), {
 }
 
 .sk-item {
-  background: #ffffff;
-  border: 1px solid #e8e8e8;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(226, 224, 217, 0.5);
   border-radius: 14px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 .sk-img {
   aspect-ratio: 1 / 1;
-  background: #f0f0f0;
+  background: rgba(241, 239, 234, 0.9);
   position: relative;
   overflow: hidden;
 }
@@ -63,7 +66,7 @@ const props = withDefaults(defineProps<{ count?: number }>(), {
   width: 64px;
   height: 18px;
   border-radius: 999px;
-  background: #e2e2e2;
+  background: rgba(45, 106, 79, 0.12);
 }
 
 .sk-body {
@@ -77,14 +80,14 @@ const props = withDefaults(defineProps<{ count?: number }>(), {
 .sk-line {
   height: 12px;
   border-radius: 6px;
-  background: #f0f0f0;
+  background: rgba(45, 106, 79, 0.08);
 }
 
 .sk-price {
   height: 18px;
   width: 50%;
   border-radius: 6px;
-  background: #f0f0f0;
+  background: rgba(45, 106, 79, 0.12);
   margin-top: 4px;
 }
 
@@ -98,14 +101,14 @@ const props = withDefaults(defineProps<{ count?: number }>(), {
   flex: 1;
   height: 34px;
   border-radius: 8px;
-  background: #f0f0f0;
+  background: rgba(45, 106, 79, 0.08);
 }
 
 .sk-btn-wa {
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: #f0f0f0;
+  background: rgba(233, 196, 106, 0.12);
   flex-shrink: 0;
 }
 

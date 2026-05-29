@@ -38,23 +38,23 @@ defineProps<{
 }
 
 .btn-primary {
-  background: var(--magenta);
+  background: #2D6A4F;
   color: #fff;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 14px rgba(45, 106, 79, 0.15);
 }
 .btn-primary:hover {
-  background: var(--magenta-dark);
+  background: #1E4D38;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md), var(--glow-magenta);
+  box-shadow: 0 12px 30px rgba(45, 106, 79, 0.25);
 }
 
 .btn-outline {
   background: transparent;
-  color: var(--magenta);
-  border: 2px solid var(--magenta);
+  color: #2D6A4F;
+  border: 2px solid #2D6A4F;
 }
 .btn-outline:hover {
-  background: var(--magenta);
+  background: #2D6A4F;
   color: #fff;
   transform: translateY(-2px);
 }
@@ -62,23 +62,23 @@ defineProps<{
 .btn-wa {
   background: #25D366;
   color: #fff;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.20);
 }
 .btn-wa:hover {
   background: #1ebe59;
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(37,211,102,.3);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, .3);
 }
 
 .btn-accent {
-  background: var(--yellow);
-  color: var(--text-title);
+  background: #E9C46A;
+  color: #111111;
   font-weight: 700;
 }
 .btn-accent:hover {
-  background: var(--yellow-spark);
+  background: #D9AF49;
   transform: translateY(-2px);
-  box-shadow: var(--glow-yellow);
+  box-shadow: 0 8px 24px rgba(233, 196, 106, 0.30);
 }
 
 .btn-sm { padding: .45rem .85rem; font-size: .82rem; }

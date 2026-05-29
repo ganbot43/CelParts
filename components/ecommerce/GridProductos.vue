@@ -10,7 +10,7 @@
       <div
         v-for="i in 8"
         :key="`sk-${i}`"
-        class="bg-gray-100 dark:bg-gray-800 rounded-2xl animate-pulse"
+        class="grid-skeleton"
         style="aspect-ratio: 0.8/1;"
       />
     </template>
@@ -29,3 +29,18 @@
 import type { Product } from '~/types'
 defineProps<{ products: Product[]; loading?: boolean }>()
 </script>
+
+<style scoped>
+.grid-skeleton {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(226, 224, 217, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.grid-empty {
+  color: #66625a;
+}
+</style>

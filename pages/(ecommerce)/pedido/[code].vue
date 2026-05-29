@@ -280,8 +280,8 @@ const waUrl = computed(
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: rgba(176, 24, 131, 0.08);
-  border: 2px solid rgba(176, 24, 131, 0.2);
+  background: rgba(45, 106, 79, 0.08);
+  border: 2px solid rgba(45, 106, 79, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -292,12 +292,12 @@ const waUrl = computed(
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #B01883, #7A0F5C);
+  background: linear-gradient(135deg, #2D6A4F, #1E4D38);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 6px 20px rgba(176, 24, 131, 0.35);
+  box-shadow: 0 6px 20px rgba(45, 106, 79, 0.35);
 }
 
 .success-title {
@@ -316,13 +316,13 @@ const waUrl = computed(
 
 .order-code {
   font-weight: 700;
-  color: #B01883;
+  color: #2D6A4F;
   font-family: monospace;
   font-size: 1rem;
-  background: #fdf0f9;
+  background: rgba(45, 106, 79, 0.08);
   padding: 0.1rem 0.5rem;
   border-radius: 6px;
-  border: 1px solid rgba(176, 24, 131, 0.2);
+  border: 1px solid rgba(45, 106, 79, 0.2);
 }
 
 .success-badge {
@@ -330,19 +330,19 @@ const waUrl = computed(
   align-items: center;
   gap: 0.4rem;
   padding: 0.35rem 0.875rem;
-  background: #fdf0f9;
-  border: 1px solid rgba(176, 24, 131, 0.2);
+  background: rgba(45, 106, 79, 0.08);
+  border: 1px solid rgba(45, 106, 79, 0.2);
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #B01883;
+  color: #2D6A4F;
 }
 
 .badge-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #B01883;
+  background: #2D6A4F;
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
@@ -365,11 +365,13 @@ const waUrl = computed(
 }
 
 .confirm-card {
-  background: #ffffff;
-  border: 1.5px solid #E5E5E5;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1.5px solid rgba(226, 224, 217, 0.5);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(176, 24, 131, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 12px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 /* ─── Card header ────────────────────────────────────────── */
@@ -378,19 +380,19 @@ const waUrl = computed(
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 1.25rem;
-  border-bottom: 1.5px solid #E5E5E5;
+  border-bottom: 1.5px solid rgba(226, 224, 217, 0.5);
 }
 
 .card-header-icon {
   width: 32px;
   height: 32px;
-  background: #fdf0f9;
-  border: 1px solid #f0c8e8;
+  background: rgba(45, 106, 79, 0.08);
+  border: 1px solid rgba(45, 106, 79, 0.2);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #B01883;
+  color: #2D6A4F;
   flex-shrink: 0;
 }
 
@@ -414,7 +416,7 @@ const waUrl = computed(
   justify-content: space-between;
   gap: 1rem;
   padding: 0.6rem 0;
-  border-bottom: 1px solid #F5F5F5;
+  border-bottom: 1px solid rgba(226, 224, 217, 0.5);
 }
 .order-item:last-child {
   border-bottom: none;
@@ -430,12 +432,12 @@ const waUrl = computed(
 .order-item-qty {
   width: 24px;
   height: 24px;
-  background: #fdf0f9;
-  border: 1px solid #f0c8e8;
+  background: rgba(45, 106, 79, 0.08);
+  border: 1px solid rgba(45, 106, 79, 0.2);
   border-radius: 6px;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #B01883;
+  color: #2D6A4F;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -463,8 +465,8 @@ const waUrl = computed(
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.25rem;
-  background: #fdf0f9;
-  border-top: 1.5px solid rgba(176, 24, 131, 0.2);
+  background: rgba(45, 106, 79, 0.06);
+  border-top: 1.5px solid rgba(45, 106, 79, 0.2);
 }
 
 .card-total-label {
@@ -476,7 +478,7 @@ const waUrl = computed(
 .card-total-val {
   font-size: 1.4rem;
   font-weight: 900;
-  color: #B01883;
+  color: #2D6A4F;
   letter-spacing: -0.03em;
 }
 
@@ -493,8 +495,8 @@ const waUrl = computed(
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.875rem;
-  background: #F5F5F5;
-  border: 1px solid #E5E5E5;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(226, 224, 217, 0.5);
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
@@ -503,8 +505,8 @@ const waUrl = computed(
 }
 
 .payment-account {
-  background: #F5F5F5;
-  border: 1.5px solid #E5E5E5;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1.5px solid rgba(226, 224, 217, 0.5);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -515,7 +517,7 @@ const waUrl = computed(
   align-items: center;
   padding: 0.7rem 1rem;
   font-size: 0.85rem;
-  border-bottom: 1px solid #E5E5E5;
+  border-bottom: 1px solid rgba(226, 224, 217, 0.5);
 }
 .account-row:last-child {
   border-bottom: none;
@@ -546,10 +548,12 @@ const waUrl = computed(
 .qr-frame {
   display: inline-block;
   padding: 0.75rem;
-  background: #ffffff;
-  border: 1.5px solid #E5E5E5;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1.5px solid rgba(226, 224, 217, 0.5);
   border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(176, 24, 131, 0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 .qr-img {
@@ -561,15 +565,17 @@ const waUrl = computed(
 
 /* ─── WhatsApp card ──────────────────────────────────────── */
 .whatsapp-card {
-  background: #ffffff;
-  border: 1.5px solid #E5E5E5;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1.5px solid rgba(226, 224, 217, 0.5);
   border-radius: 18px;
   padding: 1.25rem;
   display: flex;
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
-  box-shadow: 0 2px 12px rgba(176, 24, 131, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 12px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 .wa-icon-wrap {
@@ -641,6 +647,6 @@ const waUrl = computed(
   transition: color 0.15s;
 }
 .back-link:hover {
-  color: #B01883;
+  color: #2D6A4F;
 }
 </style>

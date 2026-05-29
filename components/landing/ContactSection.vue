@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { waLink } = useJoymar();
+const { waLink } = useKite();
 
 const channels = [
   {
@@ -12,22 +12,22 @@ const channels = [
   {
     icon: "📸",
     label: "Instagram",
-    handle: "@joymar.utensilios",
-    href: "https://instagram.com/joymar",
+    handle: "@kite.utensilios",
+    href: "https://instagram.com/kite",
     type: "ig",
   },
   {
     icon: "👍",
     label: "Facebook",
-    handle: "Joymar Utensilios de Cocina",
-    href: "https://facebook.com/joymar",
+    handle: "Kite Utensilios de Cocina",
+    href: "https://facebook.com/kite",
     type: "fb",
   },
   {
     icon: "✉️",
     label: "Correo electrónico",
-    handle: "joymar.peru@gmail.com",
-    href: "mailto:joymar.peru@gmail.com",
+    handle: "hola@kite.com",
+    href: "mailto:hola@kite.com",
     type: "mail",
   },
 ];
@@ -49,7 +49,7 @@ const form = reactive({
 });
 
 function handleSubmit() {
-  const msg = `Hola Joymar! Mi nombre es ${form.nombre}. ${form.asunto ? `Asunto: ${form.asunto}. ` : ""}${form.mensaje}`;
+  const msg = `Hola Kite! Mi nombre es ${form.nombre}. ${form.asunto ? `Asunto: ${form.asunto}. ` : ""}${form.mensaje}`;
   window.open(waLink(msg), "_blank", "noopener");
 }
 </script>
@@ -123,7 +123,7 @@ function handleSubmit() {
             <input
               v-model="form.email"
               type="email"
-              placeholder="joymar.peru@gmail.com"
+              placeholder="hola@kite.com"
             />
           </div>
 
@@ -164,24 +164,25 @@ function handleSubmit() {
 
 <style scoped>
 .contact {
-  --magenta: #b01883;
-  --magenta-dark: #7a0f5c;
-  --magenta-tint: rgba(176, 24, 131, 0.08);
-  --yellow: #f7d21e;
+  --kite-green: #2D6A4F;
+  --kite-green-dark: #1E4D38;
+  --kite-yellow: #E9C46A;
+  --kite-green-soft: rgba(45, 106, 79, 0.10);
 
-  --bg: #ffffff;
-  --bg-alt: #fafafa;
+  --bg: #F8F7F4;
+  --bg-alt: #F1EFEA;
+  --bg-surface: #FFFFFF;
 
-  --text-title: #2b2b2b;
-  --text-muted: #6b6b6b;
+  --text-title: #111111;
+  --text-muted: #66625A;
 
-  --border: #e8e8e8;
+  --border: #E2E0D9;
 
-  --radius: 16px;
-  --radius-lg: 26px;
+  --radius: 14px;
+  --radius-lg: 20px;
 
-  --shadow-sm: 0 10px 25px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 25px 60px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 10px 25px rgba(17, 17, 17, 0.05);
+  --shadow-md: 0 25px 60px rgba(17, 17, 17, 0.08);
 
   padding: 120px 0;
   background: linear-gradient(180deg, var(--bg-alt), var(--bg));
@@ -208,7 +209,7 @@ function handleSubmit() {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--magenta);
+  color: var(--kite-green);
   margin-bottom: 14px;
 }
 
@@ -217,7 +218,8 @@ function handleSubmit() {
   content: "";
   width: 26px;
   height: 2px;
-  background: var(--magenta);
+  background: var(--kite-green);
+  border-radius: 2px;
 }
 
 .section-title {
@@ -229,7 +231,7 @@ function handleSubmit() {
 .accent-dot {
   width: 6px;
   height: 6px;
-  background: var(--yellow);
+  background: var(--kite-yellow);
   border-radius: 50%;
   display: inline-block;
   margin-left: 4px;
@@ -265,16 +267,19 @@ function handleSubmit() {
   align-items: center;
   gap: 14px;
   padding: 18px 20px;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(226, 224, 217, 0.5);
   border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   text-decoration: none;
   transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .contact-channel:hover {
   transform: translateX(6px);
-  border-color: var(--magenta);
+  border-color: var(--kite-green);
   box-shadow: var(--shadow-sm);
 }
 
@@ -289,16 +294,20 @@ function handleSubmit() {
 }
 
 .contact-channel-icon.wa {
-  background: #dcf8e8;
+  background: var(--kite-green-soft);
+  color: var(--kite-green);
 }
 .contact-channel-icon.ig {
-  background: #fde8f0;
+  background: rgba(233, 196, 106, 0.10);
+  color: var(--kite-yellow);
 }
 .contact-channel-icon.fb {
-  background: #e7f0ff;
+  background: rgba(231, 111, 81, 0.10);
+  color: #E76F51;
 }
 .contact-channel-icon.mail {
-  background: var(--magenta-tint);
+  background: var(--kite-green-soft);
+  color: var(--kite-green);
 }
 
 .contact-channel-text strong {
@@ -319,11 +328,13 @@ function handleSubmit() {
 
 /* FORM */
 .contact-form {
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(226, 224, 217, 0.5);
   border-radius: var(--radius-lg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   padding: 42px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 32px rgba(17, 17, 17, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .contact-form h3 {
@@ -355,8 +366,9 @@ function handleSubmit() {
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: var(--magenta);
-  box-shadow: 0 0 0 3px rgba(176, 24, 131, 0.1);
+  border-color: var(--kite-green);
+  box-shadow: 0 0 0 3px var(--kite-green-soft);
+  outline: none;
 }
 
 textarea {

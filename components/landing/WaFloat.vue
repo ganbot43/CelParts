@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const { waLink } = useJoymar()
+const { waLink } = useKite()
 </script>
 
 <template>
   <div class="wa-float">
     <div class="wa-float-tooltip">¡Escríbenos!</div>
     <a
-      :href="waLink('Hola Joymar, vi su web y quisiera consultar')"
+      :href="waLink('Hola Kite, vi su web y quisiera consultar')"
       class="wa-float-btn"
       target="_blank"
       rel="noopener"

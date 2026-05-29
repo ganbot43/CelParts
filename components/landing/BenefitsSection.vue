@@ -1,44 +1,44 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const { waLink } = useJoymar();
+const { waLink } = useKite();
 
 const benefits = [
   {
-    icon: "🧪",
-    title: "Productos probados",
+    icon: "check",
+    title: "Selección profesional",
     description:
-      "Verificamos cada artículo antes de ponerlo a la venta. Si no nos convence, no lo vendemos.",
+      "Elegimos productos pensados para restaurantes premium y cocinas de alto rendimiento.",
   },
   {
-    icon: "🛡️",
-    title: "Calidad garantizada",
+    icon: "shield",
+    title: "Calidad de nivel gastronómico",
     description:
-      "Solo trabajamos con materiales resistentes y funcionales. Tu inversión debe durar.",
+      "Trabajamos con materiales resistentes, elegantes y preparados para uso profesional.",
   },
   {
-    icon: "💬",
-    title: "Atención vía WhatsApp",
+    icon: "chat",
+    title: "Asesoría especializada",
     description:
-      "Respondemos rápido. Te asesoramos para que encuentres exactamente lo que necesitas.",
+      "Te ayudamos a encontrar el equipamiento ideal según el estilo y necesidad de tu restaurante.",
   },
   {
-    icon: "🏪",
-    title: "Tienda física en Lima",
+    icon: "store",
+    title: "Showroom en Lima",
     description:
-      "Puedes venir a vernos en Villa El Salvador. Toca los productos antes de decidir.",
+      "Conoce nuestros productos de cerca y evalúa cada detalle antes de equipar tu cocina.",
   },
   {
-    icon: "🚚",
-    title: "Envíos a todo Lima",
+    icon: "truck",
+    title: "Entregas seguras",
     description:
-      "Coordinamos la entrega de tu pedido de forma rápida y segura donde estés.",
+      "Coordinamos envíos rápidos y confiables para restaurantes y negocios gastronómicos.",
   },
   {
-    icon: "🇵🇪",
+    icon: "peru",
     title: "Marca peruana",
     description:
-      "Somos una empresa local comprometida con el hogar peruano. Tu confianza nos impulsa.",
+      "Kite impulsa la gastronomía peruana con equipamiento moderno y funcional.",
   },
 ];
 
@@ -46,12 +46,10 @@ const slider = ref<HTMLElement | null>(null);
 
 const scroll = (dir: "left" | "right") => {
   if (!slider.value) return;
-
   const card = slider.value.querySelector(".benefit-slide") as HTMLElement;
   if (!card) return;
-  
-  // Scroll de 1 en 1 (ancho de una tarjeta + gap)
-  const scrollAmount = card.offsetWidth + 28;
+
+  const scrollAmount = card.offsetWidth + 20;
 
   slider.value.scrollBy({
     left: dir === "left" ? -scrollAmount : scrollAmount,
@@ -63,27 +61,40 @@ const scroll = (dir: "left" | "right") => {
 <template>
   <section class="benefits" id="beneficios">
     <div class="benefits-container">
+
+      <!-- Header -->
       <div class="benefits-header">
-        <span class="section-label">¿Por qué elegirnos?</span>
+        <span class="section-label">Kite Professional Supply</span>
 
         <h2 class="section-title">
-          La diferencia Joymar<span class="accent-dot" />
+          Equipamiento para restaurantes de lujo
+          <span class="accent-dot" />
         </h2>
 
         <p class="section-subtitle">
-          Cada decisión que tomamos está pensada en darte la mejor experiencia
-          de compra.
+          Productos premium para chefs, restaurantes y cocinas
+          que buscan calidad, diseño y rendimiento profesional.
         </p>
       </div>
 
+      <!-- Slider -->
       <div class="benefits-slider-area">
+
         <button
           class="slider-btn slider-btn-left"
           type="button"
           aria-label="Ver beneficios anteriores"
           @click="scroll('left')"
         >
-          ‹
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M10 12L6 8l4-4"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </button>
 
         <div class="benefits-slider" ref="slider">
@@ -93,13 +104,120 @@ const scroll = (dir: "left" | "right") => {
             class="benefit-slide"
           >
             <article class="benefit-card">
+
+              <!-- Ícono SVG -->
               <div class="benefit-icon">
-                {{ benefit.icon }}
+
+                <!-- check -->
+                <svg
+                  v-if="benefit.icon === 'check'"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 12l2 2 4-4"/>
+                  <circle cx="12" cy="12" r="9"/>
+                </svg>
+
+                <!-- shield -->
+                <svg
+                  v-else-if="benefit.icon === 'shield'"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+
+                <!-- chat -->
+                <svg
+                  v-else-if="benefit.icon === 'chat'"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                </svg>
+
+                <!-- store -->
+                <svg
+                  v-else-if="benefit.icon === 'store'"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+
+                <!-- truck -->
+                <svg
+                  v-else-if="benefit.icon === 'truck'"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="1" y="3" width="15" height="13" rx="1"/>
+                  <path d="M16 8h4l3 5v4h-7V8z"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+
+                <!-- peru -->
+                <svg
+                  v-else-if="benefit.icon === 'peru'"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 014-10z"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                </svg>
+
               </div>
 
-              <h3>{{ benefit.title }}</h3>
+              <div class="benefit-body">
+                <h3>{{ benefit.title }}</h3>
+                <p>{{ benefit.description }}</p>
+              </div>
 
-              <p>{{ benefit.description }}</p>
             </article>
           </div>
         </div>
@@ -110,122 +228,170 @@ const scroll = (dir: "left" | "right") => {
           aria-label="Ver más beneficios"
           @click="scroll('right')"
         >
-          ›
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M6 4l4 4-4 4"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </button>
+
       </div>
 
+      <!-- CTA -->
       <div class="benefits-cta">
+
         <div class="benefits-cta-text">
-          <h3>¿Listo para equipar tu cocina?</h3>
+          <span class="cta-eyebrow">
+            Equipamiento gastronómico premium
+          </span>
+
+          <h3>
+            Lleva tu restaurante al siguiente nivel.
+          </h3>
+
           <p>
-            Escríbenos y te ayudamos a encontrar el utensilio perfecto para tu
-            hogar.
+            Cotiza con nosotros y recibe asesoría personalizada.
           </p>
         </div>
 
         <LandingAppButton
           variant="accent"
           size="lg"
-          :href="waLink('Hola Joymar, quiero consultar sobre sus productos')"
+          :href="waLink('Hola Kite, quiero cotizar equipamiento para mi restaurante')"
           target="_blank"
         >
           <LandingWaIcon />
-          Escribirnos ahora
+          Cotizar por WhatsApp
         </LandingAppButton>
+
       </div>
+
     </div>
   </section>
 </template>
 
 <style scoped>
+/* ═══════════════════════════════════
+   TOKENS
+═══════════════════════════════════ */
 .benefits {
-  --magenta: #b01883;
-  --magenta-dark: #7a0f5c;
-  --magenta-soft: rgba(176, 24, 131, 0.08);
-  --yellow: #f7d21e;
-
-  --text-title: #232323;
-  --text-muted: #6f6f6f;
-  --bg: #ffffff;
-  --border: rgba(0, 0, 0, 0.08);
-
-  --radius: 22px;
-  --radius-lg: 30px;
-
-  --shadow-sm: 0 12px 35px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 22px 70px rgba(0, 0, 0, 0.1);
+  --b-green:        #2D6A4F;
+  --b-green-dark:   #1E4D38;
+  --b-green-soft:   rgba(45, 106, 79, 0.08);
+  --b-green-line:   rgba(45, 106, 79, 0.2);
+  --b-terracotta:   #E76F51;
+  --b-terracotta-dark: #C85A3D;
+  --b-yellow:       #E9C46A;
+  --b-black:        #111111;
+  --b-text:         #111111;
+  --b-text-muted:   #6B6860;
+  --b-text-faint:   #A5A39C;
+  --b-bg:           #F8F7F4;
+  --b-bg-alt:       #F0EFEB;
+  --b-surface:      #FFFFFF;
+  --b-border:       #E2E0D9;
+  --b-shadow-sm:    0 2px 10px rgba(17, 17, 17, 0.05);
+  --b-shadow-md:    0 10px 36px rgba(17, 17, 17, 0.09);
+  --b-radius:       14px;
+  --b-radius-lg:    20px;
 
   width: 100%;
   overflow: hidden;
-  background: var(--bg);
-  padding: clamp(80px, 8vw, 120px) clamp(18px, 4vw, 56px);
+  background: var(--b-bg);
+  padding: clamp(80px, 8vw, 112px) clamp(18px, 4vw, 52px);
+  border-top: 1px solid var(--b-border);
 }
 
 .benefits-container {
-  width: min(100%, 1500px);
+  width: min(100%, 1400px);
   margin: 0 auto;
 }
 
-/* HEADER */
+/* ═══════════════════════════════════
+   HEADER
+═══════════════════════════════════ */
 .benefits-header {
   text-align: center;
-  margin-bottom: clamp(42px, 5vw, 70px);
+  margin-bottom: clamp(40px, 5vw, 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .section-label {
-  display: inline-block;
-  margin-bottom: 12px;
-  font-size: 0.76rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--magenta);
-  font-weight: 800;
-  letter-spacing: 0.14em;
+  color: var(--b-green);
+}
+
+.section-label::before,
+.section-label::after {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--b-green);
+  border-radius: 2px;
 }
 
 .section-title {
-  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
   line-height: 1.08;
-  font-weight: 900;
-  color: var(--text-title);
-  margin: 0 0 16px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--b-text);
+  margin: 0;
 }
 
 .accent-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--yellow);
+  width: 7px;
+  height: 7px;
+  background: var(--b-terracotta);
   display: inline-block;
   border-radius: 50%;
-  margin-left: 6px;
+  margin-left: 5px;
+  vertical-align: middle;
+  position: relative;
+  top: -4px;
 }
 
 .section-subtitle {
-  color: var(--text-muted);
-  max-width: 620px;
-  margin: 0 auto;
+  color: var(--b-text-muted);
+  max-width: 560px;
+  margin: 0;
   line-height: 1.7;
-  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
 }
 
-/* SLIDER */
+/* ═══════════════════════════════════
+   SLIDER
+═══════════════════════════════════ */
 .benefits-slider-area {
   position: relative;
-  padding: 0 72px;
-  max-width: 100%;
+  padding: 0 68px;
   overflow: hidden;
 }
 
 .benefits-slider {
   display: flex;
-  gap: 28px;
+  gap: 20px;
   overflow-x: auto;
   overflow-y: visible;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  padding: 14px 4px 28px;
+  padding: 12px 2px 28px;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  width: 100%;
 }
 
 .benefits-slider::-webkit-scrollbar {
@@ -233,85 +399,117 @@ const scroll = (dir: "left" | "right") => {
 }
 
 .benefit-slide {
-  flex: 0 0 calc((100% - 56px) / 3);
+  flex: 0 0 calc((100% - 40px) / 3);
   scroll-snap-align: start;
   display: flex;
 }
 
+/* ═══════════════════════════════════
+   CARD
+═══════════════════════════════════ */
 .benefit-card {
   width: 100%;
-  min-height: 250px;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: clamp(28px, 3vw, 36px);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1.5px solid rgba(226, 224, 217, 0.5);
+  border-radius: var(--b-radius);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: clamp(24px, 2.5vw, 32px);
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.25s ease, box-shadow 0.25s ease,
-    border-color 0.25s ease;
+  gap: 18px;
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
 }
 
 .benefit-card:hover {
-  transform: translateY(-7px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(176, 24, 131, 0.18);
+  transform: translateY(-5px);
+  box-shadow: var(--b-shadow-md);
+  border-color: var(--b-green-line);
 }
 
+/* Ícono */
 .benefit-icon {
-  width: 62px;
-  height: 62px;
-  flex: 0 0 62px;
-  border-radius: 18px;
-  background: var(--magenta-soft);
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--b-green-soft);
+  border: 1px solid var(--b-green-line);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.65rem;
+  color: var(--b-green);
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.benefit-card:hover .benefit-icon {
+  background: var(--b-green);
+  border-color: var(--b-green);
+  color: #fff;
+}
+
+.benefit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .benefit-card h3 {
-  font-size: 1.15rem;
-  line-height: 1.25;
-  font-weight: 800;
-  color: var(--text-title);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--b-text);
   margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
 }
 
 .benefit-card p {
-  font-size: 0.96rem;
-  color: var(--text-muted);
+  font-size: 0.875rem;
+  color: var(--b-text-muted);
   line-height: 1.7;
   margin: 0;
 }
 
-/* FLECHAS */
+/* ═══════════════════════════════════
+   FLECHAS
+═══════════════════════════════════ */
 .slider-btn {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  width: 54px;
-  height: 54px;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  background: #ffffff;
-  color: var(--magenta);
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+  transform: translateY(calc(-50% - 8px));
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--b-border);
+  background: var(--b-surface);
+  color: var(--b-text-muted);
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.08);
   cursor: pointer;
   z-index: 5;
-  font-size: 2.2rem;
-  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.25s ease;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .slider-btn:hover {
-  background: var(--magenta);
-  color: #ffffff;
-  transform: translateY(-50%) scale(1.06);
+  background: var(--b-black);
+  border-color: var(--b-black);
+  color: #fff;
+  transform: translateY(calc(-50% - 8px)) scale(1.05);
+  box-shadow: 0 6px 20px rgba(17, 17, 17, 0.14);
 }
 
 .slider-btn-left {
@@ -322,52 +520,113 @@ const scroll = (dir: "left" | "right") => {
   right: 0;
 }
 
-/* CTA */
+/* ═══════════════════════════════════
+   CTA BANNER
+═══════════════════════════════════ */
 .benefits-cta {
-  margin-top: clamp(56px, 6vw, 82px);
-  background: linear-gradient(135deg, var(--magenta), var(--magenta-dark));
-  border-radius: var(--radius-lg);
-  padding: clamp(32px, 4vw, 52px);
+  margin-top: clamp(52px, 6vw, 80px);
+  background:
+    radial-gradient(circle at top right, rgba(233, 196, 106, 0.08), transparent 32%),
+    radial-gradient(circle at left bottom, rgba(45, 106, 79, 0.08), transparent 28%),
+    linear-gradient(135deg, #101010 0%, #141414 55%, #111111 100%);
+  border-radius: var(--b-radius-lg);
+  padding: clamp(32px, 4vw, 52px) clamp(28px, 4vw, 52px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 26px;
-  box-shadow: 0 25px 70px rgba(176, 24, 131, 0.18);
+  gap: 32px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 50px rgba(17, 17, 17, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.benefits-cta::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(233, 196, 106, 0.06);
+  pointer-events: none;
+}
+
+.benefits-cta::after {
+  content: "";
+  position: absolute;
+  bottom: -60px;
+  left: 30%;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(45, 106, 79, 0.05);
+  pointer-events: none;
+}
+
+.benefits-cta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--b-yellow);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.cta-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 1.5px;
+  background: var(--b-yellow);
+  border-radius: 2px;
 }
 
 .benefits-cta-text h3 {
-  color: #ffffff;
-  margin: 0 0 10px;
-  font-size: clamp(1.45rem, 3vw, 2rem);
+  color: #fff;
+  margin: 0;
+  font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+  font-weight: 800;
   line-height: 1.15;
+  letter-spacing: -0.025em;
 }
 
 .benefits-cta-text p {
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.925rem;
   line-height: 1.6;
   margin: 0;
-  max-width: 560px;
 }
 
-/* TABLET */
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
 @media (max-width: 1024px) {
   .benefits-slider-area {
-    padding: 0 58px;
+    padding: 0 56px;
   }
 
   .benefit-slide {
-    flex-basis: clamp(300px, 42vw, 360px);
+    flex-basis: clamp(280px, 44vw, 340px);
   }
 
   .slider-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 2rem;
+    width: 40px;
+    height: 40px;
   }
 }
 
-/* MOBILE */
 @media (max-width: 720px) {
   .benefits {
     padding-inline: 18px;
@@ -378,16 +637,12 @@ const scroll = (dir: "left" | "right") => {
   }
 
   .benefits-slider {
-    gap: 18px;
-    padding: 8px 0 22px;
+    gap: 14px;
+    padding: 6px 0 20px;
   }
 
   .benefit-slide {
-    flex: 0 0 86%;
-  }
-
-  .benefit-card {
-    min-height: 240px;
+    flex: 0 0 84%;
   }
 
   .slider-btn {
@@ -400,22 +655,13 @@ const scroll = (dir: "left" | "right") => {
   }
 }
 
-/* MOBILE PEQUEÑO */
 @media (max-width: 420px) {
   .benefit-slide {
-    flex-basis: 92%;
+    flex-basis: 90%;
   }
 
   .benefit-card {
-    padding: 26px 22px;
-  }
-
-  .benefit-card h3 {
-    font-size: 1.05rem;
-  }
-
-  .benefit-card p {
-    font-size: 0.9rem;
+    padding: 22px 18px;
   }
 }
 </style>

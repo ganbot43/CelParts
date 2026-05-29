@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { waLink } = useJoymar();
+const { waLink } = useKite();
 
 const details = [
   {
@@ -75,7 +75,7 @@ const details = [
             <LandingAppButton
               variant="wa"
               :href="
-                waLink('Hola Joymar, quisiera coordinar una visita a la tienda')
+                waLink('Hola Kite, quisiera coordinar una visita a la tienda')
               "
               target="_blank"
               class="action-btn action-btn-primary"
@@ -97,7 +97,7 @@ const details = [
         <div class="location-map-card">
           <div class="map-topbar">
             <span class="map-status" />
-            <span>Ubicación Joymar</span>
+            <span>Ubicación Kite</span>
           </div>
 
           <div class="location-map">
@@ -139,15 +139,15 @@ const details = [
   background:
     radial-gradient(
       circle at top left,
-      rgba(176, 24, 131, 0.08),
+      rgba(45, 106, 79, 0.08),
       transparent 34%
     ),
     radial-gradient(
       circle at bottom right,
-      rgba(247, 210, 30, 0.16),
+      rgba(233, 196, 106, 0.16),
       transparent 32%
     ),
-    #f5f5f5;
+    #F8F7F4;
 }
 
 .container {
@@ -169,15 +169,15 @@ const details = [
   gap: 10px;
   padding: 9px 16px;
   margin-bottom: 18px;
-  border: 1px solid rgba(176, 24, 131, 0.16);
+  border: 1px solid rgba(45, 106, 79, 0.16);
   border-radius: 999px;
-  background: #ffffff;
-  color: #b01883;
+  background: #FFFFFF;
+  color: #2D6A4F;
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  box-shadow: 0 10px 24px rgba(176, 24, 131, 0.08);
+  box-shadow: 0 10px 24px rgba(45, 106, 79, 0.08);
 }
 
 .section-label::before {
@@ -185,13 +185,13 @@ const details = [
   width: 9px;
   height: 9px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #b01883, #f7d21e);
-  box-shadow: 0 0 14px rgba(176, 24, 131, 0.22);
+  background: linear-gradient(135deg, #2D6A4F, #E9C46A);
+  box-shadow: 0 0 14px rgba(45, 106, 79, 0.22);
 }
 
 .section-title {
   margin: 0;
-  color: #2b2b2b;
+  color: #111111;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 850;
   line-height: 1.08;
@@ -204,15 +204,15 @@ const details = [
   height: 9px;
   margin-left: 5px;
   border-radius: 999px;
-  background: #f7d21e;
+  background: #E9C46A;
   vertical-align: middle;
-  box-shadow: 0 0 18px rgba(247, 210, 30, 0.55);
+  box-shadow: 0 0 18px rgba(233, 196, 106, 0.55);
 }
 
 .section-subtitle {
   max-width: 620px;
   margin: 16px auto 0;
-  color: #666666;
+  color: #66625A;
   font-size: clamp(0.98rem, 2vw, 1.08rem);
   line-height: 1.75;
 }
@@ -227,10 +227,10 @@ const details = [
 .location-info-card,
 .location-map-card {
   min-width: 0;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #E2E0D9;
   border-radius: 28px;
-  background: #ffffff;
-  box-shadow: 0 18px 45px rgba(18, 18, 18, 0.06);
+  background: #FFFFFF;
+  box-shadow: 0 18px 45px rgba(17, 17, 17, 0.06);
 }
 
 .location-info-card {
@@ -240,7 +240,7 @@ const details = [
 .location-info-header {
   margin-bottom: 22px;
   padding-bottom: 22px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid #E2E0D9;
 }
 
 .info-badge {
@@ -249,15 +249,15 @@ const details = [
   margin-bottom: 14px;
   padding: 7px 12px;
   border-radius: 999px;
-  background: #ffd735;
-  color: #121212;
+  background: #E9C46A;
+  color: #111111;
   font-size: 0.76rem;
   font-weight: 800;
 }
 
 .location-info-header h3 {
   margin: 0;
-  color: #2b2b2b;
+  color: #111111;
   font-size: clamp(1.35rem, 2.5vw, 1.8rem);
   font-weight: 850;
   letter-spacing: -0.03em;
@@ -265,7 +265,7 @@ const details = [
 
 .location-info-header p {
   margin: 10px 0 0;
-  color: #666666;
+  color: #66625A;
   font-size: 0.96rem;
   line-height: 1.65;
 }
@@ -280,10 +280,12 @@ const details = [
   align-items: flex-start;
   gap: 15px;
   padding: 18px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid rgba(226, 224, 217, 0.5);
   border-radius: 20px;
-  background:
-    linear-gradient(135deg, rgba(176, 24, 131, 0.035), transparent 48%), #ffffff;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.4);
   transition:
     transform 0.22s ease,
     border-color 0.22s ease,
@@ -292,8 +294,8 @@ const details = [
 
 .location-detail:hover {
   transform: translateY(-3px);
-  border-color: #b01883;
-  box-shadow: 0 10px 30px rgba(176, 24, 131, 0.12);
+  border-color: #2D6A4F;
+  box-shadow: 0 10px 30px rgba(45, 106, 79, 0.12);
 }
 
 .location-detail-icon {
@@ -304,10 +306,10 @@ const details = [
   width: 48px;
   height: 48px;
   border-radius: 16px;
-  background: rgba(176, 24, 131, 0.09);
-  color: #b01883;
+  background: rgba(45, 106, 79, 0.09);
+  color: #2D6A4F;
   font-size: 1.25rem;
-  box-shadow: inset 0 0 0 1px rgba(176, 24, 131, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(45, 106, 79, 0.08);
 }
 
 .location-detail-text {
@@ -317,14 +319,14 @@ const details = [
 .location-detail-text strong {
   display: block;
   margin-bottom: 5px;
-  color: #2b2b2b;
+  color: #111111;
   font-size: 0.95rem;
   font-weight: 850;
 }
 
 .location-detail-text span {
   display: block;
-  color: #666666;
+  color: #66625A;
   font-size: 0.9rem;
   line-height: 1.6;
 }
@@ -351,7 +353,7 @@ const details = [
   align-items: center;
   gap: 10px;
   padding: 6px 8px 14px;
-  color: #555555;
+  color: #66625A;
   font-size: 0.86rem;
   font-weight: 800;
 }
@@ -360,8 +362,8 @@ const details = [
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: #b01883;
-  box-shadow: 0 0 0 6px rgba(176, 24, 131, 0.11);
+  background: #2D6A4F;
+  box-shadow: 0 0 0 6px rgba(45, 106, 79, 0.11);
 }
 
 .location-map {
@@ -369,9 +371,9 @@ const details = [
   overflow: hidden;
   min-height: 440px;
   height: 100%;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #E2E0D9;
   border-radius: 22px;
-  background: #f5f5f5;
+  background: #F8F7F4;
 }
 
 .location-map iframe {
@@ -392,8 +394,8 @@ const details = [
   padding: 32px;
   text-align: center;
   background:
-    linear-gradient(135deg, rgba(176, 24, 131, 0.12), rgba(247, 210, 30, 0.2)),
-    #ffffff;
+    linear-gradient(135deg, rgba(45, 106, 79, 0.12), rgba(233, 196, 106, 0.2)),
+    #FFFFFF;
 }
 
 .map-icon {
@@ -403,14 +405,14 @@ const details = [
   height: 86px;
   margin-bottom: 18px;
   border-radius: 26px;
-  background: #ffffff;
+  background: #FFFFFF;
   font-size: 2.6rem;
-  box-shadow: 0 18px 38px rgba(176, 24, 131, 0.14);
+  box-shadow: 0 18px 38px rgba(45, 106, 79, 0.14);
 }
 
 .map-placeholder h4 {
   margin: 0;
-  color: #2b2b2b;
+  color: #111111;
   font-size: 1.25rem;
   font-weight: 850;
 }
@@ -418,7 +420,7 @@ const details = [
 .map-placeholder p {
   max-width: 320px;
   margin: 10px 0 0;
-  color: #666666;
+  color: #66625A;
   font-size: 0.94rem;
   line-height: 1.6;
 }
@@ -430,12 +432,12 @@ const details = [
   margin-top: 22px;
   padding: 13px 20px;
   border-radius: 999px;
-  background: #b01883;
-  color: #ffffff;
+  background: #2D6A4F;
+  color: #FFFFFF;
   font-size: 0.9rem;
   font-weight: 800;
   text-decoration: none;
-  box-shadow: 0 10px 24px rgba(176, 24, 131, 0.25);
+  box-shadow: 0 10px 24px rgba(45, 106, 79, 0.25);
   transition:
     transform 0.2s ease,
     background 0.2s ease,
@@ -444,8 +446,8 @@ const details = [
 
 .map-link:hover {
   transform: translateY(-2px);
-  background: #7a0f5c;
-  box-shadow: 0 14px 30px rgba(176, 24, 131, 0.3);
+  background: #1E4D38;
+  box-shadow: 0 14px 30px rgba(45, 106, 79, 0.3);
 }
 
 @media (max-width: 960px) {

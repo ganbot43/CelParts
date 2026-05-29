@@ -10,19 +10,20 @@ interface Product {
   images?: Array<{ id: number; url: string; isPrimary: boolean }>;
   isFeatured?: boolean;
 }
-
 interface CatalogProductsResponse {
   data: Product[];
   total: number;
 }
+
 const products = ref<Product[]>([]);
 const totalProducts = ref(0);
 const loadingProducts = ref(false);
+
 const fetchNuevoLanzamientos = async () => {
   try {
     loadingProducts.value = true;
     const response = await $fetch<CatalogProductsResponse>(
-      "/api/landing/nuevos-lanzamientos?limit=4",
+      "/api/landing/nuevos-lanzamientos?limit=4"
     );
     products.value = response.data || [];
     totalProducts.value = response.total ?? response.data?.length ?? 0;
@@ -41,21 +42,18 @@ onMounted(async () => {
 
 const productsPageLink = {
   path: "/productos",
-  query: {
-    nuevoLanzamiento: "1",
-    page: "1",
-    limit: "24",
-  },
+  query: { nuevoLanzamiento: "1", page: "1", limit: "24" },
 };
 </script>
 
 <template>
   <section class="catalog" id="nuevos-lanzamientos">
     <div class="container">
+
       <!-- Header -->
       <div class="catalog-header">
         <div class="catalog-header-left">
-          <!-- <span class="section-label">Nuevos</span> -->
+          <span class="section-label">Nuevos</span>
           <h2 class="section-title">
             Nuevos lanzamientos<span class="accent-dot" />
           </h2>
@@ -63,11 +61,21 @@ const productsPageLink = {
             Descubre las últimas incorporaciones a nuestro catálogo.
           </p>
         </div>
+
+        <!-- Enlace Ver todos — desktop -->
+        <NuxtLink
+          v-if="totalProducts > 0"
+          :to="productsPageLink"
+          class="show-all-btn show-all-btn--header"
+        >
+          Ver todos
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </NuxtLink>
       </div>
 
-      <!-- filtros y tabs removidos (mostrar solo nuevos lanzamientos) -->
-
-      <!-- Grid de productos -->
+      <!-- Grid -->
       <div class="products-grid">
         <template v-if="loadingProducts">
           <EcommerceSkeletonProductCard :count="4" />
@@ -84,202 +92,302 @@ const productsPageLink = {
         </template>
       </div>
 
-      <!-- Ver todos -->
+      <!-- Ver todos — mobile / centrado -->
       <div v-if="totalProducts > 0" class="catalog-footer">
         <NuxtLink :to="productsPageLink" class="show-all-btn">
-          Ver todos
+          Ver todos los lanzamientos
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </NuxtLink>
       </div>
+
     </div>
   </section>
 </template>
 
 <style scoped>
+/* ═══════════════════════════════════
+   KITE — NUEVOS LANZAMIENTOS
+═══════════════════════════════════ */
 .catalog {
-  --magenta: #b01883;
-  --magenta-dark: #7a0f5c;
+  padding: 110px 40px;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--brand-bg) 0%,
+      #ffffff 100%
+    );
+  position: relative;
+  overflow: hidden;
+}
 
-  --yellow: #f7d21e;
-
-  --text-title: #2b2b2b;
-  --text-muted: #777;
-
-  --bg: #ffffff;
-  --bg-alt: #ffffff;
-  --border: #eeeeee;
-
-  --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 20px 60px rgba(0, 0, 0, 0.08);
-
-  --radius: 18px;
-
-  padding: 60px 40px;
-  background: #ffffff;
+.catalog::before {
+  content: "";
+  position: absolute;
+  top: -180px;
+  right: -120px;
+  width: 420px;
+  height: 420px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(45, 106, 79, 0.08) 0%,
+      transparent 70%
+    );
+  pointer-events: none;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
-/* ── Header ── */
+/* ═══════════════════════════════════
+   HEADER
+═══════════════════════════════════ */
 .catalog-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 32px;
+  gap: 28px;
   flex-wrap: wrap;
-  margin-bottom: 56px;
+  margin-bottom: 54px;
 }
 
 .catalog-header-left {
-  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 620px;
 }
 
+/* Label */
 .section-label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  color: var(--magenta);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+
+  color: var(--brand-primary);
 }
 
+.section-label::before {
+  content: "";
+  width: 26px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: var(--brand-primary);
+}
+
+/* Title */
 .section-title {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin: 0;
+
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
   font-weight: 800;
-  color: var(--text-title);
-  margin: 0.25rem 0 0;
+
+  color: var(--brand-black);
+}
+
+.section-title span {
+  color: var(--brand-primary);
 }
 
 .accent-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--yellow);
-  display: inline-block;
-  border-radius: 50%;
-  margin-left: 4px;
-  vertical-align: middle;
-}
-
-.section-subtitle {
-  color: var(--text-muted);
-  margin-top: 10px;
-  max-width: 520px;
-  line-height: 1.6;
-}
-
-/* ── Filtros ── */
-.catalog-filters {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 44px;
-}
-
-.filter-btn {
-  padding: 0.5rem 1.2rem;
+  width: 8px;
+  height: 8px;
+  margin-left: 6px;
   border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #fff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease;
-  color: var(--text-title);
+  display: inline-block;
+  background: var(--brand-accent);
+  vertical-align: middle;
+  position: relative;
+  top: -4px;
+
+  box-shadow: 0 0 18px rgba(231, 111, 81, 0.45);
 }
 
-.filter-btn:hover {
-  border-color: var(--magenta);
-  color: var(--magenta);
+/* Subtitle */
+.section-subtitle {
+  margin: 0;
+
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--brand-text-muted);
+
+  max-width: 520px;
 }
 
-.filter-btn.active {
-  background: var(--magenta);
-  color: #fff;
-  border-color: var(--magenta);
-}
-
-/* ── Grid ── */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 24px;
-  align-items: stretch;
-}
-
-/* ── Estados ── */
-.loading-state,
-.empty-state {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 60px 40px;
-  color: var(--text-muted);
-  font-size: 1rem;
-}
-
-/* ── Footer ── */
-.catalog-footer {
-  margin-top: 48px;
-  display: flex;
-  justify-content: center;
-}
-
+/* ═══════════════════════════════════
+   BUTTONS
+═══════════════════════════════════ */
 .show-all-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 0 28px;
+  gap: 10px;
+
+  padding: 0.9rem 1.55rem;
+
   border-radius: 999px;
-  background: var(--magenta);
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+
+  background: var(--brand-black);
+  color: white;
+
   text-decoration: none;
+
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+
   transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.show-all-btn svg {
+  transition: transform 0.18s ease;
 }
 
 .show-all-btn:hover {
-  background: var(--magenta-dark);
+  background: var(--brand-primary);
+  box-shadow: 0 10px 30px rgba(45, 106, 79, 0.18);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(176, 24, 131, 0.28);
 }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
+.show-all-btn:hover svg {
+  transform: translateX(2px);
+}
+
+/* Header version */
+.show-all-btn--header {
+  background: rgba(255,255,255,0.78);
+  color: var(--brand-text);
+
+  border: 1px solid rgba(17,17,17,0.08);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 2px 10px rgba(17,17,17,0.04);
+}
+
+.show-all-btn--header:hover {
+  color: white;
+  border-color: transparent;
+}
+
+/* ═══════════════════════════════════
+   GRID
+═══════════════════════════════════ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+
+/* ═══════════════════════════════════
+   FOOTER
+═══════════════════════════════════ */
+.catalog-footer {
+  margin-top: 54px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Desktop */
+@media (min-width: 641px) {
+  .catalog-footer {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media (max-width: 1100px) {
   .catalog {
-    padding: 90px 24px;
+    padding: 92px 32px;
   }
 
+  .products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
   .catalog-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 36px;
+  }
+
+  .show-all-btn--header {
+    display: none;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 640px) {
   .catalog {
-    padding: 80px 18px;
+    padding: 74px 18px;
+  }
+
+  .catalog-header {
+    margin-bottom: 36px;
+    gap: 18px;
+  }
+
+  .catalog-header-left {
+    gap: 10px;
+  }
+
+  .section-title {
+    font-size: clamp(1.9rem, 9vw, 2.4rem);
+  }
+
+  .section-subtitle {
+    font-size: 0.92rem;
+    line-height: 1.65;
   }
 
   .products-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
+  }
+
+  .catalog-footer {
+    display: flex;
+  }
+
+  .show-all-btn {
+    width: 100%;
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 420px) {
   .products-grid {
     grid-template-columns: 1fr;
+  }
+
+  .catalog {
+    padding-inline: 16px;
   }
 }
 </style>

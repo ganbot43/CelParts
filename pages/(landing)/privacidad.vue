@@ -5,7 +5,7 @@
         Política de Privacidad
       </h2>
       <p class="text-lg mb-6">
-        En <span class="font-semibold">Joymar Utensilios</span>, respetamos y
+        En <span class="font-semibold">Kite</span>, respetamos y
         valoramos la privacidad de nuestros usuarios. Esta política de
         privacidad describe cómo recopilamos, utilizamos y protegemos su
         información personal.
@@ -62,17 +62,17 @@
 definePageMeta({ layout: 'landing' })
 
 useSeoMeta({
-  title: 'Politica de Privacidad | Joymar Utensilios',
-  description: 'Conoce como Joymar Utensilios recopila, usa y protege tus datos personales en nuestro sitio web.',
-  ogTitle: 'Politica de Privacidad | Joymar Utensilios',
-  ogDescription: 'Informacion sobre tratamiento de datos personales y derechos del usuario en Joymar Utensilios.',
+  title: 'Politica de Privacidad | Kite',
+  description: 'Conoce como Kite recopila, usa y protege tus datos personales en nuestro sitio web.',
+  ogTitle: 'Politica de Privacidad | Kite',
+  ogDescription: 'Informacion sobre tratamiento de datos personales y derechos del usuario en Kite.',
   ogType: 'article',
-  ogUrl: 'https://joymarperu.com/privacidad',
-  ogImage: 'https://joymarperu.com/images/logo.png',
+  ogUrl: 'https://kite.pe/privacidad',
+  ogImage: 'https://kite.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Politica de Privacidad | Joymar Utensilios',
-  twitterDescription: 'Consulta la politica de privacidad de Joymar Utensilios.',
-  twitterImage: 'https://joymarperu.com/images/logo.png',
+  twitterTitle: 'Politica de Privacidad | Kite',
+  twitterDescription: 'Consulta la politica de privacidad de Kite.',
+  twitterImage: 'https://kite.pe/images/logo.png',
 })
 </script>
 <style scoped>

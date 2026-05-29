@@ -208,7 +208,7 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 /* ─── Base ───────────────────────────────────────────────── */
 .pagina-detalle {
   min-height: 100vh;
-  background: #ffffff;
+  background: linear-gradient(180deg, rgba(248, 247, 244, 0.96), rgba(241, 239, 234, 1));
   padding-bottom: 4rem;
 }
 
@@ -232,7 +232,7 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 .barra-breadcrumb {
   padding: 1.5rem 0 0;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid rgba(226, 224, 217, 0.7);
   padding-bottom: 1rem;
 }
 .nav-breadcrumb {
@@ -251,13 +251,13 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
   text-decoration: none;
 }
 .enlace-breadcrumb:hover {
-  color: #B01883;
+  color: #2D6A4F;
 }
 .separador-breadcrumb {
   color: #D9D9D9;
 }
 .breadcrumb-actual {
-  color: #2B2B2B;
+  color: #111111;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -276,18 +276,20 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
   max-width: 34rem;
   margin: 0 auto;
   padding: 2rem;
-  border: 1px solid #edd6e7;
+  border: 1px solid rgba(226, 224, 217, 0.5);
   border-radius: 24px;
-  background: linear-gradient(180deg, #fff8fc 0%, #ffffff 100%);
-  box-shadow: 0 20px 50px rgba(176, 24, 131, 0.08);
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 50px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 .error-pill {
   display: inline-flex;
   align-items: center;
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
-  background: rgba(176, 24, 131, 0.1);
-  color: #9a166f;
+  background: rgba(45, 106, 79, 0.1);
+  color: #2D6A4F;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -296,11 +298,11 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 .tarjeta-error h2 {
   margin: 1rem 0 0.5rem;
   font-size: 1.5rem;
-  color: #22111e;
+  color: #111111;
 }
 .tarjeta-error p {
   margin: 0;
-  color: #6f6070;
+  color: #66625A;
   line-height: 1.6;
 }
 .reintentar-btn {
@@ -308,12 +310,12 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
   border: 0;
   border-radius: 999px;
   padding: 0.9rem 1.25rem;
-  background: linear-gradient(135deg, #b01883 0%, #7f105d 100%);
+  background: linear-gradient(135deg, #2D6A4F 0%, #1E4D38 100%);
   color: #fff;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 14px 30px rgba(176, 24, 131, 0.22);
+  box-shadow: 0 14px 30px rgba(45, 106, 79, 0.22);
 }
 .reintentar-btn:hover {
   transform: translateY(-1px);
@@ -330,11 +332,13 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 }
 .imagen-cargando {
   aspect-ratio: 1/1;
-  background: linear-gradient(110deg, #F5F5F5 8%, #ffffff 18%, #F5F5F5 33%);
+  background: linear-gradient(110deg, rgba(255,255,255,0.7) 8%, rgba(241,239,234,0.98) 18%, rgba(255,255,255,0.7) 33%);
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
   border-radius: 20px;
-  border: 1px solid #E5E5E5;
+  border: 1px solid rgba(226, 224, 217, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .info-cargando {
   display: flex;
@@ -345,7 +349,7 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 .linea-cargando {
   height: 1rem;
   border-radius: 6px;
-  background: linear-gradient(110deg, #F5F5F5 8%, #ffffff 18%, #F5F5F5 33%);
+  background: linear-gradient(110deg, rgba(255,255,255,0.7) 8%, rgba(241,239,234,0.98) 18%, rgba(255,255,255,0.7) 33%);
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
 }

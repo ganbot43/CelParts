@@ -168,7 +168,7 @@ const emit = defineEmits<{
 }>();
 
 const formatPrice = useFormatPrice();
-const { waLink } = useJoymar();
+const { waLink } = useKite();
 const cantidad = ref(1);
 
 async function manejarAgregar() {
@@ -180,11 +180,11 @@ async function manejarAgregar() {
 <style scoped>
 /* ─── Variables ────────────────────────────────────────────── */
 .info-producto {
-  --primary: #b01883;
-  --primary-dark: #7a0f5c;
-  --primary-glow: rgba(176, 24, 131, 0.22);
-  --primary-line: rgba(176, 24, 131, 0.2);
-  --accent: #f7d21e;
+  --primary: #2D6A4F;
+  --primary-dark: #1E4D38;
+  --primary-glow: rgba(45, 106, 79, 0.22);
+  --primary-line: rgba(45, 106, 79, 0.2);
+  --accent: #E9C46A;
   --radius: 14px;
   --radius-sm: 8px;
   --border: #e5e5e5;
@@ -273,7 +273,7 @@ async function manejarAgregar() {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(176, 24, 131, 0.75);
+  background: rgba(45, 106, 79, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 3px 9px;
   border-radius: 999px;
@@ -419,7 +419,7 @@ async function manejarAgregar() {
 }
 
 .info-cantidad-boton:hover:not(:disabled) {
-  background: #fdf0f9;
+  background: #ffffff;
   color: var(--primary);
 }
 
@@ -447,6 +447,7 @@ async function manejarAgregar() {
   -webkit-appearance: none;
 }
 .info-cantidad-entrada[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 
@@ -497,7 +498,7 @@ async function manejarAgregar() {
 .info-boton-agregar:hover:not(:disabled) {
   background: var(--primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(176, 24, 131, 0.38);
+  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.38);
 }
 
 .info-boton-agregar:active:not(:disabled) {

@@ -11,14 +11,14 @@
       >
         <path
           d="M8 20h32M8 20v18a2 2 0 002 2h28a2 2 0 002-2V20M8 20l4-10h24l4 10"
-          stroke="#B01883"
+          stroke="#2D6A4F"
           stroke-width="2.2"
           stroke-linecap="round"
           stroke-linejoin="round"
         />
         <path
           d="M24 10V8M20 28h8M24 24v8"
-          stroke="#F7D21E"
+          stroke="#E9C46A"
           stroke-width="2.2"
           stroke-linecap="round"
         />
@@ -86,18 +86,18 @@ const categories: Category[] = [
 
 <style scoped>
 .empty-state {
-  --clr-primary: #b01883;
-  --clr-primary-dark: #7a0f5c;
-  --clr-yellow: #f7d21e;
-  --clr-bg: #ffffff;
-  --clr-bg-soft: #f5f5f5;
-  --clr-bg-pink: #fdf0f8;
-  --clr-border: #eeeeee;
-  --clr-border-pink: #f0c0e0;
-  --clr-text: #2b2b2b;
-  --clr-text-mid: #555555;
-  --clr-text-muted: #777777;
-  --clr-text-hint: #aaaaaa;
+  --clr-primary: #2D6A4F;
+  --clr-primary-dark: #1E4D38;
+  --clr-yellow: #E9C46A;
+  --clr-bg: #FFFFFF;
+  --clr-bg-soft: #F8F7F4;
+  --clr-bg-pink: #F1EFEA;
+  --clr-border: #E2E0D9;
+  --clr-border-pink: #E2E0D9;
+  --clr-text: #111111;
+  --clr-text-mid: #66625A;
+  --clr-text-muted: #9E9A91;
+  --clr-text-hint: #A5A39C;
 
   /* Layout — ocupa el grid completo */
   grid-column: 1 / -1;
@@ -163,7 +163,7 @@ const categories: Category[] = [
   align-items: center;
   gap: 8px;
   background: var(--clr-primary);
-  color: #ffffff;
+  color: #FFFFFF;
   font-size: 0.875rem;
   font-weight: 700;
   padding: 12px 28px;
@@ -174,13 +174,13 @@ const categories: Category[] = [
     background 0.2s ease,
     transform 0.15s ease,
     box-shadow 0.2s ease;
-  box-shadow: 0 4px 16px rgba(176, 24, 131, 0.22);
+  box-shadow: 0 4px 16px rgba(45, 106, 79, 0.22);
 }
 
 .empty-state__btn:hover {
   background: var(--clr-primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(176, 24, 131, 0.32);
+  box-shadow: 0 6px 22px rgba(45, 106, 79, 0.32);
 }
 
 .empty-state__btn:active {

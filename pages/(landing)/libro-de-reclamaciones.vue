@@ -200,7 +200,7 @@
                 name="email"
                 maxlength="254"
                 class="lr-input"
-                placeholder="joymar.peru@gmail.com"
+                placeholder="hola@kite.com"
                 required
               />
               <span
@@ -589,17 +589,17 @@ import { useBusinessConfig } from "~/composables/useBusinessConfig";
 import { useAppToast } from "~/composables/useToast";
 
 useSeoMeta({
-  title: 'Libro de Reclamaciones | Joymar Utensilios',
-  description: 'Presenta tu reclamo o queja en el Libro de Reclamaciones de Joymar Utensilios de forma segura y rapida.',
-  ogTitle: 'Libro de Reclamaciones | Joymar Utensilios',
-  ogDescription: 'Canal oficial para registrar reclamos y quejas de clientes de Joymar Utensilios.',
+  title: 'Libro de Reclamaciones | Kite',
+  description: 'Presenta tu reclamo o queja en el Libro de Reclamaciones de Kite de forma segura y rapida.',
+  ogTitle: 'Libro de Reclamaciones | Kite',
+  ogDescription: 'Canal oficial para registrar reclamos y quejas de clientes de Kite.',
   ogType: 'website',
-  ogUrl: 'https://joymarperu.com/libro-de-reclamaciones',
-  ogImage: 'https://joymarperu.com/images/logo.png',
+  ogUrl: 'https://kite.pe/libro-de-reclamaciones',
+  ogImage: 'https://kite.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Libro de Reclamaciones | Joymar Utensilios',
-  twitterDescription: 'Registra tu reclamo en el Libro de Reclamaciones de Joymar Utensilios.',
-  twitterImage: 'https://joymarperu.com/images/logo.png',
+  twitterTitle: 'Libro de Reclamaciones | Kite',
+  twitterDescription: 'Registra tu reclamo en el Libro de Reclamaciones de Kite.',
+  twitterImage: 'https://kite.pe/images/logo.png',
 })
 
 const businessState = useBusinessConfig();
@@ -713,30 +713,30 @@ async function submit() {
 
 <style scoped>
 /* ═══════════════════════════════════
-   TOKENS JOYMAR — LIGHT
+  TOKENS KITE — LIGHT
 ═══════════════════════════════════ */
 .lr-page {
-  --jm-magenta: #b01883;
-  --jm-magenta-dark: #7a0f5c;
-  --jm-magenta-glow: rgba(176, 24, 131, 0.25);
-  --jm-magenta-soft: rgba(176, 24, 131, 0.06);
-  --jm-magenta-line: rgba(176, 24, 131, 0.2);
-  --jm-yellow: #f7d21e;
-  --jm-yellow-dim: rgba(247, 210, 30, 0.8);
-  --jm-surface: #ffffff;
-  --jm-surface2: #f5f5f5;
-  --jm-surface3: #ffffff;
-  --jm-border: #e5e5e5;
-  --jm-border-strong: #d9d9d9;
-  --jm-text: #2b2b2b;
+  --kite-green: #2D6A4F;
+  --kite-green-dark: #1E4D38;
+  --kite-green-glow: rgba(45, 106, 79, 0.25);
+  --kite-green-soft: rgba(45, 106, 79, 0.08);
+  --kite-green-line: rgba(45, 106, 79, 0.2);
+  --kite-yellow: #E9C46A;
+  --kite-yellow-dim: rgba(233, 196, 106, 0.8);
+  --jm-surface: rgba(255, 255, 255, 0.76);
+  --jm-surface2: rgba(255, 255, 255, 0.7);
+  --jm-surface3: rgba(255, 255, 255, 0.82);
+  --jm-border: rgba(226, 224, 217, 0.5);
+  --jm-border-strong: rgba(226, 224, 217, 0.7);
+  --jm-text: #111111;
   --jm-text-dim: #555555;
-  --jm-text-muted: #999999;
+  --jm-text-muted: #66625A;
 }
 
 /* ── Base ── */
 .lr-page {
   min-height: 100vh;
-  background: #ffffff;
+  background: linear-gradient(180deg, rgba(248, 247, 244, 0.96), rgba(241, 239, 234, 1));
   padding: 48px 16px 80px;
   position: relative;
   overflow: hidden;
@@ -751,7 +751,7 @@ async function submit() {
   font-size: 72px;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: rgba(176, 24, 131, 0.04);
+  color: rgba(45, 106, 79, 0.04);
   pointer-events: none;
   white-space: nowrap;
   line-height: 1;
@@ -777,9 +777,9 @@ async function submit() {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #b01883;
-  background: rgba(176, 24, 131, 0.06);
-  border: 1px solid var(--jm-magenta-line);
+  color: #2D6A4F;
+  background: rgba(45, 106, 79, 0.06);
+  border: 1px solid var(--kite-green-line);
   border-radius: 4px;
   padding: 5px 10px;
   margin-bottom: 20px;
@@ -801,7 +801,7 @@ async function submit() {
   max-width: 560px;
   font-style: italic;
   padding-left: 12px;
-  border-left: 2px solid var(--jm-magenta-line);
+  border-left: 2px solid var(--kite-green-line);
 }
 
 /* ── Datos del negocio ── */
@@ -844,8 +844,8 @@ async function submit() {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  background: rgba(176, 24, 131, 0.05);
-  border: 1px solid var(--jm-magenta-line);
+  background: rgba(45, 106, 79, 0.05);
+  border: 1px solid var(--kite-green-line);
   border-radius: 12px;
   padding: 20px 24px;
   margin-bottom: 32px;
@@ -857,15 +857,15 @@ async function submit() {
   border-radius: 50%;
   background: linear-gradient(
     135deg,
-    var(--jm-magenta),
-    var(--jm-magenta-dark)
+    var(--kite-green),
+    var(--kite-green-dark)
   );
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 24px var(--jm-magenta-glow);
+  box-shadow: 0 0 24px var(--kite-green-glow);
 }
 
 .lr-success__title {
@@ -877,7 +877,7 @@ async function submit() {
 
 .lr-success__code {
   font-size: 13px;
-  color: var(--jm-magenta);
+  color: var(--kite-green);
   font-weight: 700;
   margin: 0 0 6px;
 }
@@ -891,7 +891,7 @@ async function submit() {
 
 /* ── Secciones del formulario ── */
 .lr-section {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.76);
   border: 1px solid var(--jm-border);
   border-radius: 12px;
   padding: 24px 28px;
@@ -899,13 +899,16 @@ async function submit() {
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 12px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 .lr-section:focus-within {
-  border-color: var(--jm-magenta-line);
+  border-color: var(--kite-green-line);
   box-shadow:
-    0 0 0 1px var(--jm-magenta-line),
-    0 0 24px rgba(176, 24, 131, 0.05);
+    0 0 0 1px var(--kite-green-line),
+    0 0 24px rgba(45, 106, 79, 0.05);
 }
 
 .lr-section__head {
@@ -921,7 +924,7 @@ async function submit() {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--jm-magenta);
+  background: var(--kite-green);
   color: #ffffff;
   font-size: 13px;
   font-weight: 700;
@@ -929,7 +932,7 @@ async function submit() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 16px var(--jm-magenta-glow);
+  box-shadow: 0 0 16px var(--kite-green-glow);
 }
 
 .lr-section__title {
@@ -1012,7 +1015,7 @@ async function submit() {
 }
 
 .lr-req {
-  color: var(--jm-magenta);
+  color: var(--kite-green);
 }
 
 /* ── Inputs ── */
@@ -1032,11 +1035,11 @@ async function submit() {
 }
 
 .lr-input:focus {
-  border-color: var(--jm-magenta);
+  border-color: var(--kite-green);
   background: #ffffff;
   box-shadow:
-    0 0 0 3px rgba(176, 24, 131, 0.12),
-    0 0 16px rgba(176, 24, 131, 0.06);
+    0 0 0 3px rgba(45, 106, 79, 0.12),
+    0 0 16px rgba(45, 106, 79, 0.06);
 }
 
 .lr-input::placeholder {
@@ -1079,7 +1082,7 @@ async function submit() {
 }
 
 .lr-counter--error {
-  color: var(--jm-magenta);
+  color: var(--kite-green);
 }
 
 /* ── Toggle buttons ── */
@@ -1105,17 +1108,17 @@ async function submit() {
 }
 
 .lr-toggle:hover {
-  border-color: var(--jm-magenta-line);
-  color: var(--jm-magenta);
-  background: rgba(176, 24, 131, 0.04);
-  box-shadow: 0 0 10px rgba(176, 24, 131, 0.1);
+  border-color: var(--kite-green-line);
+  color: var(--kite-green);
+  background: rgba(45, 106, 79, 0.04);
+  box-shadow: 0 0 10px rgba(45, 106, 79, 0.1);
 }
 
 .lr-toggle--active {
-  border-color: var(--jm-magenta);
-  background: var(--jm-magenta);
+  border-color: var(--kite-green);
+  background: var(--kite-green);
   color: #ffffff;
-  box-shadow: 0 0 18px var(--jm-magenta-glow);
+  box-shadow: 0 0 18px var(--kite-green-glow);
 }
 
 .lr-toggle__hint {
@@ -1149,10 +1152,10 @@ async function submit() {
 }
 
 .lr-file:hover {
-  border-color: var(--jm-magenta);
-  background: rgba(176, 24, 131, 0.04);
-  color: var(--jm-magenta);
-  box-shadow: 0 0 12px rgba(176, 24, 131, 0.1);
+  border-color: var(--kite-green);
+  background: rgba(45, 106, 79, 0.04);
+  color: var(--kite-green);
+  box-shadow: 0 0 12px rgba(45, 106, 79, 0.1);
 }
 
 .lr-file__input {
@@ -1204,9 +1207,9 @@ async function submit() {
 }
 
 .lr-check:has(.lr-check__input:checked) .lr-check__box {
-  background: var(--jm-magenta);
-  border-color: var(--jm-magenta);
-  box-shadow: 0 0 12px var(--jm-magenta-glow);
+  background: var(--kite-green);
+  border-color: var(--kite-green);
+  box-shadow: 0 0 12px var(--kite-green-glow);
 }
 
 .lr-check__text {
@@ -1222,7 +1225,7 @@ async function submit() {
   justify-content: center;
   gap: 8px;
   padding: 13px 32px;
-  background: var(--jm-magenta);
+  background: var(--kite-green);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -1237,21 +1240,21 @@ async function submit() {
     box-shadow 0.15s,
     background 0.15s;
   box-shadow:
-    0 0 20px var(--jm-magenta-glow),
-    0 4px 16px rgba(176, 24, 131, 0.25);
+    0 0 20px var(--kite-green-glow),
+    0 4px 16px rgba(45, 106, 79, 0.25);
 }
 
 .lr-submit:hover:not(:disabled) {
-  background: var(--jm-magenta-dark);
+  background: var(--kite-green-dark);
   transform: translateY(-2px);
   box-shadow:
-    0 0 32px var(--jm-magenta-glow),
-    0 8px 24px rgba(176, 24, 131, 0.3);
+    0 0 32px var(--kite-green-glow),
+    0 8px 24px rgba(45, 106, 79, 0.3);
 }
 
 .lr-submit:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 0 12px var(--jm-magenta-glow);
+  box-shadow: 0 0 12px var(--kite-green-glow);
 }
 
 .lr-submit:disabled {
@@ -1275,7 +1278,7 @@ async function submit() {
 }
 
 .lr-link:hover {
-  color: var(--jm-magenta);
+  color: var(--kite-green);
 }
 
 /* ── Spinner ── */

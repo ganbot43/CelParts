@@ -132,7 +132,7 @@ const props = defineProps<{ product?: CardProduct }>();
 const cartStore = useCartStore();
 const toast = useAppToast();
 const formatPrice = useFormatPrice();
-const { waLink } = useJoymar();
+const { waLink } = useKite();
 const adding = ref(false);
 
 const primaryImage = computed(() => {
@@ -161,24 +161,26 @@ async function addToCart() {
 
 <style scoped>
 /* ═══════════════════════════════════
-   TOKENS JOYMAR — LIGHT
+   TOKENS KITE — LIQUID GLASS
 ═══════════════════════════════════ */
 .vf-card {
-  --jm-magenta: #c01890;
-  --jm-magenta-dark: #8c1068;
-  --jm-magenta-glow: rgba(192, 24, 144, 0.22);
-  --jm-magenta-soft: rgba(192, 24, 144, 0.07);
-  --jm-magenta-line: rgba(192, 24, 144, 0.2);
+  --kite-green: #2D6A4F;
+  --kite-green-dark: #1E4D38;
+  --kite-green-glow: rgba(45, 106, 79, 0.22);
+  --kite-green-soft: rgba(45, 106, 79, 0.08);
+  --kite-green-line: rgba(45, 106, 79, 0.2);
+  --kite-yellow: #E9C46A;
+  --kite-terracotta: #E76F51;
 
   --jm-wa: #25d366;
   --jm-wa-dark: #128c4a;
   --jm-wa-glow: rgba(37, 211, 102, 0.22);
 
   /* Card surfaces */
-  --jm-card-bg: #ffffff;
-  --jm-card-border: #e8e8e8;
-  --jm-card-border-hover: rgba(192, 24, 144, 0.35);
-  --jm-img-bg: #f5f5f5;
+  --jm-card-bg: rgba(255, 255, 255, 0.72);
+  --jm-card-border: rgba(226, 224, 217, 0.5);
+  --jm-card-border-hover: rgba(45, 106, 79, 0.35);
+  --jm-img-bg: #F1EFEA;
 
   /* Text */
   --jm-text: #111111;
@@ -195,21 +197,24 @@ async function addToCart() {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition:
     transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
     border-color 0.22s ease;
   cursor: pointer;
   height: 100%;
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .vf-card:hover {
   transform: translateY(-5px);
   border-color: var(--jm-card-border-hover);
   box-shadow:
-    0 0 0 1px var(--jm-magenta-line),
-    0 12px 40px rgba(0, 0, 0, 0.1),
-    0 0 28px var(--jm-magenta-glow);
+    0 0 0 1px var(--kite-green-line),
+    0 12px 40px rgba(45, 106, 79, 0.12),
+    0 0 28px var(--kite-green-glow);
 }
 
 /* ── Link wrapper ── */
@@ -276,7 +281,7 @@ async function addToCart() {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: var(--jm-magenta);
+  background: var(--kite-green);
   color: #fff;
   font-size: 0.62rem;
   font-weight: 800;
@@ -284,7 +289,9 @@ async function addToCart() {
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: 999px;
-  box-shadow: 0 2px 10px var(--jm-magenta-glow);
+  box-shadow: 0 2px 10px var(--kite-green-glow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .vf-card__badge-dot {
@@ -318,12 +325,12 @@ async function addToCart() {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(192, 24, 144, 0.75);
+  background: rgba(45, 106, 79, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 3px 9px;
   border-radius: 999px;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* ── Body ── */
@@ -352,13 +359,13 @@ async function addToCart() {
 }
 
 .vf-card:hover .vf-card__name {
-  color: var(--jm-magenta);
+  color: var(--kite-green);
 }
 
 .vf-card__price {
   font-size: 1.15rem;
   font-weight: 800;
-  color: var(--jm-magenta);
+  color: var(--kite-green);
   letter-spacing: -0.02em;
   margin: 0;
 }
@@ -398,14 +405,14 @@ async function addToCart() {
 .vf-card__btn--cart {
   flex: 1;
   min-width: 0;
-  background: var(--jm-magenta);
+  background: var(--kite-green);
   color: #fff;
-  box-shadow: 0 2px 12px var(--jm-magenta-glow);
+  box-shadow: 0 2px 12px var(--kite-green-glow);
 }
 
 .vf-card__btn--cart:hover:not(:disabled) {
-  background: var(--jm-magenta-dark);
-  box-shadow: 0 4px 20px rgba(192, 24, 144, 0.38);
+  background: var(--kite-green-dark);
+  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.38);
   transform: translateY(-1px);
 }
 

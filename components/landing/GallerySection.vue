@@ -1,10 +1,10 @@
 <script setup lang="ts">
 const items = [
-  { imageUrl: "/images/gallery/sartenes.png", label: "Sartenes & Woks", alt: "Sartenes y woks Joymar" },
-  { imageUrl: "/images/gallery/ollas.png", label: "Ollas y cazuelas", alt: "Ollas Joymar" },
-  { imageUrl: "/images/gallery/cuchilleria.png", label: "Cuchillería", alt: "Cuchillos Joymar" },
-  { imageUrl: "/images/gallery/reposteria.png", label: "Repostería", alt: "Utensilios de repostería Joymar" },
-  { imageUrl: "/images/gallery/almacenaje.png", label: "Almacenaje", alt: "Recipientes y almacenaje Joymar" },
+  { imageUrl: "/images/gallery/sartenes.png", label: "Sartenes & Woks", alt: "Sartenes y woks Kite" },
+  { imageUrl: "/images/gallery/ollas.png", label: "Ollas y cazuelas", alt: "Ollas Kite" },
+  { imageUrl: "/images/gallery/cuchilleria.png", label: "Cuchillería", alt: "Cuchillos Kite" },
+  { imageUrl: "/images/gallery/reposteria.png", label: "Repostería", alt: "Utensilios de repostería Kite" },
+  { imageUrl: "/images/gallery/almacenaje.png", label: "Almacenaje", alt: "Recipientes y almacenaje Kite" },
 ];
 </script>
 
@@ -42,28 +42,28 @@ const items = [
 
 <style scoped>
 .gallery {
-  --magenta: #b01883;
-  --magenta-dark: #7a0f5c;
-  --magenta-tint: rgba(176, 24, 131, 0.08);
-  --yellow: #f7d21e;
+  --kite-green: #2D6A4F;
+  --kite-green-dark: #1E4D38;
+  --kite-yellow: #E9C46A;
+  --kite-green-soft: rgba(45, 106, 79, 0.08);
 
-  --bg: #ffffff;
-  --bg-alt: #fafafa;
-  --bg-section: #f5f5f5;
+  --bg: #F8F7F4;
+  --bg-alt: #F1EFEA;
+  --bg-surface: #FFFFFF;
 
-  --text-title: #2b2b2b;
-  --text-muted: #6b6b6b;
+  --text-title: #111111;
+  --text-muted: #66625A;
 
-  --border: #e8e8e8;
+  --border: #E2E0D9;
 
   --radius: 20px;
   --radius-lg: 28px;
 
-  --shadow-sm: 0 10px 25px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 20px 50px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 10px 25px rgba(17, 17, 17, 0.05);
+  --shadow-md: 0 20px 50px rgba(17, 17, 17, 0.08);
 
   padding: 120px 0;
-  background: linear-gradient(180deg, var(--bg-section) 0%, var(--bg-alt) 100%);
+  background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%);
 }
 
 /* 👇 CLAVE PARA QUE NO SE VEA PEGADO */
@@ -88,8 +88,8 @@ const items = [
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--magenta);
-  margin-bottom: 16px;
+  color: var(--kite-green);
+  margin-bottom: 14px;
 }
 
 .section-label::before,
@@ -97,7 +97,7 @@ const items = [
   content: "";
   width: 26px;
   height: 2px;
-  background: var(--magenta);
+  background: var(--kite-green);
   border-radius: 2px;
 }
 
@@ -110,7 +110,7 @@ const items = [
 .accent-dot {
   width: 6px;
   height: 6px;
-  background: var(--yellow);
+  background: var(--kite-yellow);
   border-radius: 50%;
   display: inline-block;
   margin-left: 4px;
@@ -152,7 +152,7 @@ const items = [
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--bg-section), var(--magenta-tint));
+  background: linear-gradient(135deg, var(--bg-alt), var(--kite-green-soft));
   overflow: hidden;
   transition: transform 0.4s ease;
 }
@@ -172,7 +172,7 @@ const items = [
 .gallery-item-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(176, 24, 131, 0.65), transparent);
+  background: linear-gradient(to top, rgba(45, 106, 79, 0.65), transparent);
   display: flex;
   align-items: flex-end;
   padding: 22px;
@@ -188,6 +188,13 @@ const items = [
   color: #fff;
   font-size: 0.9rem;
   font-weight: 600;
+  background: rgba(255, 255, 255, 0.72);
+  color: #2D6A4F;
+  padding: 8px 16px;
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 /* POSICIONES */

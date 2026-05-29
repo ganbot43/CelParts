@@ -5,7 +5,7 @@
         Términos y Condiciones
       </h2>
       <p class="text-lg text-[#333333] mb-4">
-        Bienvenido a Joymar Utensilios. Al utilizar nuestros servicios,
+        Bienvenido a Kite. Al utilizar nuestros servicios,
         aceptas cumplir con los siguientes términos y condiciones.
       </p>
 
@@ -33,7 +33,7 @@
           <h3 class="text-2xl font-semibold mb-2">3. Propiedad intelectual</h3>
           <p>
             Todos los derechos de propiedad intelectual sobre el contenido y los
-            servicios pertenecen a Joymar Utensilios. No puedes copiar,
+            servicios pertenecen a Kite. No puedes copiar,
             distribuir o modificar ningún material sin nuestro consentimiento
             previo.
           </p>
@@ -44,7 +44,7 @@
             4. Limitación de responsabilidad
           </h3>
           <p>
-            Joymar Utensilios no sera responsable por daños directos,
+            Kite no sera responsable por daños directos,
             indirectos, incidentales o consecuenciales derivados del uso o la
             imposibilidad de uso de nuestros servicios.
           </p>
@@ -67,17 +67,17 @@
 definePageMeta({ layout: 'landing' })
 
 useSeoMeta({
-  title: 'Terminos y Condiciones | Joymar Utensilios',
-  description: 'Revisa los terminos y condiciones de uso del sitio y servicios de Joymar Utensilios.',
-  ogTitle: 'Terminos y Condiciones | Joymar Utensilios',
-  ogDescription: 'Condiciones de uso, limitaciones y responsabilidades aplicables en Joymar Utensilios.',
+  title: 'Terminos y Condiciones | Kite',
+  description: 'Revisa los terminos y condiciones de uso del sitio y servicios de Kite.',
+  ogTitle: 'Terminos y Condiciones | Kite',
+  ogDescription: 'Condiciones de uso, limitaciones y responsabilidades aplicables en Kite.',
   ogType: 'article',
-  ogUrl: 'https://joymarperu.com/terminos',
-  ogImage: 'https://joymarperu.com/images/logo.png',
+  ogUrl: 'https://kite.pe/terminos',
+  ogImage: 'https://kite.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Terminos y Condiciones | Joymar Utensilios',
-  twitterDescription: 'Consulta los terminos y condiciones de Joymar Utensilios.',
-  twitterImage: 'https://joymarperu.com/images/logo.png',
+  twitterTitle: 'Terminos y Condiciones | Kite',
+  twitterDescription: 'Consulta los terminos y condiciones de Kite.',
+  twitterImage: 'https://kite.pe/images/logo.png',
 })
 </script>
 

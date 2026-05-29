@@ -1,18 +1,31 @@
 <template>
-  <div class="bg-white text-[#3A3A3A]">
+  <div class="bg-(--k-bg) text-(--k-text)">
+    <!-- HERO -->
     <LandingHeroSection />
-    <!-- components/landing/CategoryGrid.vue -->
 
-    <LandingFeaturedSection />
+    <!-- BENEFICIOS / CONFIANZA -->
+    <LandingBenefitsSection />
+
+    <!-- LANZAMIENTOS -->
     <LandingCatalogNuevosLanzamientos />
 
+    <!-- DESTACADOS -->
+    <LandingFeaturedSection />
+
+    <!-- CATEGORÍAS -->
     <LandingCategoryGrid sectionId="1" />
     <LandingCategoryGrid sectionId="2" />
 
-    <LandingBenefitsSection />
+    <!-- SOBRE NOSOTROS -->
     <LandingAboutSection />
+
+    <!-- GALERÍA -->
     <LandingGallerySection />
+
+    <!-- UBICACIÓN -->
     <LandingLocationSection />
+
+    <!-- CONTACTO -->
     <LandingContactSection />
   </div>
 </template>
@@ -22,56 +35,99 @@ definePageMeta({
   layout: "landing",
 });
 
+/* =========================================
+   SEO
+========================================= */
+
 useSeoMeta({
-  title: "Joymar Utensilios | Utensilios de Cocina de Alta Calidad en Perú",
-  ogTitle: "Joymar Utensilios | Artículos de Cocina Premium en Perú",
+  title:
+    "Kite | Cocina, Hogar y Estilo de Vida",
+
+  ogTitle:
+    "Kite | Productos para Cocina y Hogar en Perú",
 
   description:
-    "Joymar Utensilios ofrece artículos de cocina de alta calidad, previamente probados antes de su comercialización. Encuentra utensilios duraderos, funcionales y modernos para tu hogar. Tienda física en Villa El Salvador, Lima.",
+    "Kite ofrece productos modernos para cocina, hogar y estilo de vida. Diseños funcionales, elegantes y de alta calidad para transformar tus espacios.",
+
   ogDescription:
-    "Artículos de cocina seleccionados por su calidad, durabilidad y funcionalidad. Joymar Utensilios cuenta con tienda física en Villa El Salvador, Lima, y atención directa por WhatsApp.",
+    "Descubre productos de cocina y hogar cuidadosamente seleccionados por Kite. Calidad, diseño y funcionalidad en un solo lugar.",
 
   keywords:
-    "Joymar, Joymar Utensilios, utensilios de cocina, artículos de cocina, productos de cocina, menaje de cocina, accesorios de cocina, tienda de utensilios de cocina en Lima, utensilios de cocina en Perú, Villa El Salvador",
+    "Kite, cocina, hogar, utensilios, accesorios de cocina, decoración, menaje, productos para el hogar, tienda online Perú, artículos de cocina",
 
   ogType: "website",
-  ogUrl: "https://joymarperu.com",
-  ogImage: "https://joymarperu.com/images/logo.png",
 
-  twitterCard: "summary_large_image",
-  twitterTitle: "Joymar Utensilios | Utensilios de Cocina Premium",
+  ogUrl:
+    "https://kite.pe",
+
+  ogImage:
+    "https://kite.pe/images/logo.png",
+
+  twitterCard:
+    "summary_large_image",
+
+  twitterTitle:
+    "Kite | Cocina y Hogar",
+
   twitterDescription:
-    "Artículos de cocina de alta calidad, seleccionados y probados antes de llegar a nuestros clientes. Atención en Villa El Salvador, Lima.",
-  twitterImage: "https://joymarperu.com/images/logo.png",
+    "Productos funcionales y modernos para cocina y hogar. Diseño, calidad y estilo en cada detalle.",
+
+  twitterImage:
+    "https://kite.pe/images/logo.png",
 });
+
+/* =========================================
+   STRUCTURED DATA
+========================================= */
 
 useHead({
   script: [
     {
       type: "application/ld+json",
+
       innerHTML: JSON.stringify({
         "@context": "https://schema.org",
+
         "@type": "Organization",
-        name: "Joymar Utensilios",
-        url: "https://joymarperu.com",
-        logo: "https://joymarperu.com/images/logo.png",
-        sameAs: ["https://www.instagram.com/joymarutensilios/"],
+
+        name: "Kite",
+
+        url: "https://kite.pe",
+
+        logo: "https://kite.pe/images/logo.png",
+
+        sameAs: [
+          "https://www.instagram.com/kite.pe/",
+        ],
+
         contactPoint: {
           "@type": "ContactPoint",
-          contactType: "customer service",
-          telephone: "+51 996 111 303",
+
+          contactType:
+            "customer service",
+
+          telephone:
+            "+51 996 111 303",
+
           areaServed: "PE",
+
           availableLanguage: ["es"],
         },
       }),
     },
+
     {
       type: "application/ld+json",
+
       innerHTML: JSON.stringify({
         "@context": "https://schema.org",
+
         "@type": "WebSite",
-        name: "Joymar Utensilios",
-        url: "https://joymarperu.com",
+
+        name: "Kite",
+
+        url: "https://kite.pe",
+
         inLanguage: "es-PE",
       }),
     },

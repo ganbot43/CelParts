@@ -165,15 +165,20 @@ function fmt(amount: unknown): string {
   gap: 12px;
   padding: 12px;
   border-radius: 12px;
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(226, 224, 217, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition:
     border-color 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 .cart-item:hover {
-  border-color: rgba(176, 24, 131, 0.3);
-  background: #fdf5fb;
+  border-color: rgba(45, 106, 79, 0.16);
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 10px 30px rgba(45,106,79,0.06);
 }
 
 /* ── Image ───────────────────────────────── */
@@ -181,13 +186,14 @@ function fmt(amount: unknown): string {
   width: 72px;
   height: 72px;
   border-radius: 10px;
-  border: 1px solid #e5e5e5;
-  background: #f5f5f5;
+  border: 1px solid rgba(226,224,217,0.5);
+  background: #F1EFEA;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
 }
 
 .item-img img {
@@ -232,7 +238,7 @@ function fmt(amount: unknown): string {
 .item-price {
   font-size: 15px;
   font-weight: 800;
-  color: #b01883;
+  color: #2D6A4F;
 }
 
 .item-original {
@@ -244,9 +250,9 @@ function fmt(amount: unknown): string {
 .item-discount {
   font-size: 11px;
   font-weight: 700;
-  color: #121212;
-  background: #ffd735;
-  border: 1px solid #f7d21e;
+  color: #111;
+  background: rgba(233,196,106,0.12);
+  border: 1px solid rgba(233,196,106,0.22);
   padding: 1px 6px;
   border-radius: 6px;
 }
@@ -264,10 +270,12 @@ function fmt(amount: unknown): string {
   display: flex;
   align-items: center;
   gap: 2px;
-  background: #f5f5f5;
-  border: 1px solid #d9d9d9;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(226,224,217,0.5);
   border-radius: 8px;
   padding: 2px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .qty-btn {
@@ -285,8 +293,8 @@ function fmt(amount: unknown): string {
 }
 .qty-btn:hover {
   background: #ffffff;
-  color: #b01883;
-  box-shadow: 0 1px 4px rgba(176, 24, 131, 0.12);
+  color: #2D6A4F;
+  box-shadow: 0 1px 4px rgba(45,106,79,0.08);
 }
 
 .qty-num {
@@ -322,7 +330,7 @@ function fmt(amount: unknown): string {
   flex-shrink: 0;
 }
 .del-btn:hover {
-  background: rgba(176, 24, 131, 0.08);
-  color: #b01883;
+  background: rgba(45,106,79,0.06);
+  color: #2D6A4F;
 }
 </style>

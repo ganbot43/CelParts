@@ -144,6 +144,7 @@ const pageTitles: Record<string, string> = {
   "/admin": "Dashboard",
   "/admin/pedidos": "Pedidos",
   "/admin/productos": "Productos",
+  "/admin/inventario": "Inventario",
   "/admin/categorias": "Categorías",
   "/admin/metodos-pago": "Métodos de Pago",
   "/admin/banners": "Banners",

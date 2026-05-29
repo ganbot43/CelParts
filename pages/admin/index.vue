@@ -33,6 +33,92 @@
       </div>
     </div>
 
+    <!-- ── Automatización ── -->
+    <div class="dash-automation admin-fade-in" style="animation-delay: 180ms">
+      <div class="dash-automation__header">
+        <div>
+          <h2 class="dash-table-title">Automatización operativa</h2>
+          <p class="dash-table-sub">
+            Reportes, alertas y carga masiva desde un solo lugar
+          </p>
+        </div>
+        <div class="dash-automation__actions">
+          <button class="dash-action-btn" :disabled="automationLoading" @click="refreshAutomation">
+            {{ automationLoading ? "Actualizando…" : "Actualizar todo" }}
+          </button>
+          <button class="dash-action-btn dash-action-btn--accent" :disabled="automationLoading" @click="sendStockAlerts">
+            Enviar alerta de stock
+          </button>
+          <button class="dash-action-btn" :disabled="automationLoading" @click="refreshFollowUpsList">
+            Ver seguimientos
+          </button>
+        </div>
+      </div>
+
+      <div class="dash-automation__grid">
+        <article class="dash-automation-card">
+          <span class="dash-automation-kicker">Reporte general</span>
+          <strong>{{ automationTotals.todaySalesLabel }}</strong>
+          <p>{{ automationTotals.todayOrders }} pedidos hoy · {{ automationTotals.weekOrders }} esta semana</p>
+        </article>
+        <article class="dash-automation-card">
+          <span class="dash-automation-kicker">Stock crítico</span>
+          <strong>{{ lowStockItems.length }}</strong>
+          <p>Productos con stock bajo el umbral</p>
+        </article>
+        <article class="dash-automation-card">
+          <span class="dash-automation-kicker">Seguimientos</span>
+          <strong>{{ followUpItems.length }}</strong>
+          <p>Pedidos pendientes de revisión</p>
+        </article>
+        <article class="dash-automation-card">
+          <span class="dash-automation-kicker">Top productos</span>
+          <strong>{{ topProducts[0]?.name ?? "Sin datos" }}</strong>
+          <p>{{ topProducts[0] ? `${topProducts[0].quantity} unidades vendidas` : "Aún no hay ventas" }}</p>
+        </article>
+      </div>
+
+      <div class="dash-automation__panels">
+        <div class="dash-automation-panel">
+          <div class="dash-automation-panel__head">
+            <h3>Productos con stock bajo</h3>
+            <span class="dash-automation-pill">Umbral {{ stockThreshold }}</span>
+          </div>
+          <div v-if="!lowStockItems.length" class="dash-automation-empty">
+            No hay productos en alerta.
+          </div>
+          <ul v-else class="dash-automation-list">
+            <li v-for="item in lowStockItems.slice(0, 6)" :key="item.id">
+              <div>
+                <strong>{{ item.name }}</strong>
+                <span>{{ item.categoryName }}</span>
+              </div>
+              <span class="dash-automation-stock">{{ item.stock }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="dash-automation-panel">
+          <div class="dash-automation-panel__head">
+            <h3>Pedidos para seguimiento</h3>
+            <span class="dash-automation-pill">{{ followUpItems.length }} abiertos</span>
+          </div>
+          <div v-if="!followUpItems.length" class="dash-automation-empty">
+            No hay pedidos pendientes fuera del plazo.
+          </div>
+          <ul v-else class="dash-automation-list">
+            <li v-for="item in followUpItems.slice(0, 6)" :key="item.id">
+              <div>
+                <strong>{{ item.orderCode }}</strong>
+                <span>{{ item.customerName }} · {{ item.hoursOpen }}h</span>
+              </div>
+              <AdminEtiquetaEstadoPedido :status="item.status" />
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <!-- ── Últimos pedidos ── -->
     <div class="sp-table-wrap admin-fade-in" style="animation-delay: 240ms">
       <!-- Cabecera de sección -->
@@ -184,12 +270,17 @@ useSeoMeta({ title: "Dashboard — Admin" });
 const { data: ordersData, refresh: refreshOrders } =
   await useFetch("/api/admin/orders");
 const { data: productsData } = await useFetch("/api/admin/products");
+const { data: reportsData, refresh: refreshReports } = await useFetch("/api/admin/automation/reports");
+const { data: stockAlertsData, refresh: refreshStockAlerts } = await useFetch("/api/admin/automation/stock-alerts");
+const { data: followUpsData, refresh: refreshFollowUpsQuery } = await useFetch("/api/admin/automation/follow-ups");
 const formatPrice = useFormatPrice();
 const { formatDateTime } = useFormatDateTime();
 
 const recentOrders = computed(() => (ordersData.value?.data ?? []).slice(0, 5));
 const selectedOrderId = ref<number | null>(null);
 const modalOpen = ref(false);
+const automationLoading = ref(false);
+const stockThreshold = ref(10);
 
 function openOrder(orderId: number) {
   selectedOrderId.value = orderId;
@@ -199,6 +290,68 @@ function openOrder(orderId: number) {
 function onOrderUpdated() {
   modalOpen.value = false;
   refreshOrders();
+}
+
+const automationTotals = computed(() => {
+  const totals = (reportsData.value?.totals ?? {}) as {
+    todaySales?: number;
+    todayOrders?: number;
+    weekOrders?: number;
+  };
+  return {
+    todaySalesLabel: formatPrice.format(Number(totals.todaySales ?? 0)),
+    todayOrders: Number(totals.todayOrders ?? 0),
+    weekOrders: Number(totals.weekOrders ?? 0),
+  };
+});
+
+const lowStockItems = computed(() =>
+  (stockAlertsData.value?.data ?? reportsData.value?.lowStock ?? []).map(
+    (item: any) => ({
+      id: item.id,
+      name: item.name,
+      stock: Number(item.stock ?? 0),
+      categoryName: item.category?.name ?? "Sin categoría",
+    }),
+  ),
+);
+const followUpItems = computed(() => followUpsData.value?.data ?? []);
+const topProducts = computed(() => reportsData.value?.topProducts ?? []);
+
+async function refreshAutomation() {
+  automationLoading.value = true;
+  try {
+    await Promise.all([
+      refreshReports(),
+      refreshStockAlerts(),
+      refreshFollowUpsQuery(),
+    ]);
+  } finally {
+    automationLoading.value = false;
+  }
+}
+
+async function sendStockAlerts() {
+  automationLoading.value = true;
+  try {
+    await $fetch("/api/admin/automation/stock-alerts", {
+      query: { threshold: stockThreshold.value, notify: 1 },
+    });
+    await Promise.all([refreshReports(), refreshStockAlerts()]);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    automationLoading.value = false;
+  }
+}
+
+async function refreshFollowUpsList() {
+  automationLoading.value = true;
+  try {
+    await refreshFollowUpsQuery();
+  } finally {
+    automationLoading.value = false;
+  }
 }
 
 const today = new Intl.DateTimeFormat("es-PE", {
@@ -409,6 +562,186 @@ const stats = computed(() => {
   font-family: var(--sp-font);
 }
 
+/* ── Automation panel ── */
+.dash-automation {
+  background: var(--sp-surface-solid);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-xl);
+  box-shadow: var(--sp-shadow-sm);
+  padding: 1.2rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dash-automation__header,
+.dash-automation-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dash-automation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dash-action-btn {
+  border: 1px solid var(--sp-border);
+  background: var(--sp-surface-subtle);
+  color: var(--sp-text);
+  border-radius: var(--sp-radius-pill);
+  padding: 0.55rem 0.9rem;
+  font-size: var(--sp-text-xs);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background var(--sp-t-fast) var(--sp-ease),
+    transform var(--sp-t-fast) var(--sp-ease),
+    opacity var(--sp-t-fast) var(--sp-ease);
+}
+
+.dash-action-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--sp-surface-solid);
+}
+
+.dash-action-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.dash-action-btn--accent {
+  background: var(--sp-primary-soft);
+  border-color: rgba(53, 109, 255, 0.18);
+  color: var(--sp-primary-ink);
+}
+
+.dash-automation__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.dash-automation-card,
+.dash-automation-panel,
+.dash-automation__importer {
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-lg);
+  background: var(--sp-surface-subtle);
+  padding: 1rem;
+}
+
+.dash-automation-card strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: var(--sp-text-lg);
+  color: var(--sp-text-strong);
+  font-family: var(--sp-font-display);
+}
+
+.dash-automation-card p,
+.dash-automation-panel p,
+.dash-automation-note {
+  margin: 0.35rem 0 0;
+  color: var(--sp-text-soft);
+  font-size: var(--sp-text-xs);
+  font-family: var(--sp-font);
+}
+
+.dash-automation-kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sp-primary);
+  font-weight: 800;
+}
+
+.dash-automation__panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.dash-automation-panel__head--stack {
+  align-items: flex-start;
+}
+
+.dash-automation-panel h3 {
+  margin: 0;
+  font-size: var(--sp-text-md);
+  color: var(--sp-text-strong);
+  font-family: var(--sp-font);
+}
+
+.dash-automation-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--sp-radius-pill);
+  background: var(--sp-primary-soft);
+  color: var(--sp-primary-ink);
+  font-size: var(--sp-text-xs);
+  font-weight: 700;
+  padding: 0.28rem 0.65rem;
+  white-space: nowrap;
+}
+
+.dash-automation-empty {
+  padding: 1rem 0 0.35rem;
+  color: var(--sp-text-soft);
+  font-size: var(--sp-text-xs);
+  font-family: var(--sp-font);
+}
+
+.dash-automation-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.dash-automation-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--sp-surface-solid);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-md);
+  padding: 0.8rem 0.85rem;
+}
+
+.dash-automation-list strong {
+  display: block;
+  font-size: var(--sp-text-sm);
+  color: var(--sp-text-strong);
+  font-family: var(--sp-font);
+}
+
+.dash-automation-list span {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: var(--sp-text-xs);
+  color: var(--sp-text-soft);
+  font-family: var(--sp-font);
+}
+
+.dash-automation-stock {
+  min-width: 2rem;
+  text-align: center;
+  border-radius: var(--sp-radius-pill);
+  background: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+  padding: 0.25rem 0.55rem;
+  font-weight: 800;
+}
+
 /* ── Table section header ── */
 .dash-table-header {
   display: flex;
@@ -515,8 +848,17 @@ const stats = computed(() => {
   .dash-stats {
     grid-template-columns: 1fr 1fr;
   }
+  .dash-automation__grid,
+  .dash-automation__panels {
+    grid-template-columns: 1fr;
+  }
   .dash-stat-value {
     font-size: var(--sp-text-2xl);
+  }
+  .dash-automation__header,
+  .dash-automation-panel__head {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 

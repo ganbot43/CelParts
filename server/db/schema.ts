@@ -17,7 +17,7 @@ export const businessConfig = mysqlTable('business_config', {
   plan:               varchar('plan', { length: 20 })
                         .notNull().default('basic'),
   socialLinks:        text('social_links'),           // JSON serializado
-  stockEnabled:       int('stock_enabled').notNull().default(0),
+  stockEnabled:       int('stock_enabled').notNull().default(1),
   autoPaymentEnabled: int('auto_payment_enabled').notNull().default(0),
   couponsEnabled:     int('coupons_enabled').notNull().default(0),
   multiuserEnabled:   int('multiuser_enabled').notNull().default(0),
@@ -71,7 +71,7 @@ export const products = mysqlTable('products', {
   description:   text('description'),
   price:         double('price').notNull(),
   stock:         int('stock').notNull().default(0),
-  trackStock:    int('track_stock').notNull().default(0),
+  trackStock:    int('track_stock').notNull().default(1),
   isFeatured:    int('is_featured').notNull().default(0),
   nuevoLanzamiento: int('nuevo_lanzamiento').notNull().default(0),
   isActive:      int('is_active').notNull().default(1),
@@ -150,6 +150,20 @@ export const orderStatusLogs = mysqlTable('order_status_logs', {
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
+// 13. inventory_movements
+export const inventoryMovements = mysqlTable('inventory_movements', {
+  id:            int('id').autoincrement().primaryKey(),
+  productId:     int('product_id').notNull().references(() => products.id, { onDelete: 'cascade' }),
+  movementType:  varchar('movement_type', { length: 20 }).notNull(), // 'entry' | 'exit' | 'adjustment'
+  quantity:      int('quantity').notNull().default(0),
+  delta:         int('delta'), // signed change (for adjustments or convenience)
+  reason:        text('reason'),
+  relatedOrderId: int('related_order_id').references(() => orders.id, { onDelete: 'set null' }),
+  createdBy:     int('created_by').references(() => users.id, { onDelete: 'set null' }),
+  metadata:      text('metadata'),
+  createdAt:     timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
+})
+
 // 11. banners
 export const banners = mysqlTable('banners', {
   id:        int('id').autoincrement().primaryKey(),
@@ -209,6 +223,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   subcategory: one(subcategories, { fields: [products.subcategoryId], references: [subcategories.id] }),
   images:      many(productImages),
   orderItems:  many(orderItems),
+  inventoryMovements: many(inventoryMovements),
 }))
 
 export const productImagesRelations = relations(productImages, ({ one }) => ({
@@ -231,4 +246,10 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
 export const orderStatusLogsRelations = relations(orderStatusLogs, ({ one }) => ({
   order:     one(orders, { fields: [orderStatusLogs.orderId],   references: [orders.id] }),
   changedBy: one(users,  { fields: [orderStatusLogs.changedBy], references: [users.id] }),
+}))
+
+export const inventoryMovementsRelations = relations(inventoryMovements, ({ one }) => ({
+  product: one(products, { fields: [inventoryMovements.productId], references: [products.id] }),
+  relatedOrder: one(orders, { fields: [inventoryMovements.relatedOrderId], references: [orders.id] }),
+  createdByUser: one(users, { fields: [inventoryMovements.createdBy], references: [users.id] }),
 }))

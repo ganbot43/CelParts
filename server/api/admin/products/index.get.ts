@@ -1,11 +1,21 @@
 import { db } from '~/server/db'
 import { enhanceProducts } from '~/server/utils/db'
 import { products } from '~/server/db/schema'
-import { desc } from 'drizzle-orm'
+import { desc, sql } from 'drizzle-orm'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const limit = Math.min(100, Math.max(1, Number(query.limit ?? 10)))
+  const offset = Math.max(0, Number(query.offset ?? 0))
+
+  // Total count
+  const countResult = await db.select({ count: sql<number>`count(*)` }).from(products).execute()
+  const total = countResult[0]?.count ?? 0
+
   const rawItems = await db.select().from(products)
     .orderBy(desc(products.createdAt))
+    .limit(limit)
+    .offset(offset)
 
   const items = await enhanceProducts(rawItems)
   const data = items.map(p => ({
@@ -28,5 +38,5 @@ export default defineEventHandler(async () => {
     images: (p.images ?? []).map(img => ({ id: img.id, url: img.url, isPrimary: !!img.isPrimary, sortOrder: img.sortOrder })),
   }))
 
-  return { data }
+  return { total, data }
 })

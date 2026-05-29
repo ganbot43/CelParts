@@ -3,15 +3,17 @@
     <LandingHeroSection />
     <!-- components/landing/CategoryGrid.vue -->
 
-    <!-- <LandingFeaturedSection /> -->
+    <LandingFeaturedSection />
     <LandingCatalogNuevosLanzamientos />
 
     <LandingCategoryGrid sectionId="1" />
     <LandingCategoryGrid sectionId="2" />
-    <!-- <LandingBenefitsSection />
+
+    <LandingBenefitsSection />
     <LandingAboutSection />
     <LandingGallerySection />
-    <LandingLocationSection /> -->
+    <LandingLocationSection />
+    <LandingContactSection />
   </div>
 </template>
 

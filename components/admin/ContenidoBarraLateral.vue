@@ -89,6 +89,11 @@ const baseItems = [
     svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M2 5l7-3 7 3v8l-7 3-7-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 2v14M2 5l7 3 7-3" stroke="currentColor" stroke-width="1.4"/></svg>`,
   },
   {
+    to: "/admin/inventario",
+    label: "Inventario",
+    svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M3 4h12v10H3z" stroke="currentColor" stroke-width="1.4"/><path d="M3 8h12" stroke="currentColor" stroke-width="1.4"/></svg>`,
+  },
+  {
     to: "/admin/categorias",
     label: "Categorías",
     svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M2 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM11 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V4zM2 11a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H3a1 1 0 01-1-1v-3zM11 11a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-3z" stroke="currentColor" stroke-width="1.4"/></svg>`,

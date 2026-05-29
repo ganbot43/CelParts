@@ -437,12 +437,23 @@ const route = useRoute();
 
 const simpleNavLinks: NavLink[] = [
   { name: "Inicio", path: "#inicio" },
-  { name: "Nuevos lanzamientos", path: "#nuevos-lanzamientos" },
+  { name: "Lanzamientos", path: "#nuevos-lanzamientos", mobileName: "Lanzamientos" },
+  { name: "Beneficios", path: "#beneficios" },
 ];
-const trailingNavLinks: NavLink[] = [];
+const trailingNavLinks: NavLink[] = [
+  { name: "Nosotros", path: "#nosotros" },
+  { name: "Galería", path: "#galeria" },
+  { name: "Ubicación", path: "#tienda" },
+  { name: "Contacto", path: "#contacto" },
+];
 const allNavLinks: NavLink[] = [
   { name: "Inicio", path: "#inicio" },
-  { name: "Nuevos lanzamientos", path: "#nuevos-lanzamientos" },
+  { name: "Lanzamientos", path: "#nuevos-lanzamientos", mobileName: "Lanzamientos" },
+  { name: "Beneficios", path: "#beneficios" },
+  { name: "Nosotros", path: "#nosotros" },
+  { name: "Galería", path: "#galeria" },
+  { name: "Ubicación", path: "#tienda" },
+  { name: "Contacto", path: "#contacto" },
 ];
 
 const activeSection = ref("#inicio");
@@ -1005,7 +1016,7 @@ const handleOutsideClick = (e: MouseEvent) => {
 .nav-bar-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 20px;
   height: 46px;
   display: flex;
   align-items: center;
@@ -1020,12 +1031,12 @@ const handleOutsideClick = (e: MouseEvent) => {
   gap: 0;
 }
 .nav-link {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.75);
-  padding: 0 20px;
+  padding: 0 14px;
   height: 46px;
   display: inline-flex;
   align-items: center;

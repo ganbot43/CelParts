@@ -1,11 +1,11 @@
 import { db } from '~/server/db'
-import { insertAndGetId } from '~/server/db/mysql'
 import { orders, orderItems, orderStatusLogs, products } from '~/server/db/schema'
 import { eq, inArray } from 'drizzle-orm'
 import { validateBody } from '~/server/utils/validate'
 import { generateOrderCode } from '~/server/utils/orderCode'
 import { z } from 'zod'
 import { enhanceOrders } from '~/server/utils/db'
+import { sendOrderNotification } from '~/server/utils/automation'
 
 const schema = z.object({
   customerName:      z.string().min(2),
@@ -66,63 +66,75 @@ export default defineEventHandler(async (event) => {
     where: (pm) => eq(pm.id, data.paymentMethodId),
   })
 
-  // INSERT orden con snapshots del método de pago
-  const orderId = await insertAndGetId(orders, {
-    orderCode:                  'PED-TEMP',
-    paymentMethodId:            data.paymentMethodId,
-    paymentMethodType:          paymentMethod?.type ?? null,
-    paymentMethodLabel:         paymentMethod?.label ?? null,
-    paymentMethodQrUrl:         paymentMethod?.qrUrl ?? null,
-    paymentMethodAccountNumber: paymentMethod?.accountNumber ?? null,
-    paymentMethodAccountName:   paymentMethod?.accountName ?? null,
-    customerName:               data.customerName,
-    customerPhone:              data.customerPhone,
-    customerAddress:            data.customerAddress,
-    customerReference:          data.customerReference,
-    customerNotes:              data.customerNotes,
-    subtotal,
-    total,
-    status: 'pending',
-  })
-  const orderCode = generateOrderCode(orderId)
-
-  // Actualizar con orderCode real
-  db.update(orders)
-    .set({ orderCode })
-    .where(eq(orders.id, orderId))
-    .execute()
-
-  // INSERT items con snapshot de nombre y precio
-  for (const item of data.items) {
-    const prod = dbProducts.find(p => p.id === item.productId)!
-    db.insert(orderItems).values({
-      orderId,
-      productId:   prod.id,
-      productName: prod.name,
-      unitPrice:   prod.price,
-      quantity:    item.quantity,
-      subtotal:    prod.price * item.quantity,
+  // Insertar orden + items + actualizaciones de stock y movimientos en una transacción
+  let createdOrderId = 0
+  await db.transaction(async (tx) => {
+    const [hdr] = await tx.insert(orders).values({
+      orderCode:                  'PED-TEMP',
+      paymentMethodId:            data.paymentMethodId,
+      paymentMethodType:          paymentMethod?.type ?? null,
+      paymentMethodLabel:         paymentMethod?.label ?? null,
+      paymentMethodQrUrl:         paymentMethod?.qrUrl ?? null,
+      paymentMethodAccountNumber: paymentMethod?.accountNumber ?? null,
+      paymentMethodAccountName:   paymentMethod?.accountName ?? null,
+      customerName:               data.customerName,
+      customerPhone:              data.customerPhone,
+      customerAddress:            data.customerAddress,
+      customerReference:          data.customerReference,
+      customerNotes:              data.customerNotes,
+      subtotal,
+      total,
+      status: 'pending',
     }).execute()
 
-    // Descontar stock si aplica
-    if (config?.stockEnabled && prod.trackStock) {
-      db.update(products)
-        .set({ stock: prod.stock - item.quantity })
-        .where(eq(products.id, prod.id))
-        .execute()
-    }
-  }
+    createdOrderId = Number((hdr as any).insertId ?? 0)
+    if (!createdOrderId) throw new Error('No se pudo crear la orden')
 
-  // INSERT log inicial
-  await db.insert(orderStatusLogs).values({
-    orderId,
-    status: 'pending',
-    note:   'Pedido creado',
-  }).execute()
+    const orderCode = generateOrderCode(createdOrderId)
+    await tx.update(orders).set({ orderCode }).where(eq(orders.id, createdOrderId)).execute()
+
+    for (const item of data.items) {
+      const prodRows: any[] = await tx.select().from(products).where(eq(products.id, item.productId)).limit(1)
+      const prod = prodRows[0]
+      if (!prod) {
+        throw createError({ statusCode: 400, message: `Producto ${item.productId} no encontrado` })
+      }
+
+      await tx.insert(orderItems).values({
+        orderId: createdOrderId,
+        productId:   prod.id,
+        productName: prod.name,
+        unitPrice:   prod.price,
+        quantity:    item.quantity,
+        subtotal:    prod.price * item.quantity,
+      }).execute()
+
+      // Descontar stock si aplica y registrar movimiento (usa helper para atomicidad)
+      if (config?.stockEnabled && prod.trackStock) {
+        const { changeStockTx } = await import('~/server/services/inventory')
+        const delta = -Number(item.quantity ?? 0)
+        // will throw if product not found or stock invalid inside helper
+        await changeStockTx(tx, prod.id, delta, {
+          movementType: 'exit',
+          reason: `Salida por pedido ${orderCode}`,
+          relatedOrderId: createdOrderId,
+          createdBy: null,
+        })
+      }
+    }
+
+    await tx.insert(orderStatusLogs).values({
+      orderId: createdOrderId,
+      status: 'pending',
+      note:   'Pedido creado',
+    }).execute()
+  })
 
   const order = (await enhanceOrders(
-    await db.select().from(orders).where(eq(orders.id, orderId)).limit(1),
+    await db.select().from(orders).where(eq(orders.id, createdOrderId)).limit(1),
   ))[0]
+
+  await sendOrderNotification(order, 'created')
 
   return order
 })

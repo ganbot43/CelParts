@@ -1,11 +1,22 @@
 import { db } from '~/server/db'
 import { orders } from '~/server/db/schema'
-import { desc } from 'drizzle-orm'
+import { desc, sql } from 'drizzle-orm'
 import { enhanceOrders } from '~/server/utils/db'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const limit = Math.min(100, Math.max(1, Number(query.limit ?? 10)))
+  const offset = Math.max(0, Number(query.offset ?? 0))
+
+  // Total count
+  const countResult = await db.select({ count: sql<number>`count(*)` }).from(orders).execute()
+  const total = countResult[0]?.count ?? 0
+
   const items = await enhanceOrders(
-    await db.select().from(orders).orderBy(desc(orders.createdAt)),
+    await db.select().from(orders)
+      .orderBy(desc(orders.createdAt))
+      .limit(limit)
+      .offset(offset),
   )
 
   // Mapear a objetos planos serializables
@@ -40,5 +51,5 @@ export default defineEventHandler(async () => {
     })),
   }))
 
-  return { data }
+  return { total, data }
 })

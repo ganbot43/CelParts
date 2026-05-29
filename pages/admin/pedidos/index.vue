@@ -4,8 +4,7 @@
       <div>
         <h1 class="sp-page-toolbar__title">Pedidos</h1>
         <p class="sp-page-toolbar__sub">
-          {{ filteredOrders.length }} pedidos
-          {{ statusFilter ? "filtrados" : "en total" }}
+          {{ total }} pedidos {{ statusFilter ? "filtrados" : "en total" }}
         </p>
       </div>
     </div>
@@ -17,7 +16,7 @@
         :key="s.value"
         class="orders-filter-btn"
         :class="{ 'orders-filter-btn--active': statusFilter === s.value }"
-        @click="statusFilter = s.value"
+        @click="setStatusFilter(s.value)"
       >
         {{ s.label }}
       </button>
@@ -39,7 +38,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="order in filteredOrders"
+              v-for="order in orders"
               :key="order.id"
               class="sp-tr sp-tr--clickable"
               @click="openOrder(order.id)"
@@ -51,58 +50,30 @@
                 <p class="sp-table-title">{{ order.customerName }}</p>
               </td>
               <td class="sp-td">
-                <span class="sp-table-amount">{{
-                  formatPrice.format(order.total)
-                }}</span>
+                <span class="sp-table-amount">{{ formatPrice.format(order.total) }}</span>
               </td>
               <td class="sp-td">
                 <AdminEtiquetaEstadoPedido :status="order.status" />
               </td>
               <td class="sp-td sp-td--muted">
-                <span class="orders-date">
-                  {{ formatDateTime(order.createdAt) }}
-                </span>
+                <span class="orders-date">{{ formatDateTime(order.createdAt) }}</span>
               </td>
               <td class="sp-td" @click.stop>
-                <button
-                  class="sp-table-btn sp-table-btn--view"
-                  title="Ver pedido"
-                  @click="openOrder(order.id)"
-                >
+                <button class="sp-table-btn sp-table-btn--view" title="Ver pedido" @click="openOrder(order.id)">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <ellipse
-                      cx="8"
-                      cy="8"
-                      rx="6"
-                      ry="4"
-                      stroke="currentColor"
-                      stroke-width="1.4"
-                    />
+                    <ellipse cx="8" cy="8" rx="6" ry="4" stroke="currentColor" stroke-width="1.4" />
                     <circle cx="8" cy="8" r="1.5" fill="currentColor" />
                   </svg>
                 </button>
               </td>
             </tr>
-
-            <tr v-if="!filteredOrders.length">
+            <tr v-if="!orders.length">
               <td colspan="6" class="sp-table-empty">
                 <div class="sp-table-empty__inner">
                   <div class="sp-table-empty__icon">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                      <rect
-                        x="2"
-                        y="7"
-                        width="20"
-                        height="14"
-                        rx="2"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                      />
-                      <path
-                        d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                      />
+                      <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5" />
+                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="currentColor" stroke-width="1.5" />
                     </svg>
                   </div>
                   <p class="sp-table-empty__msg">
@@ -114,16 +85,26 @@
           </tbody>
         </table>
       </div>
+
+      <div class="sp-table-footer" style="display:flex; align-items:center; justify-content:space-between; padding:.75rem 1rem; gap:1rem">
+        <div class="sp-table-meta">Página {{ page + 1 }} — {{ total }} registros</div>
+        <div style="display:flex; gap:0.35rem; align-items:center">
+          <button
+            v-for="p in totalPages" :key="p"
+            @click="page = p - 1; fetchOrders()"
+            :disabled="p - 1 === page"
+            class="sp-table-btn"
+            style="min-width:36px; padding:.45rem .6rem; font-size:0.875rem"
+            :style="{ fontWeight: p - 1 === page ? 600 : 400, background: p - 1 === page ? '#3b82f6' : 'transparent', color: p - 1 === page ? 'white' : 'inherit' }"
+          >{{ p }}</button>
+        </div>
+      </div>
     </div>
 
     <!-- Modal -->
     <Teleport to="body">
       <Transition name="modal">
-        <div
-          v-if="modalOpen"
-          class="modal-backdrop"
-          @click.self="modalOpen = false"
-        >
+        <div v-if="modalOpen" class="modal-backdrop" @click.self="modalOpen = false">
           <div class="modal-box">
             <PedidoModal
               v-if="selectedOrderId"
@@ -139,17 +120,48 @@
 </template>
 
 <script setup lang="ts">
-import PedidoModal from "./pedidoModal.vue";
+import PedidoModal from "./pedidoModal.vue"
+definePageMeta({ middleware: "auth", layout: "admin" })
+useSeoMeta({ title: "Pedidos — Admin" })
 
-definePageMeta({ middleware: "auth", layout: "admin" });
-useSeoMeta({ title: "Pedidos — Admin" });
+const formatPrice = useFormatPrice()
+const { formatDateTime } = useFormatDateTime()
 
-const { data: ordersData, refresh } = await useFetch("/api/admin/orders");
-const formatPrice = useFormatPrice();
-const { formatDateTime } = useFormatDateTime();
-const statusFilter = ref("");
-const modalOpen = ref(false);
-const selectedOrderId = ref<number | null>(null);
+// ── Paginación y filtros ──
+const page = ref<number>(0)
+const limit = ref<number>(10)
+const total = ref<number>(0)
+const orders = ref<any[]>([])
+const statusFilter = ref<string>("")
+
+const totalPages = computed<number>(() => Math.ceil((total.value || 0) / limit.value))
+
+async function fetchOrders() {
+  try {
+    const query: any = { limit: limit.value, offset: page.value * limit.value }
+    if (statusFilter.value) query.status = statusFilter.value
+    const res: any = await $fetch("/api/admin/orders", { query })
+    orders.value = res?.data ?? []
+    total.value = res?.total ?? orders.value.length
+  } catch (e) {
+    // ignore
+  }
+}
+
+function setStatusFilter(value: string) {
+  statusFilter.value = value
+  page.value = 0
+  fetchOrders()
+}
+
+onMounted(() => {
+  fetchOrders()
+  window.addEventListener("keydown", onKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", onKeydown)
+})
 
 const statusOptions = [
   { value: "", label: "Todos" },
@@ -159,32 +171,23 @@ const statusOptions = [
   { value: "in_preparation", label: "En preparación" },
   { value: "delivered", label: "Entregados" },
   { value: "cancelled", label: "Cancelados" },
-];
+]
 
-const filteredOrders = computed(() => {
-  const orders = ordersData.value?.data ?? [];
-  if (!statusFilter.value) return orders;
-  return orders.filter((o: any) => o.status === statusFilter.value);
-});
+// ── Modal ──
+const modalOpen = ref(false)
+const selectedOrderId = ref<number | null>(null)
 
 function openOrder(id: number) {
-  selectedOrderId.value = id;
-  modalOpen.value = true;
+  selectedOrderId.value = id
+  modalOpen.value = true
 }
 
 async function onOrderUpdated() {
-  await refresh();
+  await fetchOrders()
 }
 
-// Cerrar con Escape
-onMounted(() => {
-  window.addEventListener("keydown", onKeydown);
-});
-onUnmounted(() => {
-  window.removeEventListener("keydown", onKeydown);
-});
 function onKeydown(e: KeyboardEvent) {
-  if (e.key === "Escape") modalOpen.value = false;
+  if (e.key === "Escape") modalOpen.value = false
 }
 </script>
 
@@ -194,8 +197,6 @@ function onKeydown(e: KeyboardEvent) {
   flex-direction: column;
   gap: 1.25rem;
 }
-
-/* ── Filtros ── */
 .orders-filters {
   display: flex;
   flex-wrap: wrap;
@@ -213,10 +214,7 @@ function onKeydown(e: KeyboardEvent) {
   font-weight: 600;
   font-family: var(--sp-font);
   cursor: pointer;
-  transition:
-    background var(--sp-t-fast) var(--sp-ease),
-    color var(--sp-t-fast) var(--sp-ease),
-    border-color var(--sp-t-fast) var(--sp-ease);
+  transition: background var(--sp-t-fast) var(--sp-ease), color var(--sp-t-fast) var(--sp-ease), border-color var(--sp-t-fast) var(--sp-ease);
   white-space: nowrap;
 }
 .orders-filter-btn:hover {
@@ -229,16 +227,8 @@ function onKeydown(e: KeyboardEvent) {
   border-color: rgba(53, 109, 255, 0.22);
   box-shadow: 0 2px 8px rgba(53, 109, 255, 0.1);
 }
-
-/* ── Row clickable ── */
-.sp-tr--clickable {
-  cursor: pointer;
-}
-.sp-tr--clickable:hover td {
-  background: var(--sp-surface-subtle, #f9f9f9);
-}
-
-/* ── Código ── */
+.sp-tr--clickable { cursor: pointer; }
+.sp-tr--clickable:hover td { background: var(--sp-surface-subtle, #f9f9f9); }
 .orders-code {
   font-family: "Courier New", Courier, monospace;
   font-size: var(--sp-text-sm);
@@ -246,8 +236,6 @@ function onKeydown(e: KeyboardEvent) {
   color: var(--sp-primary);
   letter-spacing: 0.02em;
 }
-
-/* ── Fecha ── */
 .orders-date {
   font-size: var(--sp-text-xs);
   font-variant-numeric: tabular-nums;

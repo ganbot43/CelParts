@@ -1,6 +1,6 @@
-# Joymar Utensilios
+# Kite Utensilios
 
-Plataforma ecommerce desarrollada con Nuxt 3 para Joymar Utensilios. El proyecto combina una landing page pública, catálogo y flujo de compra, además de un panel administrativo para gestionar productos, categorías, pedidos, banners, pagos y el libro de reclamaciones.
+Plataforma ecommerce desarrollada con Nuxt 3 para Kite Utensilios. El proyecto combina una landing page pública, catálogo y flujo de compra, además de un panel administrativo para gestionar productos, categorías, pedidos, banners, pagos y el libro de reclamaciones.
 
 ## Qué tipo de proyecto es
 
@@ -61,19 +61,19 @@ El proyecto usa configuración de entorno para la base de datos, correo, reCAPTC
 # Base de datos MySQL
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_USER=joymar_user
+DB_USER=kite_user
 DB_PASSWORD=tu_password
-DB_NAME=joymar
+DB_NAME=kiteprueba
 
 # Sesión / auth
 NUXT_SESSION_PASSWORD=una_clave_larga_y_segura
 
 # App pública
-NUXT_PUBLIC_APP_NAME=Joymar Utensilios
-NUXT_PUBLIC_COMPANY_NAME=Joymar Utensilios
-NUXT_PUBLIC_SITE_NAME=Joymar Peru
-NUXT_PUBLIC_SITE_URL=https://joymarperu.com
-NUXT_PUBLIC_WHATSAPP=+51996111303
+NUXT_PUBLIC_APP_NAME=Kite Utensilios
+NUXT_PUBLIC_COMPANY_NAME=Kite Utensilios
+NUXT_PUBLIC_SITE_NAME=Kite Peru
+NUXT_PUBLIC_SITE_URL=https://kite.pe
+NUXT_PUBLIC_WHATSAPP=+51923821520
 
 # Google reCAPTCHA
 G_RECAPTCHA_SECRET_KEY=tu_secret_key
@@ -82,9 +82,9 @@ G_RECAPTCHA_SITE_KEY=tu_site_key
 # SMTP
 SMTP_HOST=mail.example.com
 SMTP_PORT=587
-SMTP_USER=joymar.peru@gmail.com
+SMTP_USER=info@kite.pe
 SMTP_PASSWORD=tu_password
-SMTP_FROM=joymar.peru@gmail.com
+SMTP_FROM="Kite Utensilios <info@kite.pe>"
 SMTP_SECURE=false
 
 # S3
@@ -92,7 +92,7 @@ S3_BUCKET=mi-bucket
 S3_REGION=us-east-1
 S3_ACCESS_KEY_ID=tu_key
 S3_SECRET_ACCESS_KEY=tu_secret
-S3_ROOT_PREFIX=joymar_utensilios
+S3_ROOT_PREFIX=kite_utensilios
 ```
 
 ## Configurar S3 en AWS
@@ -140,7 +140,7 @@ mysql -u root -p
 Dentro del prompt de MySQL:
 
 ```sql
-CREATE DATABASE joymarprueba CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE kiteprueba CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 EXIT;
 ```
 
@@ -266,7 +266,7 @@ Si ya generaste `.output/` en tu entorno de build, copia esa carpeta al servidor
 - `nuxt.config.ts` habilita SSR.
 - La app usa sitemap y excluye rutas privadas como `/admin` y `/login`.
 - El proyecto integra Google Fonts, iconos de Font Awesome y utilidades de Tailwind v4.
-- El dominio configurado en metadata es `joymarperu.com`.
+-- El dominio configurado en metadata es `kite.pe`.
 
 ## Solución de problemas
 
@@ -283,7 +283,7 @@ Si ya generaste `.output/` en tu entorno de build, copia esa carpeta al servidor
 - Prueba la conexión manualmente:
 
 ```bash
-mysql -u joymar_user -p joymar -h 127.0.0.1 -e "SELECT 1"
+mysql -u kite_user -p kiteprueba -h 127.0.0.1 -e "SELECT 1"
 ```
 
 ### El puerto 3000 está ocupado

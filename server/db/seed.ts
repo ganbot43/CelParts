@@ -121,7 +121,7 @@ async function seed() {
       slug,
       description:   `${name}: producto de cocina de alta calidad, previamente probado y certificado. Durabilidad garantizada para tu hogar.`,
       price:         parseFloat((Math.random() * 180 + 30).toFixed(2)),
-      stock:         50,
+      stock:         Math.floor(Math.random() * 60) + 10,
       isFeatured:    i < 4 ? 1 : 0,
       isActive:      1,
     })

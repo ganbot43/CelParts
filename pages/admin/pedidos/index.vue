@@ -11,13 +11,8 @@
 
     <!-- Filtros -->
     <div class="orders-filters">
-      <button
-        v-for="s in statusOptions"
-        :key="s.value"
-        class="orders-filter-btn"
-        :class="{ 'orders-filter-btn--active': statusFilter === s.value }"
-        @click="setStatusFilter(s.value)"
-      >
+      <button v-for="s in statusOptions" :key="s.value" class="orders-filter-btn"
+        :class="{ 'orders-filter-btn--active': statusFilter === s.value }" @click="setStatusFilter(s.value)">
         {{ s.label }}
       </button>
     </div>
@@ -37,12 +32,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="order in orders"
-              :key="order.id"
-              class="sp-tr sp-tr--clickable"
-              @click="openOrder(order.id)"
-            >
+            <tr v-for="order in orders" :key="order.id" class="sp-tr sp-tr--clickable" @click="openOrder(order.id)">
               <td class="sp-td">
                 <span class="orders-code">{{ order.orderCode }}</span>
               </td>
@@ -86,17 +76,14 @@
         </table>
       </div>
 
-      <div class="sp-table-footer" style="display:flex; align-items:center; justify-content:space-between; padding:.75rem 1rem; gap:1rem">
+      <div class="sp-table-footer"
+        style="display:flex; align-items:center; justify-content:space-between; padding:.75rem 1rem; gap:1rem">
         <div class="sp-table-meta">Página {{ page + 1 }} — {{ total }} registros</div>
         <div style="display:flex; gap:0.35rem; align-items:center">
-          <button
-            v-for="p in totalPages" :key="p"
-            @click="page = p - 1; fetchOrders()"
-            :disabled="p - 1 === page"
-            class="sp-table-btn"
-            style="min-width:36px; padding:.45rem .6rem; font-size:0.875rem"
-            :style="{ fontWeight: p - 1 === page ? 600 : 400, background: p - 1 === page ? '#3b82f6' : 'transparent', color: p - 1 === page ? 'white' : 'inherit' }"
-          >{{ p }}</button>
+          <button v-for="p in totalPages" :key="p" @click="page = p - 1; fetchOrders()" :disabled="p - 1 === page"
+            class="sp-table-btn" style="min-width:36px; padding:.45rem .6rem; font-size:0.875rem"
+            :style="{ fontWeight: p - 1 === page ? 600 : 400, background: p - 1 === page ? '#3b82f6' : 'transparent', color: p - 1 === page ? 'white' : 'inherit' }">{{
+            p }}</button>
         </div>
       </div>
     </div>
@@ -106,12 +93,8 @@
       <Transition name="modal">
         <div v-if="modalOpen" class="modal-backdrop" @click.self="modalOpen = false">
           <div class="modal-box">
-            <PedidoModal
-              v-if="selectedOrderId"
-              :order-id="selectedOrderId"
-              @close="modalOpen = false"
-              @updated="onOrderUpdated"
-            />
+            <PedidoModal v-if="selectedOrderId" :order-id="selectedOrderId" @close="modalOpen = false"
+              @updated="onOrderUpdated" />
           </div>
         </div>
       </Transition>
@@ -197,11 +180,13 @@ function onKeydown(e: KeyboardEvent) {
   flex-direction: column;
   gap: 1.25rem;
 }
+
 .orders-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
+
 .orders-filter-btn {
   display: inline-flex;
   align-items: center;
@@ -217,18 +202,27 @@ function onKeydown(e: KeyboardEvent) {
   transition: background var(--sp-t-fast) var(--sp-ease), color var(--sp-t-fast) var(--sp-ease), border-color var(--sp-t-fast) var(--sp-ease);
   white-space: nowrap;
 }
+
 .orders-filter-btn:hover {
   background: var(--sp-surface-solid);
   color: var(--sp-text);
 }
+
 .orders-filter-btn--active {
   background: var(--sp-primary-soft);
   color: var(--sp-primary-ink);
   border-color: rgba(53, 109, 255, 0.22);
   box-shadow: 0 2px 8px rgba(53, 109, 255, 0.1);
 }
-.sp-tr--clickable { cursor: pointer; }
-.sp-tr--clickable:hover td { background: var(--sp-surface-subtle, #f9f9f9); }
+
+.sp-tr--clickable {
+  cursor: pointer;
+}
+
+.sp-tr--clickable:hover td {
+  background: var(--sp-surface-subtle, #f9f9f9);
+}
+
 .orders-code {
   font-family: "Courier New", Courier, monospace;
   font-size: var(--sp-text-sm);
@@ -236,6 +230,7 @@ function onKeydown(e: KeyboardEvent) {
   color: var(--sp-primary);
   letter-spacing: 0.02em;
 }
+
 .orders-date {
   font-size: var(--sp-text-xs);
   font-variant-numeric: tabular-nums;

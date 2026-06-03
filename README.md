@@ -1,14 +1,14 @@
-# Kite Utensilios
+# CelParts
 
-Plataforma ecommerce desarrollada con Nuxt 3 para Kite Utensilios. El proyecto combina una landing page pública, catálogo y flujo de compra, además de un panel administrativo para gestionar productos, categorías, pedidos, banners, pagos y el libro de reclamaciones.
+Plataforma ecommerce desarrollada con Nuxt 3 para CelParts. El proyecto combina una landing page pública, catálogo y flujo de compra, además de un panel administrativo para gestionar productos, categorías, pedidos, banners, pagos y el libro de reclamaciones.
 
 ## Qué tipo de proyecto es
 
-Es una aplicación web full-stack con SSR, pensada para vender utensilios de cocina y administrar el negocio desde el mismo código base. Incluye:
+Es una aplicación web full-stack con SSR, pensada para vender repuestos y accesorios para teléfonos móviles y administrar el negocio desde el mismo código base. Incluye:
 
 - Landing page institucional y secciones de marketing.
-- Ecommerce con catálogo, carrito, checkout y seguimiento de pedidos.
-- Panel admin para operaciones internas.
+- Ecommerce con catálogo organizado por categorías (pantallas, baterías, cases, cargadores, protectores, entre otros) y filtros por marca de celular, carrito, checkout y seguimiento de pedidos.
+- Panel admin para operaciones internas con roles diferenciados entre superadmin y admin.
 - Persistencia en MySQL con Drizzle ORM.
 
 ## Tecnologías
@@ -27,6 +27,9 @@ Es una aplicación web full-stack con SSR, pensada para vender utensilios de coc
 - AWS S3 SDK para almacenamiento de archivos e imágenes
 - bcryptjs para hashing de contraseñas
 - zod para validación
+- Google reCAPTCHA para protección de formularios contra bots
+- PM2 para gestión de procesos en producción
+- NGINX como servidor web y proxy inverso
 
 ## Requisitos
 
@@ -61,19 +64,19 @@ El proyecto usa configuración de entorno para la base de datos, correo, reCAPTC
 # Base de datos MySQL
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_USER=kite_user
+DB_USER=celparts_user
 DB_PASSWORD=tu_password
-DB_NAME=kiteprueba
+DB_NAME=celparts
 
 # Sesión / auth
 NUXT_SESSION_PASSWORD=una_clave_larga_y_segura
 
 # App pública
-NUXT_PUBLIC_APP_NAME=Kite Utensilios
-NUXT_PUBLIC_COMPANY_NAME=Kite Utensilios
-NUXT_PUBLIC_SITE_NAME=Kite Peru
-NUXT_PUBLIC_SITE_URL=https://kite.pe
-NUXT_PUBLIC_WHATSAPP=+51923821520
+NUXT_PUBLIC_APP_NAME=CelParts
+NUXT_PUBLIC_COMPANY_NAME=CelParts
+NUXT_PUBLIC_SITE_NAME=CelParts
+NUXT_PUBLIC_SITE_URL=https://celparts.pe
+NUXT_PUBLIC_WHATSAPP=+51900000000
 
 # Google reCAPTCHA
 G_RECAPTCHA_SECRET_KEY=tu_secret_key
@@ -82,9 +85,9 @@ G_RECAPTCHA_SITE_KEY=tu_site_key
 # SMTP
 SMTP_HOST=mail.example.com
 SMTP_PORT=587
-SMTP_USER=info@kite.pe
+SMTP_USER=info@celparts.pe
 SMTP_PASSWORD=tu_password
-SMTP_FROM="Kite Utensilios <info@kite.pe>"
+SMTP_FROM="CelParts <info@celparts.pe>"
 SMTP_SECURE=false
 
 # S3
@@ -92,7 +95,7 @@ S3_BUCKET=mi-bucket
 S3_REGION=us-east-1
 S3_ACCESS_KEY_ID=tu_key
 S3_SECRET_ACCESS_KEY=tu_secret
-S3_ROOT_PREFIX=kite_utensilios
+S3_ROOT_PREFIX=celparts
 ```
 
 ## Configurar S3 en AWS
@@ -124,7 +127,7 @@ S3_BUCKET=mi-bucket
 S3_REGION=us-east-1
 S3_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx
 S3_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-S3_ROOT_PREFIX=joymar_utensilios
+S3_ROOT_PREFIX=celparts
 ```
 
 ## Base de datos
@@ -140,7 +143,7 @@ mysql -u root -p
 Dentro del prompt de MySQL:
 
 ```sql
-CREATE DATABASE kiteprueba CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE celparts CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 EXIT;
 ```
 
@@ -172,12 +175,12 @@ npm run db:seed
 El esquema actual crea 12 tablas:
 
 - `business_config`: configuración general del negocio, logo, WhatsApp, dirección y flags del sistema.
-- `users`: usuarios del sistema y roles administrativos.
-- `categories`: categorías principales del catálogo.
+- `users`: usuarios del sistema con roles diferenciados (superadmin y admin).
+- `categories`: categorías principales del catálogo (pantallas, baterías, cases, cargadores, protectores, entre otros).
 - `subcategories`: subcategorías relacionadas a una categoría.
-- `products`: productos del ecommerce.
+- `products`: productos del ecommerce con filtros por marca de celular.
 - `product_images`: imágenes asociadas a productos.
-- `payment_methods`: medios de pago disponibles como Yape, Plin o transferencia.
+- `payment_methods`: medios de pago disponibles como Yape, Plin o transferencia bancaria.
 - `orders`: pedidos realizados por clientes.
 - `order_items`: detalle de productos dentro de cada pedido.
 - `order_status_logs`: historial de cambios de estado de pedidos.
@@ -266,7 +269,7 @@ Si ya generaste `.output/` en tu entorno de build, copia esa carpeta al servidor
 - `nuxt.config.ts` habilita SSR.
 - La app usa sitemap y excluye rutas privadas como `/admin` y `/login`.
 - El proyecto integra Google Fonts, iconos de Font Awesome y utilidades de Tailwind v4.
--- El dominio configurado en metadata es `kite.pe`.
+- El dominio configurado en metadata es `celparts.pe`.
 
 ## Solución de problemas
 
@@ -283,7 +286,7 @@ Si ya generaste `.output/` en tu entorno de build, copia esa carpeta al servidor
 - Prueba la conexión manualmente:
 
 ```bash
-mysql -u kite_user -p kiteprueba -h 127.0.0.1 -e "SELECT 1"
+mysql -u celparts_user -p celparts -h 127.0.0.1 -e "SELECT 1"
 ```
 
 ### El puerto 3000 está ocupado

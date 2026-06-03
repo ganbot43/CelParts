@@ -1,13 +1,15 @@
-# CelParts
+# Arigumi
 
-Plataforma ecommerce desarrollada con Nuxt 3 para CelParts. El proyecto combina una landing page pública, catálogo y flujo de compra, además de un panel administrativo para gestionar productos, categorías, pedidos, banners, pagos y el libro de reclamaciones.
+Plataforma ecommerce desarrollada con Nuxt 3 para Arigumi. El proyecto combina una landing page pública, catálogo de productos artesanales y flujo de compra, además de un panel administrativo para gestionar productos, categorías, pedidos, banners, pagos y el libro de reclamaciones.
 
 ## Qué tipo de proyecto es
 
-Es una aplicación web full-stack con SSR, pensada para vender repuestos y accesorios para teléfonos móviles y administrar el negocio desde el mismo código base. Incluye:
+Es una aplicación web full-stack con SSR, pensada para conectar a artesanos adultos mayores con compradores que valoran los tejidos y productos de crochet hechos a mano en Perú. Integra dos grandes módulos en un único proyecto: una tienda pública para el cliente final y un panel administrativo para la gestión interna del negocio. Incluye:
 
 - Landing page institucional y secciones de marketing.
-- Ecommerce con catálogo organizado por categorías (pantallas, baterías, cases, cargadores, protectores, entre otros) y filtros por marca de celular, carrito, checkout y seguimiento de pedidos.
+- Ecommerce con catálogo de productos artesanales (tejidos, crochet) organizado por categorías, carrito, checkout y seguimiento de pedidos.
+- Contacto directo vendedor-comprador vía WhatsApp, eliminando intermediarios en el proceso de venta.
+- Modelo híbrido donde el comprador también puede ser vendedor, fomentando una economía colaborativa y circular.
 - Panel admin para operaciones internas con roles diferenciados entre superadmin y admin.
 - Persistencia en MySQL con Drizzle ORM.
 
@@ -64,18 +66,18 @@ El proyecto usa configuración de entorno para la base de datos, correo, reCAPTC
 # Base de datos MySQL
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_USER=celparts_user
+DB_USER=arigumi_user
 DB_PASSWORD=tu_password
-DB_NAME=celparts
+DB_NAME=arigumi
 
 # Sesión / auth
 NUXT_SESSION_PASSWORD=una_clave_larga_y_segura
 
 # App pública
-NUXT_PUBLIC_APP_NAME=CelParts
-NUXT_PUBLIC_COMPANY_NAME=CelParts
-NUXT_PUBLIC_SITE_NAME=CelParts
-NUXT_PUBLIC_SITE_URL=https://celparts.pe
+NUXT_PUBLIC_APP_NAME=Arigumi
+NUXT_PUBLIC_COMPANY_NAME=Arigumi
+NUXT_PUBLIC_SITE_NAME=Arigumi
+NUXT_PUBLIC_SITE_URL=https://arigumi.pe
 NUXT_PUBLIC_WHATSAPP=+51900000000
 
 # Google reCAPTCHA
@@ -85,9 +87,9 @@ G_RECAPTCHA_SITE_KEY=tu_site_key
 # SMTP
 SMTP_HOST=mail.example.com
 SMTP_PORT=587
-SMTP_USER=info@celparts.pe
+SMTP_USER=info@arigumi.pe
 SMTP_PASSWORD=tu_password
-SMTP_FROM="CelParts <info@celparts.pe>"
+SMTP_FROM="Arigumi <info@arigumi.pe>"
 SMTP_SECURE=false
 
 # S3
@@ -95,7 +97,7 @@ S3_BUCKET=mi-bucket
 S3_REGION=us-east-1
 S3_ACCESS_KEY_ID=tu_key
 S3_SECRET_ACCESS_KEY=tu_secret
-S3_ROOT_PREFIX=celparts
+S3_ROOT_PREFIX=arigumi
 ```
 
 ## Configurar S3 en AWS
@@ -127,7 +129,7 @@ S3_BUCKET=mi-bucket
 S3_REGION=us-east-1
 S3_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx
 S3_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-S3_ROOT_PREFIX=celparts
+S3_ROOT_PREFIX=arigumi
 ```
 
 ## Base de datos
@@ -143,7 +145,7 @@ mysql -u root -p
 Dentro del prompt de MySQL:
 
 ```sql
-CREATE DATABASE celparts CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE arigumi CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 EXIT;
 ```
 
@@ -176,9 +178,9 @@ El esquema actual crea 12 tablas:
 
 - `business_config`: configuración general del negocio, logo, WhatsApp, dirección y flags del sistema.
 - `users`: usuarios del sistema con roles diferenciados (superadmin y admin).
-- `categories`: categorías principales del catálogo (pantallas, baterías, cases, cargadores, protectores, entre otros).
+- `categories`: categorías principales del catálogo de productos artesanales (tejidos, crochet, accesorios, entre otros).
 - `subcategories`: subcategorías relacionadas a una categoría.
-- `products`: productos del ecommerce con filtros por marca de celular.
+- `products`: productos artesanales del ecommerce.
 - `product_images`: imágenes asociadas a productos.
 - `payment_methods`: medios de pago disponibles como Yape, Plin o transferencia bancaria.
 - `orders`: pedidos realizados por clientes.
@@ -269,7 +271,7 @@ Si ya generaste `.output/` en tu entorno de build, copia esa carpeta al servidor
 - `nuxt.config.ts` habilita SSR.
 - La app usa sitemap y excluye rutas privadas como `/admin` y `/login`.
 - El proyecto integra Google Fonts, iconos de Font Awesome y utilidades de Tailwind v4.
-- El dominio configurado en metadata es `celparts.pe`.
+- El dominio configurado en metadata es `arigumi.pe`.
 
 ## Solución de problemas
 
@@ -286,7 +288,7 @@ Si ya generaste `.output/` en tu entorno de build, copia esa carpeta al servidor
 - Prueba la conexión manualmente:
 
 ```bash
-mysql -u celparts_user -p celparts -h 127.0.0.1 -e "SELECT 1"
+mysql -u arigumi_user -p arigumi -h 127.0.0.1 -e "SELECT 1"
 ```
 
 ### El puerto 3000 está ocupado

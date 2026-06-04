@@ -7,95 +7,65 @@
 
       <!-- BRAND -->
       <div class="jm-footer__brand">
-        <NuxtLink
-          to="/"
-          class="jm-footer__logo"
-          aria-label="Kite — Inicio"
-        >
+        <NuxtLink to="/" class="jm-footer__logo" aria-label="Kite — Inicio">
           <div class="jm-footer__logo-img">
-            <img
-              src="/images/logo.png"
-              alt="Kite"
-              width="58"
-              height="58"
-            />
+            <img src="/images/logo.png" alt="Kite" width="58" height="58" />
           </div>
 
           <div class="jm-footer__logo-text">
             <span class="jm-footer__logo-name">
-              Kite
+              CelParts
             </span>
 
             <span class="jm-footer__logo-sub">
-              Plataforma moderna
+              Repuestos & Accesorios
             </span>
           </div>
         </NuxtLink>
 
         <p class="jm-footer__desc">
-          Creamos experiencias digitales modernas, rápidas y visualmente
-          atractivas para negocios y marcas que buscan destacar.
+          Tu tienda de confianza para repuestos y accesorios de celulares.
+          Encuentra pantallas, baterías, cargadores, cases y mucho más
+          para las principales marcas del mercado.
         </p>
 
         <!-- BADGES -->
         <div class="jm-footer__badges">
           <div class="jm-footer__badge">
-            Experiencia premium
+            Repuestos originales
           </div>
 
           <div class="jm-footer__badge">
-            Diseño moderno
+            Envios seguros
           </div>
         </div>
 
         <!-- SOCIALS -->
         <div class="jm-footer__socials">
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="jm-footer__social-btn"
-            aria-label="Instagram"
-          >
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
+            aria-label="Instagram">
             <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
               <path
                 d="M7.5 3h9A4.5 4.5 0 0 1 21 7.5v9a4.5 4.5 0 0 1-4.5 4.5h-9A4.5 4.5 0 0 1 3 16.5v-9A4.5 4.5 0 0 1 7.5 3Z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
+                fill="none" stroke="currentColor" stroke-width="1.8" />
               <circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8" />
               <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" />
             </svg>
           </a>
 
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="jm-footer__social-btn"
-            aria-label="Facebook"
-          >
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
+            aria-label="Facebook">
             <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
-              <path
-                d="M14.5 8.5H17V5h-2.5C11.57 5 10 6.57 10 9v2H7v3.5h3V19h3.5v-4.5H16l.5-3.5h-3V9c0-.28.22-.5.5-.5Z"
-                fill="currentColor"
-              />
+              <path d="M14.5 8.5H17V5h-2.5C11.57 5 10 6.57 10 9v2H7v3.5h3V19h3.5v-4.5H16l.5-3.5h-3V9c0-.28.22-.5.5-.5Z"
+                fill="currentColor" />
             </svg>
           </a>
 
-          <a
-            href="https://x.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="jm-footer__social-btn"
-            aria-label="X"
-          >
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
+            aria-label="X">
             <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
-              <path
-                d="M5 5h3.2l4.2 5.5L16.6 5H19l-5.3 6.8L19.5 19h-3.2l-4.5-5.9L7.4 19H5l5.8-7.4L5 5Z"
-                fill="currentColor"
-              />
+              <path d="M5 5h3.2l4.2 5.5L16.6 5H19l-5.3 6.8L19.5 19h-3.2l-4.5-5.9L7.4 19H5l5.8-7.4L5 5Z"
+                fill="currentColor" />
             </svg>
           </a>
         </div>
@@ -147,11 +117,8 @@
               Email
             </div>
 
-            <a
-              href="mailto:hola@kite.com"
-              class="jm-footer__contact-val"
-            >
-              hola@kite.com
+            <a href="mailto:ventas@celparts.pe" class="jm-footer__contact-val">
+              ventas@celparts.pe
             </a>
           </div>
 
@@ -160,11 +127,8 @@
               Teléfono
             </div>
 
-            <a
-              href="tel:+51999999999"
-              class="jm-footer__contact-val"
-            >
-              +51 999 999 999
+            <a href="tel:+51923821520" class="jm-footer__contact-val">
+              +51 923 821 520
             </a>
           </div>
 
@@ -188,15 +152,10 @@
     ═══════════════════════════════ -->
     <div class="jm-footer__bottom">
       <span>
-        © {{ currentYear }} Kite · Todos los derechos reservados
+        © {{ currentYear }} CelParts. Todos los derechos reservados.
       </span>
 
-      <a
-        href="https://smartcsperu.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="jm-footer__credit"
-      >
+      <a href="https://smartcsperu.com" target="_blank" rel="noopener noreferrer" class="jm-footer__credit">
         Desarrollada por <strong>Smart CS</strong>
       </a>
     </div>
@@ -212,19 +171,32 @@ const currentYear = new Date().getFullYear();
    TOKENS
 ═══════════════════════════════ */
 .jm-footer {
-  --bg: #111111;
-  --surface: #1A1A1A;
+  --bg: #050505;
+  --surface: rgba(0, 174, 239, 0.05);
 
-  --primary: #2D6A4F;
-  --primary-soft: rgba(45, 106, 79, 0.12);
+  --primary: #00AEEF;
+  --primary-dark: #0077C8;
+  --primary-soft: rgba(0, 174, 239, 0.12);
 
-  --border: rgba(255,255,255,0.08);
+  --border: rgba(0, 174, 239, 0.14);
 
   --text: #FFFFFF;
-  --text-soft: rgba(255,255,255,0.72);
-  --text-faint: rgba(255,255,255,0.45);
+  --text-soft: rgba(168, 237, 255, 0.82);
+  --text-faint: rgba(168, 237, 255, 0.5);
 
-  background: var(--bg);
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(0,174,239,.08),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(0,119,200,.10),
+      transparent 40%
+    ),
+    var(--bg);
+
   color: var(--text);
 
   border-top: 1px solid var(--border);
@@ -232,6 +204,7 @@ const currentYear = new Date().getFullYear();
   position: relative;
   overflow: hidden;
 }
+
 
 /* ═══════════════════════════════
    MAIN GRID
@@ -337,12 +310,12 @@ const currentYear = new Date().getFullYear();
 
   background: var(--primary-soft);
 
-  border: 1px solid rgba(45, 106, 79, 0.2);
+  border: 1px solid rgba(0,174,239,.25);
 
   font-size: 0.75rem;
   font-weight: 700;
 
-  color: #E9C46A;
+  color: #A8EDFF;
 
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -393,11 +366,14 @@ const currentYear = new Date().getFullYear();
 .jm-footer__social-btn:hover {
   background: var(--primary-soft);
 
-  border-color: rgba(45, 106, 79, 0.4);
+  border-color: rgba(0,174,239,.45);
 
   color: white;
 
   transform: translateY(-2px);
+
+  box-shadow:
+    0 0 20px rgba(0,174,239,.18);
 }
 
 /* ═══════════════════════════════
@@ -440,7 +416,7 @@ const currentYear = new Date().getFullYear();
 }
 
 .jm-footer__link:hover {
-  color: white;
+  color: #50D0FF;
 
   transform: translateX(4px);
 }
@@ -484,7 +460,7 @@ const currentYear = new Date().getFullYear();
 }
 
 .jm-footer__contact-val:hover {
-  color: white;
+  color: #50D0FF;
 }
 
 /* ═══════════════════════════════

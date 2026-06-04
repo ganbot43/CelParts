@@ -17,12 +17,7 @@
 
         <!-- Texto de bienvenida -->
         <p class="welcome-text">
-          Nacimos en el Perú con un propósito claro: llevar a cada hogar
-          utensilios de cocina de alta calidad y con garantía comprobada.
-          Creemos firmemente que las familias peruanas merecen cocinar con lo
-          mejor sin tener que pagar de más. Por eso, seleccionamos
-          cuidadosamente cada producto para ofrecerte la máxima durabilidad y
-          funcionalidad
+          En <strong class="welcome-text__highlight">CelParts</strong> nos apasiona ofrecer repuestos y accesorios de alta calidad para celulares en Perú. Creemos que tu dispositivo merece lo mejor, y por eso nos esforzamos por brindarte productos confiables, duraderos y
           <strong class="welcome-text__highlight">al precio justo</strong>.
         </p>
 
@@ -51,7 +46,7 @@
         <!-- País de origen -->
         <p class="origin-tag">
           <span class="origin-tag__flag" aria-hidden="true">🇵🇪</span>
-          Hecho con orgullo en Perú · Desde 2023
+          Hecho en Peru - 2026
         </p>
       </div>
     </div>
@@ -64,16 +59,14 @@ interface Pillar {
 }
 
 const pillars: Pillar[] = [
-  { label: "Alta calidad" },
-  { label: "Garantía comprobada" },
-  { label: "Precio justo" },
+  { label: "Repuestos de calidad" },
+  { label: "Atención personalizada" },
+  { label: "Precios competitivos" },
+  { label: "Compatibilidad garantizada" },
 ];
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   KITE ABOUT SECTION
-═══════════════════════════════════ */
 .kite-section {
   position: relative;
   overflow: hidden;
@@ -83,21 +76,22 @@ const pillars: Pillar[] = [
   padding: 120px 0;
 
   background:
-    linear-gradient(
-      to bottom,
-      #ffffff 0%,
-      var(--brand-bg) 100%
-    );
+    radial-gradient(circle at top right,
+      rgba(0,174,239,.10),
+      transparent 35%),
+    radial-gradient(circle at bottom left,
+      rgba(0,63,138,.15),
+      transparent 40%),
+    #0A0A0A;
 }
 
-/* ═══════════════════════════════════
-   DECORATIVE BLOBS
-═══════════════════════════════════ */
+/* BLOBS */
+
 .blob {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(10px);
+  filter: blur(100px);
 }
 
 .blob--tr {
@@ -108,11 +102,7 @@ const pillars: Pillar[] = [
   height: 520px;
 
   background:
-    radial-gradient(
-      circle,
-      rgba(45,106,79,0.08) 0%,
-      transparent 72%
-    );
+    rgba(0,174,239,.15);
 }
 
 .blob--bl {
@@ -123,16 +113,11 @@ const pillars: Pillar[] = [
   height: 440px;
 
   background:
-    radial-gradient(
-      circle,
-      rgba(231,111,81,0.06) 0%,
-      transparent 70%
-    );
+    rgba(0,119,200,.15);
 }
 
-/* ═══════════════════════════════════
-   CONTAINER
-═══════════════════════════════════ */
+/* CONTAINER */
+
 .kite-section__container {
   position: relative;
   z-index: 2;
@@ -143,9 +128,8 @@ const pillars: Pillar[] = [
   padding: 0 32px;
 }
 
-/* ═══════════════════════════════════
-   CONTENT
-═══════════════════════════════════ */
+/* CONTENT */
+
 .kite-section__content {
   display: flex;
   flex-direction: column;
@@ -156,9 +140,8 @@ const pillars: Pillar[] = [
   gap: 28px;
 }
 
-/* ═══════════════════════════════════
-   DIVIDER
-═══════════════════════════════════ */
+/* DIVIDER */
+
 .divider {
   display: flex;
   align-items: center;
@@ -176,7 +159,7 @@ const pillars: Pillar[] = [
     linear-gradient(
       90deg,
       transparent,
-      rgba(17,17,17,0.12)
+      rgba(0,174,239,.25)
     );
 }
 
@@ -185,36 +168,31 @@ const pillars: Pillar[] = [
 }
 
 .divider__gem {
+  color: #00AEEF;
   font-size: 11px;
-  color: var(--brand-accent);
-  opacity: 0.9;
 }
 
-/* ═══════════════════════════════════
-   TEXT
-═══════════════════════════════════ */
+/* TEXT */
+
 .welcome-text {
   max-width: 760px;
 
   margin: 0;
 
-  font-size: clamp(1.02rem, 1.6vw, 1.16rem);
+  color: rgba(168,237,255,.82);
+
+  font-size: clamp(1.02rem,1.6vw,1.16rem);
+
   line-height: 1.95;
-  letter-spacing: -0.01em;
-
-  color: var(--brand-text-muted);
-
-  font-weight: 400;
 }
 
 .welcome-text__highlight {
-  color: var(--brand-black);
+  color: #FFFFFF;
   font-weight: 700;
 }
 
-/* ═══════════════════════════════════
-   PILLARS
-═══════════════════════════════════ */
+/* PILLS */
+
 .pillars {
   list-style: none;
 
@@ -222,9 +200,8 @@ const pillars: Pillar[] = [
   padding: 0;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-wrap: wrap;
+  justify-content: center;
 
   gap: 12px;
 }
@@ -238,52 +215,46 @@ const pillars: Pillar[] = [
 
   border-radius: 999px;
 
-  background: rgba(255,255,255,0.7);
+  background:
+    rgba(0,174,239,.06);
 
-  border: 1px solid rgba(17,17,17,0.08);
+  border:
+    1px solid rgba(0,174,239,.18);
 
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease;
+  transition: .2s ease;
 }
 
 .pillars__item:hover {
   transform: translateY(-2px);
 
-  border-color: rgba(45,106,79,0.18);
+  border-color:
+    rgba(0,174,239,.45);
 
-  background: rgba(255,255,255,0.92);
+  box-shadow:
+    0 0 24px rgba(0,174,239,.15);
 }
 
 .pillars__check {
+  color: #00AEEF;
   font-size: 11px;
-  color: var(--brand-primary);
 }
 
 .pillars__label {
+  color: #A8EDFF;
+
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-
-  color: var(--brand-text);
 }
 
-/* ═══════════════════════════════════
-   CTA
-═══════════════════════════════════ */
+/* CTA */
+
 .cta-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-
   gap: 14px;
   flex-wrap: wrap;
-
-  padding-top: 4px;
+  justify-content: center;
 }
 
 .btn {
@@ -293,21 +264,16 @@ const pillars: Pillar[] = [
 
   min-width: 170px;
 
-  padding: 0.9rem 1.5rem;
+  padding: .95rem 1.6rem;
 
-  border-radius: 10px;
-
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  border-radius: 12px;
 
   text-decoration: none;
 
-  transition:
-    transform 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+  font-size: .88rem;
+  font-weight: 700;
+
+  transition: .2s ease;
 }
 
 .btn:hover {
@@ -315,65 +281,67 @@ const pillars: Pillar[] = [
 }
 
 .btn--primary {
-  background: var(--brand-black);
+  background:
+    linear-gradient(
+      135deg,
+      #00AEEF,
+      #0077C8
+    );
 
   color: white;
 
-  border: 1px solid var(--brand-black);
+  border: 1px solid rgba(80,208,255,.2);
 
   box-shadow:
-    0 8px 24px rgba(17,17,17,0.10);
+    0 10px 30px rgba(0,174,239,.25);
 }
 
 .btn--primary:hover {
-  background: var(--brand-primary);
-  border-color: var(--brand-primary);
-
   box-shadow:
-    0 12px 30px rgba(45,106,79,0.18);
+    0 16px 40px rgba(0,174,239,.45);
 }
 
 .btn--secondary {
-  background: rgba(255,255,255,0.78);
+  background:
+    rgba(0,174,239,.06);
 
-  color: var(--brand-text);
+  color: #A8EDFF;
 
-  border: 1px solid var(--brand-border);
+  border:
+    1px solid rgba(0,174,239,.18);
 
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 }
 
 .btn--secondary:hover {
-  background: white;
-  border-color: rgba(17,17,17,0.2);
+  border-color:
+    rgba(0,174,239,.4);
 }
 
-/* ═══════════════════════════════════
-   ORIGIN TAG
-═══════════════════════════════════ */
+/* ORIGIN */
+
 .origin-tag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
 
-  margin: 0;
+  color:
+    rgba(168,237,255,.55);
 
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+
   text-transform: uppercase;
 
-  color: var(--brand-text-faint);
+  letter-spacing: .08em;
 }
 
 .origin-tag__flag {
   font-size: 14px;
 }
 
-/* ═══════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════ */
-@media (max-width: 768px) {
+/* RESPONSIVE */
+
+@media (max-width:768px) {
   .kite-section {
     padding: 84px 0;
   }
@@ -382,29 +350,12 @@ const pillars: Pillar[] = [
     padding: 0 20px;
   }
 
-  .kite-section__content {
-    gap: 24px;
-  }
-
   .welcome-text {
-    font-size: 0.98rem;
-    line-height: 1.85;
-  }
-
-  .pillars {
-    gap: 10px;
-  }
-
-  .pillars__item {
-    padding: 9px 14px;
-  }
-
-  .btn {
-    min-width: 150px;
+    font-size: .98rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width:480px) {
   .kite-section {
     padding: 72px 0;
   }
@@ -419,17 +370,8 @@ const pillars: Pillar[] = [
   }
 
   .welcome-text {
-    font-size: 0.95rem;
+    font-size: .95rem;
     line-height: 1.8;
-  }
-
-  .pillars {
-    justify-content: center;
-  }
-
-  .origin-tag {
-    text-align: center;
-    line-height: 1.6;
   }
 }
 </style>

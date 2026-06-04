@@ -85,6 +85,7 @@ export default defineEventHandler(async (event) => {
       subtotal,
       total,
       status: 'pending',
+      createdAt: new Date(),
     }).execute()
 
     createdOrderId = Number((hdr as any).insertId ?? 0)

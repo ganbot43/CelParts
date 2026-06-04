@@ -79,7 +79,7 @@ export default defineNuxtConfig({
       include: ["@fortawesome/free-brands-svg-icons"],
     },
     server: {
-      allowedHosts: ['localhost', '.ngrok-free.app', '5dd2-190-43-41-72.ngrok-free.app', '.trycloudflare.com'],
+      allowedHosts: ['localhost', '.ngrok-free.app', '5dd2-190-43-41-72.ngrok-free.app', '.trycloudflare.com', 'octagonal-unspacious-kaylee.ngrok-free.dev'],
     },
     cacheDir: '.vite-cache',
   },

@@ -1,5 +1,5 @@
-// composables/useKite.ts
-export const WA_NUMBER = '51996111303'
+// composables/useJoymar.ts
+export const WA_NUMBER = '51923821520'
 
 export function useKite() {
   const waLink = (msg = 'Hola Kite, vi su web y quisiera consultar sobre sus productos') =>

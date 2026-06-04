@@ -3,23 +3,23 @@ const { waLink } = useKite();
 
 const details = [
   {
-    icon: "📍",
+    icon: "ti-map-pin",
     title: "Dirección",
     content:
       "Villa El Salvador, Lima, Perú\nAv. [Nombre de la avenida], [número], VES",
   },
   {
-    icon: "🕐",
+    icon: "ti-clock-hour-4",
     title: "Horario de atención",
     content: "Lunes a Sábado: 9:00 am – 7:00 pm\nDomingos: 10:00 am – 3:00 pm",
   },
   {
-    icon: "📱",
+    icon: "ti-brand-whatsapp",
     title: "WhatsApp / Llamadas",
     content: "+51 XXX XXX XXX\nTambién atendemos pedidos por WhatsApp",
   },
   {
-    icon: "📦",
+    icon: "ti-package",
     title: "Envíos",
     content: "Delivery a todo Lima.\nCoordina tu pedido por WhatsApp.",
   },
@@ -28,23 +28,35 @@ const details = [
 
 <template>
   <section class="location" id="tienda">
+    <div class="location-glow location-glow--1" aria-hidden="true" />
+    <div class="location-glow location-glow--2" aria-hidden="true" />
+    <div class="location-grid-bg" aria-hidden="true" />
+
     <div class="container">
+      <!-- Intro -->
       <div class="section-intro">
-        <span class="section-label">Encuéntranos</span>
+        <div class="section-chip">
+          <span class="section-chip__dot" />
+          <span class="section-chip__text">ENCUÉNTRANOS</span>
+        </div>
 
         <h2 class="section-title">
-          Visita nuestra tienda<span class="accent-dot" />
+          Visita nuestra
+          <span class="section-title__accent">tienda</span>
         </h2>
 
         <p class="section-subtitle">
-          Estamos ubicados en XXXX XXXXXX, Lima. Ven a conocernos y
+          Estamos ubicados en Villa El Salvador, Lima. Ven a conocernos y
           descubre nuestra selección de productos de calidad.
         </p>
       </div>
 
-      <div class="location-grid">
-        <div class="location-info-card">
-          <div class="location-info-header">
+      <!-- Grid principal -->
+      <div class="location-layout">
+
+        <!-- Card de info -->
+        <div class="info-card">
+          <div class="info-card__header">
             <span class="info-badge">Atención en tienda</span>
             <h3>Estamos cerca de ti</h3>
             <p>
@@ -53,17 +65,12 @@ const details = [
             </p>
           </div>
 
-          <div class="location-info">
-            <div
-              v-for="detail in details"
-              :key="detail.title"
-              class="location-detail"
-            >
-              <div class="location-detail-icon">
-                {{ detail.icon }}
+          <div class="details-list">
+            <div v-for="detail in details" :key="detail.title" class="detail-item">
+              <div class="detail-icon">
+                <i :class="`ti ${detail.icon}`" aria-hidden="true" />
               </div>
-
-              <div class="location-detail-text">
+              <div class="detail-text">
                 <strong>{{ detail.title }}</strong>
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <span v-html="detail.content.replace(/\n/g, '<br>')" />
@@ -71,59 +78,45 @@ const details = [
             </div>
           </div>
 
-          <div class="location-actions">
-            <LandingAppButton
-              variant="wa"
-              :href="
-                waLink('Hola, estoy interesado en visitar la tienda, ¿podrían brindarme más información?')
-              "
-              target="_blank"
-              class="action-btn action-btn-primary"
-            >
-              <LandingWaIcon /> Escribirnos
-            </LandingAppButton>
+          <div class="info-actions">
+            <!-- Botón de WhatsApp corregido -->
+            <button @click="waLink('Hola, estoy interesado en visitar la tienda, ¿podrían brindarme más información?')"
+              class="action-btn action-btn--primary">
+              <i class="ti ti-brand-whatsapp" aria-hidden="true"></i> Escribirnos
+            </button>
 
-            <LandingAppButton
-              variant="outline"
-              href="https://maps.google.com/?q=Villa+El+Salvador+Lima"
-              target="_blank"
-              class="action-btn action-btn-secondary"
-            >
-              📍 Ver en Google Maps
-            </LandingAppButton>
-          </div>
-        </div>
-
-        <div class="location-map-card">
-          <div class="map-topbar">
-            <span class="map-status" />
-            <span>Ubicación Cel Parts</span>
+            <!-- Botón de Google Maps corregido con enlace estático -->
+            <a href="https://maps.google.com/?q=Villa+El+Salvador+Lima" target="_blank"
+              class="action-btn action-btn--outline">
+              <i class="ti ti-map-pin" aria-hidden="true"></i> Ver en Google Maps
+            </a>
           </div>
 
-          <div class="location-map">
-            <!--
-              Reemplazar por iframe real:
-              <iframe
-                src="https://www.google.com/maps/embed?pb=..."
-                allowfullscreen
-                loading="lazy"
-              />
-            -->
 
-            <div class="map-placeholder">
-              <div class="map-icon">🗺️</div>
-              <h4>Mapa de Google Maps</h4>
-              <p>Inserta aquí el iframe real de la ubicación.</p>
-
-              <a
-                class="map-link"
-                href="https://maps.app.goo.gl/AJnmGdDDr7a4dvPT7"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Abrir ubicación
-              </a>
+          <!-- Card del mapa -->
+          <div class="map-card">
+            <div class="map-topbar">
+              <span class="map-status" />
+              <span>Ubicación Cel Parts</span>
             </div>
+
+            <div class="map-frame">
+              <div class="map-placeholder">
+                <div class="map-placeholder__icon">
+                  <i class="ti ti-map-2" aria-hidden="true" />
+                </div>
+
+                <h4>Mapa de Google Maps</h4>
+                <p>Inserta aquí el iframe real de la ubicación.</p>
+
+                <a class="map-open-btn" href="https://maps.app.goo.gl/AJnmGdDDr7a4dvPT7" target="_blank"
+                  rel="noopener noreferrer">
+                  <i class="ti ti-external-link" aria-hidden="true" />
+                  Abrir ubicación
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -132,255 +125,409 @@ const details = [
 </template>
 
 <style scoped>
+/* ═══════════════════════════════════
+   SECTION
+═══════════════════════════════════ */
 .location {
   position: relative;
   overflow: hidden;
-  padding: clamp(72px, 9vw, 120px) 0;
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(45, 106, 79, 0.08),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(233, 196, 106, 0.16),
-      transparent 32%
-    ),
-    #F8F7F4;
+  padding: clamp(80px, 10vw, 128px) 0;
+  background: var(--k-bg);
 }
 
+/* ═══════════════════════════════════
+   GLOWS
+═══════════════════════════════════ */
+.location-glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.location-glow--1 {
+  width: 520px;
+  height: 520px;
+  background: rgba(0, 174, 239, 0.12);
+  top: -140px;
+  left: -100px;
+}
+
+.location-glow--2 {
+  width: 400px;
+  height: 400px;
+  background: rgba(0, 63, 138, 0.22);
+  bottom: -100px;
+  right: -80px;
+}
+
+/* ═══════════════════════════════════
+   GRID DECORATIVO
+═══════════════════════════════════ */
+.location-grid-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(0, 174, 239, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 174, 239, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 80% at center, black 30%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════
+   CONTAINER
+═══════════════════════════════════ */
 .container {
   position: relative;
   z-index: 2;
-  width: min(1180px, calc(100% - 32px));
-  margin: 0 auto;
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: 32px;
 }
 
+/* ═══════════════════════════════════
+   INTRO
+═══════════════════════════════════ */
 .section-intro {
-  max-width: 720px;
-  margin: 0 auto clamp(36px, 5vw, 60px);
+  max-width: 680px;
+  margin: 0 auto clamp(40px, 5vw, 64px);
   text-align: center;
 }
 
-.section-label {
+.section-chip {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 16px;
-  margin-bottom: 18px;
-  border: 1px solid rgba(45, 106, 79, 0.16);
+  height: 36px;
+  padding: 0 16px;
+  margin-bottom: 28px;
   border-radius: 999px;
-  background: #FFFFFF;
-  color: #2D6A4F;
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  box-shadow: 0 10px 24px rgba(45, 106, 79, 0.08);
+  border: 1px solid rgba(0, 174, 239, 0.22);
+  background: rgba(0, 174, 239, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.section-label::before {
-  content: "";
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #2D6A4F, #E9C46A);
-  box-shadow: 0 0 14px rgba(45, 106, 79, 0.22);
+.section-chip__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--k-cyan);
+  box-shadow: 0 0 8px rgba(0, 174, 239, 0.9);
+  animation: pulse-dot 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(0, 174, 239, 0.9);
+  }
+
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 14px rgba(0, 174, 239, 0.5);
+  }
+}
+
+.section-chip__text {
+  color: var(--k-ice);
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
 }
 
 .section-title {
   margin: 0;
-  color: #111111;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 850;
-  line-height: 1.08;
-  letter-spacing: -0.04em;
+  color: var(--k-white);
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
 }
 
-.accent-dot {
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  margin-left: 5px;
-  border-radius: 999px;
-  background: #E9C46A;
-  vertical-align: middle;
-  box-shadow: 0 0 18px rgba(233, 196, 106, 0.55);
+.section-title__accent {
+  background: linear-gradient(135deg, var(--k-cyan) 0%, var(--k-cyan-light) 60%, var(--k-ice) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(0, 174, 239, 0.4));
 }
 
 .section-subtitle {
-  max-width: 620px;
+  max-width: 560px;
   margin: 16px auto 0;
-  color: #66625A;
-  font-size: clamp(0.98rem, 2vw, 1.08rem);
+  color: rgba(168, 237, 255, 0.65);
+  font-size: clamp(0.94rem, 1.4vw, 1.05rem);
   line-height: 1.75;
 }
 
-.location-grid {
+/* ═══════════════════════════════════
+   LAYOUT
+═══════════════════════════════════ */
+.location-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: clamp(24px, 4vw, 48px);
+  gap: clamp(20px, 3vw, 36px);
   align-items: stretch;
 }
 
-.location-info-card,
-.location-map-card {
-  min-width: 0;
-  border: 1px solid #E2E0D9;
-  border-radius: 28px;
-  background: #FFFFFF;
-  box-shadow: 0 18px 45px rgba(17, 17, 17, 0.06);
+/* ═══════════════════════════════════
+   INFO CARD
+═══════════════════════════════════ */
+.info-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(22px, 3vw, 32px);
+  border-radius: 32px;
+  background: linear-gradient(135deg, rgba(0, 174, 239, 0.1), rgba(0, 63, 138, 0.07));
+  border: 1px solid rgba(0, 174, 239, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(0, 174, 239, 0.18);
 }
 
-.location-info-card {
-  padding: clamp(22px, 3vw, 34px);
+.info-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 174, 239, 0.07), transparent 40%);
+  pointer-events: none;
 }
 
-.location-info-header {
+.info-card__header {
+  position: relative;
   margin-bottom: 22px;
   padding-bottom: 22px;
-  border-bottom: 1px solid #E2E0D9;
+  border-bottom: 1px solid rgba(0, 174, 239, 0.12);
 }
 
 .info-badge {
   display: inline-flex;
-  width: fit-content;
+  align-items: center;
   margin-bottom: 14px;
-  padding: 7px 12px;
+  padding: 5px 14px;
   border-radius: 999px;
-  background: #E9C46A;
-  color: #111111;
-  font-size: 0.76rem;
-  font-weight: 800;
+  background: rgba(0, 174, 239, 0.14);
+  border: 1px solid rgba(0, 174, 239, 0.22);
+  color: var(--k-cyan-light);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
-.location-info-header h3 {
+.info-card__header h3 {
   margin: 0;
-  color: #111111;
-  font-size: clamp(1.35rem, 2.5vw, 1.8rem);
-  font-weight: 850;
-  letter-spacing: -0.03em;
+  color: var(--k-white);
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 
-.location-info-header p {
+.info-card__header p {
   margin: 10px 0 0;
-  color: #66625A;
-  font-size: 0.96rem;
+  color: rgba(168, 237, 255, 0.6);
+  font-size: 0.93rem;
   line-height: 1.65;
 }
 
-.location-info {
+/* ═══════════════════════════════════
+   DETAIL ITEMS
+═══════════════════════════════════ */
+.details-list {
+  position: relative;
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
-.location-detail {
+.detail-item {
   display: flex;
   align-items: flex-start;
-  gap: 15px;
-  padding: 18px;
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(0, 174, 239, 0.12);
+  border-radius: 18px;
+  background: rgba(0, 174, 239, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition:
-    transform 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-.location-detail:hover {
-  transform: translateY(-3px);
-  border-color: #2D6A4F;
-  box-shadow: 0 10px 30px rgba(45, 106, 79, 0.12);
+.detail-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 174, 239, 0.28);
+  background: rgba(0, 174, 239, 0.1);
+  box-shadow: 0 0 18px rgba(0, 174, 239, 0.15);
 }
 
-.location-detail-icon {
+.detail-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 48px;
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  background: rgba(45, 106, 79, 0.09);
-  color: #2D6A4F;
-  font-size: 1.25rem;
-  box-shadow: inset 0 0 0 1px rgba(45, 106, 79, 0.08);
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(0, 174, 239, 0.12);
+  border: 1px solid rgba(0, 174, 239, 0.22);
+  color: var(--k-cyan-light);
+  font-size: 1.2rem;
 }
 
-.location-detail-text {
+.detail-text {
   min-width: 0;
+  padding-top: 2px;
 }
 
-.location-detail-text strong {
+.detail-text strong {
   display: block;
-  margin-bottom: 5px;
-  color: #111111;
-  font-size: 0.95rem;
-  font-weight: 850;
+  margin-bottom: 4px;
+  color: var(--k-white);
+  font-size: 0.92rem;
+  font-weight: 700;
 }
 
-.location-detail-text span {
+.detail-text span {
   display: block;
-  color: #66625A;
-  font-size: 0.9rem;
+  color: rgba(168, 237, 255, 0.6);
+  font-size: 0.87rem;
   line-height: 1.6;
 }
 
-.location-actions {
+/* ═══════════════════════════════════
+   ACTIONS
+═══════════════════════════════════ */
+.info-actions {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 22px;
 }
 
 .action-btn {
-  min-height: 48px;
-  border-radius: 999px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.16s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-.location-map-card {
+.action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.action-btn--primary {
+  background: linear-gradient(135deg, var(--k-cyan), var(--k-cyan-dark));
+  border: 1px solid rgba(80, 208, 255, 0.22);
+  color: #ffffff;
+  box-shadow: 0 10px 28px rgba(0, 174, 239, 0.3);
+}
+
+.action-btn--primary:hover {
+  box-shadow: 0 0 18px 6px rgba(0, 174, 239, 0.45);
+}
+
+.action-btn--outline {
+  background: rgba(0, 174, 239, 0.08);
+  border: 1px solid rgba(0, 174, 239, 0.28);
+  color: var(--k-cyan-light);
+  backdrop-filter: blur(10px);
+}
+
+.action-btn--outline:hover {
+  background: rgba(0, 174, 239, 0.16);
+  border-color: var(--k-cyan);
+}
+
+/* ═══════════════════════════════════
+   MAP CARD
+═══════════════════════════════════ */
+.map-card {
+  position: relative;
   overflow: hidden;
   padding: 14px;
+  border-radius: 32px;
+  background: linear-gradient(135deg, rgba(0, 174, 239, 0.1), rgba(0, 63, 138, 0.07));
+  border: 1px solid rgba(0, 174, 239, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(0, 174, 239, 0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+.map-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 174, 239, 0.07), transparent 40%);
+  pointer-events: none;
 }
 
 .map-topbar {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 8px 14px;
-  color: #66625A;
-  font-size: 0.86rem;
-  font-weight: 800;
+  padding: 4px 6px 12px;
+  color: rgba(168, 237, 255, 0.55);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
 }
 
 .map-status {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 999px;
-  background: #2D6A4F;
-  box-shadow: 0 0 0 6px rgba(45, 106, 79, 0.11);
+  background: var(--k-cyan);
+  box-shadow: 0 0 0 5px rgba(0, 174, 239, 0.15);
+  animation: pulse-dot 2s ease-in-out infinite;
+  flex-shrink: 0;
 }
 
-.location-map {
+.map-frame {
   position: relative;
+  flex: 1;
   overflow: hidden;
-  min-height: 440px;
-  height: 100%;
-  border: 1px solid #E2E0D9;
+  min-height: 420px;
+  border: 1px solid rgba(0, 174, 239, 0.22);
   border-radius: 22px;
-  background: #F8F7F4;
+  background: rgba(0, 0, 0, 0.4);
 }
 
-.location-map iframe {
+.map-frame iframe {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 440px;
   border: 0;
 }
 
@@ -389,89 +536,91 @@ const details = [
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  min-height: 440px;
   height: 100%;
+  min-height: 420px;
   padding: 32px;
   text-align: center;
-  background:
-    linear-gradient(135deg, rgba(45, 106, 79, 0.12), rgba(233, 196, 106, 0.2)),
-    #FFFFFF;
+  background: radial-gradient(ellipse at center, rgba(0, 174, 239, 0.08) 0%, transparent 70%);
 }
 
-.map-icon {
+.map-placeholder__icon {
   display: grid;
   place-items: center;
-  width: 86px;
-  height: 86px;
+  width: 80px;
+  height: 80px;
   margin-bottom: 18px;
-  border-radius: 26px;
-  background: #FFFFFF;
-  font-size: 2.6rem;
-  box-shadow: 0 18px 38px rgba(45, 106, 79, 0.14);
+  border-radius: 22px;
+  background: rgba(0, 174, 239, 0.12);
+  border: 1px solid rgba(0, 174, 239, 0.22);
+  color: var(--k-cyan-light);
+  font-size: 2rem;
+  box-shadow: 0 0 18px rgba(0, 174, 239, 0.2);
 }
 
 .map-placeholder h4 {
   margin: 0;
-  color: #111111;
-  font-size: 1.25rem;
-  font-weight: 850;
+  color: var(--k-white);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 .map-placeholder p {
-  max-width: 320px;
+  max-width: 280px;
   margin: 10px 0 0;
-  color: #66625A;
-  font-size: 0.94rem;
+  color: rgba(168, 237, 255, 0.55);
+  font-size: 0.9rem;
   line-height: 1.6;
 }
 
-.map-link {
+.map-open-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
   margin-top: 22px;
-  padding: 13px 20px;
+  min-height: 44px;
+  padding: 0 20px;
   border-radius: 999px;
-  background: #2D6A4F;
-  color: #FFFFFF;
-  font-size: 0.9rem;
-  font-weight: 800;
+  background: linear-gradient(135deg, var(--k-cyan), var(--k-cyan-dark));
+  border: 1px solid rgba(80, 208, 255, 0.22);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 10px 24px rgba(45, 106, 79, 0.25);
+  box-shadow: 0 10px 24px rgba(0, 174, 239, 0.28);
   transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.16s ease,
+    box-shadow 0.18s ease;
 }
 
-.map-link:hover {
+.map-open-btn:hover {
   transform: translateY(-2px);
-  background: #1E4D38;
-  box-shadow: 0 14px 30px rgba(45, 106, 79, 0.3);
+  box-shadow: 0 0 18px 6px rgba(0, 174, 239, 0.4);
 }
 
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
 @media (max-width: 960px) {
-  .location-grid {
+  .location-layout {
     grid-template-columns: 1fr;
   }
 
-  .location-map {
-    min-height: 360px;
-  }
-
-  .location-map iframe,
+  .map-frame,
   .map-placeholder {
-    min-height: 360px;
+    min-height: 340px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-inline: 20px;
   }
 }
 
 @media (max-width: 640px) {
   .location {
     padding: 64px 0;
-  }
-
-  .container {
-    width: min(100% - 24px, 1180px);
   }
 
   .section-intro {
@@ -483,57 +632,44 @@ const details = [
     margin-right: 0;
   }
 
-  .location-info-card {
+  .info-card {
     padding: 18px;
-    border-radius: 22px;
+    border-radius: 24px;
   }
 
-  .location-map-card {
+  .map-card {
     padding: 10px;
-    border-radius: 22px;
+    border-radius: 24px;
   }
 
-  .location-detail {
-    padding: 15px;
+  .detail-item {
+    padding: 13px;
     gap: 12px;
-    border-radius: 18px;
+    border-radius: 14px;
   }
 
-  .location-detail-icon {
-    flex-basis: 42px;
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
+  .detail-icon {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
     font-size: 1.1rem;
   }
 
-  .location-actions {
+  .info-actions {
     flex-direction: column;
   }
 
   .action-btn {
     width: 100%;
-    justify-content: center;
   }
 
-  .location-map {
-    min-height: 300px;
-  }
-
-  .location-map iframe,
+  .map-frame,
   .map-placeholder {
-    min-height: 300px;
+    min-height: 280px;
   }
 
-  .map-placeholder {
-    padding: 24px 18px;
-  }
-
-  .map-icon {
-    width: 72px;
-    height: 72px;
-    border-radius: 22px;
-    font-size: 2.2rem;
+  .container {
+    padding-inline: 16px;
   }
 }
 </style>

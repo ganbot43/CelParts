@@ -385,7 +385,7 @@ async function addToCart() {
 .vf-card__name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: rgba(192, 232, 255, 0.90);
+  color: rgba(21, 47, 61, 0.9);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;

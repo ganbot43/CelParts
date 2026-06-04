@@ -23,7 +23,7 @@
     <LandingGallerySection />
 
     <!-- UBICACIÓN -->
-    <LandingLocationSection />
+    <!--<LandingLocationSection />-->
 
     <!-- CONTACTO -->
     <LandingContactSection />

@@ -245,7 +245,7 @@ const simpleNavLinks: NavLink[] = [
 ];
 const trailingNavLinks: NavLink[] = [
   { name: "Galería",   path: "#galeria" },
-  { name: "Ubicación", path: "#tienda" },
+  //{ name: "Ubicación", path: "#tienda" },
   { name: "Contacto",  path: "#contacto" },
 ];
 const allNavLinks = [...simpleNavLinks, ...trailingNavLinks];

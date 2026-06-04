@@ -37,8 +37,8 @@ const details = [
         </h2>
 
         <p class="section-subtitle">
-          Ven a conocer nuestros productos de cocina y hogar. Te esperamos con
-          una atención cercana, práctica y personalizada.
+          Estamos ubicados en XXXX XXXXXX, Lima. Ven a conocernos y
+          descubre nuestra selección de productos de calidad.
         </p>
       </div>
 
@@ -75,7 +75,7 @@ const details = [
             <LandingAppButton
               variant="wa"
               :href="
-                waLink('Hola Kite, quisiera coordinar una visita a la tienda')
+                waLink('Hola, estoy interesado en visitar la tienda, ¿podrían brindarme más información?')
               "
               target="_blank"
               class="action-btn action-btn-primary"
@@ -97,7 +97,7 @@ const details = [
         <div class="location-map-card">
           <div class="map-topbar">
             <span class="map-status" />
-            <span>Ubicación Kite</span>
+            <span>Ubicación Cel Parts</span>
           </div>
 
           <div class="location-map">

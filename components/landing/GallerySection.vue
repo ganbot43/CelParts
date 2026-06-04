@@ -1,27 +1,27 @@
 <script setup lang="ts">
 const items = [
   {
-    imageUrl: "/images/gallery/pantallas.jpg",
+    imageUrl: "/images/gallery/almacenaje.png",
     label: "Pantallas",
     alt: "Pantallas para celulares"
   },
   {
-    imageUrl: "/images/gallery/baterias.jpg",
+    imageUrl: "/images/gallery/cuchilleria.png",
     label: "Baterías",
     alt: "Baterías para celulares"
   },
   {
-    imageUrl: "/images/gallery/cases.jpg",
+    imageUrl: "/images/gallery/ollas.png",
     label: "Cases y fundas",
     alt: "Cases para celulares"
   },
   {
-    imageUrl: "/images/gallery/cargadores.jpg",
+    imageUrl: "/images/gallery/reposteria.png",
     label: "Cargadores",
     alt: "Cargadores para celulares"
   },
   {
-    imageUrl: "/images/gallery/protectores.jpg",
+    imageUrl: "/images/gallery/sartenes.png",
     label: "Protectores",
     alt: "Protectores de pantalla"
   },

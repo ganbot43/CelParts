@@ -1,19 +1,19 @@
 <template>
   <header class="cp-header" :class="{ 'cp-header--scrolled': scrolled }">
+
+    <!-- LÍNEA TÉCNICA DE MARCA (visible al hacer scroll) -->
+    <div class="cp-header__brand-line" />
+
     <!-- BACKDROP -->
     <div class="cp-header__blur" />
 
     <div class="cp-header__container">
+
       <!-- LEFT -->
       <div class="cp-header__left">
         <!-- MOBILE MENU BTN -->
-        <button
-          type="button"
-          class="cp-mobile-btn"
-          :class="{ open: mobileMenuOpen }"
-          @click="toggleMobileMenu"
-          aria-label="Abrir menú"
-        >
+        <button type="button" class="cp-mobile-btn" :class="{ open: mobileMenuOpen }" @click="toggleMobileMenu"
+          aria-label="Abrir menú">
           <span />
           <span />
           <span />
@@ -21,99 +21,66 @@
 
         <!-- LOGO -->
         <NuxtLink to="/" class="cp-logo" aria-label="CelParts — Inicio">
-          <img src="/images/logo.png" alt="CelParts" class="cp-logo__icon" />
-          <img src="/images/logo_letra.png" alt="CelParts" class="cp-logo__text" />
+          <img src="/images/logo.png" alt="CelParts" class="cp-logo__img" />
         </NuxtLink>
       </div>
 
       <!-- CENTER NAV -->
       <nav class="cp-nav">
-        <a
-          v-for="link in simpleNavLinks"
-          :key="link.path"
-          :href="link.path"
+        <a v-for="link in simpleNavLinks" :key="link.path" :href="link.path"
           :class="['cp-nav__link', activeSection === link.path && 'active']"
-          @click.prevent="scrollToSection(link.path)"
-        >
+          @click.prevent="scrollToSection(link.path)">
           {{ link.name }}
         </a>
 
-        <!-- PRODUCTOS -->
+        <!-- DROPDOWN PRODUCTOS -->
         <div class="cp-products" ref="triggerRef" @mouseenter="openMenuOnHover" @mouseleave="scheduleClose">
-          <button
-            type="button"
-            class="cp-nav__link cp-nav__button"
-            :class="{ active: megaOpen || isProductsPage }"
-            @click="toggleMega"
-          >
+          <button type="button" class="cp-nav__link cp-nav__button" :class="{ active: megaOpen || isProductsPage }"
+            @click="toggleMega">
             Productos
-            <svg
-              class="cp-chevron"
-              :class="{ open: megaOpen }"
-              width="10" height="10" viewBox="0 0 10 10" fill="none"
-            >
+            <svg class="cp-chevron" :class="{ open: megaOpen }" width="10" height="10" viewBox="0 0 10 10" fill="none">
               <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </button>
 
           <!-- MEGA MENU -->
           <Transition name="cp-fade">
-            <div
-              v-if="megaOpen"
-              class="cp-mega"
-              ref="megaRef"
-              @mouseenter="cancelClose"
-              @mouseleave="scheduleClose"
-            >
-              <!-- glow interno -->
-              <div class="cp-mega__glow" aria-hidden="true" />
+            <div v-if="megaOpen" class="cp-mega" ref="megaRef" @mouseenter="cancelClose" @mouseleave="scheduleClose">
+              <!-- Línea técnica top del mega -->
+              <div class="cp-mega__top-line" />
 
               <div class="cp-mega__grid">
-                <!-- CATEGORIES -->
+                <!-- CATEGORÍAS -->
                 <div class="cp-mega__categories">
                   <p class="cp-mega__label">Categorías</p>
 
-                  <button
-                    type="button"
-                    class="cp-cat"
-                    :class="{ active: activeCatId === null }"
-                    @mouseenter="previewCategory(null)"
-                    @click="goToCategory(null)"
-                  >
+                  <button type="button" class="cp-cat" :class="{ active: activeCatId === null }"
+                    @mouseenter="previewCategory(null)" @click="goToCategory(null)">
                     <span class="cp-cat__dot" />
                     <span>Todos</span>
                     <small>{{ totalProductCount }}</small>
                   </button>
 
-                  <button
-                    v-for="cat in categories"
-                    :key="cat.id"
-                    type="button"
-                    class="cp-cat"
-                    :class="{ active: activeCatId === cat.id }"
-                    @mouseenter="previewCategory(cat.id)"
-                    @click="goToCategory(cat.id)"
-                  >
+                  <button v-for="cat in categories" :key="cat.id" type="button" class="cp-cat"
+                    :class="{ active: activeCatId === cat.id }" @mouseenter="previewCategory(cat.id)"
+                    @click="goToCategory(cat.id)">
                     <span class="cp-cat__dot" />
                     <span>{{ cat.name }}</span>
                     <small>{{ subCountForCat(cat.id) }}</small>
                   </button>
                 </div>
 
-                <!-- SUBCATEGORIES -->
+                <!-- SUBCATEGORÍAS -->
                 <div class="cp-mega__subs">
                   <p class="cp-mega__label">Subcategorías</p>
 
-                  <a
-                    v-for="sub in filteredSubs"
-                    :key="sub.id"
-                    :href="`/productos?categoria=${activeCategorySlug}&subcategoria=${sub.slug}`"
-                    class="cp-sub"
-                    @click="closeMega"
-                  >
+                  <a v-for="sub in filteredSubs" :key="sub.id"
+                    :href="`/productos?categoria=${activeCategorySlug}&subcategoria=${sub.slug}`" class="cp-sub"
+                    @click="closeMega">
                     <span class="cp-sub__icon" aria-hidden="true">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="2.2"
+                          stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
                     </span>
                     {{ sub.name }}
@@ -123,14 +90,9 @@
             </div>
           </Transition>
         </div>
-
-        <a
-          v-for="link in trailingNavLinks"
-          :key="link.path"
-          :href="link.path"
+        <a v-for="link in trailingNavLinks" :key="link.path" :href="link.path"
           :class="['cp-nav__link', activeSection === link.path && 'active']"
-          @click.prevent="scrollToSection(link.path)"
-        >
+          @click.prevent="scrollToSection(link.path)">
           {{ link.name }}
         </a>
       </nav>
@@ -163,28 +125,16 @@
     <Transition name="mobile-slide">
       <nav v-if="mobileMenuOpen" class="cp-mobile">
         <div class="cp-mobile__inner">
-          <a
-            v-for="link in allNavLinks"
-            :key="link.path"
-            :href="link.path"
-            class="cp-mobile__link"
-            @click.prevent="handleMobileNavClick(link.path)"
-          >
+          <a v-for="link in allNavLinks" :key="link.path" :href="link.path" class="cp-mobile__link"
+            @click.prevent="handleMobileNavClick(link.path)">
             {{ link.name }}
           </a>
 
           <div class="cp-mobile-products">
-            <button
-              type="button"
-              class="cp-mobile-products__toggle"
-              @click="mobileProductsOpen = !mobileProductsOpen"
-            >
+            <button type="button" class="cp-mobile-products__toggle" @click="mobileProductsOpen = !mobileProductsOpen">
               Productos
-              <svg
-                class="cp-chevron"
-                :class="{ open: mobileProductsOpen }"
-                width="10" height="10" viewBox="0 0 10 10" fill="none"
-              >
+              <svg class="cp-chevron" :class="{ open: mobileProductsOpen }" width="10" height="10" viewBox="0 0 10 10"
+                fill="none">
                 <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
               </svg>
             </button>
@@ -193,12 +143,8 @@
               <a href="/productos" class="cp-mobile-products__item">
                 Todos los productos
               </a>
-              <a
-                v-for="cat in categories"
-                :key="cat.id"
-                :href="`/productos?categoria=${cat.slug}`"
-                class="cp-mobile-products__item"
-              >
+              <a v-for="cat in categories" :key="cat.id" :href="`/productos?categoria=${cat.slug}`"
+                class="cp-mobile-products__item">
                 {{ cat.name }}
               </a>
             </div>
@@ -206,6 +152,7 @@
         </div>
       </nav>
     </Transition>
+
   </header>
 </template>
 
@@ -217,41 +164,27 @@ import { useFormatPrice } from "~/composables/useFormatPrice";
 const cartStore = useCartStore();
 const formatPrice = useFormatPrice();
 
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  productCount?: number;
-}
-interface Subcategory {
-  id: number;
-  categoryId: number;
-  name: string;
-  slug: string;
-  productCount?: number;
-}
-interface NavLink {
-  name: string;
-  path: string;
-}
+interface Category { id: number; name: string; slug: string; productCount?: number; }
+interface Subcategory { id: number; categoryId: number; name: string; slug: string; productCount?: number; }
+interface NavLink { name: string; path: string; }
 
 const route = useRoute();
 const scrolled = ref(false);
 
 const simpleNavLinks: NavLink[] = [
-  { name: "Inicio",        path: "#inicio" },
-  { name: "Lanzamientos",  path: "#nuevos-lanzamientos" },
-  { name: "Beneficios",    path: "#beneficios" },
+  { name: "Inicio", path: "#inicio" },
+  { name: "Beneficios", path: "#beneficios" },
+  { name: "Lanzamientos", path: "#nuevos-lanzamientos" },
+  
 ];
 const trailingNavLinks: NavLink[] = [
-  { name: "Galería",   path: "#galeria" },
-  //{ name: "Ubicación", path: "#tienda" },
-  { name: "Contacto",  path: "#contacto" },
+  { name: "Galería", path: "#galeria" },
+  { name: "Contacto", path: "#contacto" },
 ];
 const allNavLinks = [...simpleNavLinks, ...trailingNavLinks];
 
-const activeSection      = ref("#inicio");
-const mobileMenuOpen     = ref(false);
+const activeSection = ref("#inicio");
+const mobileMenuOpen = ref(false);
 const mobileProductsOpen = ref(false);
 
 const cartTotalLabel = computed(() => formatPrice.format(cartStore.total));
@@ -287,40 +220,52 @@ const handleMobileNavClick = (hash: string) => { mobileMenuOpen.value = false; s
 watch(mobileMenuOpen, (open) => { document.body.style.overflow = open ? "hidden" : ""; });
 
 /* ── MEGA MENU ── */
-const megaOpen    = ref(false);
-const triggerRef  = ref<HTMLElement | null>(null);
-const megaRef     = ref<HTMLElement | null>(null);
+const megaOpen = ref(false);
+const triggerRef = ref<HTMLElement | null>(null);
+const megaRef = ref<HTMLElement | null>(null);
 let closeTimer: ReturnType<typeof setTimeout> | null = null;
 
-const categories    = ref<Category[]>([]);
+const categories = ref<Category[]>([]);
 const subcategories = ref<Subcategory[]>([]);
-const activeCatId   = ref<number | null>(null);
+const activeCatId = ref<number | null>(null);
 
 const activeCategorySlug = computed(() =>
-  activeCatId.value === null ? "" : categories.value.find(c => c.id === activeCatId.value)?.slug ?? ""
+  activeCatId.value === null
+    ? ""
+    : categories.value.find(c => c.id === activeCatId.value)?.slug ?? ""
 );
 const filteredSubs = computed(() =>
-  activeCatId.value === null ? subcategories.value : subcategories.value.filter(s => s.categoryId === activeCatId.value)
+  activeCatId.value === null
+    ? subcategories.value
+    : subcategories.value.filter(s => s.categoryId === activeCatId.value)
 );
-const totalProductCount = computed(() => categories.value.reduce((t, c) => t + (c.productCount ?? 0), 0));
-const subCountForCat = (id: number) => categories.value.find(c => c.id === id)?.productCount ?? 0;
+const totalProductCount = computed(() =>
+  categories.value.reduce((t, c) => t + (c.productCount ?? 0), 0)
+);
+const subCountForCat = (id: number) =>
+  categories.value.find(c => c.id === id)?.productCount ?? 0;
 const isProductsPage = computed(() => route.path.includes("/productos"));
 
 const fetchCatalog = async () => {
   try {
-    const res = await $fetch<{ data: Array<Category & { subcategories?: Subcategory[] }> }>("/api/categories?active=true");
-    categories.value    = res.data.map(({ subcategories: _s, ...c }) => c);
-    subcategories.value = res.data.flatMap(c => (c.subcategories ?? []).map(s => ({ ...s, categoryId: c.id })));
+    const res = await $fetch<{ data: Array<Category & { subcategories?: Subcategory[] }> }>(
+      "/api/categories?active=true"
+    );
+    categories.value = res.data.map(({ subcategories: _s, ...c }) => c);
+    subcategories.value = res.data.flatMap(c =>
+      (c.subcategories ?? []).map(s => ({ ...s, categoryId: c.id }))
+    );
   } catch (e) { console.error(e); }
 };
 
 const openMega = async () => {
   megaOpen.value = true;
   if (!categories.value.length) await fetchCatalog();
-  if (categories.value.length && activeCatId.value === null) activeCatId.value = categories.value[0].id;
+  if (categories.value.length && activeCatId.value === null)
+    activeCatId.value = categories.value[0].id;
 };
-const closeMega   = () => { megaOpen.value = false; };
-const toggleMega  = () => { megaOpen.value ? closeMega() : openMega(); };
+const closeMega = () => { megaOpen.value = false; };
+const toggleMega = () => { megaOpen.value ? closeMega() : openMega(); };
 const previewCategory = (id: number | null) => { activeCatId.value = id; };
 const goToCategory = (id: number | null) => {
   closeMega();
@@ -328,8 +273,11 @@ const goToCategory = (id: number | null) => {
   window.location.assign(id === null ? "/productos" : `/productos?categoria=${slug}`);
 };
 const openMenuOnHover = () => { if (closeTimer) clearTimeout(closeTimer); openMega(); };
-const scheduleClose   = () => { if (closeTimer) clearTimeout(closeTimer); closeTimer = setTimeout(closeMega, 180); };
-const cancelClose     = () => { if (closeTimer) clearTimeout(closeTimer); };
+const scheduleClose = () => {
+  if (closeTimer) clearTimeout(closeTimer);
+  closeTimer = setTimeout(closeMega, 180);
+};
+const cancelClose = () => { if (closeTimer) clearTimeout(closeTimer); };
 
 const handleOutsideClick = (e: MouseEvent) => {
   if (triggerRef.value && !triggerRef.value.contains(e.target as Node)) closeMega();
@@ -348,59 +296,59 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   HEADER — CELPARTS TECH DARK
-═══════════════════════════════════ */
-.cp-header {
-  --cp-cyan:        #00AEEF;
-  --cp-cyan-dark:   #0077C8;
-  --cp-cyan-deep:   #003F8A;
-  --cp-cyan-light:  #50D0FF;
-  --cp-ice:         #A8EDFF;
-  --cp-fog:         #C0E8FF;
-  --cp-bg:          #0A0A0A;
-  --cp-surface:     #111827;
-  --cp-border:      rgba(0, 174, 239, 0.18);
-  --cp-border-dim:  rgba(0, 174, 239, 0.10);
-  --cp-text:        #FFFFFF;
-  --cp-text-muted:  rgba(168, 237, 255, 0.70);
+/* ═══════════════════════════════════════════════════════
+   APPHEADER — CELPARTS
+   100% tokens de main.css (--cp-* / --brand-* / --grad-*)
+   Cero colores hardcodeados.
+═══════════════════════════════════════════════════════ */
 
+/* ── BASE ── */
+.cp-header {
   position: sticky;
   top: 0;
   z-index: 100;
   width: 100%;
   transition:
-    background 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
+    box-shadow var(--t-slow) var(--ease-smooth),
+    border-color var(--t-slow) var(--ease-smooth);
+}
+
+/* ── LÍNEA TÉCNICA (firma de marca) ── */
+.cp-header__brand-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--line-brand);
+  opacity: 0;
+  z-index: 3;
+  transition: opacity var(--t-slow) var(--ease-smooth);
+}
+
+.cp-header--scrolled .cp-header__brand-line {
+  opacity: 1;
 }
 
 /* ── BACKDROP ── */
 .cp-header__blur {
   position: absolute;
   inset: 0;
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  background:
-    linear-gradient(135deg,
-      rgba(10, 10, 10, 0.82),
-      rgba(17, 24, 39, 0.76));
-  border-bottom: 1px solid var(--cp-border);
-  box-shadow:
-    0 8px 30px rgba(0, 0, 0, 0.50),
-    inset 0 1px 0 rgba(0, 174, 239, 0.12);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--card-shadow-sm);
+  transition:
+    background var(--t-slow) var(--ease-smooth),
+    box-shadow var(--t-slow) var(--ease-smooth),
+    border-color var(--t-slow) var(--ease-smooth);
 }
 
 .cp-header--scrolled .cp-header__blur {
-  background:
-    linear-gradient(135deg,
-      rgba(10, 10, 10, 0.92),
-      rgba(17, 24, 39, 0.88));
-  border-bottom-color: rgba(0, 174, 239, 0.26);
-  box-shadow:
-    0 14px 40px rgba(0, 0, 0, 0.60),
-    0 0 0 1px rgba(0, 174, 239, 0.08),
-    inset 0 1px 0 rgba(0, 174, 239, 0.16);
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom-color: var(--border-mid);
+  box-shadow: var(--card-shadow);
 }
 
 /* ── CONTAINER ── */
@@ -408,57 +356,49 @@ onUnmounted(() => {
   position: relative;
   z-index: 2;
   max-width: 1400px;
-  height: 76px;
+  height: var(--header-height);
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 var(--space-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-6);
 }
 
-/* ═══════════════════════════════════
-   LEFT
-═══════════════════════════════════ */
+/* ── LEFT ── */
 .cp-header__left {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: var(--space-4);
+  flex-shrink: 0;
 }
 
-/* ═══════════════════════════════════
-   LOGO
-═══════════════════════════════════ */
+/* ── LOGO ── */
 .cp-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
   text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity var(--t-fast) var(--ease-smooth);
 }
 
-.cp-logo__icon {
-  width: 40px;
-  height: 40px;
+.cp-logo:hover {
+  opacity: 0.88;
+}
+
+.cp-logo__img {
+  width: 110px;
+  height: auto;
   object-fit: contain;
-  filter:
-    drop-shadow(0 0 10px rgba(0, 174, 239, 0.45))
-    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.40));
 }
 
-.cp-logo__text {
-  height: 20px;
-  width: auto;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
-  opacity: 0.92;
-}
-
-/* ═══════════════════════════════════
-   NAV
-═══════════════════════════════════ */
+/* ── NAV ── */
 .cp-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  flex: 1;
+  justify-content: center;
 }
 
 .cp-nav__link {
@@ -466,409 +406,484 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
-  padding: 0 14px;
-  border-radius: 999px;
-  color: var(--cp-text-muted);
+  gap: var(--space-1);
+  height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--r-pill);
+  color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.88rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: -0.01em;
   border: 1px solid transparent;
+  white-space: nowrap;
   transition:
-    background 0.22s ease,
-    color 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease,
-    transform 0.22s ease;
+    color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth);
 }
 
 .cp-nav__link:hover {
-  color: var(--cp-cyan-light);
-  background: rgba(0, 174, 239, 0.10);
-  border-color: var(--cp-border);
-  box-shadow: 0 0 14px rgba(0, 174, 239, 0.14);
+  color: var(--cp-navy);
+  background: var(--bg-alt);
+  border-color: var(--border-light);
 }
 
 .cp-nav__link.active {
-  color: var(--cp-cyan-light);
-  background: rgba(0, 174, 239, 0.12);
-  border-color: rgba(0, 174, 239, 0.28);
-  box-shadow:
-    inset 0 1px 0 rgba(80, 208, 255, 0.18),
-    0 0 18px rgba(0, 174, 239, 0.16);
+  color: var(--cp-navy);
+  background: var(--cp-frost);
+  border-color: var(--cp-mist);
+  font-weight: 600;
+}
+
+/* Punto azul eléctrico en el item activo */
+.cp-nav__link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cp-electric);
 }
 
 .cp-nav__button {
   border: none;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-body);
   background: transparent;
 }
 
 .cp-chevron {
-  margin-left: 6px;
-  transition: transform 0.24s ease;
+  margin-left: 3px;
+  flex-shrink: 0;
+  transition: transform var(--t-base) var(--ease-smooth);
   color: currentColor;
+  opacity: 0.6;
 }
-.cp-chevron.open { transform: rotate(180deg); }
 
-/* ═══════════════════════════════════
-   CART
-═══════════════════════════════════ */
+.cp-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* ── CARRITO ── */
+.cp-header__right {
+  flex-shrink: 0;
+}
+
 .cp-cart {
   height: 44px;
-  padding: 0 18px 0 0;
-  border-radius: 999px;
-  border: 1px solid var(--cp-border);
-  background: rgba(0, 174, 239, 0.08);
-  backdrop-filter: blur(20px);
-  color: var(--cp-text);
+  padding: 0 var(--space-4) 0 var(--space-1);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
   cursor: pointer;
-  box-shadow:
-    inset 0 1px 0 rgba(0, 174, 239, 0.14),
-    0 8px 24px rgba(0, 0, 0, 0.30);
+  box-shadow: var(--card-shadow-sm);
   transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    background 0.22s ease,
-    border-color 0.22s ease;
+    transform var(--t-fast) var(--ease-snappy),
+    box-shadow var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth);
 }
 
 .cp-cart:hover {
   transform: translateY(-1px);
-  background: rgba(0, 174, 239, 0.14);
-  border-color: rgba(0, 174, 239, 0.34);
-  box-shadow:
-    inset 0 1px 0 rgba(80, 208, 255, 0.20),
-    0 0 20px rgba(0, 174, 239, 0.22),
-    0 14px 30px rgba(0, 0, 0, 0.40);
+  border-color: var(--border-mid);
+  box-shadow: var(--card-shadow);
+  background: var(--bg-alt);
 }
 
 .cp-cart__icon {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--cp-cyan-light);
+  color: var(--cp-navy);
+  flex-shrink: 0;
 }
 
 .cp-cart__badge {
   position: absolute;
-  top: 7px;
-  right: 7px;
+  top: 5px;
+  right: 4px;
   min-width: 17px;
   height: 17px;
   padding: 0 4px;
-  border-radius: 999px;
-  background: var(--cp-cyan);
-  color: var(--cp-bg);
-  font-size: 10px;
+  border-radius: var(--r-pill);
+  background: var(--cp-electric);
+  color: var(--cp-navy);
+  font-size: 0.625rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid var(--bg-surface);
+  line-height: 1;
 }
 
 .cp-cart__info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 1px;
 }
 
 .cp-cart__label {
-  font-size: 10px;
+  font-size: 0.625rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--cp-text-muted);
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  line-height: 1;
+  font-weight: 600;
 }
 
 .cp-cart__amount {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--cp-cyan-light);
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: var(--cp-navy);
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
-/* ═══════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    MEGA MENU
-═══════════════════════════════════ */
-.cp-products { position: relative; }
+═══════════════════════════════════════════════════════ */
+.cp-products {
+  position: relative;
+}
 
 .cp-mega {
   position: absolute;
-  top: calc(100% + 14px);
+  top: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
-  width: 780px;
-  border-radius: 28px;
+  width: 720px;
+  border-radius: var(--r-lg);
   overflow: hidden;
-  background:
-    linear-gradient(135deg,
-      rgba(10, 10, 10, 0.90),
-      rgba(17, 24, 39, 0.88));
-  backdrop-filter: blur(36px) saturate(160%);
-  -webkit-backdrop-filter: blur(36px) saturate(160%);
-  border: 1px solid rgba(0, 174, 239, 0.22);
-  box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.70),
-    0 0 0 1px rgba(0, 174, 239, 0.08),
-    inset 0 1px 0 rgba(0, 174, 239, 0.16);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--card-shadow-hover);
 }
 
-.cp-mega__glow {
-  position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 260px;
-  height: 260px;
-  border-radius: 999px;
-  background: rgba(0, 174, 239, 0.14);
-  filter: blur(80px);
-  pointer-events: none;
+/* Línea técnica top del mega */
+.cp-mega__top-line {
+  height: 2px;
+  background: var(--line-brand);
+  flex-shrink: 0;
 }
 
 .cp-mega__label {
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(0, 174, 239, 0.55);
-  margin: 0 0 12px;
-  padding: 0 4px;
+  color: var(--text-faint);
+  margin: 0 0 var(--space-3);
+  padding: 0 2px;
 }
 
 .cp-mega__grid {
-  position: relative;
-  z-index: 2;
   display: grid;
-  grid-template-columns: 230px 1fr;
+  grid-template-columns: 210px 1fr;
   align-items: start;
 }
 
-/* ── CATEGORIES ── */
+/* Sidebar categorías */
 .cp-mega__categories {
-  padding: 20px 16px;
-  border-right: 1px solid rgba(0, 174, 239, 0.14);
-  background: rgba(0, 63, 138, 0.10);
+  padding: var(--space-5) var(--space-3);
+  border-right: 1px solid var(--border-light);
+  background: var(--bg-muted);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-1);
+  min-height: 280px;
 }
 
 .cp-cat {
-  min-height: 44px;
-  padding: 0 14px;
-  border-radius: 14px;
+  min-height: 42px;
+  padding: 0 var(--space-3);
+  border-radius: var(--r-sm);
   border: 1px solid transparent;
-  background: rgba(0, 174, 239, 0.06);
+  background: transparent;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
   cursor: pointer;
+  width: 100%;
   transition:
-    background 0.22s ease,
-    border-color 0.22s ease,
-    transform 0.22s ease,
-    box-shadow 0.22s ease;
+    background var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    transform var(--t-base) var(--ease-snappy);
 }
 
-.cp-cat:hover,
+.cp-cat:hover {
+  background: var(--bg-surface);
+  border-color: var(--border-light);
+  transform: translateX(2px);
+}
+
 .cp-cat.active {
-  background: rgba(0, 174, 239, 0.14);
-  border-color: rgba(0, 174, 239, 0.28);
-  transform: translateX(3px);
-  box-shadow: 0 0 14px rgba(0, 174, 239, 0.14);
+  background: var(--cp-ice);
+  border-color: var(--cp-mist);
+  transform: translateX(2px);
 }
 
 .cp-cat__dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--cp-border);
+  background: var(--border-mid);
   flex-shrink: 0;
-  transition: background 0.22s ease, box-shadow 0.22s ease;
+  transition:
+    background var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
 .cp-cat.active .cp-cat__dot,
 .cp-cat:hover .cp-cat__dot {
-  background: var(--cp-cyan);
-  box-shadow: 0 0 8px rgba(0, 174, 239, 0.80);
+  background: var(--cp-electric);
+  box-shadow: 0 0 6px var(--cp-electric);
 }
 
 .cp-cat span {
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(168, 237, 255, 0.82);
+  font-size: 0.84375rem;
+  font-weight: 500;
+  color: var(--text-body);
   flex: 1;
   text-align: left;
 }
 
-.cp-cat small {
-  font-size: 11px;
+.cp-cat.active span {
+  color: var(--cp-navy);
   font-weight: 600;
-  color: rgba(0, 174, 239, 0.45);
 }
 
-/* ── SUBS ── */
+.cp-cat small {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--text-faint);
+  background: var(--bg-surface);
+  padding: 1px 7px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+/* Panel subcategorías */
 .cp-mega__subs {
-  padding: 20px 18px;
+  padding: var(--space-5) var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: 0;
-}
-
-.cp-mega__subs .cp-mega__label {
-  margin-bottom: 14px;
+  gap: 2px;
 }
 
 .cp-sub {
-  position: relative;
-  min-height: 44px;
-  padding: 0 14px;
-  border-radius: 12px;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border-radius: var(--r-sm);
   border: 1px solid transparent;
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: rgba(192, 232, 255, 0.72);
+  gap: var(--space-3);
+  color: var(--text-body);
   text-decoration: none;
-  font-size: 13.5px;
+  font-size: 0.84375rem;
   font-weight: 500;
   transition:
-    background 0.20s ease,
-    border-color 0.20s ease,
-    color 0.20s ease,
-    transform 0.20s ease;
+    background var(--t-fast) var(--ease-smooth),
+    border-color var(--t-fast) var(--ease-smooth),
+    color var(--t-fast) var(--ease-smooth),
+    transform var(--t-fast) var(--ease-snappy);
 }
 
 .cp-sub:hover {
-  background: rgba(0, 174, 239, 0.10);
-  border-color: rgba(0, 174, 239, 0.20);
-  color: var(--cp-cyan-light);
-  transform: translateX(4px);
+  background: var(--cp-ice);
+  border-color: var(--cp-mist);
+  color: var(--cp-navy);
+  transform: translateX(3px);
 }
 
 .cp-sub__icon {
-  color: rgba(0, 174, 239, 0.40);
+  color: var(--text-faint);
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  transition: color 0.20s ease;
+  transition: color var(--t-fast) var(--ease-smooth), transform var(--t-fast) var(--ease-snappy);
 }
 
 .cp-sub:hover .cp-sub__icon {
-  color: var(--cp-cyan);
+  color: var(--cp-electric);
+  transform: translateX(2px);
 }
 
-/* ═══════════════════════════════════
-   MOBILE
-═══════════════════════════════════ */
-.cp-mobile-btn { display: none; }
-.cp-mobile     { display: none; }
+/* ═══════════════════════════════════════════════════════
+   MOBILE — BOTÓN HAMBURGUESA
+═══════════════════════════════════════════════════════ */
+.cp-mobile-btn {
+  display: none;
+}
 
+.cp-mobile {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMACIONES
+═══════════════════════════════════════════════════════ */
+.cp-fade-enter-active,
+.cp-fade-leave-active {
+  transition:
+    opacity var(--t-base) var(--ease-smooth),
+    transform var(--t-base) var(--ease-snappy);
+}
+
+.cp-fade-enter-from,
+.cp-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-6px) scale(0.98);
+}
+
+.mobile-slide-enter-active,
+.mobile-slide-leave-active {
+  transition:
+    opacity var(--t-base) var(--ease-smooth),
+    transform var(--t-base) var(--ease-snappy);
+}
+
+.mobile-slide-enter-from,
+.mobile-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤1024px)
+═══════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
-  .cp-nav { display: none; }
+  .cp-nav {
+    display: none;
+  }
 
   .cp-mobile-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    border: 1px solid var(--cp-border);
-    background: rgba(0, 174, 239, 0.08);
-    backdrop-filter: blur(18px);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border-light);
+    background: var(--bg-surface);
+    box-shadow: var(--card-shadow-sm);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 4px;
     cursor: pointer;
-    transition: background 0.22s ease, border-color 0.22s ease;
+    transition:
+      background var(--t-base) var(--ease-smooth),
+      border-color var(--t-base) var(--ease-smooth);
   }
 
   .cp-mobile-btn:hover {
-    background: rgba(0, 174, 239, 0.14);
-    border-color: rgba(0, 174, 239, 0.30);
+    background: var(--bg-alt);
+    border-color: var(--border-mid);
   }
 
   .cp-mobile-btn span {
-    width: 16px;
+    width: 15px;
     height: 1.5px;
-    background: var(--cp-cyan-light);
-    border-radius: 999px;
-    transition: transform 0.22s ease, opacity 0.22s ease;
+    background: var(--cp-navy);
+    border-radius: var(--r-pill);
+    transition:
+      transform var(--t-base) var(--ease-snappy),
+      opacity var(--t-base) var(--ease-smooth);
   }
 
-  .cp-mobile-btn.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
-  .cp-mobile-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .cp-mobile-btn.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+  .cp-mobile-btn.open span:nth-child(1) {
+    transform: translateY(5.5px) rotate(45deg);
+  }
 
+  .cp-mobile-btn.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .cp-mobile-btn.open span:nth-child(3) {
+    transform: translateY(-5.5px) rotate(-45deg);
+  }
+
+  /* Panel mobile */
   .cp-mobile {
     display: block;
     position: relative;
     z-index: 4;
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(28px);
-    border-top: 1px solid var(--cp-border);
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-light);
+    box-shadow: var(--card-shadow);
   }
 
   .cp-mobile__inner {
-    padding: 16px 20px 24px;
+    padding: var(--space-4) var(--space-5) var(--space-6);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
   }
 
   .cp-mobile__link,
   .cp-mobile-products__toggle,
   .cp-mobile-products__item {
-    min-height: 50px;
-    border-radius: 16px;
-    padding: 0 18px;
+    min-height: 48px;
+    border-radius: var(--r-md);
+    padding: 0 var(--space-4);
     display: flex;
     align-items: center;
-    color: rgba(168, 237, 255, 0.82);
-    text-decoration: none;
-    background: rgba(0, 174, 239, 0.07);
-    border: 1px solid var(--cp-border-dim);
-    font-size: 14px;
-    font-weight: 600;
-    backdrop-filter: blur(18px);
-    transition: background 0.20s ease, border-color 0.20s ease, color 0.20s ease;
-    cursor: pointer;
-    font-family: inherit;
     justify-content: space-between;
+    color: var(--text-body);
+    text-decoration: none;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background var(--t-base) var(--ease-smooth),
+      border-color var(--t-base) var(--ease-smooth),
+      color var(--t-base) var(--ease-smooth);
   }
 
   .cp-mobile__link:hover,
   .cp-mobile-products__toggle:hover,
   .cp-mobile-products__item:hover {
-    background: rgba(0, 174, 239, 0.14);
-    border-color: rgba(0, 174, 239, 0.28);
-    color: var(--cp-cyan-light);
+    background: var(--cp-ice);
+    border-color: var(--cp-mist);
+    color: var(--cp-navy);
   }
 
   .cp-mobile-products {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
   }
 
   .cp-mobile-products__items {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding-left: 12px;
+    gap: var(--space-1);
+    padding-left: var(--space-3);
   }
 
   .cp-mobile-products__item {
     min-height: 44px;
-    font-size: 13px;
-    opacity: 0.85;
+    font-size: 0.8125rem;
   }
 
   .cp-mega {
@@ -876,25 +891,30 @@ onUnmounted(() => {
   }
 }
 
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤640px)
+═══════════════════════════════════════════════════════ */
 @media (max-width: 640px) {
   .cp-header__container {
-    height: 68px;
-    padding: 0 16px;
+    height: 62px;
+    padding: 0 var(--space-4);
+    gap: var(--space-3);
   }
 
-  .cp-logo__text {
-    height: 18px;
+  .cp-logo__img {
+    width: 88px;
   }
 
+  /* Carrito sin texto en mobile */
   .cp-cart__info {
     display: none;
   }
 
   .cp-cart {
-    width: 48px;
+    width: 44px;
     padding: 0;
     justify-content: center;
-    border-radius: 14px;
+    border-radius: var(--r-sm);
   }
 
   .cp-mega__grid {
@@ -903,35 +923,8 @@ onUnmounted(() => {
 
   .cp-mega__categories {
     border-right: none;
-    border-bottom: 1px solid rgba(0, 174, 239, 0.14);
+    border-bottom: 1px solid var(--border-light);
+    min-height: unset;
   }
-
-  .cp-mega__categories,
-  .cp-mega__subs {
-    padding: 14px;
-  }
-}
-
-/* ═══════════════════════════════════
-   ANIMATIONS
-═══════════════════════════════════ */
-.cp-fade-enter-active,
-.cp-fade-leave-active {
-  transition: opacity 0.22s ease, transform 0.22s ease;
-}
-.cp-fade-enter-from,
-.cp-fade-leave-to {
-  opacity: 0;
-  transform: translateX(-50%) translateY(-10px) scale(0.98);
-}
-
-.mobile-slide-enter-active,
-.mobile-slide-leave-active {
-  transition: opacity 0.24s ease, transform 0.24s ease;
-}
-.mobile-slide-enter-from,
-.mobile-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
 }
 </style>

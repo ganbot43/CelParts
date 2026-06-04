@@ -62,16 +62,12 @@ const productsPageLink = {
           </p>
         </div>
 
-        <!-- Enlace Ver todos — desktop -->
-        <NuxtLink
-          v-if="totalProducts > 0"
-          :to="productsPageLink"
-          class="catalog-btn catalog-btn--ghost"
-        >
+        <!-- Ver todos — desktop -->
+        <NuxtLink v-if="totalProducts > 0" :to="productsPageLink" class="catalog-btn catalog-btn--ghost">
           Ver todos
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6"
-              stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </NuxtLink>
       </div>
@@ -85,11 +81,7 @@ const productsPageLink = {
           <LandingNuevosLanzamientosEmptyState />
         </template>
         <template v-else>
-          <EcommerceTarjetaProducto
-            v-for="product in products"
-            :key="product.id"
-            :product="product"
-          />
+          <EcommerceTarjetaProducto v-for="product in products" :key="product.id" :product="product" />
         </template>
       </div>
 
@@ -98,8 +90,8 @@ const productsPageLink = {
         <NuxtLink :to="productsPageLink" class="catalog-btn catalog-btn--primary">
           Ver todos los lanzamientos
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6"
-              stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </NuxtLink>
       </div>
@@ -110,59 +102,62 @@ const productsPageLink = {
 
 <style scoped>
 /* ═══════════════════════════════════
-   NUEVOS LANZAMIENTOS — CELPARTS TECH DARK
+   NUEVOS LANZAMIENTOS — CELPARTS
+   100% tokens de main.css
 ═══════════════════════════════════ */
-.catalog {
-  --cp-cyan:         #00AEEF;
-  --cp-cyan-dark:    #0077C8;
-  --cp-cyan-light:   #50D0FF;
-  --cp-ice:          #A8EDFF;
-  --cp-white:        #FFFFFF;
-  --cp-text:         rgba(168, 237, 255, 0.82);
-  --cp-border:       rgba(0, 174, 239, 0.18);
-  --cp-border-hover: rgba(0, 174, 239, 0.45);
 
+.catalog {
   position: relative;
   overflow: hidden;
-  background: transparent;
-  padding: 110px 40px;
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: clamp(80px, 8vw, 120px) 0;
 }
 
-/* ═══════════════════════════════════
-   CONTAINER
-═══════════════════════════════════ */
+/* Línea técnica superior */
+.catalog::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--line-brand);
+}
+
+/* ── Container ── */
 .catalog-container {
-  max-width: 1240px;
+  max-width: var(--container-width);
   margin: 0 auto;
+  padding: 0 var(--space-8);
   position: relative;
   z-index: 1;
 }
 
-/* ═══════════════════════════════════
-   HEADER
-═══════════════════════════════════ */
+/* ── Header ── */
 .catalog-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 28px;
+  gap: var(--space-8);
   flex-wrap: wrap;
-  margin-bottom: 54px;
+  margin-bottom: var(--space-12);
 }
 
 .catalog-header__left {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
   max-width: 650px;
 }
 
 .catalog-label {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
   width: fit-content;
-  color: var(--cp-cyan-light);
+  color: var(--cp-electric);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -173,62 +168,64 @@ const productsPageLink = {
   content: "";
   width: 26px;
   height: 1.5px;
-  border-radius: 999px;
-  background: var(--cp-cyan);
+  border-radius: var(--r-pill);
+  background: var(--cp-electric);
+  opacity: 0.6;
 }
 
 .catalog-title {
   margin: 0;
-  color: var(--cp-white);
+  color: var(--text-primary);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 800;
   line-height: 1.05;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.045em;
 }
 
 .catalog-title__dot {
   width: 8px;
   height: 8px;
-  margin-left: 6px;
+  margin-left: var(--space-2);
   border-radius: 50%;
   display: inline-block;
-  background: var(--cp-cyan);
+  background: var(--cp-electric);
   position: relative;
   top: -4px;
-  box-shadow: 0 0 16px rgba(0, 174, 239, 0.80);
+  box-shadow: var(--glow-soft);
 }
 
 .catalog-subtitle {
   margin: 0;
   max-width: 560px;
-  color: var(--cp-text);
+  color: var(--text-muted);
   font-size: 1rem;
   line-height: 1.8;
 }
 
-/* ═══════════════════════════════════
-   BOTONES
-═══════════════════════════════════ */
+/* ── Botones ── */
 .catalog-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 0.95rem 1.6rem;
-  border-radius: 999px;
+  gap: var(--space-2);
+  height: 44px;
+  padding: 0 var(--space-6);
+  border-radius: var(--r-pill);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
   font-weight: 700;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+    transform var(--t-fast) var(--ease-snappy),
+    box-shadow var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    color var(--t-base) var(--ease-smooth);
 }
 
 .catalog-btn svg {
-  transition: transform 0.2s ease;
+  transition: transform var(--t-base) var(--ease-snappy);
 }
 
 .catalog-btn:hover svg {
@@ -239,55 +236,45 @@ const productsPageLink = {
   transform: translateY(-2px);
 }
 
-/* Primario — gradiente cyan */
 .catalog-btn--primary {
-  background: linear-gradient(135deg, var(--cp-cyan), var(--cp-cyan-dark));
-  color: var(--cp-white);
-  border: 1px solid rgba(80, 208, 255, 0.25);
-  box-shadow:
-    0 10px 30px rgba(0, 174, 239, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: none;
+  box-shadow: var(--card-shadow);
 }
 
 .catalog-btn--primary:hover {
-  box-shadow:
-    0 16px 42px rgba(0, 174, 239, 0.45),
-    0 0 0 1px rgba(0, 174, 239, 0.50);
+  background: var(--btn-primary-hover);
+  box-shadow: var(--card-shadow-hover);
+  color: var(--btn-primary-text);
 }
 
-/* Ghost — glass transparente */
 .catalog-btn--ghost {
-  background: rgba(0, 174, 239, 0.07);
-  color: var(--cp-ice);
-  border: 1px solid var(--cp-border);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--bg-surface);
+  color: var(--text-body);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .catalog-btn--ghost:hover {
-  background: var(--cp-cyan);
-  border-color: var(--cp-cyan);
-  color: var(--cp-white);
-  box-shadow: 0 0 22px rgba(0, 174, 239, 0.45);
+  background: var(--cp-frost);
+  border-color: var(--border-mid);
+  color: var(--cp-navy);
 }
 
-/* ═══════════════════════════════════
-   GRID
-═══════════════════════════════════ */
+/* ── Grid ── */
 .catalog-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 22px;
+  gap: var(--space-6);
   align-items: stretch;
 }
 
-/* ═══════════════════════════════════
-   FOOTER
-═══════════════════════════════════ */
+/* ── Footer ── */
 .catalog-footer {
   display: flex;
   justify-content: center;
-  margin-top: 56px;
+  margin-top: var(--space-12);
 }
 
 @media (min-width: 641px) {
@@ -300,10 +287,6 @@ const productsPageLink = {
    RESPONSIVE
 ═══════════════════════════════════ */
 @media (max-width: 1100px) {
-  .catalog {
-    padding: 90px 30px;
-  }
-
   .catalog-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -325,13 +308,9 @@ const productsPageLink = {
 }
 
 @media (max-width: 640px) {
-  .catalog {
-    padding: 75px 18px;
-  }
-
   .catalog-header {
-    gap: 18px;
-    margin-bottom: 38px;
+    gap: var(--space-5);
+    margin-bottom: var(--space-8);
   }
 
   .catalog-title {
@@ -343,7 +322,7 @@ const productsPageLink = {
   }
 
   .catalog-grid {
-    gap: 14px;
+    gap: var(--space-4);
   }
 
   .catalog-footer {
@@ -360,8 +339,8 @@ const productsPageLink = {
     grid-template-columns: 1fr;
   }
 
-  .catalog {
-    padding-inline: 16px;
+  .catalog-container {
+    padding: 0 var(--space-4);
   }
 }
 </style>

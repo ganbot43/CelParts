@@ -105,7 +105,6 @@
   position: relative;
   width: 100%;
   background: var(--bg-page);
-  padding-bottom: 100px;
 }
 
 /* ── Imagen de fondo ── */
@@ -195,6 +194,7 @@
   z-index: 3;
   display: flex;
   align-items: center;
+  padding-top: var(--header-height); /* Evita que el navbar superponga el título */
 }
 
 .hero-container {
@@ -379,62 +379,70 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 100px;
-  background: linear-gradient(to bottom, transparent 0%, var(--bg-page) 100%);
+  height: 80px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(247,251,255,0.85) 100%);
   z-index: 2;
   pointer-events: none;
 }
 
-/* ── Stats — fuera del absolute ── */
+/* ── Stats — tarjeta centrada compacta ── */
 .hero-stats-wrap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -60px;
-  z-index: 10;
-  padding: 0 var(--space-16);
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--space-8);
+  margin-top: -36px;
 }
 
 .hero-stats {
-  max-width: var(--container-width);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-lg);
-  box-shadow: var(--card-shadow);
+  display: inline-flex;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(200, 232, 248, 0.8);
+  border-radius: var(--r-xl);
+  box-shadow:
+    0 4px 24px rgba(7, 30, 82, 0.10),
+    0 1px 4px rgba(7, 30, 82, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .hero-stat {
   padding: var(--space-5) var(--space-8);
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 110px;
 }
 
 .hero-stat strong {
   display: block;
   color: var(--cp-navy);
   font-family: var(--font-display);
-  font-size: 1.18rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: 1;
 }
 
 .hero-stat span {
   color: var(--text-muted);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  font-weight: 500;
+  font-size: 0.70rem;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .hero-stat-divider {
   width: 1px;
-  height: 36px;
+  align-self: stretch;
+  margin: var(--space-4) 0;
   background: var(--border-light);
   flex-shrink: 0;
 }
@@ -453,7 +461,7 @@
   }
 
   .hero-stats-wrap {
-    padding: 0 var(--space-10) var(--space-8);
+    padding: 0 var(--space-10);
   }
 
   .hero-deco--circle-1 {
@@ -515,21 +523,27 @@
   }
 
   .hero-stats-wrap {
-    padding: 0 var(--space-5) var(--space-6);
+    padding: 0 var(--space-5);
+    margin-top: -28px;
+  }
+
+  .hero-stats {
+    flex-wrap: wrap;
+    border-radius: var(--r-lg);
   }
 
   .hero-stat {
     flex: 1;
-    min-width: 160px;
-    padding: var(--space-4);
+    min-width: 120px;
+    padding: var(--space-4) var(--space-5);
   }
 
   .hero-stat strong {
-    font-size: 1.02rem;
+    font-size: 1.1rem;
   }
 
   .hero-stat-divider {
-    height: 28px;
+    margin: var(--space-3) 0;
   }
 
   .hero-deco--circle-1 {
@@ -552,27 +566,35 @@
     flex: unset;
   }
 
-  .hero-stats {
-    display: grid;
-    grid-template-columns: 1fr 1px 1fr;
+  .hero-stats-wrap {
+    margin-top: -24px;
+    padding: 0 var(--space-4);
   }
 
-  .hero-stat-divider:nth-child(6) {
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: var(--r-lg);
+    flex-wrap: unset;
+  }
+
+  .hero-stat-divider {
     display: none;
   }
 
-  .hero-stat:nth-child(7) {
-    grid-column: 1 / -1;
-    border-top: 1px solid var(--border-light);
-    text-align: center;
-    align-items: center;
+  .hero-stat {
+    min-width: unset;
+    padding: var(--space-4);
   }
 
-  .hero-stats-wrap {
-    position: relative;
-    z-index: 10;
-    margin-top: -100px;
-    padding: 0 var(--space-16) var(--space-10);
+  .hero-stat:nth-child(1),
+  .hero-stat:nth-child(3) {
+    border-right: 1px solid var(--border-light);
+  }
+
+  .hero-stat:nth-child(3),
+  .hero-stat:nth-child(5) {
+    border-top: 1px solid var(--border-light);
   }
 }
 </style>

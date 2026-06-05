@@ -103,19 +103,33 @@ const productsPageLink = {
 <style scoped>
 /* ═══════════════════════════════════
    NUEVOS LANZAMIENTOS — CELPARTS
-   100% tokens de main.css
+   Design system: hero + benefits pattern
+   100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */
 
+/* ── Sección ── */
 .catalog {
   position: relative;
   overflow: hidden;
-  background: var(--bg-alt);
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-page);
   padding: clamp(80px, 8vw, 120px) 0;
 }
 
-/* Línea técnica superior */
+/* Fondo degradado sutil igual que benefits */
+.catalog::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    var(--cp-frost) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Línea técnica de marca superior */
 .catalog::before {
   content: '';
   position: absolute;
@@ -124,6 +138,7 @@ const productsPageLink = {
   right: 0;
   height: 2px;
   background: var(--line-brand);
+  z-index: 1;
 }
 
 /* ── Container ── */
@@ -132,7 +147,7 @@ const productsPageLink = {
   margin: 0 auto;
   padding: 0 var(--space-8);
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* ── Header ── */
@@ -152,6 +167,7 @@ const productsPageLink = {
   max-width: 650px;
 }
 
+/* Label — mismo estilo que benefits */
 .catalog-label {
   display: inline-flex;
   align-items: center;
@@ -164,22 +180,23 @@ const productsPageLink = {
   text-transform: uppercase;
 }
 
-.catalog-label::before {
+.catalog-label::before,
+.catalog-label::after {
   content: "";
-  width: 26px;
-  height: 1.5px;
-  border-radius: var(--r-pill);
+  width: 20px;
+  height: 1px;
   background: var(--cp-electric);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
+/* Título */
 .catalog-title {
   margin: 0;
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
   font-weight: 800;
-  line-height: 1.05;
+  line-height: 1.02;
   letter-spacing: -0.045em;
 }
 
@@ -191,10 +208,11 @@ const productsPageLink = {
   display: inline-block;
   background: var(--cp-electric);
   position: relative;
-  top: -4px;
+  top: -6px;
   box-shadow: var(--glow-soft);
 }
 
+/* Subtítulo */
 .catalog-subtitle {
   margin: 0;
   max-width: 560px;
@@ -203,7 +221,7 @@ const productsPageLink = {
   line-height: 1.8;
 }
 
-/* ── Botones ── */
+/* ── Botón "Ver todos" — desktop (ghost) ── */
 .catalog-btn {
   display: inline-flex;
   align-items: center;
@@ -229,7 +247,7 @@ const productsPageLink = {
 }
 
 .catalog-btn:hover svg {
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 .catalog-btn:hover {
@@ -240,12 +258,12 @@ const productsPageLink = {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
   border: none;
-  box-shadow: var(--card-shadow);
+  box-shadow: 0 2px 10px rgba(7, 30, 82, 0.18);
 }
 
 .catalog-btn--primary:hover {
   background: var(--btn-primary-hover);
-  box-shadow: var(--card-shadow-hover);
+  box-shadow: 0 6px 22px rgba(7, 30, 82, 0.26);
   color: var(--btn-primary-text);
 }
 
@@ -257,12 +275,12 @@ const productsPageLink = {
 }
 
 .catalog-btn--ghost:hover {
-  background: var(--cp-frost);
+  background: var(--bg-alt);
   border-color: var(--border-mid);
-  color: var(--cp-navy);
+  color: var(--text-primary);
 }
 
-/* ── Grid ── */
+/* ── Grid de productos ── */
 .catalog-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -270,7 +288,7 @@ const productsPageLink = {
   align-items: stretch;
 }
 
-/* ── Footer ── */
+/* ── Footer — botón centrado en mobile ── */
 .catalog-footer {
   display: flex;
   justify-content: center;
@@ -286,6 +304,12 @@ const productsPageLink = {
 /* ═══════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════ */
+@media (max-width: 1280px) {
+  .catalog-container {
+    padding: 0 var(--space-10);
+  }
+}
+
 @media (max-width: 1100px) {
   .catalog-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -296,6 +320,7 @@ const productsPageLink = {
   .catalog-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: var(--space-5);
   }
 
   .catalog-btn--ghost {
@@ -304,12 +329,12 @@ const productsPageLink = {
 
   .catalog-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
   }
 }
 
 @media (max-width: 640px) {
   .catalog-header {
-    gap: var(--space-5);
     margin-bottom: var(--space-8);
   }
 
@@ -340,7 +365,7 @@ const productsPageLink = {
   }
 
   .catalog-container {
-    padding: 0 var(--space-4);
+    padding: 0 var(--space-5);
   }
 }
 </style>

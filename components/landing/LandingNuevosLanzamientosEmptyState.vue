@@ -1,12 +1,17 @@
 <template>
   <div class="empty-state">
+
     <!-- Ícono central -->
     <div class="empty-state__icon-ring">
       <svg class="empty-state__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true">
-        <path d="M8 20h32M8 20v18a2 2 0 002 2h28a2 2 0 002-2V20M8 20l4-10h24l4 10" stroke="#2D6A4F" stroke-width="2.2"
-          stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M24 10V8M20 28h8M24 24v8" stroke="#E9C46A" stroke-width="2.2" stroke-linecap="round" />
+        <!-- Caja / tienda -->
+        <path d="M8 20h32M8 20v18a2 2 0 002 2h28a2 2 0 002-2V20M8 20l4-10h24l4 10"
+          stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+        <!-- Estrella / tilde de nuevo -->
+        <path d="M24 28v4M22 30h4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        <!-- Punto superior -->
+        <circle cx="24" cy="10" r="1.5" fill="currentColor" opacity="0.5" />
       </svg>
     </div>
 
@@ -66,16 +71,12 @@ const categories: Category[] = [
 </script>
 
 <style scoped>
-.empty-state {
-  --cp-bg: #0A0A0A;
-  --cp-cyan: #00AEEF;
-  --cp-cyan-dark: #0077C8;
-  --cp-cyan-light: #50D0FF;
-  --cp-ice: #A8EDFF;
-  --cp-white: #FFFFFF;
-  --cp-text: rgba(168, 237, 255, 0.82);
-  --cp-border: rgba(0, 174, 239, 0.20);
+/* ═══════════════════════════════════
+   EMPTY STATE — NUEVOS LANZAMIENTOS
+   100% tokens de main.css — sin hardcode
+═══════════════════════════════════ */
 
+.empty-state {
   grid-column: 1 / -1;
 
   display: flex;
@@ -83,219 +84,244 @@ const categories: Category[] = [
   align-items: center;
   text-align: center;
 
-  padding: 70px 40px;
+  padding: var(--space-20) var(--space-10);
 
-  background:
-    rgba(0, 174, 239, 0.04);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  box-shadow: var(--card-shadow);
 
-  border: 1px solid var(--cp-border);
-
-  border-radius: 24px;
-
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
 }
 
-/* ICONO */
+/* Línea técnica superior */
+.empty-state::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--line-brand);
+}
 
+/* Halo de fondo sutil */
+.empty-state::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--cp-frost) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Asegurar que el contenido quede sobre el pseudo */
+.empty-state > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Ícono ── */
 .empty-state__icon-ring {
-  width: 90px;
-  height: 90px;
-
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
 
-  background:
-    rgba(0, 174, 239, 0.08);
-
-  border: 1px solid var(--cp-border);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 24px;
+  margin-bottom: var(--space-6);
+
+  color: var(--cp-electric);
+  box-shadow: var(--glow-soft);
 }
 
 .empty-state__icon {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
 }
 
-.empty-state__icon path:first-child {
-  stroke: #50D0FF;
-}
-
-.empty-state__icon path:last-child {
-  stroke: #00AEEF;
-}
-
-/* TEXTOS */
-
+/* ── Textos ── */
 .empty-state__eyebrow {
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-3);
 
-  color: var(--cp-cyan-light);
+  color: var(--cp-electric);
 
-  font-size: 11px;
+  font-size: 0.70rem;
   font-weight: 700;
-
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.empty-state__eyebrow::before,
+.empty-state__eyebrow::after {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--cp-electric);
+  opacity: 0.5;
 }
 
 .empty-state__title {
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-3);
 
-  color: var(--cp-white);
-
-  font-size: clamp(1.4rem, 3vw, 1.8rem);
-
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
   font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
 .empty-state__subtitle {
-  margin: 0 0 34px;
+  margin: 0 0 var(--space-8);
 
-  max-width: 480px;
+  max-width: 460px;
 
-  color: var(--cp-text);
-
+  color: var(--text-muted);
   line-height: 1.8;
-
-  font-size: .95rem;
+  font-size: 0.95rem;
 }
 
-/* BOTÓN */
-
+/* ── Botón CTA ── */
 .empty-state__btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 
   text-decoration: none;
 
-  color: white;
-
-  font-size: .9rem;
+  color: var(--btn-primary-text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
   font-weight: 700;
 
-  padding: 14px 28px;
+  height: 46px;
+  padding: 0 var(--space-6);
+  border-radius: var(--r-pill);
 
-  border-radius: 999px;
+  background: var(--btn-primary-bg);
+  border: none;
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--cp-cyan),
-      var(--cp-cyan-dark)
-    );
-
-  border: 1px solid rgba(80,208,255,.2);
-
-  box-shadow:
-    0 10px 30px rgba(0,174,239,.25);
+  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.20);
 
   transition:
-    transform .2s ease,
-    box-shadow .2s ease;
+    transform var(--t-fast) var(--ease-snappy),
+    background var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
 .empty-state__btn:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 16px 42px rgba(0,174,239,.45);
+  background: var(--btn-primary-hover);
+  box-shadow: 0 8px 28px rgba(7, 30, 82, 0.28);
+  color: var(--btn-primary-text);
 }
 
-/* DIVIDER */
+.empty-state__btn:active {
+  transform: translateY(0);
+}
 
+/* ── Divisor ── */
 .empty-state__divider {
   width: 100%;
-  max-width: 480px;
-
+  max-width: 440px;
   height: 1px;
-
-  background:
-    rgba(0,174,239,.15);
-
-  margin: 34px 0 28px;
+  background: var(--border-light);
+  margin: var(--space-8) 0 var(--space-6);
 }
 
-/* TAGS */
-
+/* ── Tags / Categorías ── */
 .empty-state__tags-label {
-  margin: 0 0 16px;
-
-  color: rgba(168,237,255,.55);
-
-  font-size: 12px;
+  margin: 0 0 var(--space-4);
+  color: var(--text-faint);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .empty-state__tags {
   list-style: none;
-
   margin: 0;
   padding: 0;
 
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .empty-state__tag {
-  border-radius: 999px;
-
-  background:
-    rgba(0,174,239,.05);
-
-  border: 1px solid var(--cp-border);
-
-  transition: .2s ease;
+  border-radius: var(--r-pill);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
+  transition:
+    border-color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
 .empty-state__tag:hover {
-  border-color: rgba(0,174,239,.45);
-
-  box-shadow:
-    0 0 18px rgba(0,174,239,.15);
+  border-color: var(--border-mid);
+  background: var(--cp-frost);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .empty-state__tag-link {
   display: flex;
   align-items: center;
-  gap: 6px;
-
-  padding: 8px 14px;
-
+  gap: var(--space-1);
+  padding: 7px var(--space-4);
   text-decoration: none;
-
-  color: var(--cp-text);
-
-  font-size: 12px;
+  color: var(--text-body);
+  font-size: 0.78rem;
   font-weight: 600;
+  transition: color var(--t-base) var(--ease-smooth);
+}
+
+.empty-state__tag:hover .empty-state__tag-link {
+  color: var(--text-primary);
 }
 
 .empty-state__tag-dot {
-  color: var(--cp-cyan);
+  color: var(--cp-electric);
+  font-size: 0.55rem;
 }
 
-/* MOBILE */
-
+/* ── Responsive ── */
 @media (max-width: 640px) {
   .empty-state {
-    padding: 50px 22px;
+    padding: var(--space-12) var(--space-6);
   }
 
   .empty-state__icon-ring {
-    width: 74px;
-    height: 74px;
+    width: 72px;
+    height: 72px;
   }
 
   .empty-state__icon {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .empty-state__btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>

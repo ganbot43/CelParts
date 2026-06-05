@@ -62,11 +62,8 @@
       </div>
     </div>
 
-    <!-- Fade inferior -->
-    <div class="hero-fade" aria-hidden="true" />
-
-    <!-- Stats FUERA del absolute — sobre el borde inferior -->
-    <div class="hero-stats-wrap">
+    <!-- Stats — integradas al fondo de la imagen -->
+  <!-- <div class="hero-stats-wrap">
       <div class="hero-stats">
         <div class="hero-stat">
           <strong>+500</strong>
@@ -88,7 +85,7 @@
           <span>Envío nacional</span>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </section>
 </template>
@@ -373,26 +370,16 @@
   outline-offset: 3px;
 }
 
-/* ── Fade inferior ── */
-.hero-fade {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, transparent 0%, rgba(247,251,255,0.85) 100%);
-  z-index: 2;
-  pointer-events: none;
-}
-
 /* ── Stats — tarjeta centrada compacta ── */
 .hero-stats-wrap {
-  position: relative;
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
   z-index: 5;
   display: flex;
   justify-content: center;
   padding: 0 var(--space-8);
-  margin-top: -36px;
 }
 
 .hero-stats {
@@ -524,7 +511,7 @@
 
   .hero-stats-wrap {
     padding: 0 var(--space-5);
-    margin-top: -28px;
+    bottom: 24px;
   }
 
   .hero-stats {
@@ -567,7 +554,7 @@
   }
 
   .hero-stats-wrap {
-    margin-top: -24px;
+    bottom: 20px;
     padding: 0 var(--space-4);
   }
 

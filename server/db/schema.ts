@@ -105,6 +105,7 @@ export const paymentMethods = mysqlTable('payment_methods', {
 export const orders = mysqlTable('orders', {
   id:                     int('id').autoincrement().primaryKey(),
   orderCode:              varchar('order_code', { length: 191 }).notNull().unique(),
+  userId:                 int('user_id').references(() => users.id, { onDelete: 'set null' }),
   paymentMethodId:        int('payment_method_id')
                             .references(() => paymentMethods.id, { onDelete: 'set null' }),
   paymentMethodType:      text('payment_method_type'),
@@ -231,6 +232,9 @@ export const productImagesRelations = relations(productImages, ({ one }) => ({
 }))
 
 export const ordersRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.userId], references: [users.id],
+  }),
   paymentMethod: one(paymentMethods, {
     fields: [orders.paymentMethodId], references: [paymentMethods.id],
   }),

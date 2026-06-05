@@ -205,10 +205,15 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 </script>
 
 <style scoped>
+/* ═══════════════════════════════════
+   DETALLE PRODUCTO — CELPARTS
+   100% tokens de main.css
+═══════════════════════════════════ */
+
 /* ─── Base ───────────────────────────────────────────────── */
 .pagina-detalle {
   min-height: 100vh;
-  background: linear-gradient(180deg, rgba(248, 247, 244, 0.96), rgba(241, 239, 234, 1));
+  background: var(--bg-base);
   padding-bottom: 4rem;
 }
 
@@ -232,33 +237,33 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 .barra-breadcrumb {
   padding: 1.5rem 0 0;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(226, 224, 217, 0.7);
+  border-bottom: 1px solid var(--border-light);
   padding-bottom: 1rem;
 }
 .nav-breadcrumb {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
+  gap: var(--space-2);
+  font-size: 0.82rem;
 }
 .enlace-breadcrumb {
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  color: #777777;
+  color: var(--text-muted);
   font-weight: 500;
-  transition: color 0.15s;
+  transition: color var(--t-fast) var(--ease-smooth);
   text-decoration: none;
 }
 .enlace-breadcrumb:hover {
-  color: #2D6A4F;
+  color: var(--cp-electric);
 }
 .separador-breadcrumb {
-  color: #D9D9D9;
+  color: var(--border-mid);
 }
 .breadcrumb-actual {
-  color: #111111;
-  font-weight: 500;
+  color: var(--text-primary);
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -266,30 +271,28 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 }
 
 /* ─── Loading skeleton ───────────────────────────────────── */
-.estado-cargando {
-  padding: 2rem 0;
-}
+.estado-cargando,
 .estado-error {
   padding: 2rem 0;
 }
 .tarjeta-error {
   max-width: 34rem;
   margin: 0 auto;
-  padding: 2rem;
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.76);
+  padding: var(--space-8);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  background: var(--bg-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 20px 50px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: var(--card-shadow);
 }
 .error-pill {
   display: inline-flex;
   align-items: center;
   padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  background: rgba(45, 106, 79, 0.1);
-  color: #2D6A4F;
+  border-radius: var(--r-pill);
+  background: rgba(0, 174, 239, 0.08);
+  color: var(--cp-electric);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -297,28 +300,36 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 }
 .tarjeta-error h2 {
   margin: 1rem 0 0.5rem;
+  font-family: var(--font-display);
   font-size: 1.5rem;
-  color: #111111;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 .tarjeta-error p {
   margin: 0;
-  color: #66625A;
+  color: var(--text-body);
   line-height: 1.6;
 }
 .reintentar-btn {
   margin-top: 1.5rem;
   border: 0;
-  border-radius: 999px;
-  padding: 0.9rem 1.25rem;
-  background: linear-gradient(135deg, #2D6A4F 0%, #1E4D38 100%);
-  color: #fff;
+  border-radius: var(--r-pill);
+  padding: 0.9rem 1.5rem;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  font-family: var(--font-body);
   font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 14px 30px rgba(45, 106, 79, 0.22);
+  transition: all var(--t-fast) var(--ease-snappy);
+  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.15);
 }
 .reintentar-btn:hover {
+  background: var(--btn-primary-hover);
   transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(7, 30, 82, 0.22);
 }
 .grilla-cargando {
   display: grid;
@@ -332,34 +343,28 @@ async function manejarAgregarProductoSimilar(productoSimilar: any) {
 }
 .imagen-cargando {
   aspect-ratio: 1/1;
-  background: linear-gradient(110deg, rgba(255,255,255,0.7) 8%, rgba(241,239,234,0.98) 18%, rgba(255,255,255,0.7) 33%);
+  background: linear-gradient(110deg, var(--bg-alt) 8%, var(--bg-surface) 18%, var(--bg-alt) 33%);
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
-  border-radius: 20px;
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border-light);
 }
 .info-cargando {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 0.5rem;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
 }
 .linea-cargando {
   height: 1rem;
-  border-radius: 6px;
-  background: linear-gradient(110deg, rgba(255,255,255,0.7) 8%, rgba(241,239,234,0.98) 18%, rgba(255,255,255,0.7) 33%);
+  border-radius: var(--r-sm);
+  background: linear-gradient(110deg, var(--bg-alt) 8%, var(--bg-surface) 18%, var(--bg-alt) 33%);
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
 }
 @keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* ─── Product grid ───────────────────────────────────────── */

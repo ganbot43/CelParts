@@ -178,79 +178,342 @@ async function manejarAgregar() {
 </script>
 
 <style scoped>
-/* ─── Variables ────────────────────────────────────────────── */
+/* ═══════════════════════════════════
+   INFO PRODUCTO — CELPARTS
+   100% tokens de main.css
+═══════════════════════════════════ */
+
+/* ─── Layout ── */
 .info-producto {
-  --primary: #2D6A4F;
-  --primary-dark: #1E4D38;
-  --primary-glow: rgba(45, 106, 79, 0.22);
-  --primary-line: rgba(45, 106, 79, 0.2);
-  --accent: #E9C46A;
-  --radius: 14px;
-  --radius-sm: 8px;
-  --border: #e5e5e5;
-  --bg: #ffffff;
-  --bg2: #f5f5f5;
-  --text: #2b2b2b;
-  --text2: #777777;
-  --green: #059669;
-  --wa: #25d366;
-  --wa-dark: #128c4a;
-  --wa-glow: rgba(37, 211, 102, 0.22);
-  --transition: 0.18s ease;
-}
-
-.info-produto {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-5);
 }
 
-.info-produto {
+/* ─── Encabezado ── */
+.info-encabezado {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-2);
 }
 
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.info-categoria {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cp-white);
+  background: rgba(7, 30, 82, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  width: fit-content;
+  backdrop-filter: blur(6px);
 }
 
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.info-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
 }
 
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* ─── Descripción ── */
+.info-descripcion {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-body);
+  line-height: 1.7;
+  padding: var(--space-4);
+  background: var(--bg-alt);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-light);
 }
 
-.info-produto {
+/* ─── Precio + stock ── */
+.info-precio-contenedor {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-lg);
 }
 
-.info-produto {
+.info-precio-bloque,
+.info-stock-bloque {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 4px;
 }
 
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.info-divider-vertical {
+  width: 1px;
+  height: 40px;
+  background: var(--border-light);
+  flex-shrink: 0;
 }
 
-.info-produto {
+.info-etiqueta {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.info-precio {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--cp-navy);
+  margin: 0;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* ─── Stock badge ── */
+.info-stock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--r-sm);
+  width: fit-content;
+}
+
+.info-stock-badge.en-stock {
+  background: rgba(22, 163, 74, 0.08);
+  color: #16a34a;
+}
+
+.info-stock-badge.sin-stock {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+
+.info-stock-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.en-stock .info-stock-dot {
+  background: #16a34a;
+}
+.sin-stock .info-stock-dot {
+  background: #dc2626;
+}
+
+/* ─── Controles ── */
+.info-controles {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-3);
+}
+
+.info-cantidad-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.info-cantidad-botonera {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--bg-surface);
+  width: fit-content;
+}
+
+.info-cantidad-boton {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--text-body);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--t-fast) var(--ease-smooth), color var(--t-fast) var(--ease-smooth);
+  flex-shrink: 0;
+}
+
+.info-cantidad-boton:hover:not(:disabled) {
+  background: var(--bg-alt);
+  color: var(--cp-electric);
+}
+
+.info-cantidad-boton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.info-cantidad-entrada {
+  width: 56px;
+  height: 40px;
+  border: none;
+  border-left: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  background: transparent;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.info-cantidad-entrada::-webkit-outer-spin-button,
+.info-cantidad-entrada::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.info-cantidad-entrada[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* ─── Botones acción ── */
+.info-botones {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* ─── Botón agregar ── */
+.info-boton-agregar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.15);
+  transition:
+    background var(--t-fast) var(--ease-smooth),
+    transform var(--t-fast) var(--ease-snappy),
+    box-shadow var(--t-fast) var(--ease-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.info-boton-agregar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.12);
+  opacity: 0;
+  transition: opacity var(--t-fast) var(--ease-smooth);
+}
+.info-boton-agregar:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.info-boton-agregar:hover:not(:disabled) {
+  background: var(--btn-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(7, 30, 82, 0.22);
+  color: var(--btn-primary-text);
+}
+
+.info-boton-agregar:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.info-boton-agregar:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ─── Botón WhatsApp ── */
+.info-boton-wa {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: rgba(37, 211, 102, 0.10);
+  border: 1.5px solid rgba(37, 211, 102, 0.25);
+  color: #25d366;
+  border-radius: var(--r-sm);
+  text-decoration: none;
+  transition:
+    background var(--t-fast) var(--ease-smooth),
+    transform var(--t-fast) var(--ease-snappy),
+    box-shadow var(--t-fast) var(--ease-smooth);
+}
+
+.info-boton-wa:hover {
+  background: #25d366;
+  border-color: #25d366;
+  color: var(--cp-white);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.30);
+}
+
+.info-boton-wa:active {
+  transform: translateY(0);
+}
+
+/* ─── Íconos ── */
+.info-boton-icono {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.info-boton-spinner {
+  width: 15px;
+  height: 15px;
+  animation: spin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Responsive ── */
+@media (max-width: 600px) {
+  .info-producto {
+    gap: var(--space-4);
+  }
+  .info-precio-contenedor {
+    gap: var(--space-4);
+    padding: var(--space-3);
+  }
+  .info-precio {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .info-precio {
+    font-size: 1.3rem;
+  }
 }
 
 /* ─── Layout ── */
@@ -273,7 +536,7 @@ async function manejarAgregar() {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(45, 106, 79, 0.75);
+  background: rgba(7, 30, 82, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 3px 9px;
   border-radius: 999px;
@@ -339,7 +602,7 @@ async function manejarAgregar() {
 .info-precio {
   font-size: 26px;
   font-weight: 800;
-  color: var(--primary);
+  color: var(--cp-navy);
   margin: 0;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -420,7 +683,7 @@ async function manejarAgregar() {
 
 .info-cantidad-boton:hover:not(:disabled) {
   background: #ffffff;
-  color: var(--primary);
+  color: var(--cp-navy);
 }
 
 .info-cantidad-boton:disabled {
@@ -464,8 +727,8 @@ async function manejarAgregar() {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  background: var(--primary);
-  color: #ffffff;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -474,7 +737,7 @@ async function manejarAgregar() {
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  box-shadow: 0 2px 12px var(--primary-glow);
+  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.15);
   transition:
     background var(--transition),
     transform 0.18s ease,
@@ -496,9 +759,9 @@ async function manejarAgregar() {
 }
 
 .info-boton-agregar:hover:not(:disabled) {
-  background: var(--primary-dark);
+  background: var(--btn-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.38);
+  box-shadow: 0 8px 24px rgba(7, 30, 82, 0.22);
 }
 
 .info-boton-agregar:active:not(:disabled) {

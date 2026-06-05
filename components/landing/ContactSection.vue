@@ -187,7 +187,7 @@ function handleSubmit() {
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--line-brand);
+  display: none; /* background: var(--line-brand); */
   z-index: 1;
 }
 

@@ -212,14 +212,16 @@ onUnmounted(() => {
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #2D6A4F;
+  color: var(--cp-electric);
   margin: 0;
 }
 
 .similares-titulo {
+  font-family: var(--font-display);
   font-size: clamp(20px, 4vw, 28px);
-  font-weight: 700;
-  color: #2b2b2b;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
   margin: 6px 0 0 0;
 }
 
@@ -237,13 +239,13 @@ onUnmounted(() => {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 1px solid #e5e5e5;
-  background: #ffffff;
-  box-shadow: 0 2px 12px rgba(45, 106, 79, 0.08);
+  border: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  box-shadow: 0 2px 12px rgba(0, 174, 239, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2b2b2b;
+  color: var(--text-primary);
   cursor: pointer;
   transition:
     background 0.2s ease,
@@ -254,10 +256,10 @@ onUnmounted(() => {
 }
 
 .similares-flecha:hover {
-  background: #2D6A4F;
-  border-color: #2D6A4F;
-  color: #ffffff;
-  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.22);
+  background: var(--cp-electric);
+  border-color: var(--cp-electric);
+  color: var(--cp-white);
+  box-shadow: 0 4px 20px rgba(0, 174, 239, 0.22);
   transform: translateY(-50%) scale(1.07);
 }
 

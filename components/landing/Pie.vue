@@ -146,6 +146,14 @@
         © {{ currentYear }} CelParts. Todos los derechos reservados.
       </span>
 
+      <div class="jm-footer__legal-links">
+        <NuxtLink to="/terminos" class="jm-footer__legal-link">Términos</NuxtLink>
+        <span class="jm-footer__legal-sep">•</span>
+        <NuxtLink to="/privacidad" class="jm-footer__legal-link">Privacidad</NuxtLink>
+        <span class="jm-footer__legal-sep">•</span>
+        <NuxtLink to="/libro-de-reclamaciones" class="jm-footer__legal-link">Libro de Reclamaciones</NuxtLink>
+      </div>
+
       <a href="https://smartcsperu.com" target="_blank" rel="noopener noreferrer" class="jm-footer__credit">
         Desarrollada por <strong>Smart CS</strong>
       </a>
@@ -430,9 +438,32 @@ const currentYear = new Date().getFullYear();
   font-weight: 700;
 }
 
-/* ═══════════════════════════════
+.jm-footer__legal-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.jm-footer__legal-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--t-fast) var(--ease-smooth);
+}
+
+.jm-footer__legal-link:hover {
+  color: var(--cp-electric);
+}
+
+.jm-footer__legal-sep {
+  color: var(--border-mid);
+  font-size: 0.7em;
+}
+
+/* ═══════════════════════════════════
    RESPONSIVE
-═══════════════════════════════ */
+═══════════════════════════════════ */
 @media (max-width: 960px) {
   .jm-footer__main {
     grid-template-columns: 1fr 1fr;
@@ -448,12 +479,44 @@ const currentYear = new Date().getFullYear();
   .jm-footer__main {
     grid-template-columns: 1fr;
     padding: var(--space-12) var(--space-5) var(--space-8);
+    text-align: center;
+  }
+
+  .jm-footer__brand {
+    align-items: center;
+  }
+
+  .jm-footer__logo {
+    justify-content: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .jm-footer__desc {
+    margin: 0 auto var(--space-6);
+  }
+
+  .jm-footer__badges {
+    justify-content: center;
+  }
+
+  .jm-footer__socials {
+    justify-content: center;
+  }
+
+  .jm-footer__links {
+    align-items: center;
+  }
+
+  .jm-footer__contact-item {
+    align-items: center;
   }
 
   .jm-footer__bottom {
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-5) var(--space-5);
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-2);
   }
 
   .jm-footer__logo-name {

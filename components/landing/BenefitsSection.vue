@@ -205,7 +205,7 @@ const scroll = (dir: "left" | "right") => {
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--line-brand);
+  display: none; /* background: var(--line-brand); */
 }
 
 /* ── Container ── */
@@ -321,7 +321,7 @@ const scroll = (dir: "left" | "right") => {
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--line-brand);
+  display: none; /* background: var(--line-brand); */
   opacity: 0;
   transition: opacity var(--t-base) var(--ease-smooth);
 }
@@ -448,7 +448,7 @@ const scroll = (dir: "left" | "right") => {
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--line-brand);
+  display: none; /* background: var(--line-brand); */
 }
 
 .benefits-cta__eyebrow {

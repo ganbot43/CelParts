@@ -101,6 +101,16 @@
       <!-- RIGHT -->
       <div class="cp-header__right">
         <ClientOnly>
+          <div class="cp-auth-nav">
+            <template v-if="loggedIn">
+              <NuxtLink v-if="user?.role === 'admin'" to="/admin" class="cp-auth-btn">Panel Admin</NuxtLink>
+              <NuxtLink v-else to="/mi-cuenta" class="cp-auth-btn">Mi Cuenta</NuxtLink>
+            </template>
+            <template v-else>
+              <NuxtLink to="/login" class="cp-auth-btn">Ingresar</NuxtLink>
+            </template>
+          </div>
+
           <button class="cp-cart" @click="cartStore.isOpen = true">
             <div class="cp-cart__icon">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
@@ -162,6 +172,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useCartStore } from "~/stores/cart";
 import { useFormatPrice } from "~/composables/useFormatPrice";
 
+const { loggedIn, user } = useUserSession();
 const cartStore = useCartStore();
 const formatPrice = useFormatPrice();
 
@@ -476,11 +487,39 @@ onUnmounted(() => {
   transform: rotate(180deg);
 }
 
-/* ── CARRITO ── */
+/* ── AUTH ── */
 .cp-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
   flex-shrink: 0;
 }
 
+.cp-auth-nav {
+  display: flex;
+  align-items: center;
+}
+
+.cp-auth-btn {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cp-electric);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(0, 174, 239, 0.2);
+  background: rgba(0, 174, 239, 0.04);
+  transition: all var(--t-fast);
+}
+
+.cp-auth-btn:hover {
+  background: var(--cp-electric);
+  color: white;
+  border-color: var(--cp-electric);
+}
+
+/* ── CARRITO ── */
 .cp-cart {
   height: 44px;
   padding: 0 var(--space-4) 0 var(--space-1);
@@ -601,7 +640,7 @@ onUnmounted(() => {
 
 .cp-mega__grid {
   display: grid;
-  grid-template-columns: 210px 1fr;
+  grid-template-columns: 240px 1fr;
   align-items: start;
 }
 
@@ -618,7 +657,7 @@ onUnmounted(() => {
 
 .cp-cat {
   min-height: 42px;
-  padding: 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--r-sm);
   border: 1px solid transparent;
   background: transparent;
@@ -646,20 +685,7 @@ onUnmounted(() => {
 }
 
 .cp-cat__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--border-mid);
-  flex-shrink: 0;
-  transition:
-    background var(--t-base) var(--ease-smooth),
-    box-shadow var(--t-base) var(--ease-smooth);
-}
-
-.cp-cat.active .cp-cat__dot,
-.cp-cat:hover .cp-cat__dot {
-  background: var(--cp-electric);
-  box-shadow: 0 0 6px var(--cp-electric);
+  display: none;
 }
 
 .cp-cat span {
@@ -668,6 +694,7 @@ onUnmounted(() => {
   color: var(--text-body);
   flex: 1;
   text-align: left;
+  line-height: 1.3;
 }
 
 .cp-cat.active span {
@@ -680,7 +707,7 @@ onUnmounted(() => {
   font-weight: 600;
   color: var(--text-faint);
   background: var(--bg-surface);
-  padding: 1px 7px;
+  padding: 2px 8px;
   border-radius: var(--r-pill);
   border: 1px solid var(--border-light);
   flex-shrink: 0;

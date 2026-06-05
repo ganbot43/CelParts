@@ -152,7 +152,7 @@ onActivated(() => void loadCategories());
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--line-brand);
+  display: none; /* background: var(--line-brand); */
   z-index: 1;
 }
 
@@ -280,7 +280,7 @@ onActivated(() => void loadCategories());
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--line-brand);
+  display: none; /* background: var(--line-brand); */
   opacity: 0;
   transition: opacity var(--t-base) var(--ease-smooth);
   z-index: 1;

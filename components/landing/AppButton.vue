@@ -38,24 +38,24 @@ defineProps<{
 }
 
 .btn-primary {
-  background: #2D6A4F;
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(45, 106, 79, 0.15);
+  background: var(--cp-electric);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 174, 239, 0.2);
 }
 .btn-primary:hover {
-  background: #1E4D38;
+  background: #0099e6;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(45, 106, 79, 0.25);
+  box-shadow: 0 12px 30px rgba(0, 174, 239, 0.35);
 }
 
 .btn-outline {
   background: transparent;
-  color: #2D6A4F;
-  border: 2px solid #2D6A4F;
+  color: var(--cp-electric);
+  border: 2px solid var(--cp-electric);
 }
 .btn-outline:hover {
-  background: #2D6A4F;
-  color: #fff;
+  background: var(--cp-electric);
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -71,14 +71,15 @@ defineProps<{
 }
 
 .btn-accent {
-  background: #E9C46A;
-  color: #111111;
+  background: #ffffff;
+  color: var(--cp-navy);
   font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
 }
 .btn-accent:hover {
-  background: #D9AF49;
+  background: var(--cp-ice);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(233, 196, 106, 0.30);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
 }
 
 .btn-sm { padding: .45rem .85rem; font-size: .82rem; }

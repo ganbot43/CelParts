@@ -17,8 +17,8 @@
             <img src="/images/logo.png" alt="Smart Panel logo" />
           </div>
           <div class="header-text">
-            <h1 class="app-name">Smart Panel</h1>
-            <p class="app-subtitle">{{ companyName }}</p>
+            <h1 class="app-name">{{ companyName }}</h1>
+            <p class="app-subtitle">Iniciar sesión en tu cuenta</p>
           </div>
         </div>
 
@@ -171,17 +171,11 @@
         </div>
 
         <!-- Footer -->
-        <div class="card-footer">
-          <NuxtLink to="/" class="back-link">
-            <svg viewBox="0 0 16 16" fill="none">
-              <path
-                d="M10 3L5 8l5 5"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+        <div class="card-footer" style="flex-direction: column; gap: 10px; align-items: center;">
+          <NuxtLink :to="`/registro${route.query.redirect ? '?redirect=' + route.query.redirect : ''}`" class="back-link">
+            ¿No tienes cuenta? Regístrate
+          </NuxtLink>
+          <NuxtLink to="/" class="back-link" style="opacity: 0.7;">
             Volver al sitio
           </NuxtLink>
         </div>
@@ -222,6 +216,7 @@ const showPassword = ref(false);
 const focusedField = ref("");
 
 const { fetch: fetchUserSession } = useUserSession();
+const route = useRoute();
 
 const inputUI = {
   base: "smart-input-inner",
@@ -250,7 +245,18 @@ async function login() {
     });
 
     await fetchUserSession();
-    await navigateTo("/admin");
+    const { user } = useUserSession();
+
+    if (user.value?.role === "admin") {
+      await navigateTo("/admin", { external: true });
+    } else {
+      const redirect = route.query.redirect as string;
+      if (redirect) {
+        await navigateTo(redirect, { external: true });
+      } else {
+        await navigateTo("/mi-cuenta", { external: true });
+      }
+    }
 
   } catch (e: any) {
     console.log("ERROR COMPLETO:", e);

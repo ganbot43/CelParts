@@ -233,7 +233,7 @@ const { data: order } = await useFetch<Order>(
 if (!order.value)
   throw createError({ statusCode: 404, message: "Pedido no encontrado" });
 
-useSeoMeta({ title: `Pedido ${order.value?.orderCode} — Joymar Utensilios` });
+useSeoMeta({ title: `Pedido ${order.value?.orderCode} — Celparts SAC` });
 
 const waMessage = computed(() =>
   encodeURIComponent(

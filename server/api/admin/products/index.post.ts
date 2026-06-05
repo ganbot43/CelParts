@@ -26,12 +26,28 @@ export default defineEventHandler(async (event) => {
   const data = validateBody(schema, body)
 
   const slug = makeSlug(data.name)
+  const initialStock = data.stock ?? 0
 
   const productId = await insertAndGetId(products, {
     ...data,
+    stock: initialStock,
     slug,
     images: undefined as any,
   })
+
+  // Insertar movimiento inicial de inventario
+  if (data.trackStock && initialStock > 0) {
+    const { inventoryMovements } = await import('~/server/db/schema')
+    const session = await getUserSession(event)
+    await db.insert(inventoryMovements).values({
+      productId,
+      movementType: 'entry',
+      quantity: initialStock,
+      delta: initialStock,
+      reason: 'Inventario inicial (producto nuevo)',
+      createdBy: (session.user as any)?.id || null,
+    }).execute()
+  }
 
   // Insertar imágenes si vienen
   if (data.images?.length) {

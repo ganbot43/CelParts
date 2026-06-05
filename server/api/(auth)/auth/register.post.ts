@@ -8,12 +8,13 @@ import { z } from 'zod'
 const schema = z.object({
   name:     z.string().min(2, "El nombre es muy corto"),
   email:    z.string().email("Correo electrónico inválido"),
+  phone:    z.string().min(6, "El teléfono debe tener al menos 6 caracteres").optional(),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
 })
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  const { name, email, password } = validateBody(schema, body)
+  const { name, email, phone, password } = validateBody(schema, body)
 
   // Verificar si el email ya existe
   const existingUser = await db.query.users.findFirst({ where: eq(users.email, email) })
@@ -29,6 +30,7 @@ export default defineEventHandler(async (event) => {
   const [{ insertId }] = await db.insert(users).values({
     name,
     email,
+    phone,
     passwordHash,
     role: 'customer',
     isActive: 1,
@@ -41,7 +43,7 @@ export default defineEventHandler(async (event) => {
 
   // Iniciar sesión automáticamente
   await setUserSession(event, {
-    user: { id: newUserId, name, email, role: 'customer' },
+    user: { id: newUserId, name, email, phone, role: 'customer' },
   })
 
   return { user: { id: newUserId, name, role: 'customer' } }

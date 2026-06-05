@@ -65,6 +65,24 @@
               </div>
             </UFormField>
 
+            <UFormField label="Teléfono / Celular (Opcional)" name="phone">
+              <div
+                class="input-wrapper"
+                :class="{ focused: focusedField === 'phone' }"
+              >
+                <UInput
+                  v-model="form.phone"
+                  type="tel"
+                  placeholder="+51 999 999 999"
+                  class="smart-input pl-4"
+                  :ui="inputUI"
+                  @focus="focusedField = 'phone'"
+                  @blur="focusedField = ''"
+                  @keyup.enter="register"
+                />
+              </div>
+            </UFormField>
+
             <UFormField label="Contraseña" name="password">
               <div
                 class="input-wrapper"
@@ -144,7 +162,7 @@ useSeoMeta({ title: "Registro — CelParts" });
 const config = useRuntimeConfig();
 const companyName = config.public.companyName || "CelParts";
 
-const form = reactive({ name: "", email: "", password: "" });
+const form = reactive({ name: "", email: "", phone: "", password: "" });
 const loading = ref(false);
 const error = ref("");
 const shaking = ref(false);

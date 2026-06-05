@@ -83,8 +83,8 @@
 definePageMeta({ layout: "landing" });
 
 useSeoMeta({
-  title: "Producto — Joymar Utensilios",
-  description: "Detalle del producto pirotécnico.",
+  title: "Producto — Celparts SAC",
+  description: "Detalle del producto.",
 });
 
 const route = useRoute();

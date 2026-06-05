@@ -246,6 +246,11 @@
             </div>
             <div class="sp-drawer-switches">
               <label class="sp-drawer-switch">
+                <input type="checkbox" v-model="form.trackStock" class="sp-drawer-switch__input" />
+                <span class="sp-drawer-switch__track"><span class="sp-drawer-switch__thumb"></span></span>
+                <span class="sp-drawer-switch__label">Rastrear stock</span>
+              </label>
+              <label class="sp-drawer-switch">
                 <input type="checkbox" v-model="form.isFeatured" class="sp-drawer-switch__input" />
                 <span class="sp-drawer-switch__track"><span class="sp-drawer-switch__thumb"></span></span>
                 <span class="sp-drawer-switch__label">Producto destacado</span>
@@ -403,6 +408,7 @@ const emptyForm = () => ({
   description: "",
   categoryId: null as number | null,
   subcategoryId: null as number | null,
+  trackStock: true,
   isFeatured: false,
   nuevoLanzamiento: false,
   isActive: true,
@@ -422,6 +428,7 @@ function openDrawer(product?: any) {
       description: product.description ?? "",
       categoryId: product.categoryId ?? null,
       subcategoryId: product.subcategoryId ?? null,
+      trackStock: product.trackStock ?? true,
       isFeatured: product.isFeatured ?? false,
       nuevoLanzamiento: product.nuevoLanzamiento ?? false,
       isActive: product.isActive ?? true,

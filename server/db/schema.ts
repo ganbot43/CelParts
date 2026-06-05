@@ -29,6 +29,7 @@ export const users = mysqlTable('users', {
   id:           int('id').autoincrement().primaryKey(),
   name:         text('name').notNull(),
   email:        varchar('email', { length: 191 }).notNull().unique(),
+  phone:        varchar('phone', { length: 20 }),
   passwordHash: text('password_hash').notNull(),
   role:         varchar('role', { length: 20 }).notNull().default('admin'),
   isActive:     int('is_active').notNull().default(1),

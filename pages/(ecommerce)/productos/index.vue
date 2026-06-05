@@ -691,8 +691,8 @@
 definePageMeta({ layout: "landing" });
 
 useSeoMeta({
-  title: "Catálogo — Joymar Utensilios",
-  description: "Explora toda nuestra gama de productos de cocina y hogar.",
+  title: "Catálogo — Celparts SAC",
+  description: "Explora toda nuestra gama de productos para móviles.",
 });
 
 const route = useRoute();

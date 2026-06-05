@@ -343,9 +343,11 @@ const { data: paymentMethods } = await useFetch("/api/payment-methods", {
   query: { active: true },
 });
 
+const { user } = useUserSession();
+
 const form = reactive({
-  customerName: "",
-  customerPhone: "",
+  customerName: user.value?.name || "",
+  customerPhone: user.value?.phone || "",
   customerAddress: "",
   customerReference: "",
   customerNotes: "",

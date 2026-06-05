@@ -1,33 +1,36 @@
 <script setup lang="ts">
+
+import { MessageCircle, Instagram, Facebook, Mail } from "lucide-vue-next";
+
 const { waLink } = useKite();
 
 const channels = [
   {
-    icon: "💬",
+    icon: MessageCircle,
     label: "WhatsApp",
     handle: "+51 XXX XXX XXX · Respuesta inmediata",
-    href: "https://wa.me/51996111303",
+    href: "https://wa.me/51923821520",
     type: "wa",
   },
   {
-    icon: "📸",
+    icon: Instagram,
     label: "Instagram",
-    handle: "@kite.utensilios",
-    href: "https://instagram.com/kite",
+    handle: "@celparts",
+    href: "https://instagram.com/celparts",
     type: "ig",
   },
   {
-    icon: "👍",
+    icon: Facebook,
     label: "Facebook",
-    handle: "Kite Utensilios de Cocina",
-    href: "https://facebook.com/kite",
+    handle: "CelParts SAC",
+    href: "https://facebook.com/celparts",
     type: "fb",
   },
   {
-    icon: "✉️",
+    icon: Mail,
     label: "Correo electrónico",
-    handle: "hola@kite.com",
-    href: "mailto:hola@kite.com",
+    handle: "hola@celparts.com",
+    href: "mailto:hola@celparts.com",
     type: "mail",
   },
 ];
@@ -49,7 +52,7 @@ const form = reactive({
 });
 
 function handleSubmit() {
-  const msg = `Hola Kite! Mi nombre es ${form.nombre}. ${form.asunto ? `Asunto: ${form.asunto}. ` : ""}${form.mensaje}`;
+  const msg = `Hola CelParts, mi nombre es ${form.nombre}. Tengo una consulta sobre "${form.asunto}". Mi correo es ${form.email} y mi teléfono es ${form.telefono}. ${form.mensaje}`;
   window.open(waLink(msg), "_blank", "noopener");
 }
 </script>
@@ -57,6 +60,7 @@ function handleSubmit() {
 <template>
   <section class="contact" id="contacto">
     <div class="contact-container">
+
       <div class="section-intro">
         <span class="section-label">Contacto</span>
         <h2 class="section-title">
@@ -68,6 +72,7 @@ function handleSubmit() {
       </div>
 
       <div class="contact-grid">
+
         <!-- Channels -->
         <div class="contact-info">
           <p class="contact-intro">
@@ -84,13 +89,17 @@ function handleSubmit() {
             target="_blank"
             rel="noopener"
           >
+            <!-- ICONO LUCIDE -->
             <div class="contact-channel-icon" :class="ch.type">
-              {{ ch.icon }}
+              <component :is="ch.icon" class="w-5 h-5" />
             </div>
+
+            <!-- TEXTO -->
             <div class="contact-channel-text">
               <strong>{{ ch.label }}</strong>
               <span>{{ ch.handle }}</span>
             </div>
+
             <span class="contact-channel-arrow">→</span>
           </a>
         </div>
@@ -102,35 +111,28 @@ function handleSubmit() {
           <div class="form-row">
             <div class="form-group">
               <label>Nombre</label>
-              <input
-                v-model="form.nombre"
-                type="text"
-                placeholder="Tu nombre"
-              />
+              <input v-model="form.nombre" type="text" placeholder="Tu nombre" />
             </div>
+
             <div class="form-group">
               <label>Teléfono</label>
-              <input
-                v-model="form.telefono"
-                type="text"
-                placeholder="+51 XXX XXX XXX"
-              />
+              <input v-model="form.telefono" type="text" placeholder="+51 XXX XXX XXX" />
             </div>
           </div>
 
           <div class="form-group">
             <label>Correo electrónico</label>
-            <input
-              v-model="form.email"
-              type="email"
-              placeholder="hola@kite.com"
-            />
+            <input v-model="form.email" type="email" placeholder="hola@celparts.com" />
           </div>
 
           <div class="form-group">
             <label>¿Qué necesitas?</label>
             <select v-model="form.asunto">
-              <option v-for="t in topics" :key="t.value" :value="t.value">
+              <option
+                v-for="t in topics"
+                :key="t.value"
+                :value="t.value"
+              >
                 {{ t.label }}
               </option>
             </select>
@@ -145,11 +147,12 @@ function handleSubmit() {
           </div>
 
           <LandingAppButton
-            variant="primary"
+            variant="secondary"
             class="submit-btn"
             @click="handleSubmit"
           >
-            <LandingWaIcon /> Enviar mensaje
+            <LandingWaIcon />
+            Enviar mensaje
           </LandingAppButton>
 
           <p class="form-note">
@@ -157,6 +160,7 @@ function handleSubmit() {
             respuesta más rápida.
           </p>
         </div>
+
       </div>
     </div>
   </section>
@@ -445,7 +449,8 @@ textarea {
   }
 
   .contact-form {
-    order: -1; /* Poner el formulario arriba en mobile */
+    order: -1;
+    /* Poner el formulario arriba en mobile */
   }
 }
 

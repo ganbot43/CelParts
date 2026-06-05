@@ -22,6 +22,7 @@
         <!-- LOGO -->
         <NuxtLink to="/" class="cp-logo" aria-label="CelParts — Inicio">
           <img src="/images/logo.png" alt="CelParts" class="cp-logo__img" />
+          <img src="/images/logo-letra.png" alt="CelParts" class="cp-logo-letra__img" />
         </NuxtLink>
       </div>
 
@@ -380,6 +381,12 @@ onUnmounted(() => {
   text-decoration: none;
   flex-shrink: 0;
   transition: opacity var(--t-fast) var(--ease-smooth);
+}
+
+.cp-logo-letra__img {
+  width: 180px;
+  height: auto;
+  object-fit: contain;
 }
 
 .cp-logo:hover {

@@ -67,8 +67,8 @@ async function seed() {
   // 2. users
   const hash = await bcrypt.hash('admin123', 10)
   await db.insert(schema.users).values([
-    { name: 'Super Admin',    email: 'owner@celparts.com', passwordHash: hash, role: 'superadmin' },
-    { name: 'Admin Cel Parts', email: 'admin@celparts.com',  passwordHash: hash, role: 'admin' },
+    { name: 'Gerente de tienda',    email: 'owner@celparts.com', passwordHash: hash, role: 'superadmin' },
+    { name: 'Encargado de tienda', email: 'admin@celparts.com',  passwordHash: hash, role: 'admin' },
   ]).execute()
 
   // 3. categorías de repuestos y accesorios de celulares

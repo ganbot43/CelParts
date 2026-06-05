@@ -2,13 +2,7 @@
   <div class="cart-item">
     <!-- Imagen / placeholder -->
     <div class="item-img">
-      <img
-        v-if="item.image && !imgError"
-        :src="item.image"
-        :alt="item.name"
-        loading="lazy"
-        @error="imgError = true"
-      />
+      <img v-if="item.image && !imgError" :src="item.image" :alt="item.name" loading="lazy" @error="imgError = true" />
       <span v-else class="img-placeholder">{{ item.emoji ?? "📦" }}</span>
     </div>
 
@@ -23,80 +17,34 @@
         <span v-if="safeOriginal > safePrice" class="item-original">
           {{ fmt(item.originalPrice) }}
         </span>
-        <span v-if="discountPct > 0" class="item-discount"
-          >-{{ discountPct }}%</span
-        >
+        <span v-if="discountPct > 0" class="item-discount">-{{ discountPct }}%</span>
       </div>
 
       <!-- Controls -->
       <div class="item-bottom">
         <div class="qty-ctrl" role="group" aria-label="Cantidad">
-          <button
-            class="qty-btn"
-            aria-label="Reducir cantidad"
-            @click="$emit('decrement')"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2.5"
-              stroke="currentColor"
-              width="14"
-              height="14"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M5 12h14"
-              />
+          <button class="qty-btn" aria-label="Reducir cantidad" @click="$emit('decrement')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+              stroke="currentColor" width="14" height="14">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
             </svg>
           </button>
           <span class="qty-num" aria-live="polite">{{ safeQty }}</span>
-          <button
-            class="qty-btn"
-            aria-label="Aumentar cantidad"
-            @click="$emit('increment')"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2.5"
-              stroke="currentColor"
-              width="14"
-              height="14"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
+          <button class="qty-btn" aria-label="Aumentar cantidad" @click="$emit('increment')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+              stroke="currentColor" width="14" height="14">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
           </button>
         </div>
 
         <div class="item-subtotal">{{ fmt(safePrice * safeQty) }}</div>
 
-        <button
-          class="del-btn"
-          aria-label="Eliminar producto"
-          @click="$emit('remove')"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            width="15"
-            height="15"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-            />
+        <button class="del-btn" aria-label="Eliminar producto" @click="$emit('remove')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            width="15" height="15">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
           </svg>
         </button>
       </div>
@@ -179,6 +127,7 @@ function fmt(amount: unknown): string {
     box-shadow var(--t-fast) var(--ease-smooth);
   box-shadow: var(--card-shadow-sm);
 }
+
 .cart-item:hover {
   border-color: rgba(0, 174, 239, 0.2);
   background: var(--bg-alt);
@@ -204,6 +153,7 @@ function fmt(amount: unknown): string {
   height: 100%;
   object-fit: cover;
 }
+
 .img-placeholder {
   font-size: 28px;
   line-height: 1;
@@ -239,6 +189,7 @@ function fmt(amount: unknown): string {
   gap: 6px;
   margin-top: 6px;
 }
+
 .item-price {
   font-family: var(--font-display);
   font-size: 1rem;
@@ -296,6 +247,7 @@ function fmt(amount: unknown): string {
   color: var(--text-muted);
   transition: all var(--t-fast) var(--ease-smooth);
 }
+
 .qty-btn:hover {
   background: var(--bg-alt);
   color: var(--cp-electric);
@@ -335,8 +287,10 @@ function fmt(amount: unknown): string {
   transition: all var(--t-fast) var(--ease-smooth);
   flex-shrink: 0;
 }
+
 .del-btn:hover {
   background: rgba(220, 38, 38, 0.1);
-  color: #dc2626; /* Color de alerta rojo */
+  color: #dc2626;
+  /* Color de alerta rojo */
 }
 </style>

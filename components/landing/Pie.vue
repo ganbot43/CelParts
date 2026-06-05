@@ -41,33 +41,24 @@
         </div>
 
         <!-- SOCIALS -->
+        <!-- SOCIALS -->
         <div class="jm-footer__socials">
+
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
             aria-label="Instagram">
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
-              <path
-                d="M7.5 3h9A4.5 4.5 0 0 1 21 7.5v9a4.5 4.5 0 0 1-4.5 4.5h-9A4.5 4.5 0 0 1 3 16.5v-9A4.5 4.5 0 0 1 7.5 3Z"
-                fill="none" stroke="currentColor" stroke-width="1.8" />
-              <circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8" />
-              <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" />
-            </svg>
+            <Instagram class="jm-footer__social-icon" />
           </a>
 
           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
             aria-label="Facebook">
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
-              <path d="M14.5 8.5H17V5h-2.5C11.57 5 10 6.57 10 9v2H7v3.5h3V19h3.5v-4.5H16l.5-3.5h-3V9c0-.28.22-.5.5-.5Z"
-                fill="currentColor" />
-            </svg>
+            <Facebook class="jm-footer__social-icon" />
           </a>
 
           <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
             aria-label="X">
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
-              <path d="M5 5h3.2l4.2 5.5L16.6 5H19l-5.3 6.8L19.5 19h-3.2l-4.5-5.9L7.4 19H5l5.8-7.4L5 5Z"
-                fill="currentColor" />
-            </svg>
+            <X class="jm-footer__social-icon" />
           </a>
+
         </div>
       </div>
 
@@ -163,6 +154,7 @@
 </template>
 
 <script setup>
+import { Instagram, Facebook, X } from "lucide-vue-next";
 const currentYear = new Date().getFullYear();
 </script>
 
@@ -321,9 +313,9 @@ const currentYear = new Date().getFullYear();
 }
 
 .jm-footer__social-icon {
-  width: 20px;
-  height: 20px;
-  display: block;
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
 }
 
 .jm-footer__social-btn:hover {

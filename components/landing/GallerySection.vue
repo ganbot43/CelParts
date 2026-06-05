@@ -1,10 +1,30 @@
 <script setup lang="ts">
 const items = [
-  { imageUrl: "/images/gallery/sartenes.png", label: "Sartenes & Woks", alt: "Sartenes y woks Kite" },
-  { imageUrl: "/images/gallery/ollas.png", label: "Ollas y cazuelas", alt: "Ollas Kite" },
-  { imageUrl: "/images/gallery/cuchilleria.png", label: "Cuchillería", alt: "Cuchillos Kite" },
-  { imageUrl: "/images/gallery/reposteria.png", label: "Repostería", alt: "Utensilios de repostería Kite" },
-  { imageUrl: "/images/gallery/almacenaje.png", label: "Almacenaje", alt: "Recipientes y almacenaje Kite" },
+  {
+    imageUrl: "/images/gallery/almacenaje.png",
+    label: "Pantallas",
+    alt: "Pantallas para celulares"
+  },
+  {
+    imageUrl: "/images/gallery/cuchilleria.png",
+    label: "Baterías",
+    alt: "Baterías para celulares"
+  },
+  {
+    imageUrl: "/images/gallery/ollas.png",
+    label: "Cases y fundas",
+    alt: "Cases para celulares"
+  },
+  {
+    imageUrl: "/images/gallery/reposteria.png",
+    label: "Cargadores",
+    alt: "Cargadores para celulares"
+  },
+  {
+    imageUrl: "/images/gallery/sartenes.png",
+    label: "Protectores",
+    alt: "Protectores de pantalla"
+  },
 ];
 </script>
 
@@ -12,22 +32,20 @@ const items = [
   <section class="gallery" id="galeria">
     <div class="gallery-container">
       <div class="gallery-header">
-        <span class="section-label">Galería</span>
+        <span class="section-label">CelParts</span>
+
         <h2 class="section-title">
-          Productos en acción<span class="accent-dot" />
+          Nuestros productos
+          <span class="accent-dot" />
         </h2>
+
         <p class="section-subtitle">
-          Así lucen nuestros artículos en cocinas reales.
+          Descubre repuestos y accesorios para las principales marcas de celulares.
         </p>
       </div>
 
       <div class="gallery-grid">
-        <div
-          v-for="(item, i) in items"
-          :key="item.label"
-          class="gallery-item"
-          :class="`gallery-item--${i + 1}`"
-        >
+        <div v-for="(item, i) in items" :key="item.label" class="gallery-item" :class="`gallery-item--${i + 1}`">
           <div class="img-placeholder">
             <img :src="item.imageUrl" :alt="item.alt" class="gallery-image" />
           </div>
@@ -41,210 +59,246 @@ const items = [
 </template>
 
 <style scoped>
+/* ═══════════════════════════════════
+   GALLERY SECTION — CELPARTS
+   100% tokens de main.css — sin hardcode
+═══════════════════════════════════ */
+
 .gallery {
-  --kite-green: #2D6A4F;
-  --kite-green-dark: #1E4D38;
-  --kite-yellow: #E9C46A;
-  --kite-green-soft: rgba(45, 106, 79, 0.08);
-
-  --bg: #F8F7F4;
-  --bg-alt: #F1EFEA;
-  --bg-surface: #FFFFFF;
-
-  --text-title: #111111;
-  --text-muted: #66625A;
-
-  --border: #E2E0D9;
-
-  --radius: 20px;
-  --radius-lg: 28px;
-
-  --shadow-sm: 0 10px 25px rgba(17, 17, 17, 0.05);
-  --shadow-md: 0 20px 50px rgba(17, 17, 17, 0.08);
-
-  padding: 120px 0;
-  background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(80px, 8vw, 120px) 0;
+  background: var(--bg-page);
 }
 
-/* 👇 CLAVE PARA QUE NO SE VEA PEGADO */
+/* Línea técnica superior */
+.gallery::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  display: none; /* background: var(--line-brand); */
+  z-index: 1;
+}
+
+/* Decoración de fondo */
+.gallery::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, var(--cp-ice) 0%, transparent 40%),
+    radial-gradient(circle at bottom left, var(--cp-frost) 0%, transparent 40%);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .gallery-container {
-  max-width: 1200px;
+  position: relative;
+  z-index: 2;
+  max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 clamp(24px, 6vw, 80px);
+  padding: 0 var(--space-8);
 }
 
-/* HEADER */
+/* ── HEADER ── */
 .gallery-header {
   text-align: center;
-  margin-bottom: 72px;
-  padding: 0 10px;
+  margin-bottom: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section-label {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
+  color: var(--cp-electric);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--kite-green);
-  margin-bottom: 14px;
 }
 
 .section-label::before,
 .section-label::after {
   content: "";
-  width: 26px;
-  height: 2px;
-  background: var(--kite-green);
-  border-radius: 2px;
+  width: 20px;
+  height: 1px;
+  background: var(--cp-electric);
+  opacity: 0.5;
 }
 
 .section-title {
-  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  margin: var(--space-3) 0 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
   font-weight: 800;
-  color: var(--text-title);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 
 .accent-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--kite-yellow);
-  border-radius: 50%;
+  width: 8px;
+  height: 8px;
   display: inline-block;
-  margin-left: 4px;
+  margin-left: var(--space-2);
+  border-radius: 50%;
+  background: var(--cp-electric);
+  position: relative;
+  top: -6px;
+  box-shadow: var(--glow-soft);
 }
 
 .section-subtitle {
-  font-size: 1.05rem;
+  margin: var(--space-3) 0 0;
+  max-width: 600px;
   color: var(--text-muted);
-  margin-top: 14px;
+  font-size: 1rem;
+  line-height: 1.8;
 }
 
-/* GRID */
+/* ── GRID ── */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(2, 260px);
-  gap: 22px; /* 👈 más aire entre cards */
+  grid-template-rows: repeat(2, 280px);
+  gap: var(--space-5);
 }
 
-/* ITEM */
+/* ── CARD ── */
 .gallery-item {
-  border-radius: var(--radius-lg);
+  position: relative;
   overflow: hidden;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
+  border-radius: var(--r-xl);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--card-shadow);
+  transition:
+    transform var(--t-base) var(--ease-snappy),
+    border-color var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
 .gallery-item:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
+  border-color: var(--border-mid);
+  box-shadow: var(--card-shadow-hover);
+  z-index: 2;
 }
 
-/* IMAGE */
+/* Línea técnica top al hover */
+.gallery-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  display: none; /* background: var(--line-brand); */
+  opacity: 0;
+  transition: opacity var(--t-base) var(--ease-smooth);
+  z-index: 2;
+}
+
+.gallery-item:hover::before {
+  opacity: 1;
+}
+
+/* ── IMAGE ── */
 .img-placeholder {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--bg-alt), var(--kite-green-soft));
   overflow: hidden;
-  transition: transform 0.4s ease;
+  background: var(--bg-alt);
 }
 
 .gallery-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  transition:
+    transform var(--t-slow) var(--ease-smooth),
+    filter var(--t-base) var(--ease-smooth);
 }
 
-.gallery-item:hover .img-placeholder {
-  transform: scale(1.05);
+.gallery-item:hover .gallery-image {
+  transform: scale(1.08);
+  filter: saturate(1.05);
 }
 
-/* OVERLAY */
+/* ── OVERLAY ── */
 .gallery-item-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(45, 106, 79, 0.65), transparent);
   display: flex;
   align-items: flex-end;
-  padding: 22px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.gallery-item:hover .gallery-item-overlay {
-  opacity: 1;
+  padding: var(--space-5);
+  background: linear-gradient(to top, rgba(7, 30, 82, 0.6), transparent);
 }
 
 .gallery-item-label {
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.72);
-  color: #2D6A4F;
-  padding: 8px 16px;
-  border-radius: 8px;
+  color: var(--cp-white);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* POSICIONES */
-.gallery-item--1 {
-  grid-column: 1 / 5;
-}
-.gallery-item--2 {
-  grid-column: 5 / 8;
-}
-.gallery-item--3 {
-  grid-column: 8 / 13;
-  grid-row: 1 / 3;
-}
-.gallery-item--4 {
-  grid-column: 1 / 4;
-}
-.gallery-item--5 {
-  grid-column: 4 / 8;
-}
+/* ── POSICIONES ── */
+.gallery-item--1 { grid-column: 1 / 5; }
+.gallery-item--2 { grid-column: 5 / 8; }
+.gallery-item--3 { grid-column: 8 / 13; grid-row: 1 / 3; }
+.gallery-item--4 { grid-column: 1 / 4; }
+.gallery-item--5 { grid-column: 4 / 8; }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .gallery {
-    padding: 90px 0;
-  }
-
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media (max-width: 960px) {
   .gallery-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    grid-template-rows: auto;
+    gap: var(--space-4);
   }
 
   .gallery-item {
     grid-column: auto !important;
     grid-row: auto !important;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/9;
   }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 640px) {
+  .gallery {
+    padding: var(--space-16) 0;
+  }
+
   .gallery-container {
-    padding: 0 18px;
+    padding: 0 var(--space-5);
   }
 
   .gallery-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: var(--space-4);
   }
 
   .gallery-header {
-    margin-bottom: 48px;
+    margin-bottom: var(--space-8);
+  }
+
+  .gallery-item {
+    aspect-ratio: 4/3;
   }
 }
 </style>

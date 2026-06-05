@@ -1,51 +1,36 @@
 <template>
   <div class="empty-state">
+
     <!-- Ícono central -->
     <div class="empty-state__icon-ring">
-      <svg
-        class="empty-state__icon"
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <path
-          d="M8 20h32M8 20v18a2 2 0 002 2h28a2 2 0 002-2V20M8 20l4-10h24l4 10"
-          stroke="#2D6A4F"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M24 10V8M20 28h8M24 24v8"
-          stroke="#E9C46A"
-          stroke-width="2.2"
-          stroke-linecap="round"
-        />
+      <svg class="empty-state__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true">
+        <!-- Caja / tienda -->
+        <path d="M8 20h32M8 20v18a2 2 0 002 2h28a2 2 0 002-2V20M8 20l4-10h24l4 10"
+          stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+        <!-- Estrella / tilde de nuevo -->
+        <path d="M24 28v4M22 30h4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        <!-- Punto superior -->
+        <circle cx="24" cy="10" r="1.5" fill="currentColor" opacity="0.5" />
       </svg>
     </div>
 
     <!-- Textos -->
-    <p class="empty-state__eyebrow">Pronto disponible</p>
-    <h3 class="empty-state__title">Nuevos lanzamientos en camino</h3>
+    <p class="empty-state__eyebrow">Próximamente</p>
+
+    <h3 class="empty-state__title">
+      Nuevos productos en camino
+    </h3>
+
     <p class="empty-state__subtitle">
-      Estamos seleccionando los mejores productos para ti.<br />
-      Vuelve pronto y sé el primero en descubrirlos.
+      Estamos incorporando nuevos repuestos y accesorios para las principales
+      marcas de celulares. Vuelve pronto para descubrir las últimas novedades.
     </p>
 
     <!-- CTA principal -->
     <NuxtLink to="/productos" class="empty-state__btn">
-      <svg
-        width="15"
-        height="15"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
         <polyline points="9 22 9 12 15 12 15 22" />
       </svg>
@@ -57,7 +42,7 @@
 
     <!-- Categorías sugeridas -->
     <p class="empty-state__tags-label">
-      Mientras tanto, explora nuestras categorías
+      Explora nuestras categorías disponibles
     </p>
     <ul class="empty-state__tags" aria-label="Categorías disponibles">
       <li v-for="cat in categories" :key="cat.slug" class="empty-state__tag">
@@ -77,53 +62,88 @@ interface Category {
 }
 
 const categories: Category[] = [
-  { label: "Ollas y sartenes", slug: "ollas-y-sartenes" },
-  { label: "Cuchillos", slug: "cuchillos" },
-  { label: "Accesorios", slug: "accesorios-de-cocina" },
-  { label: "Almacenamiento", slug: "menaje-de-hogar" },
+  { label: "Pantallas", slug: "pantallas" },
+  { label: "Baterías", slug: "baterias" },
+  { label: "Cases", slug: "cases" },
+  { label: "Cargadores", slug: "cargadores" },
+  { label: "Protectores", slug: "protectores" },
 ];
 </script>
 
 <style scoped>
-.empty-state {
-  --clr-primary: #2D6A4F;
-  --clr-primary-dark: #1E4D38;
-  --clr-yellow: #E9C46A;
-  --clr-bg: #FFFFFF;
-  --clr-bg-soft: #F8F7F4;
-  --clr-bg-pink: #F1EFEA;
-  --clr-border: #E2E0D9;
-  --clr-border-pink: #E2E0D9;
-  --clr-text: #111111;
-  --clr-text-mid: #66625A;
-  --clr-text-muted: #9E9A91;
-  --clr-text-hint: #A5A39C;
+/* ═══════════════════════════════════
+   EMPTY STATE — NUEVOS LANZAMIENTOS
+   100% tokens de main.css — sin hardcode
+═══════════════════════════════════ */
 
-  /* Layout — ocupa el grid completo */
+.empty-state {
   grid-column: 1 / -1;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 64px 40px;
-  background: var(--clr-bg);
-  /* border: 1.5px solid var(--clr-border); */
-  border-radius: 20px;
+
+  padding: var(--space-20) var(--space-10);
+
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  box-shadow: var(--card-shadow);
+
+  position: relative;
+  overflow: hidden;
 }
 
-/* ── Ícono ─────────────────────────────────────────────────── */
+/* Línea técnica superior */
+.empty-state::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  display: none; /* background: var(--line-brand); */
+}
+
+/* Halo de fondo sutil */
+.empty-state::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--cp-frost) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Asegurar que el contenido quede sobre el pseudo */
+.empty-state > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Ícono ── */
 .empty-state__icon-ring {
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: var(--clr-bg-pink);
-  border: 1.5px solid var(--clr-border-pink);
+
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
-  flex-shrink: 0;
+
+  margin-bottom: var(--space-6);
+
+  color: var(--cp-electric);
+  box-shadow: var(--glow-soft);
 }
 
 .empty-state__icon {
@@ -131,129 +151,162 @@ const categories: Category[] = [
   height: 38px;
 }
 
-/* ── Textos ────────────────────────────────────────────────── */
+/* ── Textos ── */
 .empty-state__eyebrow {
-  font-size: 11px;
+  margin: 0 0 var(--space-3);
+
+  color: var(--cp-electric);
+
+  font-size: 0.70rem;
   font-weight: 700;
-  letter-spacing: 2.5px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--clr-primary);
-  margin: 0 0 10px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.empty-state__eyebrow::before,
+.empty-state__eyebrow::after {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--cp-electric);
+  opacity: 0.5;
 }
 
 .empty-state__title {
-  font-size: clamp(1.2rem, 3vw, 1.4rem);
+  margin: 0 0 var(--space-3);
+
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
   font-weight: 800;
-  color: var(--clr-text);
-  margin: 0 0 10px;
-  line-height: 1.2;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
 .empty-state__subtitle {
+  margin: 0 0 var(--space-8);
+
+  max-width: 460px;
+
+  color: var(--text-muted);
+  line-height: 1.8;
   font-size: 0.95rem;
-  color: var(--clr-text-muted);
-  line-height: 1.75;
-  max-width: 360px;
-  margin: 0 0 32px;
 }
 
-/* ── Botón CTA ─────────────────────────────────────────────── */
+/* ── Botón CTA ── */
 .empty-state__btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: var(--clr-primary);
-  color: #FFFFFF;
-  font-size: 0.875rem;
-  font-weight: 700;
-  padding: 12px 28px;
-  border-radius: 999px;
+  gap: var(--space-2);
+
   text-decoration: none;
-  margin-bottom: 36px;
+
+  color: var(--btn-primary-text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  height: 46px;
+  padding: 0 var(--space-6);
+  border-radius: var(--r-pill);
+
+  background: var(--btn-primary-bg);
+  border: none;
+
+  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.20);
+
   transition:
-    background 0.2s ease,
-    transform 0.15s ease,
-    box-shadow 0.2s ease;
-  box-shadow: 0 4px 16px rgba(45, 106, 79, 0.22);
+    transform var(--t-fast) var(--ease-snappy),
+    background var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
 .empty-state__btn:hover {
-  background: var(--clr-primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(45, 106, 79, 0.32);
+  background: var(--btn-primary-hover);
+  box-shadow: 0 8px 28px rgba(7, 30, 82, 0.28);
+  color: var(--btn-primary-text);
 }
 
 .empty-state__btn:active {
-  transform: scale(0.97);
+  transform: translateY(0);
 }
 
-/* ── Divisor ───────────────────────────────────────────────── */
+/* ── Divisor ── */
 .empty-state__divider {
   width: 100%;
   max-width: 440px;
   height: 1px;
-  background: var(--clr-border);
-  margin-bottom: 28px;
+  background: var(--border-light);
+  margin: var(--space-8) 0 var(--space-6);
 }
 
-/* ── Tags categorías ───────────────────────────────────────── */
+/* ── Tags / Categorías ── */
 .empty-state__tags-label {
-  font-size: 12px;
-  color: var(--clr-text-hint);
-  margin: 0 0 14px;
-  letter-spacing: 0.3px;
+  margin: 0 0 var(--space-4);
+  color: var(--text-faint);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .empty-state__tags {
   list-style: none;
   margin: 0;
   padding: 0;
+
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
+  gap: var(--space-2);
 }
 
 .empty-state__tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--clr-bg-soft);
-  border: 1px solid var(--clr-border);
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--clr-text-mid);
+  border-radius: var(--r-pill);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
   transition:
-    border-color 0.2s ease,
-    color 0.2s ease;
+    border-color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
+}
+
+.empty-state__tag:hover {
+  border-color: var(--border-mid);
+  background: var(--cp-frost);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .empty-state__tag-link {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-1);
+  padding: 7px var(--space-4);
   text-decoration: none;
-  color: inherit;
-  transition: color 0.2s ease;
+  color: var(--text-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: color var(--t-base) var(--ease-smooth);
 }
 
-.empty-state__tag:hover,
 .empty-state__tag:hover .empty-state__tag-link {
-  border-color: var(--clr-primary);
-  color: var(--clr-primary);
+  color: var(--text-primary);
 }
 
 .empty-state__tag-dot {
-  font-size: 10px;
-  color: var(--clr-primary);
+  color: var(--cp-electric);
+  font-size: 0.55rem;
 }
 
-/* ── Responsive ────────────────────────────────────────────── */
+/* ── Responsive ── */
 @media (max-width: 640px) {
   .empty-state {
-    padding: 48px 24px;
+    padding: var(--space-12) var(--space-6);
   }
 
   .empty-state__icon-ring {
@@ -264,6 +317,11 @@ const categories: Category[] = [
   .empty-state__icon {
     width: 30px;
     height: 30px;
+  }
+
+  .empty-state__btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>

@@ -1,101 +1,92 @@
 <template>
   <section class="hero" id="inicio">
-    <!-- Fondo -->
-    <div class="hero-bg">
-      <img
-        src="/images/hero2.jpeg"
-        alt="Utensilios Kite"
-        fetchpriority="high"
-        decoding="async"
-      />
 
-      <!-- glow -->
-      <div class="hero-glow hero-glow--1" />
-      <div class="hero-glow hero-glow--2" />
+    <!-- Fondo con imagen -->
+    <div class="hero-bg">
+      <img src="/images/hero.jpg" alt="CelParts — Repuestos y accesorios para celulares" fetchpriority="high"
+        decoding="async" />
     </div>
 
-    <!-- overlay -->
+    <!-- Overlay -->
     <div class="hero-overlay" aria-hidden="true" />
 
-    <!-- contenido -->
+    <!-- Decoración geométrica -->
+    <div class="hero-deco hero-deco--circle-1" aria-hidden="true" />
+    <div class="hero-deco hero-deco--circle-2" aria-hidden="true" />
+    <div class="hero-deco hero-deco--grid" aria-hidden="true" />
+
+    <!-- Contenido -->
     <div class="hero-content">
       <div class="hero-container">
 
-        <!-- top badge -->
+        <!-- Badge -->
         <div class="hero-chip">
-          <span class="hero-chip__line" />
-          KITE
+          <span class="hero-chip__dot" aria-hidden="true" />
+          <span class="hero-chip__text">CELPARTS PERÚ</span>
+          <span class="hero-chip__tag">OFICIAL</span>
         </div>
 
-        <!-- headline -->
+        <!-- Titular -->
         <div class="hero-copy">
           <h1 class="hero-title">
-            Cocina con
-            <span>nivel profesional.</span>
+            Repuestos
+            <span class="hero-title__accent">originales</span>
+            <span class="hero-title__line">para tu celular.</span>
           </h1>
-
           <p class="hero-text">
-            Descubre utensilios de cocina de alta calidad, seleccionados y
-            probados para ofrecerte solo lo mejor. Transforma tu experiencia
-            culinaria con nuestros productos premium.
+            Pantallas, baterías, conectores y accesorios de alta calidad.
+            Todo lo que necesitas para reparar y personalizar tu dispositivo,
+            con garantía y envío a todo el Perú.
           </p>
         </div>
 
-        <!-- actions -->
+        <!-- CTAs -->
         <div class="hero-actions">
-          <a href="#nuevos-lanzamientos" class="hero-btn hero-btn--primary">
-            Explorar catálogo
-
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M5 12H19"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-              <path
-                d="M13 6L19 12L13 18"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
+          <a href="#catalogo" class="hero-btn hero-btn--primary">
+            Ver catálogo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12H19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+              <path d="M13 6L19 12L13 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
             </svg>
           </a>
-
-          <!-- <a href="#nosotros" class="hero-btn hero-btn--ghost">
-            Nuestra historia
-          </a> -->
+          <a href="#contacto" class="hero-btn hero-btn--ghost">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Cotizar ahora
+          </a>
         </div>
 
-        <!-- bottom stats -->
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <strong>+500</strong>
-            <span>Productos</span>
-          </div>
-
-          <div class="hero-stat">
-            <strong>2023</strong>
-            <span>Desde</span>
-          </div>
-
-          <div class="hero-stat">
-            <strong>Perú</strong>
-            <span>Distribución</span>
-          </div>
-        </div>
       </div>
     </div>
 
-    <!-- fade -->
-    <div class="hero-fade" aria-hidden="true" />
+    <!-- Stats — integradas al fondo de la imagen -->
+  <!-- <div class="hero-stats-wrap">
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong>+500</strong>
+          <span>Productos</span>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true" />
+        <div class="hero-stat">
+          <strong>2023</strong>
+          <span>Fundados</span>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true" />
+        <div class="hero-stat">
+          <strong>100%</strong>
+          <span>Garantía</span>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true" />
+        <div class="hero-stat">
+          <strong>Perú</strong>
+          <span>Envío nacional</span>
+        </div>
+      </div>
+    </div> -->
+
   </section>
 </template>
 
@@ -103,326 +94,344 @@
 
 <style scoped>
 /* ═══════════════════════════════════
-   HERO — KITE STYLE
+   HERO — CELPARTS
+   100% tokens de main.css
 ═══════════════════════════════════ */
-.hero {
-  --hero-bg: #0f1110;
-  --hero-green: #2d6a4f;
-  --hero-green-light: #52a17a;
-  --hero-yellow: #e9c46a;
-  --hero-white: #ffffff;
-  --hero-text: rgba(255, 255, 255, 0.72);
-  --hero-border: rgba(255, 255, 255, 0.12);
 
+.hero {
   position: relative;
   width: 100%;
-  overflow: hidden;
-  background: var(--hero-bg);
+  background: var(--bg-page);
 }
 
-/* ═══════════════════════════════════
-   BG
-═══════════════════════════════════ */
+/* ── Imagen de fondo ── */
 .hero-bg {
   position: relative;
   width: 100%;
   height: 100vh;
   min-height: 680px;
-  max-height: 980px;
+  max-height: 920px;
+  overflow: hidden;
 }
 
 .hero-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center 30%;
   display: block;
-
-  transform: scale(1.02);
-  filter:
-    saturate(1.05)
-    contrast(1.02)
-    brightness(0.82);
 }
 
-/* glow */
-.hero-glow {
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(120px);
-  opacity: 0.45;
-  pointer-events: none;
-}
-
-.hero-glow--1 {
-  width: 420px;
-  height: 420px;
-  background: rgba(45, 106, 79, 0.45);
-
-  top: -80px;
-  right: -80px;
-}
-
-.hero-glow--2 {
-  width: 320px;
-  height: 320px;
-  background: rgba(233, 196, 106, 0.22);
-
-  bottom: -120px;
-  left: -80px;
-}
-
-/* ═══════════════════════════════════
-   OVERLAY
-═══════════════════════════════════ */
+/* ── Overlay ── */
 .hero-overlay {
   position: absolute;
   inset: 0;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(5, 5, 5, 0.86) 0%,
-      rgba(5, 5, 5, 0.58) 42%,
-      rgba(5, 5, 5, 0.18) 100%
-    );
-
+  height: 100vh;
+  max-height: 920px;
+  background: linear-gradient(105deg,
+      rgba(7, 30, 82, 0.55) 0%,
+      rgba(7, 30, 82, 0.35) 45%,
+      rgba(7, 30, 82, 0.10) 100%);
   z-index: 1;
 }
 
-/* ═══════════════════════════════════
-   CONTENT
-═══════════════════════════════════ */
+/* ── Decoración geométrica ── */
+.hero-deco {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-deco--circle-1 {
+  width: 640px;
+  height: 640px;
+  border-radius: var(--r-pill);
+  right: -120px;
+  top: -180px;
+  background: radial-gradient(circle,
+      var(--cp-ice) 0%,
+      var(--cp-frost) 50%,
+      transparent 75%);
+  opacity: 0.12;
+}
+
+.hero-deco--circle-2 {
+  width: 320px;
+  height: 320px;
+  border-radius: var(--r-pill);
+  left: -80px;
+  bottom: 80px;
+  background: radial-gradient(circle,
+      var(--cp-frost) 0%,
+      transparent 70%);
+  opacity: 0.10;
+}
+
+.hero-deco--grid {
+  inset: 0;
+  height: 100vh;
+  max-height: 920px;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(100deg,
+      transparent 0%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.30) 72%,
+      rgba(0, 0, 0, 0.14) 100%);
+}
+
+/* ── Contenido ── */
 .hero-content {
   position: absolute;
   inset: 0;
-  z-index: 2;
-
+  height: 100vh;
+  max-height: 920px;
+  z-index: 3;
   display: flex;
   align-items: center;
+  padding-top: var(--header-height); /* Evita que el navbar superponga el título */
 }
 
 .hero-container {
   width: 100%;
-  max-width: 1320px;
-
+  max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 48px;
-
+  padding: 0 var(--space-16);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-/* ═══════════════════════════════════
-   CHIP
-═══════════════════════════════════ */
+/* ── Chip / badge ── */
 .hero-chip {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
+  height: 34px;
+  padding: 0 var(--space-4);
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--card-shadow-sm);
+  margin-bottom: var(--space-8);
+}
 
-  height: 38px;
-  padding: 0 18px;
+.hero-chip__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cp-electric);
+  box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.30);
+  animation: pulse-dot 2.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
 
-  border-radius: 999px;
-  border: 1px solid var(--hero-border);
+@keyframes pulse-dot {
 
-  background: rgba(255, 255, 255, 0.06);
+  0%,
+  100% {
+    box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.30);
+  }
 
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
 
-  color: rgba(255, 255, 255, 0.88);
-
-  font-size: 0.72rem;
+.hero-chip__text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
-
-  margin-bottom: 30px;
+  letter-spacing: 0.16em;
 }
 
-.hero-chip__line {
-  width: 18px;
-  height: 2px;
-  border-radius: 999px;
-  background: var(--hero-yellow);
+.hero-chip__tag {
+  background: var(--cp-electric);
+  color: var(--cp-navy);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
 }
 
-/* ═══════════════════════════════════
-   COPY
-═══════════════════════════════════ */
+/* ── Titular ── */
 .hero-copy {
-  max-width: 720px;
+  max-width: 680px;
 }
 
 .hero-title {
   margin: 0;
-
-  color: var(--hero-white);
-
-  font-size: clamp(3.5rem, 8vw, 7rem);
-  line-height: 0.95;
-  letter-spacing: -0.06em;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 7vw, 6rem);
+  line-height: 0.97;
+  letter-spacing: -0.045em;
   font-weight: 800;
+  color: var(--cp-white);
 }
 
-.hero-title span {
+.hero-title__accent {
   display: block;
-  color: var(--hero-yellow);
+  background: linear-gradient(120deg, var(--cp-sky) 0%, var(--cp-electric) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-title__line {
+  display: block;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .hero-text {
-  margin: 28px 0 0;
-
-  max-width: 580px;
-
-  color: var(--hero-text);
-
-  font-size: clamp(1rem, 1.3vw, 1.12rem);
-  line-height: 1.75;
+  margin: var(--space-8) 0 0;
+  max-width: 520px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: clamp(0.95rem, 1.15vw, 1.07rem);
+  line-height: 1.80;
   font-weight: 400;
 }
 
-/* ═══════════════════════════════════
-   ACTIONS
-═══════════════════════════════════ */
+/* ── Botones CTA ── */
 .hero-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
-
-  margin-top: 42px;
+  gap: var(--space-3);
+  margin-top: var(--space-10);
   flex-wrap: wrap;
 }
 
 .hero-btn {
-  height: 54px;
-  padding: 0 24px;
-
-  border-radius: 14px;
-
+  height: 50px;
+  padding: 0 var(--space-6);
+  border-radius: var(--r-md);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-
+  gap: var(--space-2);
   text-decoration: none;
-
-  font-size: 0.92rem;
+  font-family: var(--font-body);
+  font-size: 0.90rem;
   font-weight: 700;
-  letter-spacing: 0.01em;
-
+  cursor: pointer;
+  border: none;
   transition:
-    transform 0.16s ease,
-    background 0.16s ease,
-    border-color 0.16s ease,
-    color 0.16s ease,
-    box-shadow 0.16s ease;
+    transform var(--t-fast) var(--ease-snappy),
+    background var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth);
 }
 
 .hero-btn:hover {
   transform: translateY(-2px);
 }
 
+.hero-btn:active {
+  transform: translateY(0);
+}
+
 .hero-btn--primary {
-  background: var(--hero-white);
-  color: #111111;
-
-  border: 1.5px solid var(--hero-white);
-
-  box-shadow:
-    0 10px 30px rgba(255, 255, 255, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.2);
+  background: var(--cp-electric);
+  color: var(--cp-navy);
+  box-shadow: 0 4px 20px rgba(0, 170, 255, 0.40);
 }
 
 .hero-btn--primary:hover {
-  background: var(--hero-yellow);
-  border-color: var(--hero-yellow);
+  background: var(--cp-sky);
+  box-shadow: 0 6px 28px rgba(0, 170, 255, 0.55);
+  color: var(--cp-navy);
+}
 
-  box-shadow:
-    0 14px 40px rgba(233, 196, 106, 0.28);
+.hero-btn--primary:focus-visible {
+  outline: 3px solid var(--cp-sky-light);
+  outline-offset: 3px;
 }
 
 .hero-btn--ghost {
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.9);
-
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.30);
+  color: var(--cp-white);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .hero-btn--ghost:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.55);
+  color: var(--cp-white);
 }
 
-/* ═══════════════════════════════════
-   STATS
-═══════════════════════════════════ */
-.hero-stats {
-  display: flex;
-  align-items: center;
-  gap: 18px;
+.hero-btn--ghost:focus-visible {
+  outline: 3px solid var(--cp-sky-light);
+  outline-offset: 3px;
+}
 
-  margin-top: 58px;
-  flex-wrap: wrap;
+/* ── Stats — tarjeta centrada compacta ── */
+.hero-stats-wrap {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--space-8);
+}
+
+.hero-stats {
+  display: inline-flex;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(200, 232, 248, 0.8);
+  border-radius: var(--r-xl);
+  box-shadow:
+    0 4px 24px rgba(7, 30, 82, 0.10),
+    0 1px 4px rgba(7, 30, 82, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden;
+  flex-wrap: nowrap;
 }
 
 .hero-stat {
-  min-width: 130px;
-
-  padding: 18px 20px;
-
-  border-radius: 18px;
-
-  background: rgba(255, 255, 255, 0.06);
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  padding: var(--space-5) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 110px;
 }
 
 .hero-stat strong {
   display: block;
-
-  color: var(--hero-white);
-
-  font-size: 1.15rem;
+  color: var(--cp-navy);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
   font-weight: 800;
-
-  margin-bottom: 6px;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
 .hero-stat span {
-  color: rgba(255, 255, 255, 0.64);
-
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-size: 0.70rem;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
 }
 
-/* ═══════════════════════════════════
-   FADE
-═══════════════════════════════════ */
-.hero-fade {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  height: 180px;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(15, 17, 16, 0) 0%,
-      rgba(15, 17, 16, 0.82) 100%
-    );
-
-  z-index: 3;
-  pointer-events: none;
+.hero-stat-divider {
+  width: 1px;
+  align-self: stretch;
+  margin: var(--space-4) 0;
+  background: var(--border-light);
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════
@@ -431,15 +440,22 @@
 @media (max-width: 1100px) {
   .hero-bg {
     height: 90vh;
-    min-height: 720px;
+    min-height: 700px;
   }
 
   .hero-container {
-    padding: 0 32px;
+    padding: 0 var(--space-10);
   }
 
-  .hero-title {
-    max-width: 700px;
+  .hero-stats-wrap {
+    padding: 0 var(--space-10);
+  }
+
+  .hero-deco--circle-1 {
+    width: 460px;
+    height: 460px;
+    right: -80px;
+    top: -100px;
   }
 }
 
@@ -450,77 +466,81 @@
   }
 
   .hero-bg img {
-    object-position: center;
+    object-position: 68% center;
   }
 
   .hero-overlay {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(5, 5, 5, 0.28) 0%,
-        rgba(5, 5, 5, 0.68) 45%,
-        rgba(5, 5, 5, 0.9) 100%
-      );
+    background: linear-gradient(180deg,
+        rgba(7, 30, 82, 0.30) 0%,
+        rgba(7, 30, 82, 0.55) 55%,
+        rgba(7, 30, 82, 0.75) 100%);
+  }
+
+  .hero-content {
+    align-items: flex-end;
   }
 
   .hero-container {
-    padding: 0 22px;
-    justify-content: flex-end;
+    padding: 0 var(--space-5) var(--space-10);
   }
 
   .hero-chip {
-    margin-bottom: 22px;
-
-    font-size: 0.64rem;
-    letter-spacing: 0.12em;
+    margin-bottom: var(--space-5);
   }
 
   .hero-title {
-    font-size: clamp(2.8rem, 12vw, 4.2rem);
-    line-height: 0.98;
+    font-size: clamp(2.6rem, 11.5vw, 4rem);
   }
 
   .hero-text {
-    margin-top: 20px;
-
-    font-size: 0.96rem;
-    line-height: 1.7;
+    margin-top: var(--space-4);
+    font-size: 0.93rem;
   }
 
   .hero-actions {
     width: 100%;
-    margin-top: 34px;
+    margin-top: var(--space-8);
   }
 
   .hero-btn {
     flex: 1;
     min-width: 0;
-    height: 50px;
+    height: 48px;
+    font-size: 0.87rem;
+  }
 
-    font-size: 0.88rem;
+  .hero-stats-wrap {
+    padding: 0 var(--space-5);
+    bottom: 24px;
   }
 
   .hero-stats {
-    gap: 12px;
-    margin-top: 42px;
-    width: 100%;
+    flex-wrap: wrap;
+    border-radius: var(--r-lg);
   }
 
   .hero-stat {
     flex: 1;
-    min-width: 0;
-
-    padding: 16px;
+    min-width: 120px;
+    padding: var(--space-4) var(--space-5);
   }
 
   .hero-stat strong {
-    font-size: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .hero-stat-divider {
+    margin: var(--space-3) 0;
+  }
+
+  .hero-deco--circle-1 {
+    opacity: 0.08;
   }
 }
 
 @media (max-width: 520px) {
   .hero-bg {
-    min-height: 760px;
+    min-height: 780px;
   }
 
   .hero-actions {
@@ -530,15 +550,38 @@
 
   .hero-btn {
     width: 100%;
+    flex: unset;
+  }
+
+  .hero-stats-wrap {
+    bottom: 20px;
+    padding: 0 var(--space-4);
   }
 
   .hero-stats {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    border-radius: var(--r-lg);
+    flex-wrap: unset;
+  }
+
+  .hero-stat-divider {
+    display: none;
   }
 
   .hero-stat {
-    width: 100%;
+    min-width: unset;
+    padding: var(--space-4);
+  }
+
+  .hero-stat:nth-child(1),
+  .hero-stat:nth-child(3) {
+    border-right: 1px solid var(--border-light);
+  }
+
+  .hero-stat:nth-child(3),
+  .hero-stat:nth-child(5) {
+    border-top: 1px solid var(--border-light);
   }
 }
 </style>

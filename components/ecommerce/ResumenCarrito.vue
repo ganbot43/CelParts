@@ -130,85 +130,103 @@ const formatPrice = useFormatPrice();
 </script>
 
 <style scoped>
+/* ═══════════════════════════════════
+   RESUMEN CARRITO — CELPARTS
+   100% tokens de main.css
+═══════════════════════════════════ */
+
 /* ─── Card ───────────────────────────────────────────────── */
 .summary-card {
-  background: rgba(255,255,255,0.72);
-  border: 1.5px solid rgba(226,224,217,0.5);
-  border-radius: 20px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-xl);
   overflow: hidden;
   position: sticky;
   top: 5.5rem;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 8px 28px rgba(17,17,17,0.04), inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: var(--card-shadow);
 }
 
 /* ─── Header ─────────────────────────────────────────────── */
 .summary-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1.5px solid #e5e5e5;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-light);
+  position: relative;
+}
+
+.summary-header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-brand) 30%, var(--line-brand) 70%, transparent);
 }
 
 .summary-icon {
   width: 32px;
   height: 32px;
-  background: rgba(45,106,79,0.06);
-  border: 1px solid rgba(45,106,79,0.12);
-  border-radius: 8px;
+  background: rgba(0, 174, 239, 0.06);
+  border: 1px solid rgba(0, 174, 239, 0.15);
+  border-radius: var(--r-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2D6A4F;
+  color: var(--cp-electric);
   flex-shrink: 0;
 }
 
 .summary-title {
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: #2b2b2b;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 /* ─── Items ──────────────────────────────────────────────── */
 .summary-items {
-  padding: 1rem 1.25rem;
+  padding: var(--space-4) var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-3);
   max-height: 260px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(45,106,79,0.18) transparent;
+  scrollbar-color: rgba(0, 174, 239, 0.2) transparent;
 }
 .summary-items::-webkit-scrollbar {
   width: 3px;
 }
 .summary-items::-webkit-scrollbar-thumb {
-  background: rgba(45,106,79,0.18);
-  border-radius: 4px;
+  background: rgba(0, 174, 239, 0.2);
+  border-radius: var(--r-pill);
 }
 
 .summary-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 .item-left {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: var(--space-2);
   min-width: 0;
   flex: 1;
 }
 .item-thumb {
   width: 36px;
   height: 36px;
-  border-radius: 8px;
-  background: #f5f5f5;
-  border: 1px solid #e5e5e5;
+  border-radius: var(--r-sm);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
   overflow: hidden;
   flex-shrink: 0;
   display: flex;
@@ -226,57 +244,59 @@ const formatPrice = useFormatPrice();
 }
 .item-name {
   font-size: 0.8rem;
-  font-weight: 500;
-  color: #2b2b2b;
+  font-weight: 600;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .item-qty {
-  font-size: 0.7rem;
-  color: #999999;
+  font-size: 0.72rem;
+  color: var(--text-muted);
   margin-top: 0.1rem;
 }
 .item-price {
-  font-size: 0.8rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
   font-weight: 700;
-  color: #2b2b2b;
+  color: var(--cp-navy);
   flex-shrink: 0;
 }
 
 /* ─── Divider ────────────────────────────────────────────── */
 .summary-divider {
   height: 1px;
-  background: #e5e5e5;
-  margin: 0 1.25rem;
+  background: var(--border-light);
+  margin: 0 var(--space-4);
 }
 
 /* ─── Totals ─────────────────────────────────────────────── */
 .summary-totals {
-  padding: 0.875rem 1.25rem 0;
+  padding: var(--space-3) var(--space-4) 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 .total-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
 }
 .total-row-label {
-  color: #999999;
+  color: var(--text-muted);
+  font-weight: 600;
 }
 .total-row-val {
-  font-weight: 600;
-  color: #555555;
+  font-weight: 700;
+  color: var(--text-body);
 }
 
 .shipping-free {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #999999;
+  color: var(--text-muted);
 }
 
 /* ─── Grand total ────────────────────────────────────────── */
@@ -284,25 +304,27 @@ const formatPrice = useFormatPrice();
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
-  margin: 0.75rem 1.25rem 1.25rem;
-  background: rgba(255,255,255,0.72);
-  border: 1.5px solid rgba(226,224,217,0.5);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: var(--space-4);
+  margin: var(--space-3) var(--space-4) var(--space-4);
+  background: var(--bg-alt);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-md);
 }
 
 .grand-label {
+  font-family: var(--font-body);
   font-size: 0.9rem;
-  font-weight: 700;
-  color: #2b2b2b;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .grand-val {
+  font-family: var(--font-display);
   font-size: 1.5rem;
-  font-weight: 900;
-  color: #2D6A4F;
+  font-weight: 800;
+  color: var(--cp-navy);
   letter-spacing: -0.03em;
   line-height: 1;
 }
@@ -312,9 +334,9 @@ const formatPrice = useFormatPrice();
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1.25rem 1.125rem;
-  border-top: 1px solid #e5e5e5;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 1px solid var(--border-light);
 }
 
 .trust-item {
@@ -322,12 +344,18 @@ const formatPrice = useFormatPrice();
   align-items: center;
   gap: 0.3rem;
   font-size: 0.7rem;
-  color: #999999;
+  color: var(--text-muted);
   font-weight: 500;
+}
+.trust-item svg {
+  color: var(--cp-electric);
+  opacity: 0.65;
 }
 .trust-sep {
   width: 1px;
   height: 14px;
-  background: #d9d9d9;
+  background: var(--border-light);
 }
 </style>
+
+

@@ -589,17 +589,17 @@ import { useBusinessConfig } from "~/composables/useBusinessConfig";
 import { useAppToast } from "~/composables/useToast";
 
 useSeoMeta({
-  title: 'Libro de Reclamaciones | Kite',
-  description: 'Presenta tu reclamo o queja en el Libro de Reclamaciones de Kite de forma segura y rapida.',
-  ogTitle: 'Libro de Reclamaciones | Kite',
-  ogDescription: 'Canal oficial para registrar reclamos y quejas de clientes de Kite.',
+  title: 'Libro de Reclamaciones | CelParts',
+  description: 'Presenta tu reclamo o queja en el Libro de Reclamaciones de CelParts de forma segura y rapida.',
+  ogTitle: 'Libro de Reclamaciones | CelParts',
+  ogDescription: 'Canal oficial para registrar reclamos y quejas de clientes de CelParts.',
   ogType: 'website',
-  ogUrl: 'https://kite.pe/libro-de-reclamaciones',
-  ogImage: 'https://kite.pe/images/logo.png',
+  ogUrl: 'https://celparts.pe/libro-de-reclamaciones',
+  ogImage: 'https://celparts.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Libro de Reclamaciones | Kite',
-  twitterDescription: 'Registra tu reclamo en el Libro de Reclamaciones de Kite.',
-  twitterImage: 'https://kite.pe/images/logo.png',
+  twitterTitle: 'Libro de Reclamaciones | CelParts',
+  twitterDescription: 'Registra tu reclamo en el Libro de Reclamaciones de CelParts.',
+  twitterImage: 'https://celparts.pe/images/logo.png',
 })
 
 const businessState = useBusinessConfig();
@@ -713,24 +713,24 @@ async function submit() {
 
 <style scoped>
 /* ═══════════════════════════════════
-  TOKENS KITE — LIGHT
+  TOKENS KITE -> CELPARTS
 ═══════════════════════════════════ */
 .lr-page {
-  --kite-green: #2D6A4F;
-  --kite-green-dark: #1E4D38;
-  --kite-green-glow: rgba(45, 106, 79, 0.25);
-  --kite-green-soft: rgba(45, 106, 79, 0.08);
-  --kite-green-line: rgba(45, 106, 79, 0.2);
-  --kite-yellow: #E9C46A;
-  --kite-yellow-dim: rgba(233, 196, 106, 0.8);
-  --jm-surface: rgba(255, 255, 255, 0.76);
-  --jm-surface2: rgba(255, 255, 255, 0.7);
-  --jm-surface3: rgba(255, 255, 255, 0.82);
-  --jm-border: rgba(226, 224, 217, 0.5);
-  --jm-border-strong: rgba(226, 224, 217, 0.7);
-  --jm-text: #111111;
-  --jm-text-dim: #555555;
-  --jm-text-muted: #66625A;
+  --kite-green: var(--cp-electric);
+  --kite-green-dark: var(--cp-navy);
+  --kite-green-glow: rgba(0, 174, 239, 0.25);
+  --kite-green-soft: rgba(0, 174, 239, 0.08);
+  --kite-green-line: rgba(0, 174, 239, 0.2);
+  --kite-yellow: #eab308;
+  --kite-yellow-dim: rgba(234, 179, 8, 0.8);
+  --jm-surface: var(--bg-surface);
+  --jm-surface2: var(--bg-surface);
+  --jm-surface3: var(--bg-surface);
+  --jm-border: var(--border-light);
+  --jm-border-strong: var(--border-mid);
+  --jm-text: var(--text-primary);
+  --jm-text-dim: var(--text-body);
+  --jm-text-muted: var(--text-muted);
 }
 
 /* ── Base ── */
@@ -1026,7 +1026,7 @@ async function submit() {
   border-radius: 7px;
   font-size: 14px;
   color: var(--jm-text);
-  background: #ffffff;
+  background: var(--bg-surface);
   transition:
     border-color 0.15s,
     box-shadow 0.15s;
@@ -1036,10 +1036,10 @@ async function submit() {
 
 .lr-input:focus {
   border-color: var(--kite-green);
-  background: #ffffff;
+  background: var(--bg-surface);
   box-shadow:
-    0 0 0 3px rgba(45, 106, 79, 0.12),
-    0 0 16px rgba(45, 106, 79, 0.06);
+    0 0 0 3px var(--kite-green-soft),
+    0 0 16px var(--kite-green-glow);
 }
 
 .lr-input::placeholder {
@@ -1056,7 +1056,7 @@ async function submit() {
 }
 
 .lr-select option {
-  background: #ffffff;
+  background: var(--bg-surface);
   color: var(--jm-text);
 }
 
@@ -1100,7 +1100,7 @@ async function submit() {
   padding: 9px 14px;
   border-radius: 7px;
   border: 1px solid var(--jm-border-strong);
-  background: #ffffff;
+  background: var(--bg-surface);
   font-size: 13px;
   color: var(--jm-text-dim);
   cursor: pointer;
@@ -1110,8 +1110,8 @@ async function submit() {
 .lr-toggle:hover {
   border-color: var(--kite-green-line);
   color: var(--kite-green);
-  background: rgba(45, 106, 79, 0.04);
-  box-shadow: 0 0 10px rgba(45, 106, 79, 0.1);
+  background: var(--kite-green-soft);
+  box-shadow: 0 0 10px var(--kite-green-glow);
 }
 
 .lr-toggle--active {

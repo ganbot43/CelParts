@@ -48,35 +48,32 @@ const productsPageLink = {
 
 <template>
   <section class="catalog" id="nuevos-lanzamientos">
-    <div class="container">
+    <div class="catalog-container">
 
       <!-- Header -->
       <div class="catalog-header">
-        <div class="catalog-header-left">
-          <span class="section-label">Nuevos</span>
-          <h2 class="section-title">
-            Nuevos lanzamientos<span class="accent-dot" />
+        <div class="catalog-header__left">
+          <span class="catalog-label">Nuevos</span>
+          <h2 class="catalog-title">
+            Nuevos lanzamientos<span class="catalog-title__dot" />
           </h2>
-          <p class="section-subtitle">
+          <p class="catalog-subtitle">
             Descubre las últimas incorporaciones a nuestro catálogo.
           </p>
         </div>
 
-        <!-- Enlace Ver todos — desktop -->
-        <NuxtLink
-          v-if="totalProducts > 0"
-          :to="productsPageLink"
-          class="show-all-btn show-all-btn--header"
-        >
+        <!-- Ver todos — desktop -->
+        <NuxtLink v-if="totalProducts > 0" :to="productsPageLink" class="catalog-btn catalog-btn--ghost">
           Ver todos
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </NuxtLink>
       </div>
 
       <!-- Grid -->
-      <div class="products-grid">
+      <div class="catalog-grid">
         <template v-if="loadingProducts">
           <EcommerceSkeletonProductCard :count="4" />
         </template>
@@ -84,20 +81,17 @@ const productsPageLink = {
           <LandingNuevosLanzamientosEmptyState />
         </template>
         <template v-else>
-          <EcommerceTarjetaProducto
-            v-for="product in products"
-            :key="product.id"
-            :product="product"
-          />
+          <EcommerceTarjetaProducto v-for="product in products" :key="product.id" :product="product" />
         </template>
       </div>
 
-      <!-- Ver todos — mobile / centrado -->
+      <!-- Ver todos — mobile -->
       <div v-if="totalProducts > 0" class="catalog-footer">
-        <NuxtLink :to="productsPageLink" class="show-all-btn">
+        <NuxtLink :to="productsPageLink" class="catalog-btn catalog-btn--primary">
           Ver todos los lanzamientos
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </NuxtLink>
       </div>
@@ -108,209 +102,199 @@ const productsPageLink = {
 
 <style scoped>
 /* ═══════════════════════════════════
-   KITE — NUEVOS LANZAMIENTOS
+   NUEVOS LANZAMIENTOS — CELPARTS
+   Design system: hero + benefits pattern
+   100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */
+
+/* ── Sección ── */
 .catalog {
-  padding: 110px 40px;
-  background:
-    linear-gradient(
-      to bottom,
-      var(--brand-bg) 0%,
-      #ffffff 100%
-    );
   position: relative;
   overflow: hidden;
+  background: var(--bg-page);
+  padding: clamp(80px, 8vw, 120px) 0;
 }
 
-.catalog::before {
-  content: "";
+/* Fondo degradado sutil igual que benefits */
+.catalog::after {
+  content: '';
   position: absolute;
-  top: -180px;
-  right: -120px;
-  width: 420px;
-  height: 420px;
-  background:
-    radial-gradient(
-      circle,
-      rgba(45, 106, 79, 0.08) 0%,
-      transparent 70%
-    );
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    var(--cp-frost) 0%,
+    transparent 70%
+  );
   pointer-events: none;
+  z-index: 0;
 }
 
-.container {
-  max-width: 1240px;
-  margin: 0 auto;
-  position: relative;
+/* Línea técnica de marca superior */
+.catalog::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  display: none; /* background: var(--line-brand); */
   z-index: 1;
 }
 
-/* ═══════════════════════════════════
-   HEADER
-═══════════════════════════════════ */
+/* ── Container ── */
+.catalog-container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Header ── */
 .catalog-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 28px;
+  gap: var(--space-8);
   flex-wrap: wrap;
-  margin-bottom: 54px;
+  margin-bottom: var(--space-12);
 }
 
-.catalog-header-left {
+.catalog-header__left {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 620px;
+  gap: var(--space-3);
+  max-width: 650px;
 }
 
-/* Label */
-.section-label {
+/* Label — mismo estilo que benefits */
+.catalog-label {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
   width: fit-content;
-
+  color: var(--cp-electric);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-
-  color: var(--brand-primary);
 }
 
-.section-label::before {
+.catalog-label::before,
+.catalog-label::after {
   content: "";
-  width: 26px;
-  height: 1.5px;
-  border-radius: 999px;
-  background: var(--brand-primary);
+  width: 20px;
+  height: 1px;
+  background: var(--cp-electric);
+  opacity: 0.5;
 }
 
-/* Title */
-.section-title {
+/* Título */
+.catalog-title {
   margin: 0;
-
-  font-size: clamp(2rem, 4vw, 3.1rem);
-  line-height: 1.05;
-  letter-spacing: -0.045em;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
   font-weight: 800;
-
-  color: var(--brand-black);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 
-.section-title span {
-  color: var(--brand-primary);
-}
-
-.accent-dot {
+.catalog-title__dot {
   width: 8px;
   height: 8px;
-  margin-left: 6px;
-  border-radius: 999px;
+  margin-left: var(--space-2);
+  border-radius: 50%;
   display: inline-block;
-  background: var(--brand-accent);
-  vertical-align: middle;
+  background: var(--cp-electric);
   position: relative;
-  top: -4px;
-
-  box-shadow: 0 0 18px rgba(231, 111, 81, 0.45);
+  top: -6px;
+  box-shadow: var(--glow-soft);
 }
 
-/* Subtitle */
-.section-subtitle {
+/* Subtítulo */
+.catalog-subtitle {
   margin: 0;
-
-  font-size: 0.98rem;
-  line-height: 1.75;
-  color: var(--brand-text-muted);
-
-  max-width: 520px;
+  max-width: 560px;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.8;
 }
 
-/* ═══════════════════════════════════
-   BUTTONS
-═══════════════════════════════════ */
-.show-all-btn {
+/* ── Botón "Ver todos" — desktop (ghost) ── */
+.catalog-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-
-  padding: 0.9rem 1.55rem;
-
-  border-radius: 999px;
-  border: 1px solid transparent;
-
-  background: var(--brand-black);
-  color: white;
-
+  gap: var(--space-2);
+  height: 44px;
+  padding: 0 var(--space-6);
+  border-radius: var(--r-pill);
   text-decoration: none;
-
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 700;
   transition:
-    transform 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+    transform var(--t-fast) var(--ease-snappy),
+    box-shadow var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    color var(--t-base) var(--ease-smooth);
 }
 
-.show-all-btn svg {
-  transition: transform 0.18s ease;
+.catalog-btn svg {
+  transition: transform var(--t-base) var(--ease-snappy);
 }
 
-.show-all-btn:hover {
-  background: var(--brand-primary);
-  box-shadow: 0 10px 30px rgba(45, 106, 79, 0.18);
+.catalog-btn:hover svg {
+  transform: translateX(4px);
+}
+
+.catalog-btn:hover {
   transform: translateY(-2px);
 }
 
-.show-all-btn:hover svg {
-  transform: translateX(2px);
+.catalog-btn--primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: none;
+  box-shadow: 0 2px 10px rgba(7, 30, 82, 0.18);
 }
 
-/* Header version */
-.show-all-btn--header {
-  background: rgba(255,255,255,0.78);
-  color: var(--brand-text);
-
-  border: 1px solid rgba(17,17,17,0.08);
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  box-shadow:
-    0 2px 10px rgba(17,17,17,0.04);
+.catalog-btn--primary:hover {
+  background: var(--btn-primary-hover);
+  box-shadow: 0 6px 22px rgba(7, 30, 82, 0.26);
+  color: var(--btn-primary-text);
 }
 
-.show-all-btn--header:hover {
-  color: white;
-  border-color: transparent;
+.catalog-btn--ghost {
+  background: var(--bg-surface);
+  color: var(--text-body);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--card-shadow-sm);
 }
 
-/* ═══════════════════════════════════
-   GRID
-═══════════════════════════════════ */
-.products-grid {
+.catalog-btn--ghost:hover {
+  background: var(--bg-alt);
+  border-color: var(--border-mid);
+  color: var(--text-primary);
+}
+
+/* ── Grid de productos ── */
+.catalog-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 22px;
+  gap: var(--space-6);
   align-items: stretch;
 }
 
-/* ═══════════════════════════════════
-   FOOTER
-═══════════════════════════════════ */
+/* ── Footer — botón centrado en mobile ── */
 .catalog-footer {
-  margin-top: 54px;
   display: flex;
   justify-content: center;
+  margin-top: var(--space-12);
 }
 
-/* Desktop */
 @media (min-width: 641px) {
   .catalog-footer {
     display: none;
@@ -320,12 +304,14 @@ const productsPageLink = {
 /* ═══════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════ */
-@media (max-width: 1100px) {
-  .catalog {
-    padding: 92px 32px;
+@media (max-width: 1280px) {
+  .catalog-container {
+    padding: 0 var(--space-10);
   }
+}
 
-  .products-grid {
+@media (max-width: 1100px) {
+  .catalog-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
@@ -334,60 +320,52 @@ const productsPageLink = {
   .catalog-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: var(--space-5);
   }
 
-  .show-all-btn--header {
+  .catalog-btn--ghost {
     display: none;
   }
 
-  .products-grid {
+  .catalog-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
   }
 }
 
 @media (max-width: 640px) {
-  .catalog {
-    padding: 74px 18px;
-  }
-
   .catalog-header {
-    margin-bottom: 36px;
-    gap: 18px;
+    margin-bottom: var(--space-8);
   }
 
-  .catalog-header-left {
-    gap: 10px;
+  .catalog-title {
+    font-size: clamp(2rem, 9vw, 2.6rem);
   }
 
-  .section-title {
-    font-size: clamp(1.9rem, 9vw, 2.4rem);
+  .catalog-subtitle {
+    font-size: 0.93rem;
   }
 
-  .section-subtitle {
-    font-size: 0.92rem;
-    line-height: 1.65;
-  }
-
-  .products-grid {
-    gap: 14px;
+  .catalog-grid {
+    gap: var(--space-4);
   }
 
   .catalog-footer {
     display: flex;
   }
 
-  .show-all-btn {
+  .catalog-btn {
     width: 100%;
   }
 }
 
 @media (max-width: 420px) {
-  .products-grid {
+  .catalog-grid {
     grid-template-columns: 1fr;
   }
 
-  .catalog {
-    padding-inline: 16px;
+  .catalog-container {
+    padding: 0 var(--space-5);
   }
 }
 </style>

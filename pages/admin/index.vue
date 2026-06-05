@@ -16,12 +16,8 @@
 
     <!-- ── Stat cards ── -->
     <div class="dash-stats">
-      <div
-        v-for="(stat, i) in stats"
-        :key="stat.label"
-        class="dash-stat-card admin-lift"
-        :style="{ animationDelay: `${i * 55}ms` }"
-      >
+      <div v-for="(stat, i) in stats" :key="stat.label" class="dash-stat-card admin-lift"
+        :style="{ animationDelay: `${i * 55}ms` }">
         <div class="dash-stat-top">
           <span class="dash-stat-label">{{ stat.label }}</span>
           <div class="dash-stat-icon" :class="`dash-stat-icon--${stat.color}`">
@@ -46,7 +42,8 @@
           <button class="dash-action-btn" :disabled="automationLoading" @click="refreshAutomation">
             {{ automationLoading ? "Actualizando…" : "Actualizar todo" }}
           </button>
-          <button class="dash-action-btn dash-action-btn--accent" :disabled="automationLoading" @click="sendStockAlerts">
+          <button class="dash-action-btn dash-action-btn--accent" :disabled="automationLoading"
+            @click="sendStockAlerts">
             Enviar alerta de stock
           </button>
           <button class="dash-action-btn" :disabled="automationLoading" @click="refreshFollowUpsList">
@@ -130,13 +127,8 @@
         <NuxtLink to="/admin/pedidos" class="dash-view-all">
           Ver todos
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M3 8h10M9 4l4 4-4 4"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </NuxtLink>
       </div>
@@ -159,18 +151,10 @@
                 <div class="sp-table-empty">
                   <div class="sp-table-empty__inner">
                     <div class="sp-table-empty__icon">
-                      <svg
-                        width="22"
-                        height="22"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
                         <path
                           d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                          stroke="currentColor"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                        />
+                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                       </svg>
                     </div>
                     <p class="sp-table-empty__msg">No hay pedidos aún</p>
@@ -180,26 +164,18 @@
             </tr>
 
             <!-- Rows -->
-            <tr
-              v-for="order in recentOrders"
-              :key="order.id"
-              class="sp-tr"
-              @click="openOrder(order.id)"
-              style="cursor: pointer"
-            >
+            <tr v-for="order in recentOrders" :key="order.id" class="sp-tr" @click="openOrder(order.id)"
+              style="cursor: pointer">
               <!-- Código -->
               <td class="sp-td">
-                <button
-                  class="dash-order-code"
-                  style="
+                <button class="dash-order-code" style="
                     background: none;
                     border: none;
                     color: inherit;
                     cursor: pointer;
                     padding: 0;
                     font: inherit;
-                  "
-                >
+                  ">
                   {{ order.orderCode }}
                 </button>
               </td>
@@ -218,7 +194,7 @@
               <td class="sp-td sp-td--right">
                 <span class="sp-table-amount">{{
                   formatPrice.format(order.total)
-                }}</span>
+                  }}</span>
               </td>
 
               <!-- Estado -->
@@ -227,10 +203,7 @@
               </td>
 
               <!-- Fecha -->
-              <td
-                class="sp-td sp-td--right sp-td--muted sp-td--mono"
-                style="font-size: var(--sp-text-xs)"
-              >
+              <td class="sp-td sp-td--right sp-td--muted sp-td--mono" style="font-size: var(--sp-text-xs)">
                 {{ formatDateTime(order.createdAt) }}
               </td>
             </tr>
@@ -242,18 +215,10 @@
     <!-- Modal -->
     <Teleport to="body">
       <Transition name="modal">
-        <div
-          v-if="modalOpen"
-          class="modal-backdrop"
-          @click.self="modalOpen = false"
-        >
+        <div v-if="modalOpen" class="modal-backdrop" @click.self="modalOpen = false">
           <div class="modal-box">
-            <PedidoModal
-              v-if="selectedOrderId"
-              :order-id="selectedOrderId"
-              @close="modalOpen = false"
-              @updated="onOrderUpdated"
-            />
+            <PedidoModal v-if="selectedOrderId" :order-id="selectedOrderId" @close="modalOpen = false"
+              @updated="onOrderUpdated" />
           </div>
         </div>
       </Transition>
@@ -458,11 +423,13 @@ const stats = computed(() => {
 }
 
 @keyframes dash-pulse {
+
   0%,
   100% {
     transform: scale(1);
     opacity: 0.3;
   }
+
   50% {
     transform: scale(1.9);
     opacity: 0;
@@ -531,14 +498,17 @@ const stats = computed(() => {
   background: var(--sp-primary-soft);
   color: var(--sp-primary);
 }
+
 .dash-stat-icon--amber {
   background: var(--sp-warning-soft);
   color: var(--sp-warning);
 }
+
 .dash-stat-icon--green {
   background: var(--sp-success-soft);
   color: var(--sp-success);
 }
+
 .dash-stat-icon--primary {
   background: var(--sp-primary-soft);
   color: var(--sp-primary-ink);
@@ -749,11 +719,9 @@ const stats = computed(() => {
   justify-content: space-between;
   padding: 1.1rem 1.4rem;
   border-bottom: 1px solid var(--sp-border);
-  background: linear-gradient(
-    180deg,
-    var(--sp-slate-50) 0%,
-    var(--sp-surface-solid) 100%
-  );
+  background: linear-gradient(180deg,
+      var(--sp-slate-50) 0%,
+      var(--sp-surface-solid) 100%);
 }
 
 .dash-table-title {
@@ -824,11 +792,9 @@ const stats = computed(() => {
   width: 1.9rem;
   height: 1.9rem;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    var(--sp-blue-400),
-    var(--sp-primary-hover)
-  );
+  background: linear-gradient(135deg,
+      var(--sp-blue-400),
+      var(--sp-primary-hover));
   color: #fff;
   font-size: 0.62rem;
   font-weight: 800;
@@ -845,16 +811,20 @@ const stats = computed(() => {
   .dash-page {
     padding: 1rem;
   }
+
   .dash-stats {
     grid-template-columns: 1fr 1fr;
   }
+
   .dash-automation__grid,
   .dash-automation__panels {
     grid-template-columns: 1fr;
   }
+
   .dash-stat-value {
     font-size: var(--sp-text-2xl);
   }
+
   .dash-automation__header,
   .dash-automation-panel__head {
     align-items: flex-start;

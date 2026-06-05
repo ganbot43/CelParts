@@ -32,15 +32,15 @@ defineProps<{ products: Product[]; loading?: boolean }>()
 
 <style scoped>
 .grid-skeleton {
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(226, 224, 217, 0.5);
+  border-radius: var(--r-xl);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .grid-empty {
-  color: #66625a;
+  color: var(--text-muted);
 }
 </style>

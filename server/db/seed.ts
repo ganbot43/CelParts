@@ -52,31 +52,31 @@ async function clearSeedData() {
 }
 
 async function seed() {
-  console.log('🌱 Iniciando seed de Joymar Utensilios...')
+  console.log('🌱 Iniciando seed de Cel Parts...')
 
   await clearSeedData()
 
   // 1. business_config
   await db.insert(schema.businessConfig).values({
-    name:        'Joymar Utensilios',
+    name:        'Cel Parts',
     whatsapp:    process.env.NUXT_PUBLIC_WHATSAPP ?? '+51996111303',
     plan:        'basic',
-    socialLinks: JSON.stringify({ instagram: 'joymarutensilios', facebook: 'joymarutensilios', tiktok: 'joymarutensilios' }),
+    socialLinks: JSON.stringify({ instagram: 'celparts', facebook: 'celparts', tiktok: 'celparts' }),
   }).execute()
 
   // 2. users
   const hash = await bcrypt.hash('admin123', 10)
   await db.insert(schema.users).values([
-    { name: 'Super Admin', email: 'joymar.peru@gmail.com', passwordHash: hash, role: 'superadmin' },
-    { name: 'Admin Joymar', email: 'joymar.peru+admin@gmail.com', passwordHash: hash, role: 'admin' },
+    { name: 'Gerente de tienda',    email: 'owner@celparts.com', passwordHash: hash, role: 'superadmin' },
+    { name: 'Encargado de tienda', email: 'admin@celparts.com',  passwordHash: hash, role: 'admin' },
   ]).execute()
 
-  // 3. categories de utensilios de cocina
+  // 3. categorías de repuestos y accesorios de celulares
   const cats = [
-    { name: 'Ollas y Sartenes',        slug: makeSlug('Ollas y Sartenes') },
-    { name: 'Utensilios de Cocina',    slug: makeSlug('Utensilios de Cocina') },
-    { name: 'Accesorios de Cocina',    slug: makeSlug('Accesorios de Cocina') },
-    { name: 'Menaje de Hogar',         slug: makeSlug('Menaje de Hogar') },
+    { name: 'Pantallas y Displays',      slug: makeSlug('Pantallas y Displays') },
+    { name: 'Baterías y Cargadores',     slug: makeSlug('Baterías y Cargadores') },
+    { name: 'Carcasas y Protectores',    slug: makeSlug('Carcasas y Protectores') },
+    { name: 'Accesorios y Cables',       slug: makeSlug('Accesorios y Cables') },
   ]
 
   const categoryIds: number[] = []
@@ -85,17 +85,17 @@ async function seed() {
     const categoryId = await insertAndGetId(schema.categories, { ...cat, sortOrder: i })
     categoryIds.push(categoryId)
 
-    const subcategoryPremiumId = await insertAndGetId(schema.subcategories, { categoryId, name: `${cat.name} Premium`, slug: `${cat.slug}-premium`, sortOrder: 0 })
-    const subcategoryStandardId = await insertAndGetId(schema.subcategories, { categoryId, name: `${cat.name} Estándar`, slug: `${cat.slug}-estandar`, sortOrder: 1 })
+    const subcategoryPremiumId  = await insertAndGetId(schema.subcategories, { categoryId, name: `${cat.name} Premium`,   slug: `${cat.slug}-premium`,  sortOrder: 0 })
+    const subcategoryStandardId = await insertAndGetId(schema.subcategories, { categoryId, name: `${cat.name} Estándar`,  slug: `${cat.slug}-estandar`, sortOrder: 1 })
     subcategoryIds.push(subcategoryPremiumId, subcategoryStandardId)
   }
 
   // 4. payment_methods
   await db.insert(schema.paymentMethods).values([
-    { type: 'yape',          label: 'Yape',                          isActive: 1, sortOrder: 1 },
-    { type: 'plin',          label: 'Plin',                          isActive: 1, sortOrder: 2 },
-    { type: 'bank_transfer', label: 'Transferencia Bancaria (BCP)',   isActive: 1, sortOrder: 3,
-      accountName: 'Joymar Utensilios SAC', accountNumber: '123-456789-0-12' },
+    { type: 'yape',          label: 'Yape',                         isActive: 1, sortOrder: 1 },
+    { type: 'plin',          label: 'Plin',                         isActive: 1, sortOrder: 2 },
+    { type: 'bank_transfer', label: 'Transferencia Bancaria (BCP)', isActive: 1, sortOrder: 3,
+      accountName: 'Cel Parts SAC', accountNumber: '123-456789-0-12' },
   ]).execute()
 
   // 5. banners
@@ -104,12 +104,20 @@ async function seed() {
     { imageUrl: 'https://picsum.photos/1200/400?random=11', sortOrder: 1, isActive: 1 },
   ]).execute()
 
-  // 6. products (12 productos de utensilios de cocina)
+  // 6. products (12 productos de repuestos y accesorios de celulares)
   const productNames = [
-    'Set de Ollas Premium 5 Piezas', 'Sartén Antiadherente Profesional', 'Juego de Cucharas de Madera',
-    'Tabla de Corte Profesional Bamboo', 'Coladores y Cernidores Juego', 'Cuchillos de Acero Inoxidable Set',
-    'Set de Bowls de Almacenamiento', 'Batidora de Mano Profesional', 'Tabla de Corte de Vidrio Templado',
-    'Set de Peladoras Multiusos', 'Recipientes de Vidrio Templado 6 piezas', 'Set Utensilios Cocina Rojo Premium',
+    'Pantalla LCD iPhone 13 Original',
+    'Pantalla OLED Samsung S22 Premium',
+    'Batería iPhone 12 3110mAh',
+    'Batería Samsung A52 4500mAh',
+    'Cargador Rápido 65W USB-C',
+    'Cable USB-C a Lightning 1m Trenzado',
+    'Carcasa iPhone 14 Pro Antigolpes',
+    'Carcasa Samsung S23 Ultra Transparente',
+    'Vidrio Templado iPhone 15 Full Cover',
+    'Kit Herramientas Reparación Celular 20 piezas',
+    'Auriculares Bluetooth 5.0 In-Ear',
+    'Cargador Inalámbrico 15W MagSafe Compatible',
   ]
 
   for (const [i, name] of productNames.entries()) {
@@ -119,8 +127,8 @@ async function seed() {
       subcategoryId: subcategoryIds[i % subcategoryIds.length],
       name,
       slug,
-      description:   `${name}: producto de cocina de alta calidad, previamente probado y certificado. Durabilidad garantizada para tu hogar.`,
-      price:         parseFloat((Math.random() * 180 + 30).toFixed(2)),
+      description:   `${name}: repuesto o accesorio de alta calidad, compatible garantizado y probado. Ideal para técnicos y usuarios finales.`,
+      price:         parseFloat((Math.random() * 180 + 15).toFixed(2)),
       stock:         Math.floor(Math.random() * 60) + 10,
       isFeatured:    i < 4 ? 1 : 0,
       isActive:      1,
@@ -135,7 +143,8 @@ async function seed() {
   }
 
   console.log('✅ Seed completado.')
-  console.log('📧 Admin: joymar.peru@gmail.com / admin123')
+  console.log('📧 Superadmin: owner@celparts.com / admin123')
+  console.log('📧 Admin:      admin@celparts.com / admin123')
   process.exit(0)
 }
 

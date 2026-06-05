@@ -7,97 +7,58 @@
 
       <!-- BRAND -->
       <div class="jm-footer__brand">
-        <NuxtLink
-          to="/"
-          class="jm-footer__logo"
-          aria-label="Kite — Inicio"
-        >
+        <NuxtLink to="/" class="jm-footer__logo" aria-label="Kite — Inicio">
           <div class="jm-footer__logo-img">
-            <img
-              src="/images/logo.png"
-              alt="Kite"
-              width="58"
-              height="58"
-            />
+            <img src="/images/logo.png" alt="Kite" width="58" height="58" />
           </div>
 
           <div class="jm-footer__logo-text">
             <span class="jm-footer__logo-name">
-              Kite
+              CelParts
             </span>
 
             <span class="jm-footer__logo-sub">
-              Plataforma moderna
+              Repuestos & Accesorios
             </span>
           </div>
         </NuxtLink>
 
         <p class="jm-footer__desc">
-          Creamos experiencias digitales modernas, rápidas y visualmente
-          atractivas para negocios y marcas que buscan destacar.
+          Tu tienda de confianza para repuestos y accesorios de celulares.
+          Encuentra pantallas, baterías, cargadores, cases y mucho más
+          para las principales marcas del mercado.
         </p>
 
         <!-- BADGES -->
         <div class="jm-footer__badges">
           <div class="jm-footer__badge">
-            Experiencia premium
+            Repuestos originales
           </div>
 
           <div class="jm-footer__badge">
-            Diseño moderno
+            Envios seguros
           </div>
         </div>
 
         <!-- SOCIALS -->
+        <!-- SOCIALS -->
         <div class="jm-footer__socials">
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="jm-footer__social-btn"
-            aria-label="Instagram"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
-              <path
-                d="M7.5 3h9A4.5 4.5 0 0 1 21 7.5v9a4.5 4.5 0 0 1-4.5 4.5h-9A4.5 4.5 0 0 1 3 16.5v-9A4.5 4.5 0 0 1 7.5 3Z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8" />
-              <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" />
-            </svg>
+
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
+            aria-label="Instagram">
+            <Instagram class="jm-footer__social-icon" />
           </a>
 
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="jm-footer__social-btn"
-            aria-label="Facebook"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
-              <path
-                d="M14.5 8.5H17V5h-2.5C11.57 5 10 6.57 10 9v2H7v3.5h3V19h3.5v-4.5H16l.5-3.5h-3V9c0-.28.22-.5.5-.5Z"
-                fill="currentColor"
-              />
-            </svg>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
+            aria-label="Facebook">
+            <Facebook class="jm-footer__social-icon" />
           </a>
 
-          <a
-            href="https://x.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="jm-footer__social-btn"
-            aria-label="X"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="jm-footer__social-icon">
-              <path
-                d="M5 5h3.2l4.2 5.5L16.6 5H19l-5.3 6.8L19.5 19h-3.2l-4.5-5.9L7.4 19H5l5.8-7.4L5 5Z"
-                fill="currentColor"
-              />
-            </svg>
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="jm-footer__social-btn"
+            aria-label="X">
+            <X class="jm-footer__social-icon" />
           </a>
+
         </div>
       </div>
 
@@ -147,11 +108,8 @@
               Email
             </div>
 
-            <a
-              href="mailto:hola@kite.com"
-              class="jm-footer__contact-val"
-            >
-              hola@kite.com
+            <a href="mailto:ventas@celparts.pe" class="jm-footer__contact-val">
+              ventas@celparts.pe
             </a>
           </div>
 
@@ -160,11 +118,8 @@
               Teléfono
             </div>
 
-            <a
-              href="tel:+51999999999"
-              class="jm-footer__contact-val"
-            >
-              +51 999 999 999
+            <a href="tel:+51923821520" class="jm-footer__contact-val">
+              +51 923 821 520
             </a>
           </div>
 
@@ -188,15 +143,18 @@
     ═══════════════════════════════ -->
     <div class="jm-footer__bottom">
       <span>
-        © {{ currentYear }} Kite · Todos los derechos reservados
+        © {{ currentYear }} CelParts. Todos los derechos reservados.
       </span>
 
-      <a
-        href="https://smartcsperu.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="jm-footer__credit"
-      >
+      <div class="jm-footer__legal-links">
+        <NuxtLink to="/terminos" class="jm-footer__legal-link">Términos</NuxtLink>
+        <span class="jm-footer__legal-sep">•</span>
+        <NuxtLink to="/privacidad" class="jm-footer__legal-link">Privacidad</NuxtLink>
+        <span class="jm-footer__legal-sep">•</span>
+        <NuxtLink to="/libro-de-reclamaciones" class="jm-footer__legal-link">Libro de Reclamaciones</NuxtLink>
+      </div>
+
+      <a href="https://smartcsperu.com" target="_blank" rel="noopener noreferrer" class="jm-footer__credit">
         Desarrollada por <strong>Smart CS</strong>
       </a>
     </div>
@@ -204,77 +162,76 @@
 </template>
 
 <script setup>
+import { Instagram, Facebook, X } from "lucide-vue-next";
 const currentYear = new Date().getFullYear();
 </script>
 
 <style scoped>
 /* ═══════════════════════════════
-   TOKENS
+   FOOTER — CELPARTS
+   100% tokens de main.css — sin hardcode
 ═══════════════════════════════ */
 .jm-footer {
-  --bg: #111111;
-  --surface: #1A1A1A;
-
-  --primary: #2D6A4F;
-  --primary-soft: rgba(45, 106, 79, 0.12);
-
-  --border: rgba(255,255,255,0.08);
-
-  --text: #FFFFFF;
-  --text-soft: rgba(255,255,255,0.72);
-  --text-faint: rgba(255,255,255,0.45);
-
-  background: var(--bg);
-  color: var(--text);
-
-  border-top: 1px solid var(--border);
-
+  background: var(--bg-alt);
+  color: var(--text-primary);
+  border-top: 1px solid var(--border-light);
   position: relative;
   overflow: hidden;
+}
+
+/* Fondo decorativo sutil */
+.jm-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, var(--cp-ice) 0%, transparent 40%),
+    radial-gradient(circle at bottom left, var(--cp-frost) 0%, transparent 40%);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ═══════════════════════════════
    MAIN GRID
 ═══════════════════════════════ */
 .jm-footer__main {
-  max-width: 1200px;
-
+  position: relative;
+  z-index: 2;
+  max-width: var(--container-width);
   margin: 0 auto;
-
-  padding: 70px 40px 50px;
-
+  padding: clamp(60px, 6vw, 80px) var(--space-8);
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr;
-
-  gap: 50px;
+  gap: var(--space-10);
 }
 
 /* ═══════════════════════════════
    BRAND
 ═══════════════════════════════ */
-.jm-footer__logo {
+.jm-footer__brand {
   display: flex;
+  flex-direction: column;
+}
+
+.jm-footer__logo {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
-
+  gap: var(--space-4);
   text-decoration: none;
-
-  margin-bottom: 22px;
+  margin-bottom: var(--space-5);
 }
 
 .jm-footer__logo-img {
   width: 58px;
   height: 58px;
-
-  border-radius: 16px;
-
-  background: var(--surface);
-
+  border-radius: var(--r-md);
+  background: var(--bg-surface);
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .jm-footer__logo-img img {
@@ -286,36 +243,31 @@ const currentYear = new Date().getFullYear();
 .jm-footer__logo-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .jm-footer__logo-name {
+  font-family: var(--font-display);
   font-size: 1.6rem;
   font-weight: 800;
-
   letter-spacing: -0.04em;
-
-  color: var(--text);
+  color: var(--text-primary);
 }
 
 .jm-footer__logo-sub {
-  font-size: 0.8rem;
-  color: var(--text-faint);
-
-  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  font-weight: 700;
 }
 
 .jm-footer__desc {
   font-size: 0.95rem;
-
   line-height: 1.8;
-
-  color: var(--text-soft);
-
+  color: var(--text-muted);
   max-width: 360px;
-
-  margin-bottom: 24px;
+  margin-bottom: var(--space-6);
 }
 
 /* ═══════════════════════════════
@@ -324,28 +276,21 @@ const currentYear = new Date().getFullYear();
 .jm-footer__badges {
   display: flex;
   flex-wrap: wrap;
-
-  gap: 10px;
-
-  margin-bottom: 24px;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
 }
 
 .jm-footer__badge {
   padding: 8px 14px;
-
-  border-radius: 999px;
-
-  background: var(--primary-soft);
-
-  border: 1px solid rgba(45, 106, 79, 0.2);
-
-  font-size: 0.75rem;
+  border-radius: var(--r-pill);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  font-size: 0.72rem;
   font-weight: 700;
-
-  color: #E9C46A;
-
+  color: var(--text-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  box-shadow: var(--card-shadow-sm);
 }
 
 /* ═══════════════════════════════
@@ -353,51 +298,40 @@ const currentYear = new Date().getFullYear();
 ═══════════════════════════════ */
 .jm-footer__socials {
   display: flex;
-  gap: 10px;
+  gap: var(--space-3);
 }
 
 .jm-footer__social-btn {
-  width: 40px;
-  height: 40px;
-
-  border-radius: 12px;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-
-  color: var(--text-soft);
-
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
   text-decoration: none;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  font-size: 0.78rem;
-  font-weight: 700;
-
   transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    color 0.2s ease;
+    background var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    transform var(--t-base) var(--ease-snappy),
+    color var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
 .jm-footer__social-icon {
   width: 18px;
   height: 18px;
-  display: block;
+  stroke-width: 2;
 }
 
 .jm-footer__social-btn:hover {
-  background: var(--primary-soft);
-
-  border-color: rgba(45, 106, 79, 0.4);
-
-  color: white;
-
+  background: var(--cp-navy);
+  border-color: var(--cp-navy);
+  color: var(--cp-white);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(7, 30, 82, 0.15);
 }
 
 /* ═══════════════════════════════
@@ -406,42 +340,32 @@ const currentYear = new Date().getFullYear();
 .jm-footer__col-title {
   font-size: 0.8rem;
   font-weight: 800;
-
   text-transform: uppercase;
   letter-spacing: 0.15em;
-
-  margin-bottom: 22px;
-
-  color: white;
+  margin-bottom: var(--space-5);
+  color: var(--text-primary);
 }
 
 .jm-footer__links {
   list-style: none;
-
   margin: 0;
   padding: 0;
-
   display: flex;
   flex-direction: column;
-
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .jm-footer__link {
-  color: var(--text-soft);
-
+  color: var(--text-muted);
   text-decoration: none;
-
   font-size: 0.95rem;
-
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
+  font-weight: 500;
+  transition: color var(--t-fast) var(--ease-smooth), transform var(--t-fast) var(--ease-smooth);
+  display: inline-block;
 }
 
 .jm-footer__link:hover {
-  color: white;
-
+  color: var(--cp-electric);
   transform: translateX(4px);
 }
 
@@ -451,90 +375,99 @@ const currentYear = new Date().getFullYear();
 .jm-footer__contact-list {
   display: flex;
   flex-direction: column;
-
-  gap: 18px;
+  gap: var(--space-5);
 }
 
 .jm-footer__contact-item {
   display: flex;
   flex-direction: column;
-
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .jm-footer__contact-label {
   font-size: 0.72rem;
-
   text-transform: uppercase;
   letter-spacing: 0.12em;
-
   color: var(--text-faint);
-
   font-weight: 700;
 }
 
 .jm-footer__contact-val {
-  color: var(--text-soft);
-
+  color: var(--text-body);
   text-decoration: none;
-
   font-size: 0.95rem;
-
-  transition: color 0.2s ease;
+  font-weight: 500;
+  transition: color var(--t-fast) var(--ease-smooth);
 }
 
 .jm-footer__contact-val:hover {
-  color: white;
+  color: var(--cp-electric);
 }
 
 /* ═══════════════════════════════
    BOTTOM
 ═══════════════════════════════ */
 .jm-footer__bottom {
-  border-top: 1px solid var(--border);
-
-  padding: 20px 40px;
-
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--border-light);
+  padding: var(--space-5) var(--space-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  gap: 12px;
-
+  gap: var(--space-3);
   flex-wrap: wrap;
-
-  max-width: 1200px;
+  max-width: var(--container-width);
   margin: 0 auto;
-
-  color: var(--text-faint);
-
+  color: var(--text-muted);
   font-size: 0.82rem;
 }
 
 .jm-footer__credit {
-  color: var(--text-faint);
-
+  color: var(--text-muted);
   text-decoration: none;
-
-  transition: color 0.2s ease;
+  transition: color var(--t-fast) var(--ease-smooth);
 }
 
 .jm-footer__credit:hover {
-  color: white;
+  color: var(--cp-electric);
 }
 
 .jm-footer__credit strong {
-  color: var(--text-soft);
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
-/* ═══════════════════════════════
+.jm-footer__legal-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.jm-footer__legal-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--t-fast) var(--ease-smooth);
+}
+
+.jm-footer__legal-link:hover {
+  color: var(--cp-electric);
+}
+
+.jm-footer__legal-sep {
+  color: var(--border-mid);
+  font-size: 0.7em;
+}
+
+/* ═══════════════════════════════════
    RESPONSIVE
-═══════════════════════════════ */
+═══════════════════════════════════ */
 @media (max-width: 960px) {
   .jm-footer__main {
     grid-template-columns: 1fr 1fr;
-
-    gap: 40px;
+    gap: var(--space-10);
   }
 
   .jm-footer__brand {
@@ -545,15 +478,45 @@ const currentYear = new Date().getFullYear();
 @media (max-width: 640px) {
   .jm-footer__main {
     grid-template-columns: 1fr;
+    padding: var(--space-12) var(--space-5) var(--space-8);
+    text-align: center;
+  }
 
-    padding: 50px 22px 36px;
+  .jm-footer__brand {
+    align-items: center;
+  }
+
+  .jm-footer__logo {
+    justify-content: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .jm-footer__desc {
+    margin: 0 auto var(--space-6);
+  }
+
+  .jm-footer__badges {
+    justify-content: center;
+  }
+
+  .jm-footer__socials {
+    justify-content: center;
+  }
+
+  .jm-footer__links {
+    align-items: center;
+  }
+
+  .jm-footer__contact-item {
+    align-items: center;
   }
 
   .jm-footer__bottom {
-    padding: 18px 22px;
-
+    padding: var(--space-5) var(--space-5);
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-2);
   }
 
   .jm-footer__logo-name {

@@ -233,7 +233,7 @@ const { data: order } = await useFetch<Order>(
 if (!order.value)
   throw createError({ statusCode: 404, message: "Pedido no encontrado" });
 
-useSeoMeta({ title: `Pedido ${order.value?.orderCode} — Joymar Utensilios` });
+useSeoMeta({ title: `Pedido ${order.value?.orderCode} — Celparts SAC` });
 
 const waMessage = computed(() =>
   encodeURIComponent(
@@ -246,10 +246,15 @@ const waUrl = computed(
 </script>
 
 <style scoped>
+/* ═══════════════════════════════════
+   PEDIDO CONFIRMADO — CELPARTS
+   100% tokens de main.css
+═══════════════════════════════════ */
+
 /* ─── Page ───────────────────────────────────────────────── */
 .confirm-page {
   min-height: 100vh;
-  background: #ffffff;
+  background: var(--bg-base);
   padding: 3rem 0 5rem;
 }
 
@@ -280,8 +285,8 @@ const waUrl = computed(
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: rgba(45, 106, 79, 0.08);
-  border: 2px solid rgba(45, 106, 79, 0.2);
+  background: rgba(0, 174, 239, 0.08);
+  border: 2px solid rgba(0, 174, 239, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -292,37 +297,38 @@ const waUrl = computed(
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2D6A4F, #1E4D38);
+  background: var(--btn-primary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  box-shadow: 0 6px 20px rgba(45, 106, 79, 0.35);
+  color: var(--cp-white);
+  box-shadow: 0 6px 20px rgba(7, 30, 82, 0.25);
 }
 
 .success-title {
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 800;
-  color: #2B2B2B;
-  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
   margin-bottom: 0.5rem;
 }
 
 .success-sub {
-  font-size: 0.9375rem;
-  color: #777777;
+  font-size: 0.95rem;
+  color: var(--text-body);
   margin-bottom: 1rem;
 }
 
 .order-code {
-  font-weight: 700;
-  color: #2D6A4F;
+  font-weight: 800;
+  color: var(--cp-electric);
   font-family: monospace;
   font-size: 1rem;
-  background: rgba(45, 106, 79, 0.08);
+  background: rgba(0, 174, 239, 0.08);
   padding: 0.1rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid rgba(45, 106, 79, 0.2);
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(0, 174, 239, 0.2);
 }
 
 .success-badge {
@@ -330,19 +336,19 @@ const waUrl = computed(
   align-items: center;
   gap: 0.4rem;
   padding: 0.35rem 0.875rem;
-  background: rgba(45, 106, 79, 0.08);
-  border: 1px solid rgba(45, 106, 79, 0.2);
-  border-radius: 20px;
+  background: rgba(0, 174, 239, 0.08);
+  border: 1px solid rgba(0, 174, 239, 0.2);
+  border-radius: var(--r-pill);
   font-size: 0.75rem;
   font-weight: 600;
-  color: #2D6A4F;
+  color: var(--cp-electric);
 }
 
 .badge-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #2D6A4F;
+  background: var(--cp-electric);
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
@@ -365,49 +371,61 @@ const waUrl = computed(
 }
 
 .confirm-card {
-  background: rgba(255, 255, 255, 0.76);
-  border: 1.5px solid rgba(226, 224, 217, 0.5);
-  border-radius: 18px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-xl);
   overflow: hidden;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 2px 12px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: var(--card-shadow-sm);
 }
 
 /* ─── Card header ────────────────────────────────────────── */
 .card-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
   padding: 1rem 1.25rem;
-  border-bottom: 1.5px solid rgba(226, 224, 217, 0.5);
+  border-bottom: 1.5px solid var(--border-light);
+  position: relative;
+}
+.card-header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-brand) 30%, var(--line-brand) 70%, transparent);
 }
 
 .card-header-icon {
   width: 32px;
   height: 32px;
-  background: rgba(45, 106, 79, 0.08);
-  border: 1px solid rgba(45, 106, 79, 0.2);
-  border-radius: 8px;
+  background: rgba(0, 174, 239, 0.06);
+  border: 1px solid rgba(0, 174, 239, 0.15);
+  border-radius: var(--r-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2D6A4F;
+  color: var(--cp-electric);
   flex-shrink: 0;
 }
 
 .card-title {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #2B2B2B;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 /* ─── Items list ─────────────────────────────────────────── */
 .items-list {
-  padding: 0.75rem 1.25rem;
+  padding: var(--space-3) 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0;
 }
 
 .order-item {
@@ -416,7 +434,7 @@ const waUrl = computed(
   justify-content: space-between;
   gap: 1rem;
   padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(226, 224, 217, 0.5);
+  border-bottom: 1px solid var(--border-light);
 }
 .order-item:last-child {
   border-bottom: none;
@@ -425,19 +443,19 @@ const waUrl = computed(
 .order-item-left {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: var(--space-2);
   min-width: 0;
 }
 
 .order-item-qty {
   width: 24px;
   height: 24px;
-  background: rgba(45, 106, 79, 0.08);
-  border: 1px solid rgba(45, 106, 79, 0.2);
-  border-radius: 6px;
+  background: rgba(0, 174, 239, 0.08);
+  border: 1px solid rgba(0, 174, 239, 0.18);
+  border-radius: var(--r-sm);
   font-size: 0.7rem;
-  font-weight: 700;
-  color: #2D6A4F;
+  font-weight: 800;
+  color: var(--cp-navy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -445,17 +463,18 @@ const waUrl = computed(
 }
 
 .order-item-name {
-  font-size: 0.85rem;
-  color: #555555;
+  font-size: 0.875rem;
+  color: var(--text-body);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .order-item-price {
-  font-size: 0.85rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
   font-weight: 700;
-  color: #2B2B2B;
+  color: var(--text-primary);
   flex-shrink: 0;
 }
 
@@ -465,21 +484,25 @@ const waUrl = computed(
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.25rem;
-  background: rgba(45, 106, 79, 0.06);
-  border-top: 1.5px solid rgba(45, 106, 79, 0.2);
+  background: rgba(7, 30, 82, 0.03);
+  border-top: 1.5px solid var(--border-light);
 }
 
 .card-total-label {
+  font-family: var(--font-body);
   font-size: 0.875rem;
-  font-weight: 700;
-  color: #2B2B2B;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .card-total-val {
-  font-size: 1.4rem;
-  font-weight: 900;
-  color: #2D6A4F;
-  letter-spacing: -0.03em;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--cp-navy);
+  letter-spacing: -0.04em;
 }
 
 /* ─── Payment ────────────────────────────────────────────── */
@@ -495,19 +518,19 @@ const waUrl = computed(
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.875rem;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  border-radius: 20px;
-  font-size: 0.8rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-pill);
+  font-size: 0.82rem;
   font-weight: 600;
-  color: #555555;
+  color: var(--text-body);
   width: fit-content;
 }
 
 .payment-account {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1.5px solid rgba(226, 224, 217, 0.5);
-  border-radius: 12px;
+  background: var(--bg-alt);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-md);
   overflow: hidden;
 }
 
@@ -516,20 +539,20 @@ const waUrl = computed(
   justify-content: space-between;
   align-items: center;
   padding: 0.7rem 1rem;
-  font-size: 0.85rem;
-  border-bottom: 1px solid rgba(226, 224, 217, 0.5);
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--border-light);
 }
 .account-row:last-child {
   border-bottom: none;
 }
 
 .account-key {
-  color: #999999;
+  color: var(--text-muted);
 }
 
 .account-val {
   font-weight: 700;
-  color: #2B2B2B;
+  color: var(--text-primary);
 }
 
 .qr-wrap {
@@ -537,9 +560,9 @@ const waUrl = computed(
 }
 
 .qr-label {
-  font-size: 0.75rem;
-  color: #999999;
-  font-weight: 500;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -548,26 +571,26 @@ const waUrl = computed(
 .qr-frame {
   display: inline-block;
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.76);
-  border: 1.5px solid rgba(226, 224, 217, 0.5);
-  border-radius: 14px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-lg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 2px 12px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .qr-img {
   width: 148px;
   height: 148px;
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   display: block;
 }
 
 /* ─── WhatsApp card ──────────────────────────────────────── */
 .whatsapp-card {
-  background: rgba(255, 255, 255, 0.76);
-  border: 1.5px solid rgba(226, 224, 217, 0.5);
-  border-radius: 18px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-xl);
   padding: 1.25rem;
   display: flex;
   align-items: center;
@@ -575,7 +598,7 @@ const waUrl = computed(
   flex-wrap: wrap;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 2px 12px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .wa-icon-wrap {
@@ -583,7 +606,7 @@ const waUrl = computed(
   height: 48px;
   background: #f0fdf4;
   border: 1.5px solid #bbf7d0;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -597,15 +620,16 @@ const waUrl = computed(
 }
 
 .wa-title {
+  font-family: var(--font-body);
   font-size: 0.875rem;
   font-weight: 700;
-  color: #2B2B2B;
+  color: var(--text-primary);
   margin-bottom: 0.2rem;
 }
 
 .wa-sub {
   font-size: 0.775rem;
-  color: #999999;
+  color: var(--text-muted);
 }
 
 .wa-btn {
@@ -615,11 +639,12 @@ const waUrl = computed(
   padding: 0.65rem 1.25rem;
   background: #22c55e;
   color: #ffffff;
-  font-size: 0.825rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
   font-weight: 700;
-  border-radius: 10px;
+  border-radius: var(--r-md);
   text-decoration: none;
-  transition: all 0.2s;
+  transition: all var(--t-fast) var(--ease-snappy);
   white-space: nowrap;
   flex-shrink: 0;
   box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
@@ -640,13 +665,13 @@ const waUrl = computed(
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: #999999;
+  color: var(--text-muted);
   text-decoration: none;
-  transition: color 0.15s;
+  transition: color var(--t-fast) var(--ease-smooth);
 }
 .back-link:hover {
-  color: #2D6A4F;
+  color: var(--cp-electric);
 }
 </style>

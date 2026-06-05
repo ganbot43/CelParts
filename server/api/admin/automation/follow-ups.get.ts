@@ -7,7 +7,7 @@ const FOLLOW_UP_STATUSES = new Set(['pending', 'voucher_sent', 'payment_validate
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  const hours = Math.max(1, Number(query.hours ?? 24) || 24)
+  const hours = Math.max(1, Number(query.hours ?? 12) || 12)
   const now = new Date()
   const cutoff = now.getTime() - hours * 60 * 60 * 1000
 

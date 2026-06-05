@@ -6,16 +6,17 @@ import { enhanceOrders, enhanceProducts } from '~/server/utils/db'
 const CLOSED_STATUSES = new Set(['delivered', 'payment_validated'])
 const ACTIVE_STATUSES = new Set(['pending', 'voucher_sent', 'payment_validated', 'in_preparation'])
 
-function startOfDay(date: Date) {
-  const copy = new Date(date)
-  copy.setHours(0, 0, 0, 0)
-  return copy
+function startOfDayLima(date: Date): Date {
+  const limaOffset = -5 * 60 * 60 * 1000 // UTC-5 en ms
+  const limaTime = new Date(date.getTime() + limaOffset)
+  limaTime.setUTCHours(0, 0, 0, 0)
+  return new Date(limaTime.getTime() - limaOffset)
 }
 
 export default defineEventHandler(async () => {
   const now = new Date()
-  const dayStart = startOfDay(now)
-  const weekStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+  const dayStart = startOfDayLima(now)
+  const weekStart = startOfDayLima(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000))
 
   const [rawOrders, rawProducts] = await Promise.all([
     enhanceOrders(await db.select().from(orders).orderBy(desc(orders.createdAt))),

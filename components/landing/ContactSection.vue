@@ -1,33 +1,36 @@
 <script setup lang="ts">
+
+import { MessageCircle, Instagram, Facebook, Mail } from "lucide-vue-next";
+
 const { waLink } = useKite();
 
 const channels = [
   {
-    icon: "💬",
+    icon: MessageCircle,
     label: "WhatsApp",
     handle: "+51 XXX XXX XXX · Respuesta inmediata",
-    href: "https://wa.me/51996111303",
+    href: "https://wa.me/51923821520",
     type: "wa",
   },
   {
-    icon: "📸",
+    icon: Instagram,
     label: "Instagram",
-    handle: "@kite.utensilios",
-    href: "https://instagram.com/kite",
+    handle: "@celparts",
+    href: "https://instagram.com/celparts",
     type: "ig",
   },
   {
-    icon: "👍",
+    icon: Facebook,
     label: "Facebook",
-    handle: "Kite Utensilios de Cocina",
-    href: "https://facebook.com/kite",
+    handle: "CelParts SAC",
+    href: "https://facebook.com/celparts",
     type: "fb",
   },
   {
-    icon: "✉️",
+    icon: Mail,
     label: "Correo electrónico",
-    handle: "hola@kite.com",
-    href: "mailto:hola@kite.com",
+    handle: "hola@celparts.com",
+    href: "mailto:hola@celparts.com",
     type: "mail",
   },
 ];
@@ -49,7 +52,7 @@ const form = reactive({
 });
 
 function handleSubmit() {
-  const msg = `Hola Kite! Mi nombre es ${form.nombre}. ${form.asunto ? `Asunto: ${form.asunto}. ` : ""}${form.mensaje}`;
+  const msg = `Hola CelParts, mi nombre es ${form.nombre}. Tengo una consulta sobre "${form.asunto}". Mi correo es ${form.email} y mi teléfono es ${form.telefono}. ${form.mensaje}`;
   window.open(waLink(msg), "_blank", "noopener");
 }
 </script>
@@ -57,6 +60,7 @@ function handleSubmit() {
 <template>
   <section class="contact" id="contacto">
     <div class="contact-container">
+
       <div class="section-intro">
         <span class="section-label">Contacto</span>
         <h2 class="section-title">
@@ -68,6 +72,7 @@ function handleSubmit() {
       </div>
 
       <div class="contact-grid">
+
         <!-- Channels -->
         <div class="contact-info">
           <p class="contact-intro">
@@ -84,13 +89,17 @@ function handleSubmit() {
             target="_blank"
             rel="noopener"
           >
+            <!-- ICONO LUCIDE -->
             <div class="contact-channel-icon" :class="ch.type">
-              {{ ch.icon }}
+              <component :is="ch.icon" class="w-5 h-5" />
             </div>
+
+            <!-- TEXTO -->
             <div class="contact-channel-text">
               <strong>{{ ch.label }}</strong>
               <span>{{ ch.handle }}</span>
             </div>
+
             <span class="contact-channel-arrow">→</span>
           </a>
         </div>
@@ -102,35 +111,28 @@ function handleSubmit() {
           <div class="form-row">
             <div class="form-group">
               <label>Nombre</label>
-              <input
-                v-model="form.nombre"
-                type="text"
-                placeholder="Tu nombre"
-              />
+              <input v-model="form.nombre" type="text" placeholder="Tu nombre" />
             </div>
+
             <div class="form-group">
               <label>Teléfono</label>
-              <input
-                v-model="form.telefono"
-                type="text"
-                placeholder="+51 XXX XXX XXX"
-              />
+              <input v-model="form.telefono" type="text" placeholder="+51 XXX XXX XXX" />
             </div>
           </div>
 
           <div class="form-group">
             <label>Correo electrónico</label>
-            <input
-              v-model="form.email"
-              type="email"
-              placeholder="hola@kite.com"
-            />
+            <input v-model="form.email" type="email" placeholder="hola@celparts.com" />
           </div>
 
           <div class="form-group">
             <label>¿Qué necesitas?</label>
             <select v-model="form.asunto">
-              <option v-for="t in topics" :key="t.value" :value="t.value">
+              <option
+                v-for="t in topics"
+                :key="t.value"
+                :value="t.value"
+              >
                 {{ t.label }}
               </option>
             </select>
@@ -145,11 +147,12 @@ function handleSubmit() {
           </div>
 
           <LandingAppButton
-            variant="primary"
+            variant="secondary"
             class="submit-btn"
             @click="handleSubmit"
           >
-            <LandingWaIcon /> Enviar mensaje
+            <LandingWaIcon />
+            Enviar mensaje
           </LandingAppButton>
 
           <p class="form-note">
@@ -157,262 +160,311 @@ function handleSubmit() {
             respuesta más rápida.
           </p>
         </div>
+
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
+/* ═══════════════════════════════════
+   CONTACT SECTION — CELPARTS
+   100% tokens de main.css — sin hardcode
+═══════════════════════════════════ */
+
 .contact {
-  --kite-green: #2D6A4F;
-  --kite-green-dark: #1E4D38;
-  --kite-yellow: #E9C46A;
-  --kite-green-soft: rgba(45, 106, 79, 0.10);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(80px, 8vw, 120px) 0;
+  background: var(--bg-page);
+}
 
-  --bg: #F8F7F4;
-  --bg-alt: #F1EFEA;
-  --bg-surface: #FFFFFF;
+/* Línea técnica superior */
+.contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  display: none; /* background: var(--line-brand); */
+  z-index: 1;
+}
 
-  --text-title: #111111;
-  --text-muted: #66625A;
-
-  --border: #E2E0D9;
-
-  --radius: 14px;
-  --radius-lg: 20px;
-
-  --shadow-sm: 0 10px 25px rgba(17, 17, 17, 0.05);
-  --shadow-md: 0 25px 60px rgba(17, 17, 17, 0.08);
-
-  padding: 120px 0;
-  background: linear-gradient(180deg, var(--bg-alt), var(--bg));
+/* Decoración de fondo */
+.contact::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, var(--cp-ice) 0%, transparent 40%),
+    radial-gradient(circle at bottom left, var(--cp-frost) 0%, transparent 40%);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* CONTENEDOR */
 .contact-container {
-  max-width: 1200px;
+  position: relative;
+  z-index: 2;
+  max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 clamp(24px, 6vw, 80px);
+  padding: 0 var(--space-8);
 }
 
-/* HEADER */
+/* ── HEADER ── */
 .section-intro {
   text-align: center;
-  margin-bottom: 70px;
+  margin-bottom: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section-label {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-3);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--kite-green);
-  margin-bottom: 14px;
+  color: var(--cp-electric);
+  margin-bottom: var(--space-3);
 }
 
 .section-label::before,
 .section-label::after {
   content: "";
-  width: 26px;
-  height: 2px;
-  background: var(--kite-green);
-  border-radius: 2px;
+  width: 20px;
+  height: 1px;
+  background: var(--cp-electric);
+  opacity: 0.5;
 }
 
 .section-title {
-  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
   font-weight: 800;
-  color: var(--text-title);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 
 .accent-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--kite-yellow);
-  border-radius: 50%;
+  width: 8px;
+  height: 8px;
   display: inline-block;
-  margin-left: 4px;
+  margin-left: var(--space-2);
+  border-radius: 50%;
+  background: var(--cp-electric);
+  position: relative;
+  top: -6px;
+  box-shadow: var(--glow-soft);
 }
 
 .section-subtitle {
-  margin-top: 12px;
+  margin: var(--space-3) 0 0;
+  max-width: 600px;
   color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.8;
 }
 
-/* GRID */
+/* ── GRID ── */
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: 60px;
+  gap: var(--space-12);
 }
 
-/* CHANNELS */
+/* ── CHANNELS ── */
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: var(--space-5);
 }
 
 .contact-intro {
   font-size: 0.95rem;
   color: var(--text-muted);
-  margin-bottom: 10px;
+  line-height: 1.7;
+  margin-bottom: var(--space-2);
 }
 
 .contact-channel {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 18px 20px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  border-radius: var(--radius);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
   text-decoration: none;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition:
+    transform var(--t-base) var(--ease-snappy),
+    border-color var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
+  box-shadow: var(--card-shadow);
 }
 
 .contact-channel:hover {
   transform: translateX(6px);
-  border-color: var(--kite-green);
-  box-shadow: var(--shadow-sm);
+  border-color: var(--border-mid);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .contact-channel-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-}
-
-.contact-channel-icon.wa {
-  background: var(--kite-green-soft);
-  color: var(--kite-green);
-}
-.contact-channel-icon.ig {
-  background: rgba(233, 196, 106, 0.10);
-  color: var(--kite-yellow);
-}
-.contact-channel-icon.fb {
-  background: rgba(231, 111, 81, 0.10);
-  color: #E76F51;
-}
-.contact-channel-icon.mail {
-  background: var(--kite-green-soft);
-  color: var(--kite-green);
+  font-size: 1.3rem;
+  background: var(--bg-alt);
 }
 
 .contact-channel-text strong {
   display: block;
-  font-size: 0.9rem;
-  color: var(--text-title);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
 }
 
 .contact-channel-text span {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
 .contact-channel-arrow {
   margin-left: auto;
-  color: var(--text-muted);
+  color: var(--cp-electric);
+  font-weight: 700;
+  opacity: 0.5;
+  transition: opacity var(--t-fast) var(--ease-smooth);
 }
 
-/* FORM */
+.contact-channel:hover .contact-channel-arrow {
+  opacity: 1;
+}
+
+/* ── FORM ── */
 .contact-form {
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  border-radius: var(--radius-lg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 42px;
-  box-shadow: 0 8px 32px rgba(17, 17, 17, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  padding: clamp(30px, 5vw, 42px);
+  box-shadow: var(--card-shadow);
 }
 
 .contact-form h3 {
-  margin-bottom: 24px;
-  font-size: 1.3rem;
+  margin-bottom: var(--space-6);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
 }
 
 .form-group label {
+  display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-title);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
   width: 100%;
-  padding: 0.75rem 0.9rem;
-  border-radius: 10px;
-  border: 1.5px solid var(--border);
-  margin-top: 6px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-alt);
   font-size: 0.9rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition:
+    border-color var(--t-fast) var(--ease-smooth),
+    box-shadow var(--t-fast) var(--ease-smooth),
+    background var(--t-fast) var(--ease-smooth);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-faint);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: var(--kite-green);
-  box-shadow: 0 0 0 3px var(--kite-green-soft);
+  background: var(--bg-surface);
+  border-color: var(--cp-electric);
+  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.15);
   outline: none;
 }
 
 textarea {
-  min-height: 110px;
+  min-height: 120px;
+  resize: vertical;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: var(--space-4);
 }
 
 .submit-btn {
   width: 100%;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: var(--space-3);
+  height: 48px;
 }
 
 .form-note {
-  margin-top: 14px;
-  font-size: 0.75rem;
+  margin-top: var(--space-4);
+  font-size: 0.8rem;
   text-align: center;
   color: var(--text-muted);
+  line-height: 1.6;
 }
 
-/* RESPONSIVE */
-@media (max-width: 860px) {
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media (max-width: 960px) {
   .contact-grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: var(--space-10);
+  }
+
+  .contact-form {
+    order: -1;
+    /* Poner el formulario arriba en mobile */
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  .contact {
+    padding: var(--space-16) 0;
+  }
+
   .contact-container {
-    padding: 0 18px;
+    padding: 0 var(--space-5);
   }
 
   .form-row {
     grid-template-columns: 1fr;
-  }
-
-  .contact-form {
-    padding: 28px 20px;
   }
 }
 </style>

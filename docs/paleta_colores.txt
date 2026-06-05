@@ -1,182 +1,85 @@
-🎨 Paleta base — Branding Joymar (Versión Clara)
+🎨 PALETA DE COLORES — CELPARTS BRANDING
 
-Color primario (magenta elegante): #B01883
-Color secundario (blanco principal): #FFFFFF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔵 COLORES PRIMARIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🎨 Colores complementarios
+Color principal / marca:       #00AEEF  (Azul Cyan)
+Color secundario / profundidad: #0077C8  (Azul Eléctrico)
+Hover / sombras:               #003F8A  (Azul Marino)
+Texto / tipografía:            #FFFFFF  (Blanco)
 
-Magenta oscuro (hover / profundidad): #7A0F5C
-Magenta claro (acentos suaves): #D94CB0
-Amarillo cocina / acento cálido: #F7D21E
-Amarillo intenso (promociones): #FFD735
-Gris claro (fondos suaves / UI): #F5F5F5
-Gris medio (bordes / cards): #D9D9D9
-Gris oscuro (texto principal): #2B2B2B
-Negro suave (contraste elegante): #121212
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🩵 COLORES COMPLEMENTARIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-⚙️ Instrucciones de implementación
+Acentos / highlights:          #50D0FF  (Cyan Claro)
+Fondos / destellos:            #A8EDFF  (Cyan Suave)
+Glassmorphism / UI:            #C0E8FF  (Azul Hielo)
+Fondo secciones claras:        #E8F6FF  (Azul Niebla)
 
-1. Fondo general
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚫ NEUTROS & CONTRASTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Base principal: blanco #FFFFFF para transmitir limpieza, cocina y hogar.
+Fondo principal / hero:        #0A0A0A  (Negro Tech)
+Cards / footer:                #111827  (Gris Oscuro)
+Secciones / navbar:            #1E293B  (Gris Azulado)
+Bordes / separadores:          #334155  (Gris Medio)
 
-Alternativa para secciones:
-gris muy claro #F5F5F5.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌈 GRADIENTE RECOMENDADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Evitar fondos negros extensos para no perder sensación de limpieza y practicidad.
+linear-gradient(135deg, #003F8A, #0077C8, #00AEEF, #50D0FF)
 
-2. Header / Navbar
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✨ GLOW / DESTELLOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Fondo: blanco #FFFFFF
-Texto: #2B2B2B
+Glow cyan:       box-shadow: 0 0 18px 6px rgba(0, 174, 239, 0.55);
+Glow profundo:   box-shadow: 0 0 18px 6px rgba(0, 63, 138, 0.60);
+Glow blanco:     box-shadow: 0 0 14px 4px rgba(255, 255, 255, 0.45);
 
-Logo:
-versión original o dark sobre fondo claro.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚙️ IMPLEMENTACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-CTA principal:
-Fondo: #B01883
-Texto: #FFFFFF
+Fondo hero / header:     #0A0A0A o #111827
+CTA primario fondo:      #00AEEF
+CTA primario texto:      #FFFFFF
+CTA hover:               #0077C8
+Cards productos fondo:   #1E293B
+Cards productos borde:   #334155
+Cards productos título:  #FFFFFF
+Badges Oferta/Nuevo bg:  #50D0FF
+Badges Oferta/Nuevo txt: #003F8A
+Footer fondo:            #0A0A0A
+Footer texto:            #A8EDFF
+Footer links hover:      #50D0FF
+Tipografía títulos:      #FFFFFF
+Tipografía cuerpo:       #A8EDFF
+Tipografía secundaria:   #C0E8FF
+Inputs fondo:            #1E293B
+Inputs borde:            #334155
+Inputs focus borde:      #00AEEF
+Inputs focus glow:       rgba(0, 174, 239, 0.20)
+Separadores:             #334155
 
-Hover:
-#7A0F5C
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 OBJETIVO VISUAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Border bottom sutil:
-#EAEAEA
+✔ Tecnología y reparación de celulares
+✔ Modernidad y confianza
+✔ Sensación premium tech
+✔ Claridad para comprar
+✔ Estética dark con destellos cyan
 
-3. Botones
-Primarios
+La web debe sentirse: "tecnológica, moderna y confiable".
 
-Fondo: #B01883
-Texto: #FFFFFF
+💡 EXTRA PRO
 
-Hover:
-#7A0F5C
-
-Sombra:
-rgba(176, 24, 131, 0.25)
-
-Secundarios
-
-Borde: #F7D21E
-Texto: #B01883
-Fondo: transparente
-
-Hover:
-Fondo #F7D21E
-Texto #121212
-
-4. Tipografía
-
-Títulos:
-#2B2B2B
-
-Texto general:
-#555555
-
-Texto secundario:
-#777777
-
-Precios/promociones:
-#B01883 o #F7D21E
-
-5. Secciones destacadas
-
-Fondos:
-blanco o gris claro #F5F5F5
-
-Íconos y detalles:
-#B01883 y #F7D21E
-
-Separadores:
-#EAEAEA
-
-👉 La web debe sentirse:
-limpia, moderna, cálida y comercial.
-
-6. Cards / Productos
-
-Fondo:
-#FFFFFF
-
-Bordes:
-#E5E5E5
-
-Títulos:
-#2B2B2B
-
-Texto:
-#666666
-
-Hover:
-border #B01883
-shadow suave magenta:
-
-box-shadow: 0 10px 30px rgba(176, 24, 131, 0.12);
-7. Iconografía
-
-Base:
-#555555
-
-Activo/importante:
-#B01883
-
-Promociones/ofertas:
-#F7D21E
-
-8. Formularios
-
-Inputs:
-Fondo: #FFFFFF
-Borde: #D9D9D9
-Texto: #2B2B2B
-
-Focus:
-Borde #B01883
-
-Glow:
-rgba(176, 24, 131, 0.15)
-
-Botón enviar:
-estilo CTA principal.
-
-9. Footer
-
-Fondo:
-#121212
-
-Texto:
-#FFFFFF
-
-Links:
-#D9D9D9
-
-Hover:
-#F7D21E
-
-🎯 Objetivo visual
-
-Transmitir:
-
-✔ Cocina y hogar
-✔ Limpieza y organización
-✔ Productos útiles y modernos
-✔ Confianza para comprar
-✔ Sensación comercial y amigable
-
-La web debe sentirse:
-“premium pero accesible”.
-
-💡 Extra pro
-
-Gradiente recomendado:
-
-linear-gradient(135deg, #B01883, #F7D21E)
-
-Glow elegante:
-
-box-shadow: 0 0 18px rgba(176, 24, 131, 0.18);
-
-Color para badges “Nuevo / Oferta”:
-
-background: #FFD735;
-color: #121212;
+Gradiente badge:    linear-gradient(135deg, #00AEEF, #50D0FF)
+Glow elegante:      box-shadow: 0 0 18px rgba(0, 174, 239, 0.20);
+Badge Nuevo/Oferta: background: #50D0FF; color: #003F8A;

@@ -23,7 +23,7 @@
     <LandingGallerySection />
 
     <!-- UBICACIÓN -->
-    <LandingLocationSection />
+    <!--<LandingLocationSection />-->
 
     <!-- CONTACTO -->
     <LandingContactSection />
@@ -41,19 +41,19 @@ definePageMeta({
 
 useSeoMeta({
   title:
-    "Kite | Cocina, Hogar y Estilo de Vida",
+    "CelParts | Repuestos y Accesorios para Celulares en Perú",
 
   ogTitle:
-    "Kite | Productos para Cocina y Hogar en Perú",
+    "CelParts | Repuestos y Accesorios para Celulares en Perú",
 
   description:
-    "Kite ofrece productos modernos para cocina, hogar y estilo de vida. Diseños funcionales, elegantes y de alta calidad para transformar tus espacios.",
+    "CelParts ofrece repuestos y accesorios de alta calidad para celulares en Perú. ¡Compra ahora y encuentra lo que necesitas!",
 
   ogDescription:
-    "Descubre productos de cocina y hogar cuidadosamente seleccionados por Kite. Calidad, diseño y funcionalidad en un solo lugar.",
+    "CelParts ofrece repuestos y accesorios de alta calidad para celulares en Perú. ¡Compra ahora y encuentra lo que necesitas!",
 
   keywords:
-    "Kite, cocina, hogar, utensilios, accesorios de cocina, decoración, menaje, productos para el hogar, tienda online Perú, artículos de cocina",
+    "CelParts, repuestos, accesorios, celulares, Perú",
 
   ogType: "website",
 
@@ -67,10 +67,10 @@ useSeoMeta({
     "summary_large_image",
 
   twitterTitle:
-    "Kite | Cocina y Hogar",
+    "CelParts | Repuestos y Accesorios para Celulares en Perú",
 
   twitterDescription:
-    "Productos funcionales y modernos para cocina y hogar. Diseño, calidad y estilo en cada detalle.",
+    "CelParts ofrece repuestos y accesorios de alta calidad para celulares en Perú. ¡Compra ahora y encuentra lo que necesitas!",
 
   twitterImage:
     "https://kite.pe/images/logo.png",

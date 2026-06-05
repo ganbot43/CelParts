@@ -15,8 +15,6 @@ export default defineEventHandler(async () => {
     whatsapp: config.whatsapp,
     address: config.address,
     plan: config.plan,
-    enabledPaymentMethods: config.enabledPaymentMethods ? JSON.parse(config.enabledPaymentMethods) : [],
-    limits: config.limits ? JSON.parse(config.limits) : {},
     socialLinks: config.socialLinks ? JSON.parse(config.socialLinks) : {},
     stockEnabled: !!config.stockEnabled,
     autoPaymentEnabled: !!config.autoPaymentEnabled,

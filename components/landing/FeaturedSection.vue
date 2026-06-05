@@ -121,7 +121,7 @@ watch(activeTab, (newTab) => {
             <!-- image -->
             <div class="featured-image-wrap">
 
-              <img v-if="getPrimaryImage(heroProduct)" :src="getPrimaryImage(heroProduct)" :alt="heroProduct.name"
+              <img v-if="getPrimaryImage(heroProduct)" :src="getPrimaryImage(heroProduct)" :alt="heroProduct.name" loading="lazy"
                 class="featured-image" />
 
               <div v-else class="featured-image-placeholder">
@@ -176,7 +176,7 @@ watch(activeTab, (newTab) => {
             <!-- image -->
             <div class="featured-image-wrap">
 
-              <img v-if="getPrimaryImage(product)" :src="getPrimaryImage(product)" :alt="product.name"
+              <img v-if="getPrimaryImage(product)" :src="getPrimaryImage(product)" :alt="product.name" loading="lazy"
                 class="featured-image" />
 
               <div v-else class="featured-image-placeholder">
@@ -523,6 +523,7 @@ watch(activeTab, (newTab) => {
   font-size: 0.9rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

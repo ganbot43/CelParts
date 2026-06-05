@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 // Define simplified product interface
 interface Product {
@@ -21,14 +21,22 @@ interface Product {
   stock?: number;
 }
 
-const products = ref<Product[]>([]);
-const loading = ref(false);
 
 const searchQuery = ref("");
+const debouncedSearchQuery = ref("");
 const filterMaterial = ref("");
 const filterSize = ref("");
 const filterPattern = ref("");
 const sortBy = ref("");
+
+// Debounce para la búsqueda de texto
+let searchTimeout: ReturnType<typeof setTimeout>;
+watch(searchQuery, (newVal) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    debouncedSearchQuery.value = newVal;
+  }, 500);
+});
 
 // Modal state
 const isModalOpen = ref(false);
@@ -39,35 +47,39 @@ const openModal = (product: Product) => {
   isModalOpen.value = true;
 };
 
-// Mock fetch or actual API
-const fetchProducts = async () => {
-  try {
-    loading.value = true;
-    const { data } = await $fetch<{ data: Product[] }>("/api/landing/catalog-products");
-    
-    // Simular propiedades de Arigumi temporalmente si la API no las trae completas
-    products.value = (data || []).map(p => ({
-      ...p,
-      material: p.material || 'Lana Alpaca',
-      sizeLength: p.sizeLength || 30,
-      sizeWidth: p.sizeWidth || 30,
-      sizeUnit: p.sizeUnit || 'cm',
-      offersPattern: p.offersPattern !== undefined ? p.offersPattern : 1,
-      sellerName: p.sellerName || 'Clara Gisbert',
-      sellerPhone: p.sellerPhone || '+51999999999',
-      description: p.description || 'Hermoso tejido a mano con dedicación.',
-      stock: p.stock || 1
-    }));
-  } catch (error) {
-    console.error("Error cargando productos:", error);
-    products.value = [];
-  } finally {
-    loading.value = false;
-  }
-};
+// Mock fetch or actual API using useAsyncData for SSR and Reactivity
+const { data: rawProducts, pending: loading } = await useAsyncData(
+  'catalog-products',
+  () => {
+    const query: Record<string, string> = {};
+    if (debouncedSearchQuery.value) query.q = debouncedSearchQuery.value;
+    if (filterMaterial.value) query.material = filterMaterial.value;
+    if (filterSize.value) query.size = filterSize.value;
+    if (filterPattern.value) query.pattern = filterPattern.value;
+    if (sortBy.value) query.sort = sortBy.value;
 
-onMounted(() => {
-  fetchProducts();
+    return $fetch<{ data: Product[] }>("/api/landing/catalog-products", { query });
+  },
+  {
+    watch: [debouncedSearchQuery, filterMaterial, filterSize, filterPattern, sortBy],
+    server: true, // Habilitar SSR (SEO-friendly)
+  }
+);
+
+// Fallbacks computed
+const products = computed(() => {
+  return (rawProducts.value?.data || []).map(p => ({
+    ...p,
+    material: p.material || 'Lana Alpaca',
+    sizeLength: p.sizeLength || 30,
+    sizeWidth: p.sizeWidth || 30,
+    sizeUnit: p.sizeUnit || 'cm',
+    offersPattern: p.offersPattern !== undefined ? p.offersPattern : 1,
+    sellerName: p.sellerName || 'Clara Gisbert',
+    sellerPhone: p.sellerPhone || '+51999999999',
+    description: p.description || 'Hermoso tejido a mano con dedicación.',
+    stock: p.stock || 1
+  }));
 });
 </script>
 

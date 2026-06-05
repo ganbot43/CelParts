@@ -3,7 +3,7 @@
 
     <!-- Fondo con imagen -->
     <div class="hero-bg">
-      <img src="/images/hero.jpg" alt="Arigumi — Repuestos y accesorios para celulares" fetchpriority="high"
+      <NuxtImg src="/images/hero.jpg" alt="Arigumi — Amigurumis y tejidos" fetchpriority="high" format="webp"
         decoding="async" />
     </div>
 

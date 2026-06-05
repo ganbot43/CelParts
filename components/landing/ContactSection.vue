@@ -147,7 +147,7 @@ function handleSubmit() {
           </div>
 
           <LandingAppButton
-            variant="secondary"
+            variant="wa"
             class="submit-btn"
             @click="handleSubmit"
           >

@@ -11,9 +11,7 @@
     <main>
       <slot />
     </main>
-    <ClientOnly>
-      <LandingPie />
-    </ClientOnly>
+    <LandingPie />
   </div>
 </template>
 

@@ -280,7 +280,7 @@ const { data: config, refresh } = await useFetch<any>("/api/business-config");
 
 const activeTab = ref<"general" | "modulos" | "acceso">("general");
 
-const tabs = [
+const tabs: Array<{ key: "general" | "modulos" | "acceso", label: string, icon: string }> = [
   {
     key: "general",
     label: "General",

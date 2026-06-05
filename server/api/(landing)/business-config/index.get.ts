@@ -1,4 +1,5 @@
 import { db } from '~/server/db'
+import { normalizeStoredImageUrl } from '~/server/utils/s3'
 
 export default defineEventHandler(async () => {
   const config = await db.query.businessConfig.findFirst()
@@ -10,7 +11,7 @@ export default defineEventHandler(async () => {
   return {
     id: config.id,
     name: config.name,
-    logoUrl: config.logoUrl,
+    logoUrl: config.logoUrl ? normalizeStoredImageUrl(config.logoUrl) : null,
     whatsapp: config.whatsapp,
     address: config.address,
     plan: config.plan,

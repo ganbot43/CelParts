@@ -142,13 +142,10 @@ const { formatTime } = useFormatDateTime();
 /* ── Título de página ── */
 const pageTitles: Record<string, string> = {
   "/admin": "Dashboard",
-  "/admin/pedidos": "Pedidos",
-  "/admin/productos": "Productos",
-  "/admin/inventario": "Inventario",
   "/admin/categorias": "Categorías",
-  "/admin/metodos-pago": "Métodos de Pago",
   "/admin/banners": "Banners",
   "/admin/configuracion": "Configuración",
+  "/admin/reclamaciones": "Libro de Reclamaciones",
 };
 
 const pageTitle = computed(() => {

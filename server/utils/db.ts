@@ -10,6 +10,7 @@ import {
     productImages,
     products,
     subcategories,
+    users,
 } from '~/server/db/schema'
 import { normalizeStoredImageUrl } from '~/server/utils/s3'
 
@@ -34,8 +35,9 @@ export async function enhanceProducts<T extends ProductWithId>(items: T[]) {
     const ids = items.map((item) => item.id)
     const categoryIds = [...new Set(items.map((item: any) => item.categoryId).filter((value): value is number => typeof value === 'number'))]
     const subcategoryIds = [...new Set(items.map((item: any) => item.subcategoryId).filter((value): value is number => typeof value === 'number'))]
+    const userIds = [...new Set(items.map((item: any) => item.sellerId).filter((value): value is number => typeof value === 'number'))]
 
-    const [images, categoryRows, subcategoryRows] = await Promise.all([
+    const [images, categoryRows, subcategoryRows, userRows] = await Promise.all([
         db.select().from(productImages)
             .where(inArray(productImages.productId, ids))
             .orderBy(asc(productImages.sortOrder), asc(productImages.id)),
@@ -44,6 +46,9 @@ export async function enhanceProducts<T extends ProductWithId>(items: T[]) {
             : Promise.resolve([] as any[]),
         subcategoryIds.length
             ? db.select().from(subcategories).where(inArray(subcategories.id, subcategoryIds))
+            : Promise.resolve([] as any[]),
+        userIds.length
+            ? db.select().from(users).where(inArray(users.id, userIds))
             : Promise.resolve([] as any[]),
     ])
 
@@ -56,6 +61,7 @@ export async function enhanceProducts<T extends ProductWithId>(items: T[]) {
 
     const categoriesById = new Map(categoryRows.map((item) => [item.id, item]))
     const subcategoriesById = new Map(subcategoryRows.map((item) => [item.id, item]))
+    const usersById = new Map(userRows.map((item) => [item.id, item]))
 
     return items.map((item) => {
         return {
@@ -66,6 +72,7 @@ export async function enhanceProducts<T extends ProductWithId>(items: T[]) {
             })),
             category: (item as any).categoryId ? categoriesById.get((item as any).categoryId) ?? null : null,
             subcategory: (item as any).subcategoryId ? subcategoriesById.get((item as any).subcategoryId) ?? null : null,
+            seller: (item as any).sellerId ? usersById.get((item as any).sellerId) ?? null : null,
         }
     })
 }

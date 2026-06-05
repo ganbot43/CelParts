@@ -6,16 +6,6 @@
         <h1 class="sp-page-toolbar__title">Configuración del negocio</h1>
         <p class="sp-page-toolbar__sub">Ajusta los datos y módulos de tu tienda</p>
       </div>
-      <div v-if="form.logoUrl" class="cfg-logo-preview">
-        <img :src="form.logoUrl" alt="Logo" @error="logoError = true" v-if="!logoError" />
-        <span v-else class="cfg-logo-fallback">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5" />
-            <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" opacity=".5" />
-            <path d="M3 15l5-5 4 4 3-3 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </span>
-      </div>
     </div>
 
     <div v-if="config" class="admin-fade-in">
@@ -79,17 +69,35 @@
           </div>
 
           <div class="sp-drawer-field cfg-field--full">
-            <label class="sp-drawer-label">URL del Logo</label>
-            <p class="sp-drawer-hint">Pega el enlace directo a la imagen (PNG, JPG o SVG)</p>
-            <div class="cfg-input-group">
-              <span class="cfg-input-prefix">
-                <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
-                  <path d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.497z" fill="currentColor" opacity=".8" />
-                  <path d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5z" fill="currentColor" opacity=".8" />
+            <label class="sp-drawer-label">Logo del Negocio</label>
+            <p class="sp-drawer-hint">Sube una imagen desde tu computadora (PNG, JPG o SVG, máx. 2MB)</p>
+            <div class="cfg-logo-upload-container">
+              <div v-if="form.logoUrl" class="cfg-logo-preview cfg-logo-preview--large">
+                <img :src="form.logoUrl" alt="Logo" @error="logoError = true" v-if="!logoError" />
+                <span v-else class="cfg-logo-fallback">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5" />
+                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" opacity=".5" />
+                    <path d="M3 15l5-5 4 4 3-3 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+              <label class="cfg-upload-zone" :class="{ 'cfg-upload-zone--uploading': uploadingLogo }">
+                <input
+                  ref="logoFileInputRef"
+                  type="file"
+                  accept="image/*"
+                  class="cfg-upload-input"
+                  @change="onLogoFileSelected"
+                />
+                <svg v-if="!uploadingLogo" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                 </svg>
-              </span>
-              <input v-model="form.logoUrl" class="sp-drawer-input cfg-input-with-prefix" placeholder="https://cdn.ejemplo.com/logo.png" @input="logoError = false" />
+                <span v-if="!uploadingLogo">{{ form.logoUrl ? 'Cambiar logo' : 'Subir logo' }}</span>
+                <span v-else class="cfg-uploading-text">Subiendo a S3...</span>
+              </label>
             </div>
+            <p v-if="logoUploadError" class="sp-drawer-error">{{ logoUploadError }}</p>
           </div>
         </div>
 
@@ -320,6 +328,52 @@ const saved = ref(false);
 const error = ref("");
 const logoError = ref(false);
 
+const uploadingLogo = ref(false);
+const logoUploadError = ref("");
+const logoFileInputRef = ref<HTMLInputElement>();
+
+async function onLogoFileSelected(e: Event) {
+  const input = e.target as HTMLInputElement;
+  if (!input.files?.length) return;
+  
+  const file = input.files[0];
+  logoUploadError.value = "";
+  
+  const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/svg+xml"];
+  const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
+  
+  if (!ALLOWED.includes(file.type)) {
+    logoUploadError.value = "Tipo no permitido: solo jpg, png, webp o svg";
+    input.value = "";
+    return;
+  }
+  
+  if (file.size > MAX_SIZE) {
+    logoUploadError.value = "La imagen debe ser menor a 2 MB";
+    input.value = "";
+    return;
+  }
+  
+  uploadingLogo.value = true;
+  try {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res: any = await $fetch("/api/upload/image", {
+      method: "POST",
+      body: fd,
+    });
+    form.logoUrl = res.url;
+    logoError.value = false;
+    if (logoFileInputRef.value) {
+      logoFileInputRef.value.value = "";
+    }
+  } catch (e: any) {
+    logoUploadError.value = e?.data?.message ?? "Error al subir la imagen";
+  } finally {
+    uploadingLogo.value = false;
+  }
+}
+
 const modules = [
   {
     key: "stockEnabled",
@@ -498,6 +552,49 @@ async function save() {
   padding-left: 2.25rem !important;
 }
 
+/* ── Upload Zone ── */
+.cfg-upload-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 1.5px dashed var(--sp-border-strong);
+  border-radius: var(--sp-radius-md);
+  background: var(--sp-surface-muted);
+  cursor: pointer;
+  transition: all 0.2s var(--sp-ease);
+  color: var(--sp-text-soft);
+  position: relative;
+}
+
+.cfg-upload-zone:hover {
+  background: var(--sp-surface-subtle);
+  border-color: var(--sp-primary);
+  color: var(--sp-primary);
+}
+
+.cfg-upload-zone--uploading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.cfg-upload-input {
+  display: none;
+}
+
+.cfg-uploading-text {
+  font-size: var(--sp-text-sm);
+  font-weight: 600;
+  color: var(--sp-primary);
+}
+
+.cfg-logo-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 /* ── Logo preview ── */
 .cfg-logo-preview {
   width: 3rem;
@@ -510,6 +607,14 @@ async function save() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.cfg-logo-preview--large {
+  width: 6rem;
+  height: 6rem;
+  border-radius: var(--sp-radius-lg);
+  box-shadow: var(--sp-shadow-sm);
+  background: white;
 }
 
 .cfg-logo-preview img {

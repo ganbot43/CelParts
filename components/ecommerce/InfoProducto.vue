@@ -168,7 +168,7 @@ const emit = defineEmits<{
 }>();
 
 const formatPrice = useFormatPrice();
-const { waLink } = useKite();
+const { waLink } = useArigumi();
 const cantidad = ref(1);
 
 async function manejarAgregar() {
@@ -179,7 +179,7 @@ async function manejarAgregar() {
 
 <style scoped>
 /* ═══════════════════════════════════
-   INFO PRODUCTO — CELPARTS
+   INFO PRODUCTO — ARIGUMI
    100% tokens de main.css
 ═══════════════════════════════════ */
 

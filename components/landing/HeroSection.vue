@@ -3,7 +3,7 @@
 
     <!-- Fondo con imagen -->
     <div class="hero-bg">
-      <img src="/images/hero.jpg" alt="CelParts — Repuestos y accesorios para celulares" fetchpriority="high"
+      <img src="/images/hero.jpg" alt="Arigumi — Repuestos y accesorios para celulares" fetchpriority="high"
         decoding="async" />
     </div>
 
@@ -22,7 +22,7 @@
         <!-- Badge -->
         <div class="hero-chip">
           <span class="hero-chip__dot" aria-hidden="true" />
-          <span class="hero-chip__text">CELPARTS PERÚ</span>
+          <span class="hero-chip__text">ARIGUMI PERÚ</span>
           <span class="hero-chip__tag">OFICIAL</span>
         </div>
 
@@ -94,7 +94,7 @@
 
 <style scoped>
 /* ═══════════════════════════════════
-   HERO — CELPARTS
+   HERO — ARIGUMI
    100% tokens de main.css
 ═══════════════════════════════════ */
 

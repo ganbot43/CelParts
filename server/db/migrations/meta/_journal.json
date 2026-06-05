@@ -36,6 +36,13 @@
       "when": 1780636111807,
       "tag": "0004_dear_gambit",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1780641937069,
+      "tag": "0005_curved_gladiator",
+      "breakpoints": true
     }
   ]
 }

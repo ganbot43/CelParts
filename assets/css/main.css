@@ -1,60 +1,58 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap");
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════
-   CELPARTS — DESIGN SYSTEM v2
-   Identidad visual basada en logo: navy · blue · electric
-   Paleta Light & Airy — oscuros solo en acciones clave
+   ARIGUMI — DESIGN SYSTEM v1
+   Identidad visual: Tejido Comunitario · Hilando Sonrisas
+   Paleta Cálida & Artesanal — Tonos tierra, crema y salvia
 ═══════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════
    1. DESIGN TOKENS — RAW VALUES
 ═══════════════════════════════════════════════════════ */
 @theme {
-  /* ── Colores del logo ── */
-  --cp-navy: #071e52;
-  --cp-navy-mid: #0f2d6b;
-  --cp-blue: #1245c4;
-  --cp-blue-mid: #1a5fb4;
-  --cp-electric: #00aaff;
-  --cp-sky: #5ac8fa;
-  --cp-sky-light: #7dd3fc;
-  --cp-mist: #c8e8f8;
-  --cp-ice: #dff1fb;
-  --cp-frost: #eef8ff;
-  --cp-offwhite: #f7fbff;
-  --cp-white: #ffffff;
-
-  /* ── Text ── */
-  --cp-text-dark: #071e52;
-  --cp-text-body: #1a3560;
-  --cp-text-muted: #5577a0;
-  --cp-text-faint: #96b8d4;
+  /* ── Colores Base de Arigumi ── */
+  --cp-sage-dark: #6e7e65;      /* Verde salvia oscuro (Acciones principales/Ingresar) */
+  --cp-sage: #7d8e74;           /* Verde salvia base de la marca (Botón Nueva Publicación) */
+  --cp-sage-light: #f0f3ee;     /* Fondo sutil verde/salvia para estados activos o pills */
+  --cp-earth-dark: #584636;     /* Marrón tierra oscuro para títulos destacados y énfasis */
+  --cp-earth-mid: #9c8468;      /* Marrón arcilla intermedio (Botón Editar Tejido) */
+  --cp-cream-bg: #faf8f5;       /* Fondo general texturizado de la plataforma (Hueso/Crema) */
+  --cp-cream-surface: #ffffff;  /* Superficies puras de tarjetas y modales */
+  --cp-cream-card: #f7f5f0;     /* Fondo de contenedores secundarios y paneles */
+  
+  /* ── Textos ── */
+  --cp-text-dark: #3a2e24;      /* Marrón moka casi negro para máxima legibilidad tipográfica */
+  --cp-text-body: #60554a;      /* Marrón grisáceo para textos largos, descripciones y etiquetas de formulario */
+  --cp-text-muted: #8c8175;     /* Tono apagado para subtítulos complementarios o informativos */
+  --cp-text-faint: #bdaf9f;     /* Gris tierra muy suave para placeholders y bordes inactivos */
 
   /* ── Borders ── */
-  --cp-border: #c8e8f8;
-  --cp-border-mid: #8fcde8;
-  --cp-border-dark: #5ac8fa;
+  --cp-border: #e6e1d8;         /* Borde natural y suave de inputs y contenedores */
+  --cp-border-mid: #ccc3b4;     /* Borde enfocado o divisores de sección */
+  --cp-border-dark: #9c8468;    /* Borde de realce */
 
-  /* ── Semantic states ── */
-  --cp-success: #059669;
-  --cp-success-bg: #edfaf4;
-  --cp-success-border: #9decc4;
-  --cp-success-text: #0a5c38;
+  /* ── Estados Semánticos (Control de UI y Alertas) ── */
+  --cp-success: #2e7d32;
+  --cp-success-bg: #f1f8f2;
+  --cp-success-border: #c8e6c9;
+  --cp-success-text: #1b5e20;
 
-  --cp-warning: #d97706;
-  --cp-warning-bg: #fffaeb;
-  --cp-warning-border: #fbd87d;
-  --cp-warning-text: #7a4f00;
+  /* Alerta naranja para recomendaciones o estados de guardado */
+  --cp-warning: #e65100;
+  --cp-warning-bg: #fff3e0;
+  --cp-warning-border: #ffe0b2;
+  --cp-warning-text: #e65100;
 
-  --cp-error: #dc2626;
-  --cp-error-bg: #fef2f2;
-  --cp-error-border: #fecaca;
-  --cp-error-text: #7f1d1d;
+  /* Botón de acciones críticas (Ej: Eliminar Publicación) */
+  --cp-error: #dc0000;          
+  --cp-error-bg: #fff5f5;
+  --cp-error-border: #ffe3e3;
+  --cp-error-text: #b70000;
 
-  --cp-info-bg: #dff1fb;
-  --cp-info-border: #c8e8f8;
-  --cp-info-text: #071e52;
+  --cp-info-bg: #f0f3ee;
+  --cp-info-border: #e6e1d8;
+  --cp-info-text: #584636;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -62,96 +60,84 @@
 ═══════════════════════════════════════════════════════ */
 :root {
   /* ── Brand ── */
-  --brand-primary: var(--cp-navy);
-  --brand-primary-hover: var(--cp-blue);
-  --brand-accent: var(--cp-electric);
-  --brand-accent-hover: var(--cp-sky);
+  --brand-primary: var(--cp-sage);
+  --brand-primary-hover: var(--cp-sage-dark);
+  --brand-accent: var(--cp-earth-mid);
+  --brand-accent-hover: var(--cp-earth-dark);
 
-  /* ── Backgrounds (claro a oscuro) ── */
-  --bg-page: var(--cp-offwhite);
-  --bg-alt: var(--cp-frost);
-  --bg-section: var(--cp-ice);
-  --bg-surface: var(--cp-white);
-  --bg-muted: var(--cp-frost);
-  --bg-overlay: rgba(7, 30, 82, 0.45);
+  /* ── Backgrounds (Cálidos y amigables) ── */
+  --bg-page: var(--cp-cream-bg);
+  --bg-alt: var(--cp-cream-card);
+  --bg-section: var(--cp-sage-light);
+  --bg-surface: var(--cp-cream-surface);
+  --bg-muted: var(--cp-cream-card);
+  --bg-overlay: rgba(58, 46, 36, 0.4);
 
-  /* ── Cards & contenedores ── */
-  --card-bg: var(--cp-white);
-  --card-bg-alt: var(--cp-frost);
+  /* ── Cards & Contenedores ── */
+  --card-bg: var(--cp-cream-surface);
+  --card-bg-alt: var(--cp-cream-card);
   --card-border: var(--cp-border);
   --card-border-hover: var(--cp-border-mid);
+  
+  /* Sombras sutiles y orgánicas basadas en tonos tierra apagados */
   --card-shadow:
-    0 1px 3px rgba(7, 30, 82, 0.06), 0 4px 16px rgba(7, 30, 82, 0.05);
+    0 4px 20px rgba(110, 126, 101, 0.04), 0 2px 8px rgba(92, 79, 66, 0.03);
   --card-shadow-hover:
-    0 4px 12px rgba(7, 30, 82, 0.1), 0 12px 32px rgba(7, 30, 82, 0.08);
-  --card-shadow-sm: 0 1px 4px rgba(7, 30, 82, 0.06);
+    0 12px 32px rgba(92, 79, 66, 0.08), 0 4px 12px rgba(92, 79, 66, 0.04);
+  --card-shadow-sm: 0 2px 6px rgba(92, 79, 66, 0.03);
 
   /* ── Text ── */
   --text-primary: var(--cp-text-dark);
   --text-body: var(--cp-text-body);
   --text-muted: var(--cp-text-muted);
   --text-faint: var(--cp-text-faint);
-  --text-inverse: var(--cp-white);
-  --text-link: var(--cp-blue);
-  --text-link-hover: var(--cp-navy);
-  --text-accent: var(--cp-electric);
+  --text-inverse: var(--cp-cream-surface);
+  --text-link: var(--cp-sage);
+  --text-link-hover: var(--cp-sage-dark);
+  --text-accent: var(--cp-earth-dark);
 
   /* ── Borders ── */
   --border-light: var(--cp-border);
   --border-mid: var(--cp-border-mid);
   --border-strong: var(--cp-border-dark);
-  --border-action: var(--cp-navy);
+  --border-action: var(--cp-sage);
 
   /* ── Buttons ── */
-  --btn-primary-bg: var(--cp-navy);
-  --btn-primary-hover: var(--cp-blue);
+  --btn-primary-bg: var(--cp-sage);
+  --btn-primary-hover: var(--cp-sage-dark);
   --btn-primary-text: #ffffff;
-  --btn-secondary-bg: var(--cp-blue);
-  --btn-secondary-hover: var(--cp-navy);
+  
+  --btn-secondary-bg: var(--cp-earth-mid);
+  --btn-secondary-hover: var(--cp-earth-dark);
   --btn-secondary-text: #ffffff;
-  --btn-accent-bg: var(--cp-electric);
-  --btn-accent-hover: var(--cp-sky);
-  --btn-accent-text: var(--cp-navy);
-  --btn-outline-border: var(--cp-navy);
-  --btn-outline-text: var(--cp-navy);
-  --btn-outline-hover: var(--cp-frost);
-  --btn-soft-bg: var(--cp-ice);
+  
+  --btn-accent-bg: var(--cp-earth-dark);
+  --btn-accent-hover: var(--cp-text-dark);
+  --btn-accent-text: var(--cp-cream-surface);
+  
+  --btn-outline-border: var(--cp-border-mid);
+  --btn-outline-text: var(--cp-text-body);
+  --btn-outline-hover: var(--cp-cream-card);
+  
+  --btn-soft-bg: var(--cp-sage-light);
   --btn-soft-border: var(--cp-border);
-  --btn-soft-text: var(--cp-navy);
+  --btn-soft-text: var(--cp-sage-dark);
+  
   --btn-ghost-border: var(--cp-border);
   --btn-ghost-text: var(--cp-text-muted);
-  --btn-ghost-hover: var(--cp-frost);
+  --btn-ghost-hover: var(--cp-cream-card);
 
-  /* ── Gradientes ── */
-  --grad-hero: linear-gradient(135deg, #eef8ff 0%, #dff1fb 60%, #c8e8f8 100%);
-  --grad-section: linear-gradient(135deg, #f7fbff 0%, #eef8ff 100%);
-  --grad-cta: linear-gradient(135deg, #071e52 0%, #1245c4 100%);
-  --grad-sky: linear-gradient(135deg, #00aaff 0%, #5ac8fa 100%);
-  --grad-promo: linear-gradient(135deg, #071e52 0%, #1245c4 60%, #00aaff 100%);
-  --grad-card: linear-gradient(160deg, #ffffff 0%, #eef8ff 100%);
-  --grad-accent: linear-gradient(
-    90deg,
-    transparent,
-    var(--cp-electric),
-    var(--cp-sky),
-    transparent
-  );
+  /* ── Gradientes Visuales (Opcionales para fondos artísticos) ── */
+  --grad-hero: linear-gradient(135deg, #faf8f5 0%, #f7f5f0 100%);
+  --grad-section: linear-gradient(135deg, #faf8f5 0%, #f0f3ee 100%);
+  --grad-card: linear-gradient(160deg, #ffffff 0%, #f7f5f0 100%);
 
-  /* ── Línea técnica (firma de marca) ── */
-  --line-brand: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--cp-electric) 30%,
-    var(--cp-sky) 70%,
-    transparent 100%
-  );
-
-  /* ── Radius ── */
-  --r-xs: 4px;
-  --r-sm: 8px;
-  --r-md: 14px;
-  --r-lg: 20px;
-  --r-xl: 28px;
+  /* ── Radius (Suaves y redondeados para una UI más tierna y accesible) ── */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-xl: 32px;
   --r-pill: 999px;
 
   /* ── Spacing scale ── */
@@ -168,16 +154,14 @@
   --space-20: 80px;
   --space-24: 96px;
 
-  /* ── Typography ── */
-  --font-display:
-    "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-body:
-    "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  /* ── Typography (Soporte Serif elegante para títulos y San-Serif para lectura limpia) ── */
+  --font-display: "Playfair Display", -apple-system, BlinkMacSystemFont, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", monospace;
 
   /* ── Layout ── */
-  --container-width: 1280px;
-  --header-height: 72px;
+  --container-width: 1200px;
+  --header-height: 80px;
 
   /* ── Transitions ── */
   --ease-snappy: cubic-bezier(0.22, 1, 0.36, 1);
@@ -186,14 +170,13 @@
   --t-base: 0.22s;
   --t-slow: 0.35s;
 
-  /* ── Glow ── */
-  --glow-electric: 0 0 0 3px rgba(0, 170, 255, 0.18);
-  --glow-navy: 0 0 0 3px rgba(7, 30, 82, 0.14);
-  --glow-soft: 0 4px 20px rgba(0, 170, 255, 0.22);
+  /* ── Glows / Focus ── */
+  --glow-sage: 0 0 0 3px rgba(125, 142, 116, 0.2);
+  --glow-earth: 0 0 0 3px rgba(156, 132, 104, 0.15);
 }
 
 /* ═══════════════════════════════════════════════════════
-   3. RESET
+   3. RESET & TEXTURA DE FONDO (PUNTOS DE COSTURA)
 ═══════════════════════════════════════════════════════ */
 *,
 *::before,
@@ -214,9 +197,13 @@ body {
   overflow-x: hidden;
   font-family: var(--font-body);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--text-body);
-  background: var(--bg-page);
+  background-color: var(--bg-page);
+  /* Sutil patrón de puntos de guía o cuadrícula de costura extraído del canvas visual */
+  background-image: radial-gradient(var(--cp-border-mid) 0.75px, transparent 0.75px);
+  background-size: 24px 24px;
+  background-position: center;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -245,7 +232,7 @@ a:hover {
 }
 
 /* ═══════════════════════════════════════════════════════
-   4. TYPOGRAPHY
+   4. TYPOGRAPHY (SERIF INTEGRATION FOR ARIGUMI)
 ═══════════════════════════════════════════════════════ */
 h1,
 h2,
@@ -255,31 +242,32 @@ h5,
 h6 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.035em;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
   color: var(--text-primary);
 }
 
 h1 {
-  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+  font-weight: 800;
 }
 h2 {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-size: clamp(1.625rem, 3.2vw, 2.5rem);
 }
 h3 {
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
 }
 h4 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 700;
 }
 h5 {
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-weight: 700;
 }
 h6 {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
 }
 
@@ -288,39 +276,32 @@ p {
   color: var(--text-body);
 }
 
-/* Variantes de heading */
-.heading-display {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  line-height: 1;
-  color: var(--text-primary);
-}
-
-.heading-display em,
+/* Énfasis cursivo elegante para los slogans artesanales de los encabezados */
 h1 em,
 h2 em,
-h3 em {
-  font-style: normal;
-  color: var(--cp-electric);
+h3 em,
+.text-italic-brand {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--cp-sage-dark);
 }
 
 .text-display {
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.02em;
 }
 .text-mono {
   font-family: var(--font-mono);
   font-size: 0.8rem;
 }
 .text-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--cp-electric);
+  color: var(--cp-earth-mid);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -330,126 +311,96 @@ h3 em {
   width: 100%;
   max-width: var(--container-width);
   margin-inline: auto;
-  padding-inline: var(--space-8);
+  padding-inline: var(--space-6);
 }
 
 .section {
-  padding-block: var(--space-20);
+  padding-block: var(--space-16);
 }
 
 .section-sm {
-  padding-block: var(--space-12);
+  padding-block: var(--space-10);
 }
 
 .section-lg {
-  padding-block: var(--space-24);
+  padding-block: var(--space-20);
 }
 
 /* ═══════════════════════════════════════════════════════
-   6. HEADER
+   6. SITE HEADER
 ═══════════════════════════════════════════════════════ */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 100;
   height: var(--header-height);
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(250, 248, 245, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--cp-border);
-  /* Línea técnica de marca al fondo del header */
-  box-shadow:
-    0 1px 0 0 var(--cp-border),
-    0 2px 0 0 rgba(0, 170, 255, 0.12);
 }
 
-.site-header::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  opacity: 0;
-  transition: opacity var(--t-slow) var(--ease-smooth);
-}
-
-.site-header.scrolled::after {
-  opacity: 1;
-}
-
-/* Nav links */
+/* Enlaces de Navegación */
 .nav-link {
   position: relative;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: var(--r-pill);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 500;
-  color: var(--text-muted);
-  transition:
-    color var(--t-base) var(--ease-smooth),
-    background var(--t-base) var(--ease-smooth);
+  color: var(--text-body);
+  transition: all var(--t-base) var(--ease-smooth);
 }
 
 .nav-link:hover {
-  color: var(--text-primary);
-  background: var(--bg-alt);
+  color: var(--cp-text-dark);
+  background: var(--cp-sage-light);
 }
 
 .nav-link.active {
-  color: var(--text-primary);
-  background: var(--cp-frost);
+  color: var(--cp-text-dark);
+  background: var(--cp-sage-light);
   font-weight: 600;
 }
 
-/* Nav pill (CTA en nav) */
-.nav-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  height: 36px;
-  padding: 0 var(--space-4);
-  border-radius: var(--r-pill);
-  font-size: 0.8rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition:
-    transform var(--t-fast) var(--ease-snappy),
-    background var(--t-base) var(--ease-smooth),
-    box-shadow var(--t-base) var(--ease-smooth);
-}
-
-.nav-pill:hover {
-  transform: translateY(-1px);
-}
-
-/* Mega menu */
-.mega-menu {
-  position: absolute;
-  top: calc(var(--header-height) + 4px);
-  left: 0;
-  right: 0;
-  background: var(--cp-white);
-  border-bottom: 1px solid var(--cp-border);
+/* Menu Desplegable del Perfil del Tejedor (Dropdown) */
+.menu-dropdown {
+  background: var(--cp-cream-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: var(--r-md);
   box-shadow: var(--card-shadow-hover);
+  padding: var(--space-2);
+}
+
+.menu-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px var(--space-4);
+  border-radius: var(--r-sm);
+  color: var(--text-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  transition: background var(--t-fast) var(--ease-smooth);
+}
+
+.menu-dropdown-item:hover {
+  background: var(--cp-cream-card);
+  color: var(--text-primary);
 }
 
 /* ═══════════════════════════════════════════════════════
-   7. BOTONES
+   7. BOTONES (ORGANIC DESIGN OVERRIDE)
 ═══════════════════════════════════════════════════════ */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  height: 44px;
+  height: 46px;
   padding: 0 var(--space-6);
   border-radius: var(--r-pill);
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   border: none;
   cursor: pointer;
@@ -463,48 +414,44 @@ h3 em {
 }
 
 .btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1.5px);
 }
 
 .btn:active {
   transform: translateY(0);
 }
 
-/* Primario — comprar, acción principal */
+/* Primario: Estilo verde salvia "Nueva Publicación" o "Ingresar" */
 .btn-primary {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
-  box-shadow: 0 2px 8px rgba(7, 30, 82, 0.2);
+  box-shadow: 0 4px 12px rgba(125, 142, 116, 0.2);
 }
 .btn-primary:hover {
   background: var(--btn-primary-hover);
-  box-shadow: 0 6px 20px rgba(7, 30, 82, 0.28);
-  color: var(--btn-primary-text);
+  box-shadow: 0 6px 16px rgba(125, 142, 116, 0.3);
 }
 
-/* Secundario — agregar al carrito */
+/* Secundario: Estilo Marrón Tierra "Editar Tejido / Cuenta" */
 .btn-secondary {
   background: var(--btn-secondary-bg);
   color: var(--btn-secondary-text);
 }
 .btn-secondary:hover {
   background: var(--btn-secondary-hover);
-  color: var(--btn-secondary-text);
 }
 
-/* Acento eléctrico — ofertas, destacados */
-.btn-accent {
-  background: var(--btn-accent-bg);
-  color: var(--btn-accent-text);
-  font-weight: 700;
+/* Peligro/Eliminar: Estilo Rojo Crítico */
+.btn-danger {
+  background: var(--cp-error);
+  color: #ffffff;
 }
-.btn-accent:hover {
-  background: var(--btn-accent-hover);
-  box-shadow: var(--glow-soft);
-  color: var(--btn-accent-text);
+.btn-danger:hover {
+  background: var(--cp-error-text);
+  box-shadow: 0 4px 14px rgba(220, 0, 0, 0.2);
 }
 
-/* Outline — acción secundaria visible */
+/* Outline / Inactivo / Volver */
 .btn-outline {
   background: transparent;
   color: var(--btn-outline-text);
@@ -512,100 +459,25 @@ h3 em {
 }
 .btn-outline:hover {
   background: var(--btn-outline-hover);
-}
-
-/* Soft — filtros, acciones suaves */
-.btn-soft {
-  background: var(--btn-soft-bg);
-  color: var(--btn-soft-text);
-  border: 1px solid var(--btn-soft-border);
-}
-.btn-soft:hover {
-  background: var(--cp-mist);
   border-color: var(--cp-border-mid);
 }
 
-/* Ghost — cancelar, cerrar */
-.btn-ghost {
-  background: transparent;
-  color: var(--btn-ghost-text);
-  border: 1px solid var(--btn-ghost-border);
-}
-.btn-ghost:hover {
-  background: var(--btn-ghost-hover);
-}
-
 /* Tamaños */
-.btn-xs {
-  height: 28px;
-  padding: 0 12px;
-  font-size: 0.75rem;
-}
 .btn-sm {
-  height: 34px;
+  height: 36px;
   padding: 0 var(--space-4);
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
 }
 .btn-lg {
-  height: 52px;
+  height: 54px;
   padding: 0 var(--space-8);
   font-size: 1rem;
 }
 
-/* Botón con flecha (CTA hero) */
-.btn-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  font-size: 0.75rem;
-  flex-shrink: 0;
-}
-
 /* ═══════════════════════════════════════════════════════
-   8. CARDS
+   8. CARDS & CONTENEDORES DE TEJIDOS
 ═══════════════════════════════════════════════════════ */
-.card {
-  position: relative;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--r-lg);
-  box-shadow: var(--card-shadow);
-  overflow: hidden;
-  transition:
-    transform var(--t-base) var(--ease-snappy),
-    box-shadow var(--t-base) var(--ease-smooth),
-    border-color var(--t-base) var(--ease-smooth);
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  border-color: var(--card-border-hover);
-  box-shadow: var(--card-shadow-hover);
-}
-
-/* Línea técnica en top al hacer hover */
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--grad-sky);
-  opacity: 0;
-  transition: opacity var(--t-base) var(--ease-smooth);
-  z-index: 1;
-}
-
-.card:hover::before {
-  opacity: 1;
-}
-
-/* Product card */
+.card, 
 .product-card {
   position: relative;
   background: var(--card-bg);
@@ -619,32 +491,17 @@ h3 em {
     border-color var(--t-base) var(--ease-smooth);
 }
 
+.card:hover, 
 .product-card:hover {
   transform: translateY(-4px);
   border-color: var(--card-border-hover);
   box-shadow: var(--card-shadow-hover);
 }
 
-.product-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--grad-sky);
-  opacity: 0;
-  transition: opacity var(--t-base) var(--ease-smooth);
-  z-index: 1;
-}
-
-.product-card:hover::before {
-  opacity: 1;
-}
-
+/* Área contenedora de la foto del producto */
 .product-card-img {
   position: relative;
-  background: var(--grad-hero);
+  background-color: var(--cp-cream-card);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -657,107 +514,97 @@ h3 em {
 
 .product-card-price {
   font-family: var(--font-display);
-  font-size: 1.375rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--cp-text-dark);
 }
 
-.product-card-price-old {
-  font-size: 0.8rem;
-  color: var(--text-faint);
-  text-decoration: line-through;
-}
-
-/* Surface card (info, categorías) */
+/* Mi Panel de Tejedor / Contenedor Superior de Resumen */
 .surface-card {
-  background: var(--bg-alt);
+  background: var(--cp-cream-card);
   border: 1px solid var(--cp-border);
   border-radius: var(--r-lg);
-  overflow: hidden;
+  padding: var(--space-5) var(--space-6);
 }
 
 /* ═══════════════════════════════════════════════════════
-   9. BADGES & ETIQUETAS
+   9. BADGES Y ETIQUETAS COLECTIVAS
 ═══════════════════════════════════════════════════════ */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
+  gap: var(--space-1);
+  padding: 4px 12px;
   border-radius: var(--r-pill);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  font-weight: 600;
   white-space: nowrap;
 }
 
-.badge-navy {
-  background: var(--cp-navy);
-  color: #fff;
+/* Distintivo para "INCLUYE GUÍA/PATRÓN" */
+.badge-pattern,
+.badge-sage {
+  background: var(--cp-sage-dark);
+  color: #ffffff;
 }
-.badge-blue {
-  background: var(--cp-blue);
-  color: #fff;
-}
-.badge-electric {
-  background: rgba(0, 170, 255, 0.1);
-  color: #004d80;
-  border: 1px solid rgba(0, 170, 255, 0.25);
-}
-.badge-sky {
-  background: var(--cp-ice);
-  color: var(--cp-navy);
-  border: 1px solid var(--cp-mist);
-}
-.badge-hot {
-  background: #fff4ec;
-  color: #b84e00;
-  border: 1px solid #ffd4b0;
-}
-.badge-new {
-  background: var(--cp-frost);
-  color: var(--cp-navy);
+
+/* Etiquetas de composición textil (Ej: Lana de alpaca bebé) */
+.badge-material {
+  background: var(--cp-cream-card);
+  color: var(--cp-text-body);
   border: 1px solid var(--cp-border);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
 }
+
+/* Indicador flotante sobre la imagen para las dimensiones (Ej: 30 cm) */
+.badge-dimension {
+  background: rgba(58, 46, 36, 0.75);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+  padding: 2px 10px;
+  border-radius: var(--r-xs);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
 .badge-ok {
   background: var(--cp-success-bg);
   color: var(--cp-success-text);
   border: 1px solid var(--cp-success-border);
 }
-.badge-warn {
-  background: var(--cp-warning-bg);
-  color: var(--cp-warning-text);
-  border: 1px solid var(--cp-warning-border);
-}
+
 .badge-error {
   background: var(--cp-error-bg);
   color: var(--cp-error-text);
   border: 1px solid var(--cp-error-border);
 }
 
-/* Dot de estado */
-.badge-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.7;
-  flex-shrink: 0;
+/* ═══════════════════════════════════════════════════════
+   10. FORMULARIOS LIMPIOS Y ACCESIBLES
+═══════════════════════════════════════════════════════ */
+label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cp-text-body);
+  margin-bottom: 6px;
 }
 
-/* ═══════════════════════════════════════════════════════
-   10. FORMULARIOS
-═══════════════════════════════════════════════════════ */
 input,
 textarea,
 select {
   font-family: var(--font-body);
-  background: var(--cp-white);
+  background: var(--cp-cream-surface);
   border: 1.5px solid var(--cp-border);
   border-radius: var(--r-sm);
-  color: var(--text-body);
-  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  padding: 10px var(--space-3);
+  width: 100%;
   transition:
     border-color var(--t-base) var(--ease-smooth),
     box-shadow var(--t-base) var(--ease-smooth);
@@ -767,48 +614,42 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--cp-electric);
-  box-shadow: var(--glow-electric);
+  border-color: var(--cp-sage);
+  box-shadow: var(--glow-sage);
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: var(--text-faint);
+  color: var(--cp-text-faint);
 }
 
-/* Input pill (buscador) */
+/* Buscador Principal Ovalado del Catálogo */
 .input-pill {
-  height: 46px;
-  padding: 0 var(--space-4);
+  height: 50px;
+  padding-inline: var(--space-5);
   border-radius: var(--r-pill);
   border: 1.5px solid var(--cp-border);
-  background: var(--cp-white);
-  color: var(--text-body);
-  width: 100%;
+  background: var(--cp-cream-surface);
+  box-shadow: var(--card-shadow-sm);
 }
 
-.input-pill:focus {
-  border-color: var(--cp-electric);
-  box-shadow: var(--glow-electric);
-}
-
-.input-wrap {
-  position: relative;
-}
-
-.input-icon {
-  position: absolute;
-  left: var(--space-4);
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-faint);
-  pointer-events: none;
+/* Contenedores de selección binaria (Ej: "¿Ofrece patrón para tejerlo?") */
+.form-selector-card {
+  border: 1.5px solid var(--cp-border);
+  border-radius: var(--r-md);
+  padding: var(--space-4);
+  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all var(--t-base) var(--ease-smooth);
 }
 
-.input-icon + .input-pill {
-  padding-left: 2.75rem;
+.form-selector-card.active {
+  border-color: var(--cp-sage);
+  background: var(--cp-sage-light);
+  color: var(--cp-text-dark);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -818,24 +659,10 @@ textarea::placeholder {
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-4);
   border-radius: var(--r-md);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  line-height: 1.5;
-}
-
-.alert-icon {
-  flex-shrink: 0;
-  margin-top: 1px;
   font-size: 0.875rem;
-}
-
-.alert strong {
-  display: block;
-  font-weight: 700;
-  font-size: 0.8125rem;
-  margin-bottom: 1px;
+  line-height: 1.5;
 }
 
 .alert-success {
@@ -856,421 +683,126 @@ textarea::placeholder {
   border: 1px solid var(--cp-error-border);
 }
 
-.alert-info {
-  background: var(--cp-info-bg);
-  color: var(--cp-info-text);
-  border: 1px solid var(--cp-info-border);
-}
-
 /* ═══════════════════════════════════════════════════════
-   12. HERO
+   12. HISTORIAS Y SECCIONES DE MARKETING (HERO)
 ═══════════════════════════════════════════════════════ */
-.hero {
-  position: relative;
-  background: var(--grad-hero);
-  border-bottom: 1px solid var(--cp-border);
-  overflow: hidden;
+.hero-marketing {
+  background: var(--cp-cream-bg);
+  padding-block: var(--space-16);
 }
 
-/* Decoración de circuito (SVG inline en el componente) */
-.hero-circuit {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.3;
-}
-
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 4px 14px;
-  border-radius: var(--r-pill);
-  background: var(--cp-white);
-  border: 1px solid var(--cp-mist);
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--cp-blue);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.hero-eyebrow-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--cp-electric);
-  box-shadow: 0 0 8px var(--cp-electric);
-  flex-shrink: 0;
-}
-
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.05em;
-  color: var(--cp-navy);
-}
-
-.hero-title em {
-  font-style: normal;
-  color: var(--cp-electric);
-}
-
-.hero-subtitle {
-  font-size: clamp(0.9rem, 1.5vw, 1.0625rem);
-  color: var(--text-muted);
-  line-height: 1.65;
-  max-width: 440px;
-}
-
-/* Stat chip dentro del hero */
-.hero-stat {
-  background: var(--cp-white);
-  border: 1px solid var(--cp-border);
+/* Tarjeta informativa interior sobre cómo funciona WhatsApp */
+.info-box-stacked {
+  background: var(--cp-cream-surface);
+  border: 1.5px dashed var(--cp-border-mid);
   border-radius: var(--r-md);
-  padding: var(--space-3) var(--space-4);
-  text-align: center;
+  padding: var(--space-5);
 }
 
-.hero-stat-num {
-  font-family: var(--font-display);
-  font-size: 1.375rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--cp-navy);
-}
-
-.hero-stat-num em {
-  font-style: normal;
-  color: var(--cp-electric);
-}
-
-.hero-stat-label {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-}
-
-/* ═══════════════════════════════════════════════════════
-   13. BANNERS PROMOCIONALES
-═══════════════════════════════════════════════════════ */
-.promo-banner {
-  position: relative;
-  background: var(--cp-navy);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-}
-
-/* Línea técnica animada en el banner */
-.promo-banner::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-}
-
-.promo-banner-eyebrow {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--cp-electric);
-  margin-bottom: var(--space-2);
-}
-
-.promo-banner-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #fff;
-}
-
-.promo-banner-title em {
-  font-style: normal;
-  color: var(--cp-sky);
-}
-
-.promo-banner-sub {
-  font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: var(--space-1);
-}
-
-/* ═══════════════════════════════════════════════════════
-   14. SECCIONES ESPECIALES
-═══════════════════════════════════════════════════════ */
-
-/* Section con fondo ice */
-.section-ice {
-  background: var(--cp-ice);
-  border-top: 1px solid var(--cp-border);
-  border-bottom: 1px solid var(--cp-border);
-}
-
-/* Section con fondo frost */
-.section-frost {
-  background: var(--cp-frost);
-  border-top: 1px solid var(--cp-border);
-  border-bottom: 1px solid var(--cp-border);
-}
-
-/* Section CTA — navy full */
-.section-cta {
-  background: var(--cp-navy);
-  position: relative;
-  overflow: hidden;
-}
-
-.section-cta::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-}
-
-/* Section divider visual */
-.section-divider {
-  width: 40px;
-  height: 2px;
-  background: var(--grad-sky);
-  border-radius: var(--r-pill);
-}
-
-/* ═══════════════════════════════════════════════════════
-   15. FILTROS Y SIDEBAR
-═══════════════════════════════════════════════════════ */
-.filter-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  height: 34px;
-  padding: 0 var(--space-4);
-  border-radius: var(--r-pill);
-  font-size: 0.8rem;
-  font-weight: 500;
+/* Ficha técnica o código SKU para el panel administrativo */
+.sku-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--cp-earth-dark);
+  background: var(--cp-cream-card);
+  padding: 4px 10px;
+  border-radius: var(--r-xs);
   border: 1px solid var(--cp-border);
-  background: var(--cp-white);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all var(--t-base) var(--ease-smooth);
-}
-
-.filter-chip:hover {
-  border-color: var(--cp-border-mid);
-  color: var(--text-primary);
-  background: var(--cp-frost);
-}
-
-.filter-chip.active {
-  background: var(--cp-navy);
-  color: #fff;
-  border-color: var(--cp-navy);
-  font-weight: 600;
 }
 
 /* ═══════════════════════════════════════════════════════
-   16. CARRITO / TOAST
+   13. COMPONENTES DE INTERACCIÓN MODAL (DETALLE DE OBRA)
 ═══════════════════════════════════════════════════════ */
-.cart-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--cp-electric);
-  color: var(--cp-navy);
-  font-size: 0.65rem;
-  font-weight: 800;
-}
-
-.cart-mini {
-  background: var(--cp-white);
-  border: 1px solid var(--cp-border);
-  border-radius: var(--r-lg);
-  box-shadow: var(--card-shadow-hover);
-  overflow: hidden;
-}
-
-/* ═══════════════════════════════════════════════════════
-   17. FOOTER
-═══════════════════════════════════════════════════════ */
-.site-footer {
-  position: relative;
-  background: var(--cp-frost);
-  border-top: 1px solid var(--cp-border);
-  color: var(--text-muted);
-}
-
-.site-footer a {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  transition: color var(--t-base) var(--ease-smooth);
-}
-
-.site-footer a:hover {
-  color: var(--cp-electric);
-}
-
-.footer-logo {
-  font-family: var(--font-display);
-  font-size: 1.375rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--cp-navy);
-}
-
-.footer-logo em {
-  font-style: normal;
-  color: var(--cp-electric);
-}
-
-.footer-section-title {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--cp-navy);
-}
-
-/* ═══════════════════════════════════════════════════════
-   18. UTILIDADES VISUALES
-═══════════════════════════════════════════════════════ */
-
-/* Línea técnica (firma CelParts) */
-.brand-line {
-  height: 2px;
-  background: var(--line-brand);
-  border: none;
-}
-
-/* Separador con dot */
-.dot-divider {
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(8px);
+  z-index: 200;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  color: var(--text-faint);
-  font-size: 0.8rem;
-}
-.dot-divider::before,
-.dot-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--cp-border);
+  justify-content: center;
+  padding: var(--space-4);
 }
 
-/* Precio tachado */
-.price-original {
-  font-size: 0.875rem;
-  color: var(--text-faint);
-  text-decoration: line-through;
-}
-
-/* SKU / referencia técnica */
-.sku {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--cp-electric);
-  background: rgba(0, 170, 255, 0.08);
-  padding: 2px 8px;
-  border-radius: var(--r-xs);
-  display: inline-block;
-}
-
-/* Rating stars */
-.rating {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--cp-navy);
-}
-
-/* Scroll reveal — clase utilitaria para JS */
-.reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity var(--t-slow) var(--ease-snappy),
-    transform var(--t-slow) var(--ease-snappy);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.modal-content {
+  background: var(--cp-cream-surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--card-shadow-hover);
+  max-width: 900px;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--cp-border);
 }
 
 /* ═══════════════════════════════════════════════════════
-   19. SCROLLBAR
+   14. SITE FOOTER
+═══════════════════════════════════════════════════════ */
+.site-footer {
+  background: var(--cp-cream-card);
+  border-top: 1px solid var(--cp-border);
+  padding-block: var(--space-8);
+  font-size: 0.875rem;
+  color: var(--cp-text-muted);
+}
+
+.site-footer-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ═══════════════════════════════════════════════════════
+   15. PERSONALIZACIÓN DE SCROLLBAR ORGÁNICO
 ═══════════════════════════════════════════════════════ */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--cp-frost);
+  background: var(--cp-cream-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--cp-mist);
+  background: var(--cp-border-mid);
   border-radius: var(--r-pill);
-  border: 2px solid transparent;
-  background-clip: padding-box;
+  border: 2px solid var(--cp-cream-bg);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--cp-sky);
+  background: var(--cp-earth-mid);
 }
 
-/* ═══════════════════════════════════════════════════════
-   20. SELECTION
-═══════════════════════════════════════════════════════ */
+/* Selecciones de texto agradables */
 ::selection {
-  background: rgba(0, 170, 255, 0.15);
-  color: var(--cp-navy);
+  background: var(--cp-sage-light);
+  color: var(--cp-text-dark);
 }
 
 /* ═══════════════════════════════════════════════════════
-   21. RESPONSIVE
+   16. AJUSTES RESPONSIVOS
 ═══════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
   :root {
-    --header-height: 64px;
-    --container-width: 100%;
+    --header-height: 72px;
   }
   .container {
-    padding-inline: var(--space-6);
+    padding-inline: var(--space-5);
   }
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding-inline: var(--space-5);
+  body {
+    background-size: 20px 20px; /* Reducción de la cuadrícula en móviles */
   }
   .section {
     padding-block: var(--space-12);
   }
-  .section-lg {
-    padding-block: var(--space-16);
-  }
-  .card,
-  .product-card,
+  .card, 
+  .product-card, 
   .surface-card {
     border-radius: var(--r-md);
   }
   .btn-lg {
-    height: 48px;
+    height: 50px;
     padding: 0 var(--space-6);
   }
 }
@@ -1279,13 +811,9 @@ textarea::placeholder {
   .container {
     padding-inline: var(--space-4);
   }
-  .card,
-  .product-card {
-    border-radius: 14px;
-  }
   .btn {
-    height: 42px;
-    padding: 0 var(--space-5);
-    font-size: 0.8125rem;
+    height: 44px;
+    padding: 0 var(--space-4);
+    font-size: 0.875rem;
   }
 }

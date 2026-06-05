@@ -17,7 +17,7 @@
 
         <!-- Texto de bienvenida -->
         <p class="welcome-text">
-          En <strong class="welcome-text__highlight">CelParts</strong> nos apasiona ofrecer repuestos y accesorios de alta calidad para celulares en Perú. Creemos que tu dispositivo merece lo mejor, y por eso nos esforzamos por brindarte productos confiables, duraderos y
+          En <strong class="welcome-text__highlight">Arigumi</strong> nos apasiona ofrecer repuestos y accesorios de alta calidad para celulares en Perú. Creemos que tu dispositivo merece lo mejor, y por eso nos esforzamos por brindarte productos confiables, duraderos y
           <strong class="welcome-text__highlight">al precio justo</strong>.
         </p>
 
@@ -68,7 +68,7 @@ const pillars: Pillar[] = [
 
 <style scoped>
 /* ═══════════════════════════════════
-   ABOUT SECTION — CELPARTS
+   ABOUT SECTION — ARIGUMI
    100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */
 

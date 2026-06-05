@@ -5,7 +5,7 @@
         Términos y Condiciones
       </h2>
       <p class="text-lg text-body mb-4">
-        Bienvenido a CelParts. Al utilizar nuestros servicios,
+        Bienvenido a Arigumi. Al utilizar nuestros servicios,
         aceptas cumplir con los siguientes términos y condiciones.
       </p>
 
@@ -33,7 +33,7 @@
           <h3 class="text-2xl font-semibold mb-2">3. Propiedad intelectual</h3>
           <p>
             Todos los derechos de propiedad intelectual sobre el contenido y los
-            servicios pertenecen a CelParts. No puedes copiar,
+            servicios pertenecen a Arigumi. No puedes copiar,
             distribuir o modificar ningún material sin nuestro consentimiento
             previo.
           </p>
@@ -44,7 +44,7 @@
             4. Limitación de responsabilidad
           </h3>
           <p>
-            CelParts no sera responsable por daños directos,
+            Arigumi no sera responsable por daños directos,
             indirectos, incidentales o consecuenciales derivados del uso o la
             imposibilidad de uso de nuestros servicios.
           </p>
@@ -67,17 +67,17 @@
 definePageMeta({ layout: 'landing' })
 
 useSeoMeta({
-  title: 'Terminos y Condiciones | CelParts',
-  description: 'Revisa los terminos y condiciones de uso del sitio y servicios de CelParts.',
-  ogTitle: 'Terminos y Condiciones | CelParts',
-  ogDescription: 'Condiciones de uso, limitaciones y responsabilidades aplicables en CelParts.',
+  title: 'Terminos y Condiciones | Arigumi',
+  description: 'Revisa los terminos y condiciones de uso del sitio y servicios de Arigumi.',
+  ogTitle: 'Terminos y Condiciones | Arigumi',
+  ogDescription: 'Condiciones de uso, limitaciones y responsabilidades aplicables en Arigumi.',
   ogType: 'article',
-  ogUrl: 'https://celparts.pe/terminos',
-  ogImage: 'https://celparts.pe/images/logo.png',
+  ogUrl: 'https://arigumi.pe/terminos',
+  ogImage: 'https://arigumi.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Terminos y Condiciones | CelParts',
-  twitterDescription: 'Consulta los terminos y condiciones de CelParts.',
-  twitterImage: 'https://celparts.pe/images/logo.png',
+  twitterTitle: 'Terminos y Condiciones | Arigumi',
+  twitterDescription: 'Consulta los terminos y condiciones de Arigumi.',
+  twitterImage: 'https://arigumi.pe/images/logo.png',
 })
 </script>
 

@@ -32,7 +32,7 @@ const items = [
   <section class="gallery" id="galeria">
     <div class="gallery-container">
       <div class="gallery-header">
-        <span class="section-label">CelParts</span>
+        <span class="section-label">Arigumi</span>
 
         <h2 class="section-title">
           Nuestros productos
@@ -60,7 +60,7 @@ const items = [
 
 <style scoped>
 /* ═══════════════════════════════════
-   GALLERY SECTION — CELPARTS
+   GALLERY SECTION — ARIGUMI
    100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */
 

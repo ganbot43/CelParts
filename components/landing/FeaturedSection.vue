@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
 
-const { waLink } = useKite();
+const { waLink } = useArigumi();
 
 interface Product {
   id: number;
@@ -54,7 +54,7 @@ const fetchFeaturedProducts = async (
     products.value = data || [];
   } catch (error) {
     console.error(
-      "[CelParts] Error cargando productos destacados:",
+      "[Arigumi] Error cargando productos destacados:",
       error
     );
 
@@ -84,7 +84,7 @@ watch(activeTab, (newTab) => {
       <!-- ═════════ HEADER ═════════ -->
       <div class="featured-header">
 
-        <span class="featured-label">Selección CelParts</span>
+        <span class="featured-label">Selección Arigumi</span>
 
         <h2 class="featured-title">
           Productos destacados<span class="featured-title__dot" />
@@ -241,7 +241,7 @@ watch(activeTab, (newTab) => {
 
 <style scoped>
 /* ═══════════════════════════════════
-   FEATURED SECTION — CELPARTS
+   FEATURED SECTION — ARIGUMI
    100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */
 

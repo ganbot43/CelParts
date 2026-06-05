@@ -6,7 +6,7 @@ import { z } from 'zod'
 
 const schema = z.object({
   name:               z.string().min(2).optional(),
-  logoUrl:            z.string().url().optional().nullable(),
+  logoUrl:            z.string().optional().nullable(),
   whatsapp:           z.string().optional(),
   address:            z.string().optional().nullable(),
   socialLinks:        z.record(z.string()).optional(),
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
 
   const update: any = {
     ...data,
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date(),
   }
   if (data.socialLinks) {
     update.socialLinks = JSON.stringify(data.socialLinks)

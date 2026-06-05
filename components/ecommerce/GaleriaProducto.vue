@@ -94,7 +94,7 @@ watch(
 
 <style scoped>
 /* ═══════════════════════════════════
-   GALERÍA PRODUCTO — CELPARTS
+   GALERÍA PRODUCTO — ARIGUMI
    100% tokens de main.css
 ═══════════════════════════════════ */
 

@@ -11,23 +11,6 @@
           <NuxtLink to="/productos" class="hover:text-primary-600 transition-colors">Catálogo</NuxtLink>
         </nav>
         <div class="flex items-center gap-3">
-          <!-- Botón carrito -->
-          <ClientOnly>
-            <button
-              id="cart-toggle-btn"
-              @click="cartStore.isOpen = true"
-              class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Abrir carrito"
-            >
-              <UIcon name="i-heroicons-shopping-bag" class="w-6 h-6 text-gray-700 dark:text-gray-200" />
-              <span
-                v-if="cartStore.itemCount > 0"
-                class="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
-              >
-                {{ cartStore.itemCount }}
-              </span>
-            </button>
-          </ClientOnly>
         </div>
       </div>
     </header>
@@ -40,10 +23,7 @@
       © {{ new Date().getFullYear() }} {{ config.public.appName }} — Todos los derechos reservados
     </footer>
 
-    <!-- Cart Drawer (client-only para evitar SSR issues) -->
-    <ClientOnly>
-      <EcommerceCarritoDrawer />
-    </ClientOnly>
+    <!-- Cart Drawer deleted -->
 
     <!-- WhatsApp flotante -->
     <SharedBotonWhatsapp />
@@ -52,5 +32,4 @@
 
 <script setup lang="ts">
 const config    = useRuntimeConfig()
-const cartStore = useCartStore()
 </script>

@@ -73,8 +73,7 @@ export default defineEventHandler(async (event) => {
           const buffer = file.data
           const cmd = new PutObjectCommand({ Bucket: bucket, Key: filename, Body: buffer, ContentType: file.type })
           await s3.send(cmd)
-          const publicBase = `https://${bucket}.s3.${config.s3Region}.amazonaws.com`
-          fileUrl = `${publicBase.replace(/\/$/, '')}/${filename}`
+          fileUrl = `/api/media?key=${encodeURIComponent(filename)}`
         } else {
           // fallback: save locally to ./public/uploads/complaints
           const buffer = file.data

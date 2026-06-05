@@ -589,17 +589,17 @@ import { useBusinessConfig } from "~/composables/useBusinessConfig";
 import { useAppToast } from "~/composables/useToast";
 
 useSeoMeta({
-  title: 'Libro de Reclamaciones | CelParts',
-  description: 'Presenta tu reclamo o queja en el Libro de Reclamaciones de CelParts de forma segura y rapida.',
-  ogTitle: 'Libro de Reclamaciones | CelParts',
-  ogDescription: 'Canal oficial para registrar reclamos y quejas de clientes de CelParts.',
+  title: 'Libro de Reclamaciones | Arigumi',
+  description: 'Presenta tu reclamo o queja en el Libro de Reclamaciones de Arigumi de forma segura y rapida.',
+  ogTitle: 'Libro de Reclamaciones | Arigumi',
+  ogDescription: 'Canal oficial para registrar reclamos y quejas de clientes de Arigumi.',
   ogType: 'website',
-  ogUrl: 'https://celparts.pe/libro-de-reclamaciones',
-  ogImage: 'https://celparts.pe/images/logo.png',
+  ogUrl: 'https://arigumi.pe/libro-de-reclamaciones',
+  ogImage: 'https://arigumi.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Libro de Reclamaciones | CelParts',
-  twitterDescription: 'Registra tu reclamo en el Libro de Reclamaciones de CelParts.',
-  twitterImage: 'https://celparts.pe/images/logo.png',
+  twitterTitle: 'Libro de Reclamaciones | Arigumi',
+  twitterDescription: 'Registra tu reclamo en el Libro de Reclamaciones de Arigumi.',
+  twitterImage: 'https://arigumi.pe/images/logo.png',
 })
 
 const businessState = useBusinessConfig();
@@ -713,16 +713,16 @@ async function submit() {
 
 <style scoped>
 /* ═══════════════════════════════════
-  TOKENS KITE -> CELPARTS
+  TOKENS KITE -> ARIGUMI
 ═══════════════════════════════════ */
 .lr-page {
-  --kite-green: var(--cp-electric);
-  --kite-green-dark: var(--cp-navy);
-  --kite-green-glow: rgba(0, 174, 239, 0.25);
-  --kite-green-soft: rgba(0, 174, 239, 0.08);
-  --kite-green-line: rgba(0, 174, 239, 0.2);
-  --kite-yellow: #eab308;
-  --kite-yellow-dim: rgba(234, 179, 8, 0.8);
+  --kite-green: var(--brand-primary);
+  --kite-green-dark: var(--brand-primary-hover);
+  --kite-green-glow: rgba(125, 142, 116, 0.25);
+  --kite-green-soft: rgba(125, 142, 116, 0.08);
+  --kite-green-line: rgba(125, 142, 116, 0.2);
+  --kite-yellow: var(--brand-accent);
+  --kite-yellow-dim: var(--brand-accent-hover);
   --jm-surface: var(--bg-surface);
   --jm-surface2: var(--bg-surface);
   --jm-surface3: var(--bg-surface);
@@ -751,7 +751,7 @@ async function submit() {
   font-size: 72px;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: rgba(45, 106, 79, 0.04);
+  color: var(--kite-green-soft);
   pointer-events: none;
   white-space: nowrap;
   line-height: 1;
@@ -777,8 +777,8 @@ async function submit() {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #2D6A4F;
-  background: rgba(45, 106, 79, 0.06);
+  color: var(--kite-green-dark);
+  background: var(--kite-green-soft);
   border: 1px solid var(--kite-green-line);
   border-radius: 4px;
   padding: 5px 10px;
@@ -844,7 +844,7 @@ async function submit() {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  background: rgba(45, 106, 79, 0.05);
+  background: var(--kite-green-soft);
   border: 1px solid var(--kite-green-line);
   border-radius: 12px;
   padding: 20px 24px;
@@ -908,7 +908,7 @@ async function submit() {
   border-color: var(--kite-green-line);
   box-shadow:
     0 0 0 1px var(--kite-green-line),
-    0 0 24px rgba(45, 106, 79, 0.05);
+    0 0 24px var(--kite-green-soft);
 }
 
 .lr-section__head {
@@ -1153,9 +1153,9 @@ async function submit() {
 
 .lr-file:hover {
   border-color: var(--kite-green);
-  background: rgba(45, 106, 79, 0.04);
+  background: var(--kite-green-soft);
   color: var(--kite-green);
-  box-shadow: 0 0 12px rgba(45, 106, 79, 0.1);
+  box-shadow: 0 0 12px var(--kite-green-glow);
 }
 
 .lr-file__input {
@@ -1249,7 +1249,7 @@ async function submit() {
   transform: translateY(-2px);
   box-shadow:
     0 0 32px var(--kite-green-glow),
-    0 8px 24px rgba(45, 106, 79, 0.3);
+    0 8px 24px var(--kite-green-glow);
 }
 
 .lr-submit:active:not(:disabled) {

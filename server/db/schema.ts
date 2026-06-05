@@ -34,6 +34,8 @@ export const users = mysqlTable('users', {
   role:         varchar('role', { length: 20 }).notNull().default('admin'),
   isActive:     int('is_active').notNull().default(1),
   createdAt:    timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
+  dni:          varchar('dni', { length: 8 }),
+  address:      text('address'),
 })
 
 // 3. categories
@@ -67,6 +69,8 @@ export const products = mysqlTable('products', {
                    .references(() => categories.id, { onDelete: 'set null' }),
   subcategoryId: int('subcategory_id')
                    .references(() => subcategories.id, { onDelete: 'set null' }),
+  sellerId:      int('seller_id')
+                   .references(() => users.id, { onDelete: 'cascade' }),
   name:          text('name').notNull(),
   slug:          varchar('slug', { length: 191 }).notNull().unique(),
   description:   text('description'),
@@ -76,6 +80,12 @@ export const products = mysqlTable('products', {
   isFeatured:    int('is_featured').notNull().default(0),
   nuevoLanzamiento: int('nuevo_lanzamiento').notNull().default(0),
   isActive:      int('is_active').notNull().default(1),
+  material:      text('material'),
+  sizeLength:    int('size_length'),
+  sizeWidth:     int('size_width'),
+  sizeUnit:      varchar('size_unit', { length: 10 }).default('cm'),
+  offersPattern: int('offers_pattern').default(0),
+  status:        varchar('status', { length: 30 }).default('disponible'),
   createdAt:     timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt:     timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`),
 })
@@ -173,6 +183,8 @@ export const banners = mysqlTable('banners', {
   linkUrl:   text('link_url'),
   sortOrder: int('sort_order').notNull().default(0),
   isActive:  int('is_active').notNull().default(1),
+  title:     text('title'),
+  subtitle:  text('subtitle'),
 })
 
 // 12. complaints / libro de reclamaciones
@@ -223,6 +235,7 @@ export const subcategoriesRelations = relations(subcategories, ({ one, many }) =
 export const productsRelations = relations(products, ({ one, many }) => ({
   category:    one(categories,    { fields: [products.categoryId],    references: [categories.id] }),
   subcategory: one(subcategories, { fields: [products.subcategoryId], references: [subcategories.id] }),
+  seller:      one(users,         { fields: [products.sellerId],      references: [users.id] }),
   images:      many(productImages),
   orderItems:  many(orderItems),
   inventoryMovements: many(inventoryMovements),

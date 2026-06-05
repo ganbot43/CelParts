@@ -5,8 +5,8 @@ import { validateBody } from '~/server/utils/validate'
 import { z } from 'zod'
 
 const schema = z.object({
-  imageUrl:  z.string().url().optional(),
-  linkUrl:   z.string().url().optional().nullable(),
+  imageUrl:  z.string().optional(),
+  linkUrl:   z.string().optional().nullable(),
   sortOrder: z.number().int().min(0).optional(),
   isActive:  z.boolean().optional(),
 })

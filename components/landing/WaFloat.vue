@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { waLink } = useKite()
+const { waLink } = useArigumi()
 </script>
 
 <template>

@@ -3,9 +3,9 @@
     <!-- Brand -->
     <div class="sp-sidebar__brand">
       <NuxtLink to="/admin" class="sp-brand" @click="emit('close')">
-        <img src="/images/logo.png" alt="Logo" class="sp-brand__logo" />
+        <img :src="logoUrl" alt="Logo" class="sp-brand__logo" />
         <div class="sp-brand__text">
-          <span class="sp-brand__name">Smart Panel</span>
+          <span class="sp-brand__name">{{ configName }}</span>
           <span class="sp-brand__role">
             {{ user?.role === "superadmin" ? "Super Admin" : "Administrador" }}
           </span>
@@ -71,27 +71,15 @@ const props = defineProps<{ user: any }>();
 const emit = defineEmits<{ (e: "close"): void }>();
 
 const route = useRoute();
+const businessConfig = useBusinessConfig();
+const logoUrl = computed(() => businessConfig.value?.logoUrl || '/images/logo.png');
+const configName = computed(() => businessConfig.value?.name || 'Smart Panel');
 
 const baseItems = [
   {
     to: "/admin",
     label: "Dashboard",
     svg: `<svg viewBox="0 0 18 18" fill="none"><rect x="1.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="1.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>`,
-  },
-  {
-    to: "/admin/pedidos",
-    label: "Pedidos",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 3V2a1 1 0 011-1h5a1 1 0 011 1v1M5 9h8M5 12h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-  },
-  {
-    to: "/admin/productos",
-    label: "Productos",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M2 5l7-3 7 3v8l-7 3-7-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 2v14M2 5l7 3 7-3" stroke="currentColor" stroke-width="1.4"/></svg>`,
-  },
-  {
-    to: "/admin/inventario",
-    label: "Inventario",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M3 4h12v10H3z" stroke="currentColor" stroke-width="1.4"/><path d="M3 8h12" stroke="currentColor" stroke-width="1.4"/></svg>`,
   },
   {
     to: "/admin/categorias",
@@ -112,9 +100,9 @@ const baseItems = [
 
 const superadminItems = [
   {
-    to: "/admin/metodos-pago",
-    label: "Métodos de Pago",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><rect x="1.5" y="4" width="15" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 7.5h15" stroke="currentColor" stroke-width="1.4"/><rect x="4" y="10" width="4" height="1.5" rx=".75" fill="currentColor"/></svg>`,
+    to: "/admin/configuracion",
+    label: "Configuración",
+    svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M9 13.5A4.5 4.5 0 1 0 9 4.5a4.5 4.5 0 0 0 0 9Z" stroke="currentColor" stroke-width="1.4"/><path d="M12 2.5a6.5 6.5 0 0 1 5 5h1M1 10.5h1a6.5 6.5 0 0 1 5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
   },
 ];
 

@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-}
-
+// Define simplified product interface
 interface Product {
   id: number;
   name: string;
@@ -14,355 +9,340 @@ interface Product {
   price: number;
   category?: { name: string } | null;
   images?: Array<{ id: number; url: string; isPrimary: boolean }>;
-  isFeatured?: boolean;
+  material?: string;
+  sizeLength?: number;
+  sizeWidth?: number;
+  sizeUnit?: string;
+  offersPattern?: number;
+  sellerId?: number;
+  sellerName?: string;
+  sellerPhone?: string;
+  description?: string;
+  stock?: number;
 }
 
-interface CatalogCategoriesResponse {
-  data: Category[];
-}
-
-interface CatalogProductsResponse {
-  data: Product[];
-}
-
-const categories = ref<Category[]>([]);
-const activeCategory = ref<string | null>(null);
 const products = ref<Product[]>([]);
-const loadingCategories = ref(false);
-const loadingProducts = ref(false);
+const loading = ref(false);
 
-onMounted(async () => {
+const searchQuery = ref("");
+const filterMaterial = ref("");
+const filterSize = ref("");
+const filterPattern = ref("");
+const sortBy = ref("");
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedProduct = ref<Product | null>(null);
+
+const openModal = (product: Product) => {
+  selectedProduct.value = product;
+  isModalOpen.value = true;
+};
+
+// Mock fetch or actual API
+const fetchProducts = async () => {
   try {
-    loadingCategories.value = true;
-    const { data } = await $fetch<CatalogCategoriesResponse>(
-      "/api/landing/catalog-categories",
-    );
-    categories.value = data || [];
-  } catch (error) {
-    console.error("Error cargando categorías:", error);
-  } finally {
-    loadingCategories.value = false;
-  }
-});
-
-const fetchProducts = async (categorySlug: string | null) => {
-  try {
-    loadingProducts.value = true;
-    const params = new URLSearchParams();
-    if (categorySlug !== null) {
-      params.append("categorySlug", categorySlug);
-    }
-    const queryString = params.toString();
-    const url = queryString
-      ? `/api/landing/catalog-products?${queryString}`
-      : "/api/landing/catalog-products";
-
-    const { data } = await $fetch<CatalogProductsResponse>(url);
-    products.value = data || [];
+    loading.value = true;
+    const { data } = await $fetch<{ data: Product[] }>("/api/landing/catalog-products");
+    
+    // Simular propiedades de Arigumi temporalmente si la API no las trae completas
+    products.value = (data || []).map(p => ({
+      ...p,
+      material: p.material || 'Lana Alpaca',
+      sizeLength: p.sizeLength || 30,
+      sizeWidth: p.sizeWidth || 30,
+      sizeUnit: p.sizeUnit || 'cm',
+      offersPattern: p.offersPattern !== undefined ? p.offersPattern : 1,
+      sellerName: p.sellerName || 'Clara Gisbert',
+      sellerPhone: p.sellerPhone || '+51999999999',
+      description: p.description || 'Hermoso tejido a mano con dedicación.',
+      stock: p.stock || 1
+    }));
   } catch (error) {
     console.error("Error cargando productos:", error);
     products.value = [];
   } finally {
-    loadingProducts.value = false;
+    loading.value = false;
   }
 };
 
-const visibleProducts = computed(() => products.value.slice(0, 4));
-
-const productsPageLink = computed(() => {
-  const query: Record<string, string> = { source: "landing-catalog" };
-  if (activeCategory.value !== null) {
-    query.categoria = activeCategory.value;
-  }
-  return { path: "/productos", query };
-});
-
-watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
-  immediate: true,
+onMounted(() => {
+  fetchProducts();
 });
 </script>
 
 <template>
-  <section class="catalog" id="catalogo">
+  <section class="catalog-section section">
     <div class="container">
-      <!-- Header -->
-      <div class="catalog-header">
-        <div class="catalog-header-left">
-          <span class="section-label">Catálogo</span>
-          <h2 class="section-title">
-            Nuestros productos<span class="accent-dot" />
-          </h2>
-          <p class="section-subtitle">
-            Utensilios seleccionados para hacer de tu cocina un espacio más
-            funcional y agradable.
-          </p>
+      
+      <!-- SEARCH & FILTERS BAR -->
+      <div class="catalog-toolbar">
+        <div class="search-box-container">
+          <span class="search-icon">🔍 🧶</span>
+          <input 
+            type="text" 
+            v-model="searchQuery" 
+            placeholder="¿Qué tapete de lana o tejido estás buscando hoy? (Ej: Girasoles, Clara...)" 
+            class="search-input"
+          />
         </div>
-        <LandingAppButton variant="primary" href="/productos">
-          Ver catálogo completo
-        </LandingAppButton>
+        
+        <div class="toolbar-divider"></div>
+        
+        <div class="filters-grid">
+          <!-- Filter 1 -->
+          <div class="filter-col">
+            <label>🧵 HILO / MATERIAL</label>
+            <div class="select-wrapper">
+              <span class="select-icon">🧶</span>
+              <select v-model="filterMaterial" class="custom-select">
+                <option value="">Todos los materiales</option>
+                <option value="lana">Lana</option>
+                <option value="algodon">Algodón</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Filter 2 -->
+          <div class="filter-col">
+            <label>📐 RANGO DE TAMAÑO</label>
+            <div class="select-wrapper">
+              <span class="select-icon">📏</span>
+              <select v-model="filterSize" class="custom-select">
+                <option value="">Cualquier tamaño</option>
+                <option value="pequeno">Pequeño</option>
+                <option value="mediano">Mediano</option>
+                <option value="grande">Grande</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Filter 3 -->
+          <div class="filter-col">
+            <label>📄 ¿OFRECE PATRÓN?</label>
+            <div class="select-wrapper">
+              <span class="select-icon">📦</span>
+              <select v-model="filterPattern" class="custom-select">
+                <option value="">Ambos (Con o sin patrón)</option>
+                <option value="si">Solo con Patrón</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Filter 4 -->
+          <div class="filter-col">
+            <label>⇅ ORDENAR POR</label>
+            <div class="select-wrapper">
+              <span class="select-icon">⏰</span>
+              <select v-model="sortBy" class="custom-select">
+                <option value="">Más Recientes Primero</option>
+                <option value="precio_menor">Menor Precio</option>
+                <option value="precio_mayor">Mayor Precio</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Filtros -->
-      <div class="catalog-filters">
-        <button
-          class="filter-btn"
-          :class="{ active: activeCategory === null }"
-          @click="activeCategory = null"
-        >
-          Todos
-        </button>
-        <button
-          v-for="cat in categories"
-          :key="cat.id"
-          class="filter-btn"
-          :class="{ active: activeCategory === cat.slug }"
-          @click="activeCategory = cat.slug"
-        >
-          {{ cat.name }}
-        </button>
+      <!-- RESULTS HEADER -->
+      <div class="results-header">
+        <div class="results-title-group">
+          <h2>✨ Tapetes en exhibición</h2>
+          <span class="results-badge">{{ products.length }} disponibles</span>
+        </div>
+        <span class="results-hint">Haz clic en cualquier tarjeta para ver más detalles</span>
       </div>
 
-      <!-- Grid de productos -->
+      <!-- GRID -->
       <div class="products-grid">
-        <template v-if="loadingProducts">
-          <EcommerceSkeletonProductCard :count="4" />
+        <template v-if="loading">
+          <div class="loading-state">Cargando tejidos hermosos...</div>
         </template>
         <template v-else-if="products.length === 0">
-          <div class="empty-state">
-            <span>No hay productos en esta categoría</span>
-          </div>
+          <div class="empty-state">No se encontraron tejidos con esos filtros.</div>
         </template>
         <template v-else>
           <EcommerceTarjetaProducto
-            v-for="product in visibleProducts"
+            v-for="product in products"
             :key="product.id"
             :product="product"
+            @select="openModal"
           />
         </template>
       </div>
 
-      <!-- Ver todos -->
-      <div v-if="products.length > 4" class="catalog-footer">
-        <NuxtLink :to="productsPageLink" class="show-all-btn">
-          Mostrar todos
-        </NuxtLink>
-      </div>
+      <EcommerceModalDetalleTejido 
+        :is-open="isModalOpen" 
+        @update:is-open="isModalOpen = $event"
+        :product="selectedProduct || {}" 
+      />
     </div>
   </section>
 </template>
 
 <style scoped>
-.catalog {
-  --kite-green: #2D6A4F;
-  --kite-green-dark: #1E4D38;
-  --kite-yellow: #E9C46A;
-
-  --text-title: #111111;
-  --text-muted: #66625A;
-
-  --bg: #F8F7F4;
-  --bg-alt: #F1EFEA;
-  --border: #E2E0D9;
-
-  --shadow-sm: 0 10px 30px rgba(17, 17, 17, 0.05);
-  --shadow-md: 0 20px 60px rgba(17, 17, 17, 0.08);
-
-  --radius: 18px;
-
-  padding: 120px 32px;
-  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+.catalog-section {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-16);
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* ── Header ── */
-.catalog-header {
+/* ── TOOLBAR ── */
+.catalog-toolbar {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid var(--cp-border);
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 32px;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-  padding: 20px 22px;
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.56);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 6px 20px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255,255,255,0.4);
+  flex-direction: column;
+  margin-bottom: var(--space-8);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.03);
 }
 
-.catalog-header-left {
-  max-width: 440px;
-}
-
-.section-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  color: var(--kite-green);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  display: inline-flex;
+.search-box-container {
+  display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 12px;
+  padding: 8px 16px;
+  border: 1.5px solid var(--cp-border-mid);
+  border-radius: var(--r-pill);
+  transition: border-color var(--t-fast);
+}
+.search-box-container:focus-within {
+  border-color: var(--cp-sage);
+}
+.search-icon {
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  color: var(--cp-text-dark);
+  outline: none;
+}
+.search-input::placeholder {
+  color: var(--cp-text-muted);
 }
 
-.section-label::before,
-.section-label::after {
-  content: "";
-  display: inline-block;
-  width: 12px;
-  height: 1.5px;
-  background: var(--kite-green);
-  border-radius: 2px;
+.toolbar-divider {
+  height: 1px;
+  background: var(--cp-border);
+  margin: 24px 0;
 }
 
-.section-title {
-  font-size: clamp(1.35rem, 2.6vw, 2rem);
-  font-weight: 700;
-  color: var(--text-title);
-  margin: 0.2rem 0 0;
-  line-height: 1.15;
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
 }
 
-.accent-dot {
-  width: 5px;
-  height: 5px;
-  background: var(--kite-yellow);
-  display: inline-block;
-  border-radius: 50%;
-  margin-left: 4px;
-  vertical-align: middle;
-}
-
-.section-subtitle {
-  color: var(--text-muted);
-  margin-top: 8px;
-  max-width: 520px;
-  line-height: 1.45;
-  font-size: 0.94rem;
-}
-
-/* ── Filtros ── */
-.catalog-filters {
+.filter-col {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
+  flex-direction: column;
+  gap: 8px;
+}
+.filter-col label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--cp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.filter-btn {
-  padding: 0.4rem 1rem;
-  border-radius: 999px;
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  font-size: 0.85rem;
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--cp-border-mid);
+  border-radius: var(--r-lg);
+  padding: 0 12px;
+  background: #fff;
+  transition: border-color var(--t-fast);
+}
+.select-wrapper:hover {
+  border-color: var(--cp-sage);
+}
+.select-icon {
+  font-size: 1rem;
+  margin-right: 8px;
+}
+.custom-select {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 0;
+  font-size: 0.95rem;
   font-weight: 600;
+  color: var(--cp-text-dark);
+  outline: none;
   cursor: pointer;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease;
-  color: var(--text-title);
-  box-shadow: 0 2px 8px rgba(17, 17, 17, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  appearance: none;
+}
+.select-wrapper::after {
+  content: '⌄';
+  font-size: 1.5rem;
+  line-height: 0;
+  color: var(--cp-text-muted);
+  pointer-events: none;
 }
 
-.filter-btn:hover {
-  border-color: var(--kite-green);
-  color: var(--kite-green);
+/* ── HEADER ── */
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  border-bottom: 1px dotted var(--cp-border-mid);
+  padding-bottom: var(--space-4);
 }
 
-.filter-btn.active {
-  background: var(--kite-green);
-  color: #fff;
-  border-color: var(--kite-green);
+.results-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-/* ── Grid ── */
+.results-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--cp-text-dark);
+  font-family: var(--font-display);
+}
+
+.results-badge {
+  background: #f4f6f3;
+  color: var(--cp-text-muted);
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid var(--cp-border);
+}
+
+.results-hint {
+  font-size: 0.85rem;
+  color: var(--cp-text-faint);
+  font-style: italic;
+}
+
+/* ── GRID ── */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 24px;
-  align-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-6);
 }
 
-/* ── Estados ── */
 .loading-state,
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 60px 40px;
-  color: var(--text-muted);
-  font-size: 1rem;
-}
-
-/* ── Footer ── */
-.catalog-footer {
-  margin-top: 28px;
-  display: flex;
-  justify-content: center;
-}
-
-.show-all-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 0 22px;
-  border-radius: 999px;
-  background: var(--kite-green);
-  color: #fff;
-  font-size: 0.84rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.show-all-btn:hover {
-  background: var(--kite-green-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(45, 106, 79, 0.28);
-}
-
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  .catalog {
-    padding: 90px 24px;
-  }
-
-  .catalog-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 22px;
-    padding: 18px 18px;
-  }
-}
-
-@media (max-width: 640px) {
-  .catalog {
-    padding: 80px 18px;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-}
-
-@media (max-width: 380px) {
-  .products-grid {
-    grid-template-columns: 1fr;
-  }
+  padding: var(--space-10);
+  font-size: 1.2rem;
+  color: var(--cp-text-muted);
 }
 </style>

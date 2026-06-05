@@ -2,7 +2,7 @@
 
 import { MessageCircle, Instagram, Facebook, Mail } from "lucide-vue-next";
 
-const { waLink } = useKite();
+const { waLink } = useArigumi();
 
 const channels = [
   {
@@ -15,22 +15,22 @@ const channels = [
   {
     icon: Instagram,
     label: "Instagram",
-    handle: "@celparts",
-    href: "https://instagram.com/celparts",
+    handle: "@arigumi",
+    href: "https://instagram.com/arigumi",
     type: "ig",
   },
   {
     icon: Facebook,
     label: "Facebook",
-    handle: "CelParts SAC",
-    href: "https://facebook.com/celparts",
+    handle: "Arigumi",
+    href: "https://facebook.com/arigumi",
     type: "fb",
   },
   {
     icon: Mail,
     label: "Correo electrónico",
-    handle: "hola@celparts.com",
-    href: "mailto:hola@celparts.com",
+    handle: "hola@arigumi.com",
+    href: "mailto:hola@arigumi.com",
     type: "mail",
   },
 ];
@@ -52,7 +52,7 @@ const form = reactive({
 });
 
 function handleSubmit() {
-  const msg = `Hola CelParts, mi nombre es ${form.nombre}. Tengo una consulta sobre "${form.asunto}". Mi correo es ${form.email} y mi teléfono es ${form.telefono}. ${form.mensaje}`;
+  const msg = `Hola Arigumi, mi nombre es ${form.nombre}. Tengo una consulta sobre "${form.asunto}". Mi correo es ${form.email} y mi teléfono es ${form.telefono}. ${form.mensaje}`;
   window.open(waLink(msg), "_blank", "noopener");
 }
 </script>
@@ -122,7 +122,7 @@ function handleSubmit() {
 
           <div class="form-group">
             <label>Correo electrónico</label>
-            <input v-model="form.email" type="email" placeholder="hola@celparts.com" />
+            <input v-model="form.email" type="email" placeholder="hola@arigumi.com" />
           </div>
 
           <div class="form-group">
@@ -168,7 +168,7 @@ function handleSubmit() {
 
 <style scoped>
 /* ═══════════════════════════════════
-   CONTACT SECTION — CELPARTS
+   CONTACT SECTION — ARIGUMI
    100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */
 

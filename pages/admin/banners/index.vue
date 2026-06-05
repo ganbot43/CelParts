@@ -242,17 +242,33 @@
             </div>
 
             <div class="sp-drawer-field">
-              <label class="sp-drawer-label"
-                >URL de imagen <span class="sp-drawer-req">*</span></label
+              <label class="sp-drawer-label">Imagen Banner <span class="sp-drawer-req">*</span></label>
+              
+              <!-- Si ya hay imagen, mostramos el preview integrado o la zona para cambiarla -->
+              <label
+                class="banner-upload-zone"
+                :class="{ 'banner-upload-zone--uploading': uploadingBanner }"
               >
-              <input
-                v-model="form.imageUrl"
-                class="sp-drawer-input"
-                placeholder="https://..."
-              />
-              <span class="sp-drawer-hint"
-                >Se recomienda proporción 3:1 (ej. 1200×400px)</span
-              >
+                <input
+                  ref="bannerFileInputRef"
+                  type="file"
+                  accept="image/*"
+                  class="banner-upload-input"
+                  @change="onBannerFileSelected"
+                />
+                <svg v-if="!uploadingBanner" width="32" height="32" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 5v14M5 12h14"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span v-if="!uploadingBanner">Subir o cambiar imagen</span>
+                <span v-else class="banner-uploading-text">Subiendo a S3...</span>
+              </label>
+              <span class="sp-drawer-hint">Sube una imagen desde tu computadora (máx. 4 MB). Se recomienda proporción 3:1</span>
+              <p v-if="bannerUploadError" class="sp-drawer-error">{{ bannerUploadError }}</p>
             </div>
 
             <div class="sp-drawer-field">
@@ -366,6 +382,9 @@ const editingId = ref<number | null>(null);
 const isEditing = computed(() => !!editingId.value);
 const saving = ref(false);
 const formError = ref("");
+const uploadingBanner = ref(false);
+const bannerUploadError = ref("");
+const bannerFileInputRef = ref<HTMLInputElement>();
 
 const emptyForm = () => ({
   imageUrl: "",
@@ -398,7 +417,7 @@ function closeDrawer() {
 
 async function save() {
   if (!form.imageUrl) {
-    formError.value = "La URL de imagen es requerida";
+    formError.value = "La imagen es requerida";
     return;
   }
   saving.value = true;
@@ -422,6 +441,47 @@ async function save() {
     formError.value = e?.data?.message ?? "Error al guardar";
   } finally {
     saving.value = false;
+  }
+}
+
+async function onBannerFileSelected(e: Event) {
+  const input = e.target as HTMLInputElement;
+  if (!input.files?.length) return;
+  
+  const file = input.files[0];
+  bannerUploadError.value = "";
+  
+  const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+  const MAX_SIZE = 4 * 1024 * 1024; // 4 MB
+  
+  if (!ALLOWED.includes(file.type)) {
+    bannerUploadError.value = "Tipo no permitido: solo jpg, png, webp o gif";
+    input.value = "";
+    return;
+  }
+  
+  if (file.size > MAX_SIZE) {
+    bannerUploadError.value = "La imagen debe ser menor a 4 MB";
+    input.value = "";
+    return;
+  }
+  
+  uploadingBanner.value = true;
+  try {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res: any = await $fetch("/api/upload/image", {
+      method: "POST",
+      body: fd,
+    });
+    form.imageUrl = res.url;
+    if (bannerFileInputRef.value) {
+      bannerFileInputRef.value.value = "";
+    }
+  } catch (e: any) {
+    bannerUploadError.value = e?.data?.message ?? "Error al subir la imagen";
+  } finally {
+    uploadingBanner.value = false;
   }
 }
 
@@ -534,5 +594,48 @@ async function deleteBanner(id: number) {
   margin-left: 0.3rem;
   text-transform: none;
   letter-spacing: 0;
+}
+
+/* ── Upload Zone ── */
+.banner-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  border: 2px dashed var(--sp-border);
+  border-radius: var(--sp-radius-md);
+  background: var(--sp-surface-subtle);
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--sp-text-soft);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.banner-upload-zone:hover {
+  border-color: var(--sp-text-muted);
+  background: var(--sp-surface-solid);
+}
+
+.banner-upload-zone--uploading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.banner-upload-input {
+  display: none;
+}
+
+.banner-uploading-text {
+  display: inline-block;
+  animation: sp-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes sp-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 </style>

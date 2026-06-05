@@ -5,7 +5,7 @@
         Política de Privacidad
       </h2>
       <p class="text-lg mb-6">
-        En <span class="font-semibold text-primary">CelParts</span>, respetamos y
+        En <span class="font-semibold text-primary">Arigumi</span>, respetamos y
         valoramos la privacidad de nuestros usuarios. Esta política de
         privacidad describe cómo recopilamos, utilizamos y protegemos su
         información personal.
@@ -62,17 +62,17 @@
 definePageMeta({ layout: 'landing' })
 
 useSeoMeta({
-  title: 'Politica de Privacidad | CelParts',
-  description: 'Conoce como CelParts recopila, usa y protege tus datos personales en nuestro sitio web.',
-  ogTitle: 'Politica de Privacidad | CelParts',
-  ogDescription: 'Informacion sobre tratamiento de datos personales y derechos del usuario en CelParts.',
+  title: 'Politica de Privacidad | Arigumi',
+  description: 'Conoce como Arigumi recopila, usa y protege tus datos personales en nuestro sitio web.',
+  ogTitle: 'Politica de Privacidad | Arigumi',
+  ogDescription: 'Informacion sobre tratamiento de datos personales y derechos del usuario en Arigumi.',
   ogType: 'article',
-  ogUrl: 'https://celparts.pe/privacidad',
-  ogImage: 'https://celparts.pe/images/logo.png',
+  ogUrl: 'https://arigumi.pe/privacidad',
+  ogImage: 'https://arigumi.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Politica de Privacidad | CelParts',
-  twitterDescription: 'Consulta la politica de privacidad de CelParts.',
-  twitterImage: 'https://celparts.pe/images/logo.png',
+  twitterTitle: 'Politica de Privacidad | Arigumi',
+  twitterDescription: 'Consulta la politica de privacidad de Arigumi.',
+  twitterImage: 'https://arigumi.pe/images/logo.png',
 })
 </script>
 <style scoped>

@@ -1,787 +1,469 @@
 <template>
   <div class="login-root">
-    <!-- Ambient background -->
-    <div class="ambient-bg">
-      <div class="orb orb-1" />
-      <div class="orb orb-2" />
-      <div class="orb orb-3" />
-      <div class="grid-overlay" />
-    </div>
-
-    <div class="login-wrapper">
-      <!-- Card -->
-      <div class="login-card" :class="{ 'card-shake': shaking }">
-        <!-- Header -->
-        <div class="card-header">
-          <div class="logo-mark">
-            <img src="/images/logo.png" alt="Smart Panel logo" />
+    <div class="login-container">
+      <!-- Left Branding Section -->
+      <div class="branding-section">
+        <div class="brand-header">
+          <img src="/images/logo.png" alt="Arigumi logo" class="brand-logo" />
+          <div class="brand-title">
+            <h1>Arigumi</h1>
+            <span>Hilando sonrisas</span>
           </div>
-          <div class="header-text">
-            <h1 class="app-name">{{ companyName }}</h1>
-            <p class="app-subtitle">Iniciar sesión en tu cuenta</p>
-          </div>
+          <span class="badge-c2c">MERCADO C2C</span>
         </div>
 
-        <div class="divider" />
+        <div class="brand-icon">
+          <span>🧶</span>
+        </div>
 
-        <!-- Form -->
-        <div class="form-body">
-          <h2 class="form-title">Iniciar sesión</h2>
+        <h1 class="hero-title">
+          Uniendo generaciones paso <br />a paso,<br />
+          <em>hecho a mano y con el corazón.</em>
+        </h1>
+
+        <p class="hero-description">
+          Arigumi es un espacio cálido y sin comisiones diseñado especialmente para que adultos mayores compren y vendan sus tapetes, mantas y bordados directamente a través de WhatsApp.
+        </p>
+
+        <div class="info-box-stacked">
+          <h4 class="info-title">💚 ¿Cómo funciona?</h4>
+          <ol class="info-list">
+            <li>Registra tus hermosas creaciones.</li>
+            <li>Los compradores interesados verán tus publicaciones.</li>
+            <li>Harán un clic y chatearán directamente a tu celular por WhatsApp.</li>
+          </ol>
+        </div>
+
+        <div class="brand-footer">
+          <span class="dot">🧶</span>
+          <span>Hilando historias desde el hogar peruano. Sin comisiones intermedias.</span>
+        </div>
+      </div>
+
+      <!-- Right Form Section -->
+      <div class="form-section">
+        <div class="form-header">
+          <span class="form-subtitle">¡QUÉ ALEGRÍA TENERTE DE VUELTA!</span>
+          <h2 class="form-title-main">Ingresar a Arigumi</h2>
+        </div>
+
+        <form class="login-form" @submit.prevent="login">
+          <div class="field-group">
+            <label for="email">Correo Electrónico o Usuario</label>
+            <input 
+              id="email" 
+              v-model="form.email" 
+              type="text" 
+              placeholder="Ej. clara@arigumi.pe" 
+              required
+            />
+            <span class="field-hint">Sugerencias: clara@arigumi.pe o ricardo@arigumi.pe</span>
+          </div>
 
           <div class="field-group">
-            <UFormField label="Correo electrónico" name="email">
-              <div
-                class="input-wrapper"
-                :class="{ focused: focusedField === 'email' }"
-              >
-                <span class="input-icon">
-                  <svg viewBox="0 0 20 20" fill="none">
-                    <path
-                      d="M2.5 5.833A1.667 1.667 0 014.167 4.167h11.666A1.667 1.667 0 0117.5 5.833v8.334a1.667 1.667 0 01-1.667 1.666H4.167A1.667 1.667 0 012.5 14.167V5.833z"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M2.5 5.833L10 10.833l7.5-5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
-                <UInput
-                  v-model="form.email"
-                  type="email"
-                  placeholder="joymar.peru@gmail.com"
-                  class="smart-input"
-                  :ui="inputUI"
-                  @focus="focusedField = 'email'"
-                  @blur="focusedField = ''"
-                  @keyup.enter="login"
-                />
-              </div>
-            </UFormField>
-
-            <UFormField label="Contraseña" name="password">
-              <div
-                class="input-wrapper"
-                :class="{ focused: focusedField === 'password' }"
-              >
-                <span class="input-icon">
-                  <svg viewBox="0 0 20 20" fill="none">
-                    <rect
-                      x="3.333"
-                      y="9.167"
-                      width="13.334"
-                      height="9.166"
-                      rx="1.667"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M6.667 9.167V6.667a3.333 3.333 0 016.666 0v2.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                    />
-                    <circle cx="10" cy="13.75" r="1.25" fill="currentColor" />
-                  </svg>
-                </span>
-                <UInput
-                  v-model="form.password"
-                  :type="showPassword ? 'text' : 'password'"
-                  placeholder="••••••••"
-                  class="smart-input"
-                  :ui="inputUI"
-                  @focus="focusedField = 'password'"
-                  @blur="focusedField = ''"
-                  @keyup.enter="login"
-                />
-                <button
-                  class="toggle-password"
-                  type="button"
-                  @click="showPassword = !showPassword"
-                  tabindex="-1"
-                >
-                  <svg v-if="!showPassword" viewBox="0 0 20 20" fill="none">
-                    <path
-                      d="M2.5 10s2.917-5 7.5-5 7.5 5 7.5 5-2.917 5-7.5 5-7.5-5-7.5-5z"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    />
-                    <circle
-                      cx="10"
-                      cy="10"
-                      r="2"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    />
-                  </svg>
-                  <svg v-else viewBox="0 0 20 20" fill="none">
-                    <path
-                      d="M3.333 3.333l13.334 13.334M8.232 8.232A2 2 0 0011.77 11.77M4.444 5.834C3.2 6.97 2.5 10 2.5 10s2.917 5 7.5 5c1.303 0 2.49-.35 3.5-.944M7.5 4.166A7.936 7.936 0 0110 4c4.583 0 7.5 5 7.5 5a13.11 13.11 0 01-1.944 2.834"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </UFormField>
+            <div class="label-row">
+              <label for="password">Contraseña </label>
+              <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+            </div>
+            <input 
+              id="password" 
+              v-model="form.password" 
+              type="password" 
+              placeholder="••••••••" 
+            />
           </div>
 
           <!-- Error -->
           <Transition name="fade-slide">
-            <div v-if="error" class="error-pill">
-              <svg viewBox="0 0 16 16" fill="none">
-                <circle
-                  cx="8"
-                  cy="8"
-                  r="7"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                />
-                <path
-                  d="M8 5v3.5M8 11h.01"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
+            <div v-if="error" class="alert alert-error">
               {{ error }}
             </div>
           </Transition>
 
-          <button
-            id="login-submit-btn"
-            class="submit-btn"
-            :class="{ loading }"
-            :disabled="loading"
-            @click="login"
-          >
-            <span class="btn-content">
-              <span v-if="!loading">Iniciar sesión</span>
-              <span v-else class="loader-dots"> <span /><span /><span /> </span>
-            </span>
-            <span class="btn-shimmer" />
+          <button type="submit" class="btn btn-primary btn-lg w-full mt-4" :disabled="loading">
+            <span v-if="!loading">Ingresar a mi cuenta</span>
+            <span v-else>Cargando...</span>
           </button>
+        </form>
+
+        <div class="divider-text">
+          <span>O TAMBIÉN</span>
         </div>
 
-        <!-- Footer -->
-        <div class="card-footer" style="flex-direction: column; gap: 10px; align-items: center;">
-          <NuxtLink :to="`/registro${route.query.redirect ? '?redirect=' + route.query.redirect : ''}`" class="back-link">
-            ¿No tienes cuenta? Regístrate
-          </NuxtLink>
-          <NuxtLink to="/" class="back-link" style="opacity: 0.7;">
-            Volver al sitio
-          </NuxtLink>
+        <button type="button" class="btn btn-outline btn-lg w-full btn-google">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="google-icon" />
+          Iniciar sesión con Google
+        </button>
+
+        <div class="register-prompt">
+          ¿Aún no tienes cuenta? <NuxtLink to="/registro">Regístrate aquí</NuxtLink>
+        </div>
+
+        <!-- Quick Access Test -->
+        <div class="quick-access">
+          <span class="quick-access-title">🚀 ACCESO RÁPIDO DE PRUEBA (CLIC ÚNICO):</span>
+          <div class="quick-access-buttons">
+            <button class="quick-acc-btn" @click.prevent="quickLogin('clara@arigumi.pe', 'admin123')">
+              <div class="qa-avatar">
+                <img src="https://i.pravatar.cc/150?u=clara" alt="Clara" />
+              </div>
+              <div class="qa-info">
+                <strong>Abuela Clara</strong>
+                <span>Vendedor y Comprador</span>
+              </div>
+            </button>
+            <button class="quick-acc-btn" @click.prevent="quickLogin('ricardo@arigumi.pe', 'admin123')">
+              <div class="qa-avatar">
+                <img src="https://i.pravatar.cc/150?u=ricardo" alt="Ricardo" />
+              </div>
+              <div class="qa-info">
+                <strong>Don Ricardo</strong>
+                <span>Vendedor y Comprador</span>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
-
-      <!-- Global footer -->
-      <footer class="global-footer">
-        <span>© {{ currentYear }} {{ companyName }}</span>
-        <span class="dot">·</span>
-        <span
-          >Desarrollado por
-          <a
-            href="https://smartcsperu.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="brand-link"
-            >Smart CS</a
-          >
-        </span>
-      </footer>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: false, middleware: 'guest' })
-useSeoMeta({ title: "Smart Panel — Iniciar sesión" });
+definePageMeta({ layout: "auth", middleware: 'guest' })
+useSeoMeta({ title: "Arigumi — Iniciar sesión" })
 
-const config = useRuntimeConfig();
-const companyName = config.public.companyName || "Mi Empresa";
-const currentYear = new Date().getFullYear();
+const form = reactive({ email: "", password: "" })
+const loading = ref(false)
+const error = ref("")
 
-const form = reactive({ email: "", password: "" });
-const loading = ref(false);
-const error = ref("");
-const shaking = ref(false);
-const showPassword = ref(false);
-const focusedField = ref("");
-
-const { fetch: fetchUserSession } = useUserSession();
-const route = useRoute();
-
-const inputUI = {
-  base: "smart-input-inner",
-  padding: { sm: "pl-10" },
-};
-
-function triggerShake() {
-  shaking.value = true;
-  setTimeout(() => (shaking.value = false), 500);
-}
+const { fetch: fetchUserSession } = useUserSession()
+const route = useRoute()
 
 async function login() {
   if (!form.email || !form.password) {
-    error.value = "Por favor completa todos los campos.";
-    triggerShake();
-    return;
+    error.value = "Por favor completa todos los campos."
+    return
   }
 
-  loading.value = true;
-  error.value = "";
+  loading.value = true
+  error.value = ""
 
   try {
     await $fetch("/api/auth/login", {
       method: "POST",
       body: form,
-    });
+    })
 
-    await fetchUserSession();
-    const { user } = useUserSession();
+    await fetchUserSession()
+    const { user } = useUserSession()
 
-    if (user.value?.role === "admin") {
-      await navigateTo("/admin", { external: true });
+    if (user.value?.role === "admin" || user.value?.role === "superadmin") {
+      await navigateTo("/admin", { external: true })
     } else {
-      const redirect = route.query.redirect as string;
+      const redirect = route.query.redirect as string
       if (redirect) {
-        await navigateTo(redirect, { external: true });
+        await navigateTo(redirect, { external: true })
       } else {
-        await navigateTo("/mi-cuenta", { external: true });
+        await navigateTo("/", { external: true })
       }
     }
-
   } catch (e: any) {
-    console.log("ERROR COMPLETO:", e);
-    console.log("DATA:", e.data);
-    console.log("STATUS:", e.statusCode);
-    console.log("MESSAGE:", e.message);
-
-    error.value =
-      e?.data?.message ||
-      e?.message ||
-      "Credenciales inválidas. Inténtalo de nuevo.";
-
-    triggerShake();
-
+    error.value = e?.data?.message || e?.message || "Credenciales inválidas. Inténtalo de nuevo."
   } finally {
-    loading.value = false;
+    loading.value = false
   }
+}
+
+function quickLogin(email: string, pass: string) {
+  form.email = email
+  form.password = pass
+  login()
 }
 </script>
 
 <style scoped>
-/* ── Reset & Root ── */
 .login-root {
-  min-height: 100dvh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #080b14;
-  font-family: "DM Sans", "Geist", system-ui, sans-serif;
-  position: relative;
-  overflow: hidden;
+  background-color: var(--cp-cream-bg);
+  background-image: radial-gradient(var(--cp-border-mid) 0.75px, transparent 0.75px);
+  background-size: 24px 24px;
+  padding: var(--space-4);
 }
 
-/* ── Ambient Background ── */
-.ambient-bg {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.18;
-  animation: drift 12s ease-in-out infinite alternate;
-}
-.orb-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, #6366f1, transparent);
-  top: -100px;
-  left: -100px;
-  animation-duration: 14s;
-}
-.orb-2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #8b5cf6, transparent);
-  bottom: -80px;
-  right: -80px;
-  animation-duration: 10s;
-  animation-delay: -4s;
-}
-.orb-3 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, #06b6d4, transparent);
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation-duration: 18s;
-  opacity: 0.1;
-}
-.grid-overlay {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-@keyframes drift {
-  from {
-    transform: translate(0, 0) scale(1);
-  }
-  to {
-    transform: translate(30px, 20px) scale(1.08);
-  }
-}
-
-/* ── Wrapper ── */
-.login-wrapper {
-  position: relative;
-  z-index: 1;
+.login-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
   width: 100%;
-  max-width: 420px;
-  padding: 1rem;
+  background: var(--cp-cream-surface);
+  border-radius: var(--r-xl);
+  box-shadow: var(--card-shadow-hover);
+  overflow: hidden;
+  border: 1px solid var(--cp-border);
+}
+
+/* ── LEFT: Branding ── */
+.branding-section {
+  padding: var(--space-10) var(--space-8);
+  background: var(--cp-cream-card);
+  border-right: 1px solid var(--cp-border);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
 }
 
-/* ── Card ── */
-.login-card {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 20px;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 24px 64px rgba(0, 0, 0, 0.5),
-    0 0 80px rgba(99, 102, 241, 0.05);
-  overflow: hidden;
-  animation: card-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes card-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.card-shake {
-  animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-@keyframes shake {
-  10%,
-  90% {
-    transform: translateX(-2px);
-  }
-  20%,
-  80% {
-    transform: translateX(4px);
-  }
-  30%,
-  50%,
-  70% {
-    transform: translateX(-5px);
-  }
-  40%,
-  60% {
-    transform: translateX(5px);
-  }
-}
-
-/* ── Card Header ── */
-.card-header {
+.brand-header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 1.75rem 1.75rem 1.25rem;
-  animation: fade-up 0.5s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--cp-sage);
+}
+.brand-title h1 {
+  font-size: 1.5rem;
+  color: var(--cp-text-dark);
+  line-height: 1;
+}
+.brand-title span {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--cp-text-muted);
+}
+.badge-c2c {
+  margin-left: auto;
+  background: var(--cp-sage);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  letter-spacing: 0.05em;
 }
 
-.logo-mark {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  background: rgba(255, 255, 255, 0.06);
+.brand-icon {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border: 1px dashed var(--cp-border-mid);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.logo-mark img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  display: block;
+  margin-bottom: var(--space-4);
+  font-size: 1.5rem;
 }
 
-.app-name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #f1f5f9;
-  letter-spacing: -0.02em;
+.hero-title {
+  font-size: 2.2rem;
   line-height: 1.2;
+  color: var(--cp-text-dark);
+  margin-bottom: var(--space-4);
 }
-.app-subtitle {
+.hero-title em {
+  color: var(--cp-sage-dark);
+}
+.hero-description {
+  font-size: 1rem;
+  color: var(--cp-text-body);
+  margin-bottom: var(--space-6);
+  line-height: 1.6;
+}
+
+.info-box-stacked {
+  margin-bottom: auto;
+}
+.info-title {
+  color: var(--cp-sage-dark);
+  margin-bottom: var(--space-2);
+}
+.info-list {
+  padding-left: 1.2rem;
+  color: var(--cp-text-body);
+  font-size: 0.9rem;
+}
+.info-list li {
+  margin-bottom: 6px;
+}
+
+.brand-footer {
+  margin-top: var(--space-8);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.85rem;
+  color: var(--cp-text-muted);
+}
+.brand-footer .dot {
+  font-size: 1.2rem;
+}
+
+/* ── RIGHT: Form ── */
+.form-section {
+  padding: var(--space-10) var(--space-12);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-header {
+  margin-bottom: var(--space-6);
+}
+.form-subtitle {
   font-size: 0.75rem;
-  color: #64748b;
-  margin-top: 1px;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
-
-/* ── Divider ── */
-.divider {
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.07) 30%,
-    rgba(255, 255, 255, 0.07) 70%,
-    transparent
-  );
-  margin: 0 1.75rem;
-}
-
-/* ── Form Body ── */
-.form-body {
-  padding: 1.5rem 1.75rem;
-  animation: fade-up 0.5s 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.form-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #94a3b8;
-  margin-bottom: 1.25rem;
-  letter-spacing: 0.01em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--cp-earth-mid);
   text-transform: uppercase;
-  font-size: 0.7rem;
+}
+.form-title-main {
+  font-size: 2rem;
+  color: var(--cp-text-dark);
+  margin-top: 4px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.forgot-password {
+  font-size: 0.8rem;
+  color: var(--cp-text-muted);
+}
+.field-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--cp-text-faint);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.w-full {
+  width: 100%;
+}
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.divider-text {
+  text-align: center;
+  margin: var(--space-6) 0;
+  position: relative;
+}
+.divider-text::before,
+.divider-text::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background: var(--cp-border);
+}
+.divider-text::before { left: 0; }
+.divider-text::after { right: 0; }
+.divider-text span {
+  font-size: 0.75rem;
+  color: var(--cp-text-faint);
   letter-spacing: 0.1em;
 }
 
-.field-group {
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.register-prompt {
+  text-align: center;
+  margin-top: var(--space-4);
+  font-size: 0.9rem;
+  color: var(--cp-text-body);
+}
+.register-prompt a {
+  font-weight: 700;
+  color: var(--cp-sage-dark);
+}
+
+.quick-access {
+  margin-top: var(--space-8);
+  padding: var(--space-4);
+  background: var(--cp-cream-card);
+  border: 1px dashed var(--cp-border-mid);
+  border-radius: var(--r-md);
+}
+.quick-access-title {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--cp-earth-mid);
+  margin-bottom: var(--space-3);
+  letter-spacing: 0.05em;
+}
+.quick-access-buttons {
+  display: flex;
+  gap: var(--space-3);
+}
+.quick-acc-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--cp-cream-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: var(--r-sm);
+  padding: 8px;
+  transition: all var(--t-fast) ease;
+  text-align: left;
+}
+.quick-acc-btn:hover {
+  border-color: var(--cp-sage);
+  background: var(--cp-sage-light);
+}
+.qa-avatar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+.qa-info {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
-
-/* ── Input Wrapper ── */
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  transition:
-    border-color 0.2s,
-    background 0.2s,
-    box-shadow 0.2s;
-  overflow: hidden;
-}
-.input-wrapper.focused {
-  border-color: rgba(99, 102, 241, 0.5);
-  background: rgba(99, 102, 241, 0.06);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
-}
-
-.input-icon {
-  position: absolute;
-  left: 12px;
-  z-index: 2;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-  transition: color 0.2s;
-}
-.input-wrapper.focused .input-icon {
-  color: #6366f1;
-}
-.input-icon svg {
-  width: 16px;
-  height: 16px;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 12px;
-  z-index: 2;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px;
-  border-radius: 4px;
-  transition: color 0.2s;
-}
-.toggle-password:hover {
-  color: #94a3b8;
-}
-.toggle-password svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Override Nuxt UI input styles inside our wrapper */
-.smart-input :deep(input) {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding-left: 38px !important;
-  padding-right: 38px !important;
-  color: #e2e8f0 !important;
-  font-size: 0.875rem !important;
-  height: 44px !important;
-  width: 100%;
-}
-.smart-input :deep(input::placeholder) {
-  color: #334155 !important;
-}
-.smart-input :deep(input:focus) {
-  outline: none !important;
-  ring: none !important;
-}
-.smart-input :deep(.ring-1),
-.smart-input :deep(.shadow) {
-  display: none !important;
-}
-.smart-input {
-  width: 100%;
-}
-
-/* ── Error Pill ── */
-.error-pill {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #f87171;
+.qa-info strong {
   font-size: 0.8rem;
-  padding: 8px 12px;
-  border-radius: 8px;
+  color: var(--cp-text-dark);
 }
-.error-pill svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
+.qa-info span {
+  font-size: 0.65rem;
+  color: var(--cp-text-muted);
 }
 
-/* ── Submit Button ── */
-.submit-btn {
-  margin-top: 1.5rem;
-  width: 100%;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition:
-    transform 0.15s,
-    box-shadow 0.15s,
-    opacity 0.15s;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
-  letter-spacing: -0.01em;
-}
-.submit-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.45);
-}
-.submit-btn:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
-}
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-.btn-content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.btn-shimmer {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.15) 50%,
-    transparent 60%
-  );
-  transform: translateX(-100%);
-  transition: transform 0.5s;
-}
-.submit-btn:hover .btn-shimmer {
-  transform: translateX(100%);
-}
-
-/* ── Loader dots ── */
-.loader-dots {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-}
-.loader-dots span {
-  width: 6px;
-  height: 6px;
-  background: white;
-  border-radius: 50%;
-  animation: bounce 0.9s ease-in-out infinite;
-}
-.loader-dots span:nth-child(2) {
-  animation-delay: 0.15s;
-}
-.loader-dots span:nth-child(3) {
-  animation-delay: 0.3s;
-}
-@keyframes bounce {
-  0%,
-  80%,
-  100% {
-    transform: scale(0.8);
-    opacity: 0.5;
+@media (max-width: 900px) {
+  .login-container {
+    grid-template-columns: 1fr;
   }
-  40% {
-    transform: scale(1.2);
-    opacity: 1;
+  .branding-section {
+    display: none;
   }
-}
-
-/* ── Card Footer ── */
-.card-footer {
-  padding: 0.75rem 1.75rem 1.5rem;
-  display: flex;
-  justify-content: center;
-  animation: fade-up 0.5s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.8rem;
-  color: #475569;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.back-link:hover {
-  color: #94a3b8;
-}
-.back-link svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* ── Global Footer ── */
-.global-footer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.7rem;
-  color: #334155;
-  letter-spacing: 0.02em;
-  animation: fade-up 0.5s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.dot {
-  opacity: 0.4;
-}
-.brand-link {
-  color: #475569;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.brand-link:hover {
-  color: #6366f1;
-}
-
-/* ── Transitions ── */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.25s ease;
-}
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateY(-6px);
-}
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-4px);
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── Label styling ── */
-:deep(.form-field label),
-:deep([data-label]) {
-  color: #64748b !important;
-  font-size: 0.78rem !important;
-  font-weight: 500 !important;
-  margin-bottom: 6px !important;
-  display: block;
-  letter-spacing: 0.01em;
-}
-
-/* ── Responsive ── */
-@media (max-width: 480px) {
-  .login-card {
-    border-radius: 16px;
-  }
-  .card-header {
-    padding: 1.5rem 1.25rem 1rem;
-  }
-  .form-body {
-    padding: 1.25rem;
-  }
-  .card-footer {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+  .form-section {
+    padding: var(--space-6) var(--space-5);
   }
 }
 </style>

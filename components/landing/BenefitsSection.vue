@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const { waLink } = useKite();
+const { waLink } = useArigumi();
 
 const benefits = [
   {
@@ -62,7 +62,7 @@ const scroll = (dir: "left" | "right") => {
 
       <!-- Header -->
       <div class="benefits-header">
-        <span class="benefits-label">CELPARTS PERÚ</span>
+        <span class="benefits-label">ARIGUMI PERÚ</span>
 
         <h2 class="benefits-title">
           Todo lo que necesitas para tu celular
@@ -168,7 +168,7 @@ const scroll = (dir: "left" | "right") => {
             Compra o cotiza tu pedido de repuestos y accesorios para celulares
           </h3>
           <p class="benefits-cta__desc">
-            CelParts es la solución integral para técnicos, tiendas y clientes finales
+            Arigumi es la solución integral para técnicos, tiendas y clientes finales
             que buscan una experiencia de compra completa, segura y personalizada.
           </p>
         </div>
@@ -186,7 +186,7 @@ const scroll = (dir: "left" | "right") => {
 
 <style scoped>
 /* ═══════════════════════════════════
-   BENEFITS — CELPARTS
+   BENEFITS — ARIGUMI
    100% tokens de main.css
 ═══════════════════════════════════ */
 

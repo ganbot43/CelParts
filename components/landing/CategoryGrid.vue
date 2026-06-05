@@ -129,7 +129,7 @@ onActivated(() => void loadCategories());
 
 <style scoped>
 /* ═══════════════════════════════════
-   CATEGORY GRID — CELPARTS
+   CATEGORY GRID — ARIGUMI
    100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */
 .cat-grid-section {

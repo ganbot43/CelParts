@@ -5,11 +5,8 @@
 
     <!-- Global cart drawer for landing layout -->
     <ClientOnly>
-      <EcommerceCarritoDrawer />
-      <!-- WhatsApp button (behind cart if open) -->
-      <!-- <LandingBotonWhatsapp /> -->
+      <!-- WhatsApp button -->
       <LandingWaFloat />
-      <!-- <LandingWaIcon /> -->
     </ClientOnly>
     <main>
       <slot />

@@ -102,7 +102,7 @@ const productsPageLink = {
 
 <style scoped>
 /* ═══════════════════════════════════
-   NUEVOS LANZAMIENTOS — CELPARTS
+   NUEVOS LANZAMIENTOS — ARIGUMI
    Design system: hero + benefits pattern
    100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */

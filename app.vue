@@ -14,8 +14,15 @@ const { loggedIn } = useUserSession()
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 
+// Cargar la configuración global del negocio
+const { data: globalConfig } = await useFetch('/api/business-config')
+const businessConfig = useBusinessConfig()
+if (globalConfig.value) {
+  businessConfig.value = globalConfig.value as any
+}
+
 const siteUrl = computed(() => {
-  const raw = String(runtimeConfig.public.siteUrl || 'https://joymarperu.com')
+  const raw = String(runtimeConfig.public.siteUrl || 'https://arigumi.pe')
   return raw.replace(/\/$/, '')
 })
 

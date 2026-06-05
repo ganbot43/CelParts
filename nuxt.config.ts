@@ -3,8 +3,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
   site: {
-    url: "https://joymarperu.com",
-    name: "CelParts SAC",
+    url: "https://arigumi.pe",
+    name: "Arigumi",
   },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
@@ -35,14 +35,14 @@ export default defineNuxtConfig({
     s3Region: process.env.S3_REGION,
     s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
     s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    s3RootPrefix: process.env.S3_ROOT_PREFIX ?? "joymar_utensilios",
+    s3RootPrefix: process.env.S3_ROOT_PREFIX ?? "arigumi",
     public: {
       recaptchaSiteKey: process.env.G_RECAPTCHA_SITE_KEY,
-      appName: process.env.NUXT_PUBLIC_APP_NAME ?? "CelParts SAC",
+      appName: process.env.NUXT_PUBLIC_APP_NAME ?? "Arigumi",
       whatsapp: process.env.NUXT_PUBLIC_WHATSAPP ?? "+51996111303",
-      companyName: process.env.NUXT_PUBLIC_COMPANY_NAME || "CelParts SAC",
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? "https://joymarperu.com",
-      siteName: process.env.NUXT_PUBLIC_SITE_NAME ?? "CelParts SAC",
+      companyName: process.env.NUXT_PUBLIC_COMPANY_NAME || "Arigumi",
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? "https://arigumi.pe",
+      siteName: process.env.NUXT_PUBLIC_SITE_NAME ?? "Arigumi",
     },
   },
 
@@ -98,52 +98,52 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: "es" },
-      title: "Joymar Utensilios — Utensilios de Cocina Premium en Perú",
+      title: "Arigumi — Hilando Sonrisas",
       meta: [
         { charset: "utf-8" },
         {
           name: "description",
           content:
-            "Joymar Utensilios: artículos de cocina de alta calidad, probados y certificados. Productos duraderos y funcionales para tu hogar. Tienda en Villa El Salvador, Lima.",
+            "Arigumi: Amigurumis tejidos a mano con amor y dedicación. Productos duraderos y hermosos para ti y tus seres queridos.",
         },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { name: "author", content: "Joymar Utensilios" },
-        { name: "theme-color", content: "#E31E24" },
+        { name: "author", content: "Arigumi" },
+        { name: "theme-color", content: "#FFA6C9" },
         {
           name: "keywords",
           content:
-            "utensilios de cocina, menaje de hogar, ollas, sartenes, productos de cocina, artículos para el hogar, menaje, Lima, Perú",
+            "amigurumis, peluches, tejidos, a mano, crochet, regalos, personalizados, Perú",
         },
         {
           property: "og:title",
-          content: "Joymar Utensilios — Utensilios de Cocina Premium en Perú",
+          content: "Arigumi — Hilando Sonrisas",
         },
         {
           property: "og:description",
           content:
-            "Joymar Utensilios: productos de cocina premium, probados y certificados. Menaje de hogar de alta calidad con garantía. Visita nuestro showroom en Villa El Salvador, Lima.",
+            "Arigumi: Amigurumis personalizados y tejidos con mucho cariño. Descubre nuestro catálogo lleno de detalles únicos.",
         },
         { property: "og:type", content: "website" },
-        { property: "og:site_name", content: "Joymar Utensilios" },
+        { property: "og:site_name", content: "Arigumi" },
         { property: "og:locale", content: "es_PE" },
         {
           property: "og:image",
-          content: "https://joymarperu.com/images/logo.png",
+          content: "https://arigumi.pe/images/logo.png",
         },
-        { property: "og:image:alt", content: "Logo de Joymar Utensilios" },
+        { property: "og:image:alt", content: "Logo de Arigumi" },
         { name: "twitter:card", content: "summary_large_image" },
         {
           name: "twitter:title",
-          content: "Joymar Utensilios — Utensilios de Cocina Premium en Perú",
+          content: "Arigumi — Hilando Sonrisas",
         },
         {
           name: "twitter:description",
           content:
-            "Productos de cocina de alta calidad en Lima, Peru. Ollas, sartenes y mas para tu hogar.",
+            "Amigurumis y tejidos a mano llenos de magia. Encuentra el regalo perfecto en Perú.",
         },
         {
           name: "twitter:image",
-          content: "https://joymarperu.com/images/logo.png",
+          content: "https://arigumi.pe/images/logo.png",
         },
         { name: "robots", content: "index, follow" },
       ],

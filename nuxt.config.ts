@@ -11,6 +11,10 @@ export default defineNuxtConfig({
   experimental: {
     appManifest: false,
   },
+  routeRules: {
+    // Redirige todas las llamadas /api del Frontend al Backend Java
+    "/api/**": { proxy: "http://localhost:8080/api/**" },
+  },
   runtimeConfig: {
     // ─── Existentes (landing) ────────────────────────────────────
     recaptchaSecretKey: process.env.G_RECAPTCHA_SECRET_KEY,

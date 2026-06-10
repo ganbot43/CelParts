@@ -6,10 +6,11 @@ export default defineNuxtRouteMiddleware((to, from) => {
   }
 
   if (user.value?.role !== 'customer') {
-    // Si es admin, redirigir al panel de admin
-    if (user.value?.role === 'admin') {
+    // Si es admin o superadmin, mandarlo SIEMPRE a su panel
+    if (user.value?.role === 'admin' || user.value?.role === 'superadmin') {
       return navigateTo('/admin')
     }
-    return navigateTo('/')
+    // Si por alguna razón no tiene rol, al login
+    return navigateTo('/login')
   }
 })

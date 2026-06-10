@@ -265,7 +265,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ middleware: "auth", layout: "admin" });
+definePageMeta({ middleware: "admin", layout: "admin" });
 import { ref, reactive, onMounted, watch, computed } from "vue";
 import { useAppToast } from "~/composables/useToast";
 

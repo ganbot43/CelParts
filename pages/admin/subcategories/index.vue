@@ -156,7 +156,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ middleware: "auth", layout: "admin" });
+definePageMeta({ middleware: "admin", layout: "admin" });
 useSeoMeta({ title: "Subcategorías — Admin" });
 
 const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/subcategories");

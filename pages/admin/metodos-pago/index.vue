@@ -445,7 +445,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ middleware: ["auth", "superadmin"], layout: "admin" });
+definePageMeta({ middleware: ["admin", "superadmin"], layout: "admin" });
 useSeoMeta({ title: "Métodos de Pago — Admin" });
 
 const { data, refresh } = useFetch<{ data: any[] }>(

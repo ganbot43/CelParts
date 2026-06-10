@@ -247,11 +247,11 @@ async function login() {
     await fetchUserSession();
     const { user } = useUserSession();
 
-    if (user.value?.role === "admin") {
+    if (user.value?.role === "admin" || user.value?.role === "superadmin") {
       await navigateTo("/admin", { external: true });
     } else {
       const redirect = route.query.redirect as string;
-      if (redirect) {
+      if (redirect && !redirect.startsWith('/admin')) {
         await navigateTo(redirect, { external: true });
       } else {
         await navigateTo("/mi-cuenta", { external: true });

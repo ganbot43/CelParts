@@ -16,7 +16,12 @@ export const useAuthStore = defineStore('auth', {
       })
       await fetchUserSession()
       this.user = data.user
-      await navigateTo('/admin')
+      
+      if (this.user?.role === 'admin' || this.user?.role === 'superadmin') {
+        await navigateTo('/admin')
+      } else {
+        await navigateTo('/mi-cuenta')
+      }
     },
     async logout() {
       try {

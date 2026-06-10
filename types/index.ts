@@ -45,7 +45,10 @@ export interface Subcategory {
   categoryId: number
   name:       string
   slug:       string
+  isActive:   boolean | number
+  sortOrder:  number
   createdAt:  string
+  category?:  Category
 }
 
 export interface Order {

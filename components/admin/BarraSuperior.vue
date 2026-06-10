@@ -201,14 +201,16 @@ onUnmounted(() => clearInterval(clockTimer));
 /* ── Logout ── */
 async function logout() {
   loggingOut.value = true;
-  await $fetch("/api/auth/logout", { method: "POST" });
-  await clearSession();
   try {
-    const authStore = useAuthStore()
-    authStore.user = null
-  } catch (e) {
-    // ignore if store not available
+    const authStore = useAuthStore();
+    await authStore.logout();
+  } catch (error) {
+    console.error('Error in logout:', error);
+    // Fallback: clear session manually if store fails
+    await clearSession();
+    await navigateTo("/login");
+  } finally {
+    loggingOut.value = false;
   }
-  await navigateTo("/login");
 }
 </script>

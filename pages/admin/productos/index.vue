@@ -290,7 +290,7 @@
 
 <script setup lang="ts">
 import type { Product } from "~/types"
-definePageMeta({ middleware: "auth", layout: "admin" })
+definePageMeta({ middleware: "admin", layout: "admin" })
 useSeoMeta({ title: "Productos — Admin" })
 
 const formatPrice = useFormatPrice()

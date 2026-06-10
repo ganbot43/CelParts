@@ -12,8 +12,8 @@ export default defineNuxtConfig({
     appManifest: false,
   },
   routeRules: {
-    // Redirige todas las llamadas /api del Frontend al Backend Java
-    "/api/**": { proxy: "http://localhost:8080/api/**" },
+    // Redirige todas las llamadas /api del Frontend al Backend Java de forma segura
+    "/api/**": { proxy: "http://127.0.0.1:8080/api/**" },
   },
   runtimeConfig: {
     // ─── Existentes (landing) ────────────────────────────────────

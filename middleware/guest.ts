@@ -3,5 +3,10 @@ export default defineNuxtRouteMiddleware(async () => {
 
   await fetch()
 
-  if (loggedIn.value) return navigateTo('/admin')
+  if (loggedIn.value) {
+    if (user.value?.role === 'admin' || user.value?.role === 'superadmin') {
+      return navigateTo('/admin')
+    }
+    return navigateTo('/mi-cuenta')
+  }
 })

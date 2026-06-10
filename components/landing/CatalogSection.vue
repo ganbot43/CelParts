@@ -35,7 +35,7 @@ onMounted(async () => {
   try {
     loadingCategories.value = true;
     const { data } = await $fetch<CatalogCategoriesResponse>(
-      "/api/landing/catalog-categories",
+      "/api/categories?active=true",
     );
     categories.value = data || [];
   } catch (error) {
@@ -50,12 +50,12 @@ const fetchProducts = async (categorySlug: string | null) => {
     loadingProducts.value = true;
     const params = new URLSearchParams();
     if (categorySlug !== null) {
-      params.append("categorySlug", categorySlug);
+      params.append("categoria", categorySlug);
     }
     const queryString = params.toString();
     const url = queryString
-      ? `/api/landing/catalog-products?${queryString}`
-      : "/api/landing/catalog-products";
+      ? `/api/products?${queryString}`
+      : "/api/products";
 
     const { data } = await $fetch<CatalogProductsResponse>(url);
     products.value = data || [];

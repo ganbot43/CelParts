@@ -154,7 +154,7 @@
 <script setup>
 import ReclamacionesModal from './reclamacionesModal.vue';
 
-definePageMeta({ middleware: "auth", layout: "admin" });
+definePageMeta({ middleware: "admin", layout: "admin" });
 useSeoMeta({ title: "Libro de Reclamaciones — Admin" });
 
 const { data, refresh } = await useFetch("/api/admin/reclamaciones");

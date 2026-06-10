@@ -229,7 +229,7 @@
 <script setup lang="ts">
 import PedidoModal from "./pedidos/pedidoModal.vue";
 
-definePageMeta({ middleware: "auth", layout: "admin" });
+definePageMeta({ middleware: "admin", layout: "admin" });
 useSeoMeta({ title: "Dashboard — Admin" });
 
 const { data: ordersData, refresh: refreshOrders } =

@@ -104,7 +104,7 @@
 
 <script setup lang="ts">
 import PedidoModal from "./pedidoModal.vue"
-definePageMeta({ middleware: "auth", layout: "admin" })
+definePageMeta({ middleware: "admin", layout: "admin" })
 useSeoMeta({ title: "Pedidos — Admin" })
 
 const formatPrice = useFormatPrice()

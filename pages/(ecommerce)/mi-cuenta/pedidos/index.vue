@@ -46,7 +46,8 @@
 </template>
 
 <script setup lang="ts">
-const { data: orders, pending } = await useFetch<any[]>('/api/my-orders');
+const { data: response, pending } = await useFetch<any>('/api/my-orders');
+const orders = computed(() => response.value?.data || []);
 const formatPrice = useFormatPrice();
 
 useSeoMeta({ title: "Mis Pedidos — CelParts" });

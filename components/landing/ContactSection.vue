@@ -147,7 +147,7 @@ function handleSubmit() {
           </div>
 
           <LandingAppButton
-            variant="secondary"
+            variant="outline"
             class="submit-btn"
             @click="handleSubmit"
           >

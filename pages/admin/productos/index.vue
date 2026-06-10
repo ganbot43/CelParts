@@ -450,11 +450,11 @@ function closeDrawer() {
 }
 
 const categoryOptions = computed(() =>
-  (categoriesData.value?.data ?? []).map((c: any) => ({ label: c.name, value: c.id }))
+  ((categoriesData.value as any)?.data ?? []).map((c: any) => ({ label: c.name, value: c.id }))
 )
 
 const subcategoryOptions = computed(() =>
-  (subsData.value?.data ?? [])
+  ((subsData.value as any)?.data ?? [])
     .filter((s: any) => !form.categoryId || s.categoryId === form.categoryId)
     .map((s: any) => ({ label: s.name, value: s.id }))
 )

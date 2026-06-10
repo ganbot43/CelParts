@@ -277,7 +277,7 @@ async function register() {
 .input-wrapper.focused { border-color: rgba(99, 102, 241, 0.5); background: rgba(99, 102, 241, 0.06); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12); }
 .smart-input :deep(input) { background: transparent !important; border: none !important; box-shadow: none !important; color: #e2e8f0 !important; font-size: 0.875rem !important; height: 44px !important; width: 100%; }
 .smart-input :deep(input::placeholder) { color: #334155 !important; }
-.smart-input :deep(input:focus) { outline: none !important; ring: none !important; }
+.smart-input :deep(input:focus) { outline: none !important; box-shadow: none !important; }
 .smart-input :deep(.ring-1), .smart-input :deep(.shadow) { display: none !important; }
 .smart-input { width: 100%; }
 .toggle-password { position: absolute; right: 12px; z-index: 2; color: #475569; display: flex; align-items: center; background: none; border: none; cursor: pointer; padding: 2px; border-radius: 4px; transition: color 0.2s; }

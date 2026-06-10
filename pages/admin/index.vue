@@ -233,11 +233,11 @@ definePageMeta({ middleware: "admin", layout: "admin" });
 useSeoMeta({ title: "Dashboard — Admin" });
 
 const { data: ordersData, refresh: refreshOrders } =
-  await useFetch("/api/admin/orders");
-const { data: productsData } = await useFetch("/api/admin/products");
-const { data: reportsData, refresh: refreshReports } = await useFetch("/api/admin/automation/reports");
-const { data: stockAlertsData, refresh: refreshStockAlerts } = await useFetch("/api/admin/automation/stock-alerts");
-const { data: followUpsData, refresh: refreshFollowUpsQuery } = await useFetch("/api/admin/automation/follow-ups");
+  await useFetch<{ data: any[] }>("/api/admin/orders");
+const { data: productsData } = await useFetch<{ data: any[] }>("/api/admin/products");
+const { data: reportsData, refresh: refreshReports } = await useFetch<any>("/api/admin/automation/reports");
+const { data: stockAlertsData, refresh: refreshStockAlerts } = await useFetch<{ data: any[] }>("/api/admin/automation/stock-alerts");
+const { data: followUpsData, refresh: refreshFollowUpsQuery } = await useFetch<{ data: any[] }>("/api/admin/automation/follow-ups");
 const formatPrice = useFormatPrice();
 const { formatDateTime } = useFormatDateTime();
 

@@ -339,7 +339,7 @@ onMounted(() => {
   if (cartStore.isEmpty) router.replace("/carrito");
 });
 
-const { data: paymentMethods } = await useFetch("/api/payment-methods", {
+const { data: paymentMethods } = await useFetch<{ data: any[] }>("/api/payment-methods", {
   query: { active: true },
 });
 

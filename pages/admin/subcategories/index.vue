@@ -160,7 +160,7 @@ definePageMeta({ middleware: "admin", layout: "admin" });
 useSeoMeta({ title: "Subcategorías — Admin" });
 
 const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/subcategories");
-const { data: categoriesData } = await useFetch("/api/admin/categories");
+const { data: categoriesData } = await useFetch<{ data: any[] }>("/api/admin/categories");
 const items = computed(() => data.value?.data ?? []);
 const { formatDateTime } = useFormatDateTime();
 

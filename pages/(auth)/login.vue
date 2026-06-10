@@ -568,7 +568,7 @@ async function login() {
 }
 .smart-input :deep(input:focus) {
   outline: none !important;
-  ring: none !important;
+  box-shadow: none !important;
 }
 .smart-input :deep(.ring-1),
 .smart-input :deep(.shadow) {

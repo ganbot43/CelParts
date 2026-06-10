@@ -740,7 +740,7 @@ type CatalogProduct = {
   isFeatured: boolean;
 };
 
-const { data: categories } = await useFetch("/api/categories", {
+const { data: categories } = await useFetch<{ data: any[] }>("/api/categories", {
   query: { active: true },
   server: false,
   lazy: true,

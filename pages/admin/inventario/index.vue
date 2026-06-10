@@ -364,7 +364,7 @@ function closeDrawer() {
 async function runBackfill() {
   const toast = useAppToast();
   try {
-    const res = await $fetch("/api/admin/inventory/backfill", {
+    const res: any = await $fetch("/api/admin/inventory/backfill", {
       method: "POST",
       body: {},
     });

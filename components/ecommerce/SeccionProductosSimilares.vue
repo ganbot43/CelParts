@@ -196,8 +196,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.seccion-similares {
-}
+/* .seccion-similares {} */
 
 .similares-encabezado {
   display: flex;

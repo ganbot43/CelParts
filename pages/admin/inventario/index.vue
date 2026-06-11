@@ -116,8 +116,8 @@
           <tbody>
             <tr v-for="m in items" :key="m.id" class="sp-tr">
               <td class="sp-td">
-                <p class="sp-table-title">{{ m.productName || m.productId }}</p>
-                <p class="sp-table-sub" v-if="m.productName && (m.relatedOrderId || m.reason)">
+                <p class="sp-table-title">{{ m.product?.name || m.productName || m.productId }}</p>
+                <p class="sp-table-sub" v-if="(m.product?.name || m.productName) && (m.relatedOrderId || m.reason)">
                   <span v-if="m.relatedOrderId">Pedido {{ m.relatedOrderId }}</span>
                   <span v-if="m.relatedOrderId && m.reason"> · </span>
                   <span v-if="m.reason">{{ m.reason }}</span>

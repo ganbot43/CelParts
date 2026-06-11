@@ -2,37 +2,40 @@ import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null as { id: number; name: string; role: string } | null,
+    user: null as { id: number; name: string; role: string; email?: string } | null,
+    token: null as string | null,
   }),
   getters: {
-    isLoggedIn: (s) => !!s.user,
+    isLoggedIn: (s) => !!s.token && !!s.user,
   },
   actions: {
     async login(email: string, password: string) {
-      const { fetch: fetchUserSession } = useUserSession()
-      const data = await $fetch<{ user: any }>('/api/auth/login', {
+      // Usar $fetch directamente para hacer login, el interceptor inyectará la URL base si está configurada
+      // o el proxy de Nitro de nuxt.config lo llevará al Gateway 8080.
+      const data = await $fetch<{ token: string; user: any }>('/api/auth/login', {
         method: 'POST',
         body: { email, password },
       })
-      await fetchUserSession()
+      
+      this.token = data.token
       this.user = data.user
-      await navigateTo('/admin')
+      
+      if (this.user?.role === 'admin' || this.user?.role === 'superadmin') {
+        await navigateTo('/admin')
+      } else {
+        await navigateTo('/')
+      }
     },
     async logout() {
-      try {
-        await $fetch('/api/auth/logout', { method: 'POST' })
-      } catch (e) {
-        // Continuar con logout incluso si la llamada falla
-      }
+      // Limpiar store
       this.user = null
-      const { clear } = useUserSession()
-      await clear()
+      this.token = null
       await navigateTo('/login')
     },
-    // Limpiar el store cuando se detecta un 401
     clearAuth() {
       this.user = null
+      this.token = null
     }
   },
-  persist: true,
+  persist: true, // Esto guarda estado en localStorage
 })

@@ -11,6 +11,9 @@ export default defineNuxtConfig({
   experimental: {
     appManifest: false,
   },
+  routeRules: {
+    '/api/**': { proxy: 'http://localhost:8080/api/**' }
+  },
   runtimeConfig: {
     // ─── Existentes (landing) ────────────────────────────────────
     recaptchaSecretKey: process.env.G_RECAPTCHA_SECRET_KEY,
@@ -37,6 +40,7 @@ export default defineNuxtConfig({
     s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     s3RootPrefix: process.env.S3_ROOT_PREFIX ?? "arigumi",
     public: {
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api",
       recaptchaSiteKey: process.env.G_RECAPTCHA_SITE_KEY,
       appName: process.env.NUXT_PUBLIC_APP_NAME ?? "Arigumi",
       whatsapp: process.env.NUXT_PUBLIC_WHATSAPP ?? "+51996111303",
@@ -51,9 +55,9 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/sitemap",
     "@nuxt/ui",
-    "nuxt-auth-utils",
     "nuxt-vitalizer",
     "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
   ],
   sitemap: {
     autoLastmod: true,

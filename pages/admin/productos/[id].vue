@@ -67,7 +67,7 @@
               <div class="select-wrapper">
                 <select v-model="form.categoryId" class="form-select" required>
                   <option :value="null" disabled>Seleccione categoría</option>
-                  <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                  <option v-for="cat in categories?.data || []" :key="cat.id" :value="cat.id">
                     {{ cat.name }}
                   </option>
                 </select>
@@ -95,7 +95,7 @@
                 <span class="select-icon">🧶</span>
                 <select v-model="form.materialId" class="form-select with-icon" required>
                   <option :value="null" disabled>Seleccione material</option>
-                  <option v-for="mat in materials" :key="mat.id" :value="mat.id">
+                  <option v-for="mat in materials?.data || []" :key="mat.id" :value="mat.id">
                     {{ mat.name }}
                   </option>
                 </select>
@@ -155,7 +155,8 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
-const { user } = useUserSession()
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
 const isEditing = computed(() => route.params.id !== 'nuevo')
 const isSaving = ref(false)
@@ -175,13 +176,15 @@ const form = ref({
 })
 
 // Fetch categories and subcategories
-const { data: categories } = await useFetch('/api/admin/categories')
-const { data: subcategories } = await useFetch('/api/admin/subcategories')
-const { data: materials } = await useFetch('/api/admin/materials')
+const authHeaders = (authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}) as Record<string, string>;
+
+const { data: categories } = await useFetch<{ data: any[] }>('/api/admin/categories', { server: false, headers: authHeaders })
+const { data: subcategories } = await useFetch<{ data: any[] }>('/api/admin/subcategories', { server: false, headers: authHeaders })
+const { data: materials } = await useFetch<{ data: any[] }>('/api/admin/materials', { server: false, headers: authHeaders })
 
 const filteredSubcategories = computed(() => {
-  if (!form.value.categoryId || !subcategories.value) return []
-  return subcategories.value.filter(s => s.categoryId === form.value.categoryId)
+  if (!form.value.categoryId || !subcategories.value?.data) return []
+  return subcategories.value.data.filter((s: any) => s.categoryId === form.value.categoryId)
 })
 
 onMounted(() => {

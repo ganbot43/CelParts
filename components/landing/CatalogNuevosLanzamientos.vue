@@ -23,7 +23,7 @@ const fetchNuevoLanzamientos = async () => {
   try {
     loadingProducts.value = true;
     const response = await $fetch<CatalogProductsResponse>(
-      "/api/landing/nuevos-lanzamientos?limit=4"
+      "/api/products?page=1&limit=4"
     );
     products.value = response.data || [];
     totalProducts.value = response.total ?? response.data?.length ?? 0;

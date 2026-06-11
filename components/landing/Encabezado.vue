@@ -58,7 +58,7 @@
                       <div class="dropdown-avatars">👵 👴</div>
                       <div class="dropdown-profile-text">
                         <strong>{{ user?.name || 'Clara Gisbert Mendoza' }}</strong>
-                        <span>@{{ user?.name ? user.name.split(' ')[0].toLowerCase() : 'abuelaclara' }}</span>
+                        <span>@{{ user?.username || (user?.name ? user.name.split(' ')[0].toLowerCase() : 'abuelaclara') }}</span>
                       </div>
                     </div>
                     
@@ -119,7 +119,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from "vue"
 
-const { loggedIn, user, clear } = useUserSession()
+const authStore = useAuthStore();
+const { user, isLoggedIn: loggedIn } = storeToRefs(authStore);
+const clear = authStore.clearAuth;
 const businessConfig = useBusinessConfig()
 
 const logoUrl = computed(() => businessConfig.value?.logoUrl || '/images/logo.png')

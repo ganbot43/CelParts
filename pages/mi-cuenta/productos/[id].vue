@@ -163,7 +163,8 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
-const { user } = useUserSession()
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
 const isEditing = computed(() => route.params.id !== 'nuevo')
 const isSaving = ref(false)

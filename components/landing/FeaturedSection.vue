@@ -46,9 +46,9 @@ const fetchFeaturedProducts = async (
 
     const type = tabMap[tabName];
 
-    const { data } =
-      await $fetch<FeaturedProductsResponse>(
-        `/api/landing/featured-products?type=${type}`
+    const data =
+      await $fetch<Product[]>(
+        `/api/products/principales`
       );
 
     products.value = data || [];

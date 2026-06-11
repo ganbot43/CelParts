@@ -310,8 +310,13 @@
 definePageMeta({ middleware: "auth", layout: "admin" });
 useSeoMeta({ title: "Categorías — Admin" });
 
+const authStore = useAuthStore();
 const { data, refresh } = await useFetch<{ data: any[] }>(
   "/api/admin/categories",
+  { 
+    server: false,
+    headers: (authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}) as Record<string, string>
+  }
 );
 const categories = computed(() => data.value?.data ?? []);
 const { formatDateTime } = useFormatDateTime();
@@ -356,13 +361,14 @@ async function save() {
   saving.value = true;
   formError.value = "";
   try {
+    const payload = { ...form, isActive: form.isActive ? 1 : 0 };
     if (isEditing.value) {
       await $fetch(`/api/admin/categories/${editingId.value}`, {
         method: "PUT",
-        body: form,
+        body: payload,
       });
     } else {
-      await $fetch("/api/admin/categories", { method: "POST", body: form });
+      await $fetch("/api/admin/categories", { method: "POST", body: payload });
     }
     useAppToast().add({
       title: isEditing.value ? "Categoría actualizada" : "Categoría creada",

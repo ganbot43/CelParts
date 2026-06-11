@@ -80,8 +80,8 @@
               </select>
             </div>
             <div class="field-group">
-              <label for="dob">Fecha de Nacimiento</label>
-              <input id="dob" v-model="form.dob" type="date" />
+              <label for="birthDate">Fecha de Nacimiento</label>
+              <input id="birthDate" v-model="form.birthDate" type="date" />
             </div>
 
             <!-- Row 4 -->
@@ -162,7 +162,7 @@ const form = reactive({
   name: "",
   lastName: "",
   gender: "Femenino",
-  dob: "",
+  birthDate: "",
   dni: "",
   phone: "",
   address: "",
@@ -172,7 +172,7 @@ const form = reactive({
 const loading = ref(false)
 const error = ref("")
 
-const { fetch: fetchUserSession } = useUserSession()
+const authStore = useAuthStore();
 const route = useRoute()
 
 async function register() {
@@ -192,8 +192,9 @@ async function register() {
       body: form,
     })
 
-    await fetchUserSession()
-    
+    // Log the user in automatically after successful registration
+    await authStore.login(form.email, form.password);
+
     const redirect = route.query.redirect as string
     if (redirect) {
       await navigateTo(redirect, { external: true })

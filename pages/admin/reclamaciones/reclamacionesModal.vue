@@ -1,34 +1,6 @@
 <template>
-  <!-- Cargando -->
-  <template v-if="pending && !item">
-    <div class="sp-modal-state">
-      <svg class="rd-spin" width="26" height="26" viewBox="0 0 26 26" fill="none">
-        <circle cx="13" cy="13" r="10" stroke="var(--sp-border-strong)" stroke-width="2"/>
-        <path d="M13 3A10 10 0 0 1 23 13" stroke="var(--sp-primary)" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <p class="sp-modal-state__text">Cargando reclamo...</p>
-    </div>
-  </template>
-
-  <!-- Error -->
-  <template v-else-if="error">
-    <div class="sp-modal-state">
-      <div class="sp-table-empty__icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M12 8v4m0 4h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <p class="sp-modal-state__text">No se pudo cargar el reclamo.</p>
-      <div class="sp-modal-state__actions">
-        <button class="sp-drawer-btn sp-drawer-btn--ghost" @click="refresh()">Reintentar</button>
-        <button class="sp-drawer-btn sp-drawer-btn--primary" @click="$emit('close')">Cerrar</button>
-      </div>
-    </div>
-  </template>
-
   <!-- Contenido -->
-  <template v-else-if="item">
+  <template v-if="item">
 
     <!-- Header -->
     <div class="sp-modal-header">
@@ -217,25 +189,22 @@
 
 <script setup>
 const props = defineProps({
-  reclamacionId: { type: Number, required: true },
+  reclamacion: { type: Object, required: true },
 })
 
 const emit = defineEmits(['close', 'updated'])
 
 const { formatDateTime } = useFormatDateTime()
+const authStore = useAuthStore()
 
-const { data, pending, error, refresh } = await useFetch(
-  () => `/api/admin/reclamaciones/${props.reclamacionId}`,
-  { watch: [() => props.reclamacionId] }
-)
-
-const item  = computed(() => data.value ?? null)
+// Sin fetch — usamos los datos que ya tiene la lista (igual que categorías/subcategorías)
+const item = computed(() => props.reclamacion)
 const local = reactive({ estado: '', respuesta: '' })
 const saving = ref(false)
 
 watch(item, (v) => {
   if (v) {
-    local.estado    = v.estado
+    local.estado    = v.estado ?? 'pendiente'
     local.respuesta = v.respuesta ?? ''
   }
 }, { immediate: true })
@@ -267,11 +236,12 @@ async function save() {
   }
   saving.value = true
   try {
-    await $fetch(`/api/admin/reclamaciones/${props.reclamacionId}`, {
+    const token = authStore.token
+    await $fetch(`/api/admin/reclamaciones/${props.reclamacion.id}`, {
       method: 'PUT',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
       body: { estado: local.estado, respuesta: local.respuesta },
     })
-    await refresh()
     emit('updated')
     useAppToast().add({ title: 'Reclamo actualizado', color: 'success' })
   } catch (err) {

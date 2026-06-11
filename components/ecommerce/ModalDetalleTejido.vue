@@ -116,7 +116,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:isOpen'])
 
-const { user } = useUserSession()
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
 const isOwner = computed(() => {
   return user.value && props.product.sellerId === user.value.id

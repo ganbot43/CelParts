@@ -1,25 +1,31 @@
-export default defineNuxtPlugin(() => {
-  $fetch.create({
-    async onResponseError({ response }) {
-      // Si recibimos un 401, limpiar sesión y redirigir al login
-      if (response.status === 401) {
-        const { clear } = useUserSession()
-        await clear()
-        
-        // Limpiar store de auth si existe
-        try {
-          const authStore = useAuthStore()
-          authStore.clearAuth()
-        } catch (e) {
-          // Ignorar si el store no está disponible
+import { ofetch } from 'ofetch'
+
+export default defineNuxtPlugin((nuxtApp) => {
+  if (process.client) {
+    // @ts-ignore
+    globalThis.$fetch = ofetch.create({
+      onRequest({ request, options }) {
+        const authStore = useAuthStore()
+        if (authStore.token) {
+          options.headers = options.headers || {}
+          // @ts-ignore
+          options.headers.Authorization = `Bearer ${authStore.token}`
         }
-        
-        // Evitar redirigir si ya estamos en login
-        const route = useRoute()
-        if (!route.path.startsWith('/login')) {
-          await navigateTo('/login')
+      },
+      async onResponseError({ response }) {
+        if (response.status === 401 || response.status === 403) {
+          try {
+            const authStore = useAuthStore()
+            authStore.clearAuth()
+          } catch (e) {
+            // Ignorar
+          }
+          const route = useRoute()
+          if (!route.path.startsWith('/login')) {
+            await navigateTo('/login')
+          }
         }
       }
-    }
-  })
+    })
+  }
 })

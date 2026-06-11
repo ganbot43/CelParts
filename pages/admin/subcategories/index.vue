@@ -159,9 +159,25 @@
 definePageMeta({ middleware: "auth", layout: "admin" });
 useSeoMeta({ title: "Subcategorías — Admin" });
 
-const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/subcategories");
-const { data: categoriesData } = await useFetch("/api/admin/categories");
-const items = computed(() => data.value?.data ?? []);
+const authStore = useAuthStore();
+const authHeaders = (authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}) as Record<string, string>;
+
+const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/subcategories", { 
+  server: false,
+  headers: authHeaders
+});
+const { data: categoriesData } = await useFetch<{ data: any[] }>("/api/admin/categories", { 
+  server: false,
+  headers: authHeaders
+});
+const items = computed(() => {
+  const subs = data.value?.data ?? [];
+  const cats = categoriesData.value?.data ?? [];
+  return subs.map((s: any) => ({
+    ...s,
+    category: cats.find((c: any) => c.id === s.categoryId)
+  }));
+});
 const { formatDateTime } = useFormatDateTime();
 
 const drawerOpen = ref(false);
@@ -200,10 +216,11 @@ async function save() {
   saving.value = true;
   formError.value = "";
   try {
+    const payload = { ...form, isActive: form.isActive ? 1 : 0 };
     if (isEditing.value) {
-      await $fetch(`/api/admin/subcategories/${editingId.value}`, { method: 'PUT', body: form });
+      await $fetch(`/api/admin/subcategories/${editingId.value}`, { method: 'PUT', body: payload });
     } else {
-      await $fetch('/api/admin/subcategories', { method: 'POST', body: form });
+      await $fetch('/api/admin/subcategories', { method: 'POST', body: payload });
     }
     useAppToast().add({ title: isEditing.value ? 'Subcategoría actualizada' : 'Subcategoría creada', color: 'success' });
     closeDrawer();

@@ -373,7 +373,11 @@
 definePageMeta({ middleware: "auth", layout: "admin" });
 useSeoMeta({ title: "Banners — Admin" });
 
-const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/banners");
+const authStore = useAuthStore();
+const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/banners", { 
+  server: false,
+  headers: (authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}) as Record<string, string>
+});
 const banners = computed(() => data.value?.data ?? []);
 const { formatDateTime } = useFormatDateTime();
 
@@ -423,13 +427,11 @@ async function save() {
   saving.value = true;
   formError.value = "";
   try {
+    const payload = { ...form, isActive: form.isActive ? 1 : 0 };
     if (isEditing.value) {
-      await $fetch(`/api/admin/banners/${editingId.value}`, {
-        method: "PUT",
-        body: form,
-      });
+      await $fetch(`/api/admin/banners/${editingId.value}`, { method: 'PUT', body: payload });
     } else {
-      await $fetch("/api/admin/banners", { method: "POST", body: form });
+      await $fetch('/api/admin/banners', { method: 'POST', body: payload });
     }
     useAppToast().add({
       title: isEditing.value ? "Banner actualizado" : "Banner creado",

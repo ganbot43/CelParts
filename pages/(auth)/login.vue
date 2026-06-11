@@ -136,7 +136,7 @@ const form = reactive({ email: "", password: "" })
 const loading = ref(false)
 const error = ref("")
 
-const { fetch: fetchUserSession } = useUserSession()
+const authStore = useAuthStore();
 const route = useRoute()
 
 async function login() {
@@ -149,24 +149,7 @@ async function login() {
   error.value = ""
 
   try {
-    await $fetch("/api/auth/login", {
-      method: "POST",
-      body: form,
-    })
-
-    await fetchUserSession()
-    const { user } = useUserSession()
-
-    if (user.value?.role === "admin" || user.value?.role === "superadmin") {
-      await navigateTo("/admin", { external: true })
-    } else {
-      const redirect = route.query.redirect as string
-      if (redirect) {
-        await navigateTo(redirect, { external: true })
-      } else {
-        await navigateTo("/", { external: true })
-      }
-    }
+    await authStore.login(form.email, form.password)
   } catch (e: any) {
     error.value = e?.data?.message || e?.message || "Credenciales inválidas. Inténtalo de nuevo."
   } finally {

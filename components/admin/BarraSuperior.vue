@@ -135,7 +135,9 @@
 import { useAuthStore } from '~/stores/auth'
 const route = useRoute();
 const loggingOut = ref(false);
-const { session, clear: clearSession } = useUserSession();
+const authStore = useAuthStore();
+const { user: session } = storeToRefs(authStore);
+const clearSession = authStore.clearAuth;
 const sidebarRef = inject<{ openDrawer: () => void } | null>('sidebarRef', null);
 const { formatTime } = useFormatDateTime();
 

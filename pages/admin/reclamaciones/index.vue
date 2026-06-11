@@ -50,17 +50,17 @@
               v-for="r in items"
               :key="r.id"
               class="sp-tr sp-tr--clickable"
-              @click="openModal(r.id)"
+              @click="openModal(r)"
             >
               <td class="sp-td">
                 <span class="sp-table-link">{{ r.codigo }}</span>
               </td>
               <td class="sp-td">
-                <p class="sp-table-title">{{ r.nombre }}</p>
+                <p class="sp-table-title">{{ r.customerName }}</p>
               </td>
               <td class="sp-td">
-                <span class="sp-badge" :class="getBadgeClass(r.tipo)">{{
-                  r.tipo
+                <span class="sp-badge" :class="getBadgeClass(r.tipoReclamo)">{{
+                  r.tipoReclamo
                 }}</span>
               </td>
               <td class="sp-td sp-td--center">
@@ -79,7 +79,7 @@
                   <button
                     class="sp-table-btn sp-table-btn--edit"
                     title="Ver detalle"
-                    @click.stop="openModal(r.id)"
+                    @click.stop="openModal(r)"
                   >
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                       <path
@@ -140,7 +140,7 @@
         >
           <div class="sp-modal-box">
             <ReclamacionesModal
-              :reclamacion-id="selectedId"
+              :reclamacion="selectedItem"
               @close="closeModal"
               @updated="onUpdated"
             />
@@ -157,21 +157,26 @@ import ReclamacionesModal from './reclamacionesModal.vue';
 definePageMeta({ middleware: "auth", layout: "admin" });
 useSeoMeta({ title: "Libro de Reclamaciones — Admin" });
 
-const { data, refresh } = await useFetch("/api/admin/reclamaciones");
-const items = computed(() => data.value ?? []);
+const authStore = useAuthStore();
+const _authToken = authStore.token;
+const { data, refresh } = await useFetch('/api/admin/reclamaciones', {
+  server: false,
+  headers: _authToken ? { Authorization: `Bearer ${_authToken}` } : {}
+});
+const items = computed(() => data.value?.data ?? []);
 const { formatDateTime } = useFormatDateTime();
 
 const modalOpen = ref(false);
-const selectedId = ref(null);
+const selectedItem = ref(null);
 
-function openModal(id) {
-  selectedId.value = id;
+function openModal(item) {
+  selectedItem.value = item;
   modalOpen.value = true;
 }
 
 function closeModal() {
   modalOpen.value = false;
-  selectedId.value = null;
+  selectedItem.value = null;
 }
 
 async function onUpdated() {

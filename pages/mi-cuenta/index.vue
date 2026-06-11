@@ -99,7 +99,8 @@ definePageMeta({
   middleware: ['auth']
 })
 
-const { user } = useUserSession()
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
 const products = ref<any[]>([])
 const loading = ref(true)
@@ -115,7 +116,7 @@ const openModal = (product: any) => {
 const fetchProducts = async () => {
   try {
     loading.value = true
-    const { data } = await $fetch<{ data: any[] }>("/api/landing/catalog-products")
+    const { data } = await $fetch<{ data: any[] }>("/api/products")
     
     // Filter by the logged-in user
     const userProducts = data.filter(p => p.sellerId === user.value?.id)

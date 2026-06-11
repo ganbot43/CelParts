@@ -58,11 +58,11 @@ const { data: rawProducts, pending: loading } = await useAsyncData(
     if (filterPattern.value) query.pattern = filterPattern.value;
     if (sortBy.value) query.sort = sortBy.value;
 
-    return $fetch<{ data: Product[] }>("/api/landing/catalog-products", { query });
+    return $fetch<{ data: Product[] }>("/api/products", { query });
   },
   {
     watch: [debouncedSearchQuery, filterMaterial, filterSize, filterPattern, sortBy],
-    server: true, // Habilitar SSR (SEO-friendly)
+    server: false, // Habilitar SSR (SEO-friendly) - Desactivado temporalmente para evitar problemas con el proxy en el servidor
   }
 );
 

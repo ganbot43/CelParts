@@ -99,10 +99,10 @@ async function loadCategories() {
   loading.value = true;
   categories.value = [];
   try {
-    const response = await $fetch<{ data: CategoryItem[] }>(
-      `/api/landing/category-grid?sectionId=${props.sectionId}`,
+    const data = await $fetch<CategoryItem[]>(
+      `/api/categories`,
     );
-    categories.value = response?.data ?? [];
+    categories.value = data ?? [];
   } catch (error) {
     console.error("Error cargando categorías del grid:", error);
     categories.value = [];

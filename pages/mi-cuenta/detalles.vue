@@ -25,7 +25,7 @@
           <div class="identity-info">
             <h2>{{ user?.name || 'Abuela/o Clara Gisbert Mendoza' }}</h2>
             <span class="role-badge">{{ user?.role ? user.role.replace('_', ' y ').toUpperCase() : 'VENDEDOR Y COMPRADOR' }}</span>
-            <span class="identity-subtext">Socio registrado / @{{ user?.name ? user.name.split(' ')[0].toLowerCase() : 'abuelaclara' }}</span>
+            <span class="identity-subtext">Socio registrado / @{{ user?.username || (user?.name ? user.name.split(' ')[0].toLowerCase() : 'abuelaclara') }}</span>
           </div>
         </div>
 
@@ -42,14 +42,19 @@
             <div class="data-value">{{ lastName }}</div>
           </div>
 
+          <div class="data-group full-width">
+            <label>NOMBRE DE USUARIO (@)</label>
+            <div class="data-value monospace-text">@{{ user?.username || '—' }}</div>
+          </div>
+
           <div class="data-group">
             <label>GÉNERO</label>
-            <div class="data-value">Femenino</div>
+            <div class="data-value">{{ user?.gender || '—' }}</div>
           </div>
 
           <div class="data-group">
             <label>FECHA DE NACIMIENTO</label>
-            <div class="data-value">1948-12-05</div>
+            <div class="data-value">{{ user?.birthDate || '—' }}</div>
           </div>
 
           <div class="data-group">
@@ -100,18 +105,12 @@ definePageMeta({
   middleware: ['auth']
 })
 
-const { user } = useUserSession()
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
-const firstName = computed(() => {
-  if (!user.value?.name) return 'Clara'
-  return user.value.name.split(' ')[0]
-})
+const firstName = computed(() => user.value?.name || '—')
 
-const lastName = computed(() => {
-  if (!user.value?.name) return 'Gisbert Mendoza'
-  const parts = user.value.name.split(' ')
-  return parts.slice(1).join(' ') || 'Gisbert'
-})
+const lastName = computed(() => user.value?.lastName || '—')
 
 const formattedRole = computed(() => {
   if (!user.value?.role) return 'Vendedor y Comprador'

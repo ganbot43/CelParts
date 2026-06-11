@@ -10,7 +10,8 @@
 </template>
 
 <script setup lang="ts">
-const { loggedIn } = useUserSession()
+const authStore = useAuthStore();
+const { isLoggedIn: loggedIn } = storeToRefs(authStore);
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 

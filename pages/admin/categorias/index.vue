@@ -27,6 +27,7 @@
             <tr>
               <th class="sp-th">Categoría</th>
               <th class="sp-th">Slug</th>
+              <th class="sp-th">Estado</th>
               <th class="sp-th">Fecha</th>
               <th class="sp-th" style="width: 100px">Acciones</th>
             </tr>
@@ -38,6 +39,12 @@
               </td>
               <td class="sp-td">
                 <span class="sp-table-num">{{ cat.slug }}</span>
+              </td>
+              <td class="sp-td">
+                <span class="sp-badge" :class="cat.isActive ? 'sp-badge--success' : 'sp-badge--danger'">
+                  <span class="sp-badge__dot"></span>
+                  {{ cat.isActive ? 'Activo' : 'Inactivo' }}
+                </span>
               </td>
               <td class="sp-td sp-td--muted">
                 <span class="sp-table-date">{{ formatDateTime(cat.createdAt) }}</span>
@@ -234,6 +241,14 @@
               <p v-if="bannerUploadError" class="sp-drawer-error">{{ bannerUploadError }}</p>
             </div>
 
+            <div class="sp-drawer-switches">
+              <label class="sp-drawer-switch">
+                <input type="checkbox" v-model="form.isActive" class="sp-drawer-switch__input" />
+                <span class="sp-drawer-switch__track"><span class="sp-drawer-switch__thumb"></span></span>
+                <span class="sp-drawer-switch__label">Activo</span>
+              </label>
+            </div>
+
             <p v-if="formError" class="sp-drawer-error">{{ formError }}</p>
           </div>
 
@@ -310,7 +325,7 @@ const uploadingBanner = ref(false);
 const bannerUploadError = ref("");
 const bannerFileInputRef = ref<HTMLInputElement>();
 
-const emptyForm = () => ({ name: "", seccion: null, idProducto: null, imagenBanner: "" });
+const emptyForm = () => ({ name: "", seccion: null, idProducto: null, imagenBanner: "", isActive: true });
 const form = reactive(emptyForm());
 
 function openDrawer(cat?: any) {
@@ -321,6 +336,7 @@ function openDrawer(cat?: any) {
     form.seccion = cat.seccion || null;
     form.idProducto = cat.idProducto || null;
     form.imagenBanner = cat.imagenBanner || "";
+    form.isActive = cat.isActive !== false;
   } else {
     editingId.value = null;
     Object.assign(form, emptyForm());

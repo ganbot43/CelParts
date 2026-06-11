@@ -102,16 +102,53 @@ async function seed() {
   const cat_amigurumis = 2
   const cat_mantas = 3
 
+  // 3.5. TABLA DE SUBCATEGORÍAS
+  const subcategories = [
+    { id: 1, categoryId: cat_amigurumis, name: 'Animalitos', slug: 'animalitos', sortOrder: 1 },
+    { id: 2, categoryId: cat_amigurumis, name: 'Personajes', slug: 'personajes', sortOrder: 2 },
+    { id: 3, categoryId: cat_tapetes, name: 'Circulares', slug: 'circulares', sortOrder: 1 },
+    { id: 4, categoryId: cat_tapetes, name: 'Rectangulares', slug: 'rectangulares', sortOrder: 2 },
+    { id: 5, categoryId: cat_mantas, name: 'Para Cuna (Bebé)', slug: 'para-cuna', sortOrder: 1 },
+    { id: 6, categoryId: cat_mantas, name: 'Para Cama', slug: 'para-cama', sortOrder: 2 },
+  ]
+  for (const sub of subcategories) {
+    await db.insert(schema.subcategories).values(sub).onDuplicateKeyUpdate({
+      set: { name: sub.name, slug: sub.slug, sortOrder: sub.sortOrder }
+    }).execute()
+  }
+
+  const sub_animalitos = 1
+  const sub_circulares = 3
+  const sub_rectangulares = 4
+
+  // 3.6. TABLA DE MATERIALES
+  const materials = [
+    { id: 1, name: 'Lana de Alpaca Bebé', slug: 'lana-alpaca-bebe' },
+    { id: 2, name: 'Algodón 100% Orgánico', slug: 'algodon-organico' },
+    { id: 3, name: 'Lana Gruesa y Yute', slug: 'lana-gruesa-yute' },
+    { id: 4, name: 'Hilo Acrílico', slug: 'hilo-acrilico' },
+  ]
+  for (const mat of materials) {
+    await db.insert(schema.materials).values(mat).onDuplicateKeyUpdate({
+      set: { name: mat.name, slug: mat.slug }
+    }).execute()
+  }
+
+  const mat_alpaca = 1
+  const mat_algodon = 2
+  const mat_lana_yute = 3
+
   // 4. TABLA DE PRODUCTOS (Ficha técnica C2C)
   // Amigurumi Oso "Beto" con Chalina Roja
   await db.insert(schema.products).values({
     id: 1,
     categoryId: cat_amigurumis,
+    subcategoryId: sub_animalitos,
     sellerId: usr_clara,
     name: 'Amigurumi Oso "Beto" con Chalina Roja',
     slug: makeSlug('Amigurumi Oso Beto con Chalina Roja'),
     price: 45.00,
-    material: 'Lana de Alpaca Bebé',
+    materialId: mat_alpaca,
     sizeLength: 30,
     sizeWidth: 20,
     sizeUnit: 'cm',
@@ -124,10 +161,11 @@ async function seed() {
   }).onDuplicateKeyUpdate({
     set: {
       categoryId: cat_amigurumis,
+      subcategoryId: sub_animalitos,
       sellerId: usr_clara,
       name: 'Amigurumi Oso "Beto" con Chalina Roja',
       price: 45.00,
-      material: 'Lana de Alpaca Bebé',
+      materialId: mat_alpaca,
       sizeLength: 30,
       sizeWidth: 20,
       sizeUnit: 'cm',
@@ -152,11 +190,12 @@ async function seed() {
   await db.insert(schema.products).values({
     id: 2,
     categoryId: cat_tapetes,
+    subcategoryId: sub_circulares,
     sellerId: usr_clara,
     name: 'Tapete Circular "Sol Cálido" de Girasoles',
     slug: makeSlug('Tapete Circular Sol Calido de Girasoles'),
     price: 85.00,
-    material: 'Algodón 100% Orgánico',
+    materialId: mat_algodon,
     sizeLength: 80,
     sizeWidth: 80,
     sizeUnit: 'cm',
@@ -168,10 +207,11 @@ async function seed() {
   }).onDuplicateKeyUpdate({
     set: {
       categoryId: cat_tapetes,
+      subcategoryId: sub_circulares,
       sellerId: usr_clara,
       name: 'Tapete Circular "Sol Cálido" de Girasoles',
       price: 85.00,
-      material: 'Algodón 100% Orgánico',
+      materialId: mat_algodon,
       sizeLength: 80,
       sizeWidth: 80,
       sizeUnit: 'cm',
@@ -195,11 +235,12 @@ async function seed() {
   await db.insert(schema.products).values({
     id: 3,
     categoryId: cat_tapetes, // Usando tapetes para alfombra
+    subcategoryId: sub_rectangulares,
     sellerId: usr_ricardo,
     name: 'Alfombra de Sala "Pradera de Otoño"',
     slug: makeSlug('Alfombra de Sala Pradera de Otono'),
     price: 140.00,
-    material: 'Lana y Yute',
+    materialId: mat_lana_yute,
     sizeLength: 120,
     sizeWidth: 80,
     sizeUnit: 'cm',
@@ -212,10 +253,11 @@ async function seed() {
   }).onDuplicateKeyUpdate({
     set: {
       categoryId: cat_tapetes,
+      subcategoryId: sub_rectangulares,
       sellerId: usr_ricardo,
       name: 'Alfombra de Sala "Pradera de Otoño"',
       price: 140.00,
-      material: 'Lana y Yute',
+      materialId: mat_lana_yute,
       sizeLength: 120,
       sizeWidth: 80,
       sizeUnit: 'cm',

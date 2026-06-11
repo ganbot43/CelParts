@@ -60,18 +60,45 @@
             </div>
           </div>
 
+          <!-- Category & Subcategory -->
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>CATEGORÍA *</label>
+              <div class="select-wrapper">
+                <select v-model="form.categoryId" class="form-select" required>
+                  <option :value="null" disabled>Seleccione categoría</option>
+                  <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                    {{ cat.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group flex-1">
+              <label>SUBCATEGORÍA</label>
+              <div class="select-wrapper">
+                <select v-model="form.subcategoryId" class="form-select">
+                  <option :value="null">Ninguna / Opcional</option>
+                  <option v-for="sub in filteredSubcategories" :key="sub.id" :value="sub.id">
+                    {{ sub.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Material & Pattern -->
           <!-- Material & Pattern -->
           <div class="form-row">
             <div class="form-group flex-1">
               <label>MATERIAL DEL TEJIDO *</label>
               <div class="select-wrapper">
                 <span class="select-icon">🧶</span>
-                <select v-model="form.material" class="form-select with-icon" required>
-                  <option value="" disabled>Seleccione material</option>
-                  <option value="Lana de Alpaca">Lana de Alpaca</option>
-                  <option value="Algodón 100% Orgánico">Algodón 100% Orgánico</option>
-                  <option value="Lana Gruesa y Yute">Lana Gruesa y Yute</option>
-                  <option value="Hilo Acrílico">Hilo Acrílico</option>
+                <select v-model="form.materialId" class="form-select with-icon" required>
+                  <option :value="null" disabled>Seleccione material</option>
+                  <option v-for="mat in materials" :key="mat.id" :value="mat.id">
+                    {{ mat.name }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -147,10 +174,24 @@ const form = ref({
   sizeLength: '',
   sizeWidth: '',
   sizeUnit: 'cm',
-  material: '',
+  materialId: null as number | null,
+  categoryId: null as number | null,
+  subcategoryId: null as number | null,
   offersPattern: null as boolean | null,
   description: '',
   image: ''
+})
+
+// Fetch dependencies
+const { data: categories } = await useFetch('/api/admin/categories', { transform: (res: any) => res.data })
+const { data: subcategories } = await useFetch('/api/admin/subcategories', { transform: (res: any) => res.data })
+const { data: materials } = await useFetch('/api/admin/materials', { transform: (res: any) => res.data })
+
+const filteredSubcategories = computed(() => {
+  const catId = Number(form.value.categoryId)
+  if (!catId) return []
+  const list = Array.isArray(subcategories.value) ? subcategories.value : (subcategories.value?.data || [])
+  return list.filter((s: any) => Number(s.categoryId) === catId)
 })
 
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -193,7 +234,9 @@ onMounted(async () => {
         sizeLength: data.sizeLength?.toString() || '',
         sizeWidth: data.sizeWidth?.toString() || '',
         sizeUnit: data.sizeUnit || 'cm',
-        material: data.material || '',
+        materialId: data.materialId || null,
+        categoryId: data.categoryId || null,
+        subcategoryId: data.subcategoryId || null,
         offersPattern: data.offersPattern === 1,
         description: data.description || '',
         image: data.images?.find((img: any) => img.isPrimary)?.url || data.images?.[0]?.url || ''
@@ -219,7 +262,9 @@ const saveProduct = async () => {
       sizeLength: form.value.sizeLength ? parseInt(form.value.sizeLength) : null,
       sizeWidth: form.value.sizeWidth ? parseInt(form.value.sizeWidth) : null,
       sizeUnit: form.value.sizeUnit,
-      material: form.value.material,
+      materialId: form.value.materialId,
+      categoryId: form.value.categoryId,
+      subcategoryId: form.value.subcategoryId,
       offersPattern: form.value.offersPattern,
       description: form.value.description,
       images: [{ url: form.value.image, isPrimary: true }]

@@ -60,6 +60,16 @@ export const subcategories = mysqlTable('subcategories', {
   slug:       varchar('slug', { length: 191 }).notNull().unique(),
   sortOrder:  int('sort_order').notNull().default(0),
   isActive:   int('is_active').notNull().default(1),
+  createdAt:  timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
+})
+
+// 4.5 materials
+export const materials = mysqlTable('materials', {
+  id:        int('id').autoincrement().primaryKey(),
+  name:      text('name').notNull(),
+  slug:      varchar('slug', { length: 191 }).notNull().unique(),
+  isActive:  int('is_active').notNull().default(1),
+  createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
 // 5. products
@@ -80,7 +90,8 @@ export const products = mysqlTable('products', {
   isFeatured:    int('is_featured').notNull().default(0),
   nuevoLanzamiento: int('nuevo_lanzamiento').notNull().default(0),
   isActive:      int('is_active').notNull().default(1),
-  material:      text('material'),
+  materialId:    int('material_id')
+                   .references(() => materials.id, { onDelete: 'set null' }),
   sizeLength:    int('size_length'),
   sizeWidth:     int('size_width'),
   sizeUnit:      varchar('size_unit', { length: 10 }).default('cm'),
@@ -235,6 +246,7 @@ export const subcategoriesRelations = relations(subcategories, ({ one, many }) =
 export const productsRelations = relations(products, ({ one, many }) => ({
   category:    one(categories,    { fields: [products.categoryId],    references: [categories.id] }),
   subcategory: one(subcategories, { fields: [products.subcategoryId], references: [subcategories.id] }),
+  material:    one(materials,     { fields: [products.materialId],    references: [materials.id] }),
   seller:      one(users,         { fields: [products.sellerId],      references: [users.id] }),
   images:      many(productImages),
   orderItems:  many(orderItems),

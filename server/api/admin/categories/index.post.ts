@@ -19,7 +19,7 @@ const schema = z.object({
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const data = validateBody(schema, body)
-  const id = await insertAndGetId(categories, { ...data, slug: makeSlug(data.name) })
+  const id = await insertAndGetId(categories, { ...data, isActive: data.isActive ? 1 : 0, slug: makeSlug(data.name) })
   const c = (await enhanceCategories(
     await db.select().from(categories).where(eq(categories.id, id)).limit(1),
   ))[0]

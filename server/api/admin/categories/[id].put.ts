@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const data = validateBody(schema, body)
   const update: any = { ...data }
+  if (data.isActive !== undefined) update.isActive = data.isActive ? 1 : 0
   if (data.name) update.slug = makeSlug(data.name)
   await db.update(categories).set(update).where(eq(categories.id, id)).execute()
   const c = (await enhanceCategories(

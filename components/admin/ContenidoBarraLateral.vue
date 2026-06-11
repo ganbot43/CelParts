@@ -92,6 +92,11 @@ const baseItems = [
     svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M3 4h12v2H3zM3 8h12v2H3zM3 12h12v2H3z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   },
   {
+    to: "/admin/materiales",
+    label: "Materiales",
+    svg: `<svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`,
+  },
+  {
     to: "/admin/reclamaciones",
     label: "Libro de Reclamaciones",
     svg: `<svg viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 7h7M5.5 10h7M5.5 13h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,

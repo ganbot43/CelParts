@@ -60,18 +60,44 @@
             </div>
           </div>
 
+          <!-- Category & Subcategory -->
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>CATEGORÍA *</label>
+              <div class="select-wrapper">
+                <select v-model="form.categoryId" class="form-select" required>
+                  <option :value="null" disabled>Seleccione categoría</option>
+                  <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                    {{ cat.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group flex-1">
+              <label>SUBCATEGORÍA</label>
+              <div class="select-wrapper">
+                <select v-model="form.subcategoryId" class="form-select">
+                  <option :value="null">Ninguna / Opcional</option>
+                  <option v-for="sub in filteredSubcategories" :key="sub.id" :value="sub.id">
+                    {{ sub.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <!-- Material & Pattern -->
           <div class="form-row">
             <div class="form-group flex-1">
               <label>MATERIAL DEL TEJIDO *</label>
               <div class="select-wrapper">
                 <span class="select-icon">🧶</span>
-                <select v-model="form.material" class="form-select with-icon" required>
-                  <option value="" disabled>Seleccione material</option>
-                  <option value="Lana de Alpaca">Lana de Alpaca</option>
-                  <option value="Algodón 100% Orgánico">Algodón 100% Orgánico</option>
-                  <option value="Lana Gruesa y Yute">Lana Gruesa y Yute</option>
-                  <option value="Hilo Acrílico">Hilo Acrílico</option>
+                <select v-model="form.materialId" class="form-select with-icon" required>
+                  <option :value="null" disabled>Seleccione material</option>
+                  <option v-for="mat in materials" :key="mat.id" :value="mat.id">
+                    {{ mat.name }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -140,10 +166,22 @@ const form = ref({
   sizeLength: '',
   sizeWidth: '',
   sizeUnit: 'cm',
-  material: '',
+  materialId: null as number | null,
   offersPattern: null as boolean | null,
   description: '',
-  image: ''
+  image: '',
+  categoryId: null as number | null,
+  subcategoryId: null as number | null
+})
+
+// Fetch categories and subcategories
+const { data: categories } = await useFetch('/api/admin/categories')
+const { data: subcategories } = await useFetch('/api/admin/subcategories')
+const { data: materials } = await useFetch('/api/admin/materials')
+
+const filteredSubcategories = computed(() => {
+  if (!form.value.categoryId || !subcategories.value) return []
+  return subcategories.value.filter(s => s.categoryId === form.value.categoryId)
 })
 
 onMounted(() => {
@@ -156,10 +194,12 @@ onMounted(() => {
       sizeLength: '80',
       sizeWidth: '80',
       sizeUnit: 'cm',
-      material: 'Algodón 100% Orgánico',
+      materialId: 2,
       offersPattern: true,
       description: 'Hermoso tapete circular tejido a crochet con forma de girasol radiante. Ideal para la sala de estar o el pie de cama.',
-      image: 'https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?auto=format&fit=crop&q=80&w=200&h=200'
+      image: 'https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?auto=format&fit=crop&q=80&w=200&h=200',
+      categoryId: 1,
+      subcategoryId: null
     }
   }
 })
@@ -167,11 +207,37 @@ onMounted(() => {
 const saveProduct = async () => {
   isSaving.value = true
   
-  // Simulate API call
-  setTimeout(() => {
-    isSaving.value = false
+  try {
+    const endpoint = isEditing.value 
+      ? `/api/seller/products/${route.params.id}` 
+      : '/api/seller/products'
+      
+    const method = isEditing.value ? 'PUT' : 'POST'
+    
+    await $fetch(endpoint, {
+      method,
+      body: {
+        name: form.value.name,
+        price: Number(form.value.price),
+        sizeLength: Number(form.value.sizeLength),
+        sizeWidth: Number(form.value.sizeWidth),
+        sizeUnit: form.value.sizeUnit,
+        materialId: form.value.materialId,
+        offersPattern: form.value.offersPattern,
+        description: form.value.description,
+        categoryId: form.value.categoryId,
+        subcategoryId: form.value.subcategoryId,
+        // image upload implementation omitted for brevity
+      }
+    })
+    
     router.push('/mi-cuenta')
-  }, 1000)
+  } catch (err) {
+    console.error('Error saving product:', err)
+    alert('Ocurrió un error al guardar el producto.')
+  } finally {
+    isSaving.value = false
+  }
 }
 </script>
 

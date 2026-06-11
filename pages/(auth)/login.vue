@@ -239,24 +239,8 @@ async function login() {
   error.value = "";
 
   try {
-    await $fetch("/api/auth/login", {
-      method: "POST",
-      body: form,
-    });
-
-    await fetchUserSession();
-    const { user } = useUserSession();
-
-    if (user.value?.role === "admin" || user.value?.role === "superadmin") {
-      await navigateTo("/admin", { external: true });
-    } else {
-      const redirect = route.query.redirect as string;
-      if (redirect && !redirect.startsWith('/admin')) {
-        await navigateTo(redirect, { external: true });
-      } else {
-        await navigateTo("/mi-cuenta", { external: true });
-      }
-    }
+    const authStore = useAuthStore();
+    await authStore.login(form.email, form.password);
 
   } catch (e: any) {
     console.log("ERROR COMPLETO:", e);

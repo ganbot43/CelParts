@@ -55,7 +55,9 @@
                   <div v-if="dropdownOpen" class="menu-dropdown">
                     <!-- Dropdown Header -->
                     <div class="dropdown-profile-header">
-                      <div class="dropdown-avatars">👵 👴</div>
+                      <div class="dropdown-avatar-img">
+                        <img :src="'https://ui-avatars.com/api/?name=' + (user?.name || 'U') + '&background=7d8e74&color=fff&size=52'" alt="Perfil" />
+                      </div>
                       <div class="dropdown-profile-text">
                         <strong>{{ user?.name || 'Clara Gisbert Mendoza' }}</strong>
                         <span>@{{ user?.username || (user?.name ? user.name.split(' ')[0].toLowerCase() : 'abuelaclara') }}</span>
@@ -334,9 +336,12 @@ onUnmounted(() => {
   margin-bottom: 20px;
 }
 
-.dropdown-avatars {
-  font-size: 1.5rem;
-  letter-spacing: -6px; /* overlap emojis */
+.dropdown-avatar-img img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8e4;
   margin-right: 6px;
 }
 

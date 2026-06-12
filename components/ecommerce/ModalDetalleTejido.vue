@@ -60,7 +60,12 @@
                 </div>
                 <div class="box-col">
                   <span class="box-label">MEDIDAS / TAMAÑO</span>
-                  <span class="box-value">📏 {{ product.sizeLength }} {{ product.sizeUnit }} de alto</span>
+                  <span class="box-value">
+                    📏 {{ product.sizeLength }}
+                    <template v-if="product.sizeWidth">x {{ product.sizeWidth }}</template>
+                    {{ product.sizeUnit }}
+                    <template v-if="!product.sizeWidth">de alto</template>
+                  </span>
                 </div>
               </div>
 

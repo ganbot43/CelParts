@@ -212,7 +212,7 @@ const handleFileUpload = async (e: Event) => {
   
   uploadingImg.value = true
   try {
-    const res = await $fetch('/api/upload/image', {
+    const res = await $fetch('/api/upload', {
       method: 'POST',
       body: formData
     })
@@ -268,7 +268,11 @@ const saveProduct = async () => {
       subcategoryId: form.value.subcategoryId,
       offersPattern: form.value.offersPattern,
       description: form.value.description,
-      images: [{ url: form.value.image, isPrimary: true }]
+      image: form.value.image,
+      sellerId: user.value?.id,
+      sellerName: user.value?.name,
+      // If user.value doesn't have phone, use a default or empty, but let's try reading user.value.phone
+      sellerPhone: (user.value as any)?.phone || '+51999999999'
     }
 
     if (isEditing.value) {

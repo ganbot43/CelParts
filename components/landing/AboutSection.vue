@@ -17,7 +17,7 @@
 
         <!-- Texto de bienvenida -->
         <p class="welcome-text">
-          En <strong class="welcome-text__highlight">Arigumi</strong> nos apasiona ofrecer repuestos y accesorios de alta calidad para celulares en Perú. Creemos que tu dispositivo merece lo mejor, y por eso nos esforzamos por brindarte productos confiables, duraderos y
+          En <strong class="welcome-text__highlight">Arigumi</strong> nos apasiona ofrecer piezas únicas tejidas a mano en Perú. Creemos que cada hogar merece la calidez de lo artesanal, y por eso nos esforzamos por brindarte productos hermosos, duraderos y llenos de historia.
           <strong class="welcome-text__highlight">al precio justo</strong>.
         </p>
 

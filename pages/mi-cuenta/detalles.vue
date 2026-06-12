@@ -42,7 +42,7 @@
             <div class="data-value">{{ lastName }}</div>
           </div>
 
-          <div class="data-group full-width">
+          <div class="data-group">
             <label>NOMBRE DE USUARIO (@)</label>
             <div class="data-value monospace-text">@{{ user?.username || '—' }}</div>
           </div>

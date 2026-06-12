@@ -352,7 +352,7 @@ async function manejarAgregar() {
 
 .info-cantidad-boton:hover:not(:disabled) {
   background: var(--bg-alt);
-  color: var(--cp-electric);
+  color: var(--cp-sage);
 }
 
 .info-cantidad-boton:disabled {

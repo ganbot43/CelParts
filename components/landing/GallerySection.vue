@@ -3,22 +3,22 @@ const items = [
   {
     imageUrl: "/images/gallery/almacenaje.png",
     label: "Pantallas",
-    alt: "Pantallas para celulares"
+    alt: "Tejidos a mano"
   },
   {
     imageUrl: "/images/gallery/cuchilleria.png",
     label: "Baterías",
-    alt: "Baterías para celulares"
+    alt: "Amigurumis decorativos"
   },
   {
     imageUrl: "/images/gallery/ollas.png",
     label: "Cases y fundas",
-    alt: "Cases para celulares"
+    alt: "Mantas artesanales"
   },
   {
     imageUrl: "/images/gallery/reposteria.png",
     label: "Cargadores",
-    alt: "Cargadores para celulares"
+    alt: "Tapetes y accesorios"
   },
   {
     imageUrl: "/images/gallery/sartenes.png",
@@ -40,7 +40,7 @@ const items = [
         </h2>
 
         <p class="section-subtitle">
-          Descubre repuestos y accesorios para las principales marcas de celulares.
+          Descubre piezas únicas tejidas con amor por nuestros adultos mayores.
         </p>
       </div>
 

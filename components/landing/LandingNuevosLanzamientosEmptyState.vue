@@ -23,8 +23,7 @@
     </h3>
 
     <p class="empty-state__subtitle">
-      Estamos incorporando nuevos repuestos y accesorios para las principales
-      marcas de celulares. Vuelve pronto para descubrir las últimas novedades.
+      Estamos tejiendo nuevas sorpresas artesanales. Vuelve pronto para descubrir las últimas novedades y apoyar a nuestros adultos mayores.
     </p>
 
     <!-- CTA principal -->

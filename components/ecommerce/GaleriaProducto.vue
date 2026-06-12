@@ -197,8 +197,8 @@ watch(
 
 .galeria-insignia-icono {
   width: 12px;
-  height: 12px;
-  color: var(--cp-electric);
+  background: var(--cp-sage-light);
+  color: var(--cp-sage-dark);
   flex-shrink: 0;
 }
 
@@ -256,7 +256,7 @@ watch(
 }
 
 .galeria-miniatura-boton.activa {
-  border: 2px solid var(--cp-electric);
+  border: 2px solid var(--cp-sage);
   box-shadow: 0 0 0 1px rgba(0, 174, 239, 0.2);
 }
 

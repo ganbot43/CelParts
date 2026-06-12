@@ -19,6 +19,7 @@ interface Product {
   sellerPhone?: string;
   description?: string;
   stock?: number;
+  createdAt?: string;
 }
 
 
@@ -66,6 +67,9 @@ const { data: rawProducts, pending: loading } = await useAsyncData(
   }
 );
 
+const { data: materialsData } = await useFetch<Array<{ name: string; slug: string }>>("/api/materials");
+const materials = computed(() => materialsData.value || []);
+
 // Fallbacks computed
 const products = computed(() => {
   return (rawProducts.value?.data || []).map(p => ({
@@ -109,8 +113,7 @@ const products = computed(() => {
               <span class="select-icon">🧶</span>
               <select v-model="filterMaterial" class="custom-select">
                 <option value="">Todos los materiales</option>
-                <option value="lana">Lana</option>
-                <option value="algodon">Algodón</option>
+                <option v-for="mat in materials" :key="mat.slug" :value="mat.slug">{{ mat.name }}</option>
               </select>
             </div>
           </div>

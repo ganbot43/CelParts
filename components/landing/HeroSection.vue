@@ -29,14 +29,14 @@
         <!-- Titular -->
         <div class="hero-copy">
           <h1 class="hero-title">
-            Repuestos
-            <span class="hero-title__accent">originales</span>
-            <span class="hero-title__line">para tu celular.</span>
+            Tejidos
+            <span class="hero-title__accent">artesanales</span>
+            <span class="hero-title__line">para tu hogar.</span>
           </h1>
           <p class="hero-text">
-            Pantallas, baterías, conectores y accesorios de alta calidad.
-            Todo lo que necesitas para reparar y personalizar tu dispositivo,
-            con garantía y envío a todo el Perú.
+            Amigurumis, tapetes, mantas y bordados hechos a mano con cariño.
+            Todo lo que necesitas para decorar y regalar con calidez,
+            directamente desde las manos de nuestras abuelas peruanas.
           </p>
         </div>
 
@@ -129,9 +129,9 @@
   height: 100vh;
   max-height: 920px;
   background: linear-gradient(105deg,
-      rgba(7, 30, 82, 0.55) 0%,
-      rgba(7, 30, 82, 0.35) 45%,
-      rgba(7, 30, 82, 0.10) 100%);
+      rgba(88, 70, 54, 0.55) 0%,
+      rgba(88, 70, 54, 0.35) 45%,
+      rgba(88, 70, 54, 0.10) 100%);
   z-index: 1;
 }
 
@@ -224,8 +224,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--cp-electric);
-  box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.30);
+  background: var(--cp-sage);
+  box-shadow: 0 0 0 2px rgba(125, 142, 116, 0.30);
   animation: pulse-dot 2.4s ease-in-out infinite;
   flex-shrink: 0;
 }
@@ -234,7 +234,7 @@
 
   0%,
   100% {
-    box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.30);
+    box-shadow: 0 0 0 2px rgba(125, 142, 116, 0.30);
   }
 
   50% {
@@ -250,8 +250,8 @@
 }
 
 .hero-chip__tag {
-  background: var(--cp-electric);
-  color: var(--cp-navy);
+  background: var(--cp-sage);
+  color: var(--cp-cream-surface);
   font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.10em;
@@ -276,7 +276,7 @@
 
 .hero-title__accent {
   display: block;
-  background: linear-gradient(120deg, var(--cp-sky) 0%, var(--cp-electric) 100%);
+  background: linear-gradient(120deg, var(--cp-sage) 0%, var(--cp-earth-mid) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -335,19 +335,19 @@
 }
 
 .hero-btn--primary {
-  background: var(--cp-electric);
-  color: var(--cp-navy);
-  box-shadow: 0 4px 20px rgba(0, 170, 255, 0.40);
+  background: var(--cp-sage);
+  color: var(--cp-cream-surface);
+  box-shadow: 0 4px 20px rgba(125, 142, 116, 0.40);
 }
 
 .hero-btn--primary:hover {
-  background: var(--cp-sky);
-  box-shadow: 0 6px 28px rgba(0, 170, 255, 0.55);
-  color: var(--cp-navy);
+  background: var(--cp-sage-dark);
+  box-shadow: 0 6px 28px rgba(125, 142, 116, 0.55);
+  color: var(--cp-cream-surface);
 }
 
 .hero-btn--primary:focus-visible {
-  outline: 3px solid var(--cp-sky-light);
+  outline: 3px solid var(--cp-sage-light);
   outline-offset: 3px;
 }
 
@@ -409,7 +409,7 @@
 
 .hero-stat strong {
   display: block;
-  color: var(--cp-navy);
+  color: var(--cp-earth-dark);
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 800;

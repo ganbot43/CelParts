@@ -6,39 +6,39 @@ const { waLink } = useArigumi();
 const benefits = [
   {
     icon: "check",
-    title: "Catálogo especializado",
+    title: "Catálogo artesanal",
     description:
-      "Encuentra pantallas, baterías, cámaras, flex, conectores y accesorios para las principales marcas de celulares.",
+      "Encuentra amigurumis, mantas, tapetes y accesorios únicos, tejidos a mano por adultos mayores.",
   },
   {
     icon: "shield",
-    title: "Compras seguras",
+    title: "Trato directo",
     description:
-      "Productos seleccionados con garantía y procesos de compra confiables para técnicos, tiendas y clientes finales.",
+      "Compra sin comisiones ni intermediarios, comunicándote directamente por WhatsApp con el tejedor.",
   },
   {
     icon: "chat",
-    title: "Soporte personalizado",
+    title: "Pedidos personalizados",
     description:
-      "Brindamos asesoría para ayudarte a encontrar el repuesto o accesorio compatible con tu dispositivo.",
+      "Conversa con nuestras abuelitas para pedir colores especiales o diseños a tu medida.",
   },
   {
     icon: "store",
-    title: "Ecommerce completo",
+    title: "Tienda unificada",
     description:
-      "Explora categorías, filtra por marca, agrega productos al carrito y realiza pedidos desde una sola plataforma.",
+      "Explora categorías, descubre nuevos lanzamientos y guarda tus favoritos desde una sola plataforma.",
   },
   {
     icon: "truck",
-    title: "Seguimiento de pedidos",
+    title: "Envíos a todo el país",
     description:
-      "Consulta el estado de tus compras y mantente informado durante todo el proceso de entrega.",
+      "Nuestros tejedores coordinan contigo la entrega de tu pedido para que llegue seguro a tus manos.",
   },
   {
     icon: "peru",
-    title: "Panel administrativo",
+    title: "Orgullo peruano",
     description:
-      "Gestiona productos, categorías, pedidos y usuarios mediante roles diferenciados entre SuperAdmin y Admin.",
+      "Cada punto tejido lleva consigo una historia de tradición y cultura peruana inigualable.",
   },
 ];
 
@@ -65,13 +65,13 @@ const scroll = (dir: "left" | "right") => {
         <span class="benefits-label">ARIGUMI PERÚ</span>
 
         <h2 class="benefits-title">
-          Todo lo que necesitas para tu celular
+          Hecho a mano y con el corazón
           <span class="benefits-title__dot" />
         </h2>
 
         <p class="benefits-subtitle">
-          Plataforma full-stack con ecommerce, catálogo de repuestos y accesorios,
-          gestión de pedidos y panel administrativo para la operación completa del negocio.
+          Un espacio donde el talento y la dedicación de nuestros adultos mayores 
+          se conectan contigo a través de hermosos tejidos artesanales.
         </p>
       </div>
 
@@ -162,21 +162,21 @@ const scroll = (dir: "left" | "right") => {
       <div class="benefits-cta">
         <div class="benefits-cta__text">
           <span class="benefits-cta__eyebrow">
-            Ecommerce + Gestión administrativa
+            Comunidad y Arte Textil
           </span>
           <h3 class="benefits-cta__title">
-            Compra o cotiza tu pedido de repuestos y accesorios para celulares
+            Únete a la familia Arigumi y descubre piezas únicas
           </h3>
           <p class="benefits-cta__desc">
-            Arigumi es la solución integral para técnicos, tiendas y clientes finales
-            que buscan una experiencia de compra completa, segura y personalizada.
+            Al comprar en Arigumi no solo adquieres un producto tejido con amor,
+            sino que apoyas directamente a la economía y bienestar de nuestros abuelitos.
           </p>
         </div>
 
         <LandingAppButton variant="accent" size="lg"
-          :href="waLink('Hola Gino, quiero cotizar repuestos y accesorios para celulares')" target="_blank">
+          :href="waLink('Hola, quiero saber más sobre los tejidos artesanales')" target="_blank">
           <LandingWaIcon />
-          Cotizar por WhatsApp
+          Escríbenos por WhatsApp
         </LandingAppButton>
       </div>
 
@@ -225,7 +225,7 @@ const scroll = (dir: "left" | "right") => {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
-  color: var(--cp-electric);
+  color: var(--cp-sage-dark);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -237,7 +237,7 @@ const scroll = (dir: "left" | "right") => {
   content: "";
   width: 20px;
   height: 1px;
-  background: var(--cp-electric);
+  background: var(--cp-sage);
   opacity: 0.5;
 }
 
@@ -256,7 +256,7 @@ const scroll = (dir: "left" | "right") => {
   height: 8px;
   display: inline-block;
   border-radius: 50%;
-  background: var(--cp-electric);
+  background: var(--cp-earth-mid);
   margin-left: var(--space-2);
   box-shadow: var(--glow-soft);
 }
@@ -346,7 +346,7 @@ const scroll = (dir: "left" | "right") => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--cp-electric);
+  color: var(--cp-sage-dark);
   flex-shrink: 0;
   transition:
     background var(--t-base) var(--ease-smooth),
@@ -356,9 +356,9 @@ const scroll = (dir: "left" | "right") => {
 }
 
 .benefit-card:hover .benefit-icon {
-  background: var(--cp-electric);
-  border-color: var(--cp-electric);
-  color: var(--cp-white);
+  background: var(--cp-sage);
+  border-color: var(--cp-sage);
+  color: var(--cp-cream-surface);
   box-shadow: var(--glow-soft);
 }
 
@@ -411,9 +411,9 @@ const scroll = (dir: "left" | "right") => {
 }
 
 .benefits-arrow:hover {
-  background: var(--cp-navy);
-  border-color: var(--cp-navy);
-  color: var(--cp-white);
+  background: var(--cp-earth-dark);
+  border-color: var(--cp-earth-dark);
+  color: var(--cp-cream-surface);
   box-shadow: var(--card-shadow);
   transform: translateY(-50%) scale(1.06);
 }
@@ -429,7 +429,7 @@ const scroll = (dir: "left" | "right") => {
 /* ── CTA ── */
 .benefits-cta {
   margin-top: var(--space-16);
-  background: var(--grad-cta);
+  background: var(--cp-sage);
   border-radius: var(--r-xl);
   padding: var(--space-12) var(--space-12);
   display: flex;
@@ -455,7 +455,7 @@ const scroll = (dir: "left" | "right") => {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--cp-sky);
+  color: var(--cp-cream-card);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -466,12 +466,12 @@ const scroll = (dir: "left" | "right") => {
   content: "";
   width: 18px;
   height: 1px;
-  background: var(--cp-electric);
+  background: var(--cp-cream-surface);
 }
 
 .benefits-cta__title {
   margin: var(--space-3) 0 var(--space-2);
-  color: var(--cp-white);
+  color: var(--cp-cream-surface);
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2.2rem);
   font-weight: 800;

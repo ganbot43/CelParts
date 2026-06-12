@@ -4,7 +4,7 @@
       <!-- Left Branding Section -->
       <div class="branding-section">
         <div class="brand-header">
-          <img src="/images/logo.png" alt="Arigumi logo" class="brand-logo" />
+          <img :src="logoUrl" alt="Arigumi logo" class="brand-logo" />
           <div class="brand-title">
             <h1>Arigumi</h1>
             <span>Hilando sonrisas</span>
@@ -73,7 +73,13 @@
             />
           </div>
 
-          <!-- Error -->
+          <!-- Error / Success -->
+          <Transition name="fade-slide">
+            <div v-if="successMsg" class="alert alert-success">
+              {{ successMsg }}
+            </div>
+          </Transition>
+
           <Transition name="fade-slide">
             <div v-if="error" class="alert alert-error">
               {{ error }}
@@ -134,10 +140,21 @@ useSeoMeta({ title: "Arigumi — Iniciar sesión" })
 
 const form = reactive({ email: "", password: "" })
 const loading = ref(false)
-const error = ref("")
+const error = ref('')
+
+// Load business config for dynamic logo
+const businessConfig = useBusinessConfig()
+const logoUrl = computed(() => businessConfig.value?.logoUrl || '/images/logo.png')
 
 const authStore = useAuthStore();
 const route = useRoute()
+
+const successMsg = computed(() => {
+  if (route.query.registered) {
+    return "¡Registro exitoso! Por favor, ingresa a tu cuenta."
+  }
+  return ""
+})
 
 async function login() {
   if (!form.email || !form.password) {

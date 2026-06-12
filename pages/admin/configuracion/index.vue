@@ -72,8 +72,8 @@
             <label class="sp-drawer-label">Logo del Negocio</label>
             <p class="sp-drawer-hint">Sube una imagen desde tu computadora (PNG, JPG o SVG, máx. 2MB)</p>
             <div class="cfg-logo-upload-container">
-              <div v-if="form.logoUrl" class="cfg-logo-preview cfg-logo-preview--large">
-                <img :src="form.logoUrl" alt="Logo" @error="logoError = true" v-if="!logoError" />
+              <div v-if="logoPreviewUrl || form.logoUrl" class="cfg-logo-preview cfg-logo-preview--large">
+                <img :src="logoPreviewUrl || form.logoUrl" alt="Logo" @error="logoError = true" v-if="!logoError" />
                 <span v-else class="cfg-logo-fallback">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5" />
@@ -327,6 +327,7 @@ const saving = ref(false);
 const saved = ref(false);
 const error = ref("");
 const logoError = ref(false);
+const logoPreviewUrl = ref("");
 
 const uploadingLogo = ref(false);
 const logoUploadError = ref("");
@@ -358,11 +359,14 @@ async function onLogoFileSelected(e: Event) {
   try {
     const fd = new FormData();
     fd.append("file", file);
-    const res: any = await $fetch("/api/upload/image", {
+    const res: any = await $fetch("/api/upload", {
       method: "POST",
       body: fd,
     });
     form.logoUrl = res.url;
+    if (res.previewUrl) {
+      logoPreviewUrl.value = res.previewUrl;
+    }
     logoError.value = false;
     if (logoFileInputRef.value) {
       logoFileInputRef.value.value = "";

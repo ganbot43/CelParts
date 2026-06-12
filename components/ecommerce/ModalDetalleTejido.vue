@@ -19,12 +19,19 @@
 
               <!-- Main Image -->
               <div class="image-wrapper">
-                <img :src="primaryImage" :alt="product.name" class="main-image" />
+                <img v-if="primaryImage" :src="primaryImage" :alt="product.name" class="main-image" />
+                <div v-else class="img-placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                </div>
               </div>
 
               <!-- Bottom Meta -->
-              <div class="image-meta-bottom">
-                <span class="meta-date">⏰ Publicado: 20/5/2026</span>
+              <div class="image-meta-bottom mt-3">
+                <span class="meta-date">⏰ Publicado: {{ formattedDate }}</span>
                 <span class="meta-location">📍 Lima, Perú</span>
               </div>
             </div>
@@ -81,7 +88,7 @@
                     <NuxtLink :to="`/mi-cuenta/productos/${product.id}`" class="btn btn-edit-full">
                       <span class="icon">📝</span> Editar Tejido
                     </NuxtLink>
-                    <button class="btn btn-delete-full">
+                    <button class="btn btn-delete-full" @click="deleteProduct">
                       <span class="icon">🗑️</span> Eliminar Publicación
                     </button>
                   </div>
@@ -114,7 +121,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:isOpen'])
+const emit = defineEmits(['update:isOpen', 'product-deleted'])
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
@@ -127,15 +134,37 @@ const close = () => {
   emit('update:isOpen', false)
 }
 
+const deleteProduct = async () => {
+  if (!confirm("¿Estás seguro de que deseas eliminar esta publicación?")) return;
+  try {
+    await $fetch(`/api/seller/products/${props.product.id}`, { method: 'DELETE' });
+    close();
+    emit('product-deleted', props.product.id);
+  } catch (e) {
+    console.error("Error deleting product", e);
+    alert("No se pudo eliminar el producto");
+  }
+}
+
 const primaryImage = computed(() => {
   const primary = props.product?.images?.find((i: any) => i.isPrimary)
-  return primary?.url ?? props.product?.images?.[0]?.url ?? '/images/placeholder.png'
+  return primary?.url ?? props.product?.images?.[0]?.url ?? null
 })
 
 const formatPrice = (price: number | string) => {
   const p = Number(price)
   return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(p)
 }
+
+const formattedDate = computed(() => {
+  if (!props.product.createdAt) return 'Hoy'
+  const date = new Date(props.product.createdAt)
+  return new Intl.DateTimeFormat('es-PE', { 
+    day: '2-digit', 
+    month: 'long', 
+    year: 'numeric' 
+  }).format(date)
+})
 
 const whatsappLink = computed(() => {
   const phone = props.product.sellerPhone?.replace(/\D/g, '') || ''
@@ -234,6 +263,20 @@ const whatsappLink = computed(() => {
   object-fit: cover;
 }
 
+.img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--cp-border-mid);
+  background-color: var(--cp-cream-card);
+}
+.img-placeholder svg {
+  width: 64px;
+  height: 64px;
+}
+
 .image-meta-bottom {
   display: flex;
   justify-content: space-between;
@@ -253,6 +296,7 @@ const whatsappLink = computed(() => {
   flex-direction: column;
   position: relative;
   border-left: 1px solid var(--cp-border-light);
+  overflow-y: auto;
 }
 
 .modal-close {

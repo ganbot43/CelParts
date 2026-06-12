@@ -4,7 +4,7 @@
       <!-- Left Branding Section (same as login) -->
       <div class="branding-section">
         <div class="brand-header">
-          <img src="/images/logo.png" alt="Arigumi logo" class="brand-logo" />
+          <img :src="logoUrl" alt="Arigumi logo" class="brand-logo" />
           <div class="brand-title">
             <h1>Arigumi</h1>
             <span>Hilando sonrisas</span>
@@ -167,8 +167,13 @@ const form = reactive({
   phone: "",
   address: "",
   role: "vendedor_comprador",
-  password: ""
+  password: '',
 })
+
+// Load business config for dynamic logo
+const { data: businessConfig } = await useFetch<any>('/api/business/config')
+const logoUrl = computed(() => businessConfig.value?.logoUrl || '/images/logo.png')
+
 const loading = ref(false)
 const error = ref("")
 
@@ -192,14 +197,12 @@ async function register() {
       body: form,
     })
 
-    // Log the user in automatically after successful registration
-    await authStore.login(form.email, form.password);
-
+    // Redirigir al login después del registro exitoso
     const redirect = route.query.redirect as string
     if (redirect) {
-      await navigateTo(redirect, { external: true })
+      await navigateTo(`/login?redirect=${redirect}&registered=true`, { external: true })
     } else {
-      await navigateTo("/", { external: true })
+      await navigateTo("/login?registered=true", { external: true })
     }
   } catch (e: any) {
     // Si no existe el endpoint temporalmente, mostramos error

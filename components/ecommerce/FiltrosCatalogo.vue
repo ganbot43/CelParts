@@ -129,14 +129,14 @@ watch(filters, () => emit('change', filters))
 .filtros-subchip:hover {
   border-color: rgba(0, 174, 239, 0.3);
   background: rgba(0, 174, 239, 0.04);
-  color: var(--cp-electric);
+  color: var(--cp-sage);
 }
 
 .filtros-chip.active,
 .filtros-subchip.active {
-  border-color: var(--cp-electric);
+  border-color: var(--cp-sage);
   background: rgba(0, 174, 239, 0.08);
-  color: var(--cp-electric);
+  color: var(--cp-sage);
   font-weight: 700;
 }
 

@@ -212,7 +212,7 @@ onUnmounted(() => {
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--cp-electric);
+  color: var(--cp-sage);
   margin: 0;
 }
 
@@ -256,8 +256,8 @@ onUnmounted(() => {
 }
 
 .similares-flecha:hover {
-  background: var(--cp-electric);
-  border-color: var(--cp-electric);
+  background: var(--cp-sage);
+  border-color: var(--cp-sage);
   color: var(--cp-white);
   box-shadow: 0 4px 20px rgba(0, 174, 239, 0.22);
   transform: translateY(-50%) scale(1.07);

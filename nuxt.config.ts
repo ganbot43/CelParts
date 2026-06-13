@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     appManifest: false,
   },
   routeRules: {
-    '/api/**': { proxy: 'http://localhost:8080/api/**' }
+    '/api/**': { proxy: (process.env.API_PROXY_URL || 'http://localhost:8080/api') + '/**' }
   },
   runtimeConfig: {
     // ─── Existentes (landing) ────────────────────────────────────

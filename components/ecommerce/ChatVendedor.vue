@@ -262,6 +262,7 @@ watch(() => props.isOpen, (val) => {
 .seller-name {
   font-weight: 800;
   font-size: 0.95rem;
+  color: #ffffff;
 }
 
 .seller-status {
@@ -269,7 +270,8 @@ watch(() => props.isOpen, (val) => {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
+  opacity: 0.8;
 }
 
 .status-dot {
@@ -282,13 +284,19 @@ watch(() => props.isOpen, (val) => {
 .btn-close {
   background: transparent;
   border: none;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   opacity: 0.8;
   transition: opacity var(--t-fast);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 8px;
+  z-index: 10;
+}
+
+.btn-close svg {
+  stroke: #ffffff;
 }
 
 .btn-close:hover {

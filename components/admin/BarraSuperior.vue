@@ -58,15 +58,15 @@
       <div class="sp-topbar__divider" role="separator"></div> -->
 
       <!-- Usuario -->
-      <div class="sp-topbar__user">
-        <div class="sp-topbar__avatar" aria-hidden="true">
-          {{ initials }}
+      <NuxtLink to="/admin/perfil" class="sp-topbar__user" style="text-decoration:none; color:inherit">
+        <div class="sp-topbar__avatar" aria-hidden="true" style="overflow: hidden; padding: 0;">
+          <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" style="width:100%; height:100%; object-fit:cover" />
+          <span v-else style="display:flex; align-items:center; justify-content:center; width:100%; height:100%">{{ initials }}</span>
         </div>
         <div class="sp-topbar__user-info">
           <span class="user-name">{{ session?.name || 'Admin' }}</span>
-          <span class="user-role">{{ session?.role || 'Administrator' }}</span>
         </div>
-      </div>
+      </NuxtLink>
 
       <div class="sp-topbar__divider" role="separator"></div>
 
@@ -132,11 +132,36 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
 const route = useRoute();
+const isScrolled = ref(false);
+
 const loggingOut = ref(false);
 const authStore = useAuthStore();
 const { user: session } = storeToRefs(authStore);
 const clearSession = authStore.clearAuth;
 const sidebarRef = inject<{ openDrawer: () => void } | null>('sidebarRef', null);
+
+const avatarUrl = ref('');
+watch(
+  () => session.value?.profileImageUrl,
+  async (newUrl) => {
+    if (!newUrl) {
+      avatarUrl.value = '';
+      return;
+    }
+    if (newUrl.includes('.amazonaws.com/')) {
+      try {
+        const res: any = await $fetch(`/api/upload/presigned?url=${encodeURIComponent(newUrl)}`);
+        avatarUrl.value = res.presignedUrl || newUrl;
+      } catch (e) {
+        avatarUrl.value = newUrl;
+      }
+    } else {
+      avatarUrl.value = newUrl;
+    }
+  },
+  { immediate: true }
+);
+
 const { formatTime } = useFormatDateTime();
 
 /* ── Título de página ── */
@@ -162,7 +187,7 @@ const pageTitle = computed(() => {
 
 /* ── Iniciales del usuario ── */
 const userDisplayName = computed(() => {
-  const user = session.value?.user as Record<string, unknown> | undefined;
+  const user = session.value as Record<string, unknown> | undefined;
   return (
     (typeof user?.name === "string" && user.name) ||
     (typeof user?.fullName === "string" && user.fullName) ||

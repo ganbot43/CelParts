@@ -176,7 +176,7 @@
                 name="tel"
                 maxlength="20"
                 class="lr-input"
-                placeholder="+51 996 111 303"
+                :placeholder="businessState?.whatsapp || '+51 999 999 999'"
                 required
               />
               <span
@@ -200,7 +200,7 @@
                 name="email"
                 maxlength="254"
                 class="lr-input"
-                placeholder="hola@kite.com"
+                :placeholder="businessState?.email || 'hola@arigumi.pe'"
                 required
               />
               <span
@@ -222,7 +222,7 @@
                 name="street-address"
                 maxlength="200"
                 class="lr-input"
-                placeholder="Av. Ejemplo 123, Lima"
+                :placeholder="businessState?.address || 'Av. Ejemplo 123, Lima'"
               />
               <span
                 class="lr-counter"
@@ -733,13 +733,13 @@ async function submit() {
   TOKENS KITE -> ARIGUMI
 ═══════════════════════════════════ */
 .lr-page {
-  --kite-green: var(--brand-primary);
-  --kite-green-dark: var(--brand-primary-hover);
-  --kite-green-glow: rgba(125, 142, 116, 0.25);
-  --kite-green-soft: rgba(125, 142, 116, 0.08);
-  --kite-green-line: rgba(125, 142, 116, 0.2);
-  --kite-yellow: var(--brand-accent);
-  --kite-yellow-dim: var(--brand-accent-hover);
+  --brand-green: var(--brand-primary);
+  --brand-green-dark: var(--brand-primary-hover);
+  --brand-green-glow: rgba(125, 142, 116, 0.25);
+  --brand-green-soft: rgba(125, 142, 116, 0.08);
+  --brand-green-line: rgba(125, 142, 116, 0.2);
+  --brand-yellow: var(--brand-accent);
+  --brand-yellow-dim: var(--brand-accent-hover);
   --jm-surface: var(--bg-surface);
   --jm-surface2: var(--bg-surface);
   --jm-surface3: var(--bg-surface);
@@ -768,7 +768,7 @@ async function submit() {
   font-size: 72px;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: var(--kite-green-soft);
+  color: var(--brand-green-soft);
   pointer-events: none;
   white-space: nowrap;
   line-height: 1;
@@ -794,9 +794,9 @@ async function submit() {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--kite-green-dark);
-  background: var(--kite-green-soft);
-  border: 1px solid var(--kite-green-line);
+  color: var(--brand-green-dark);
+  background: var(--brand-green-soft);
+  border: 1px solid var(--brand-green-line);
   border-radius: 4px;
   padding: 5px 10px;
   margin-bottom: 20px;
@@ -818,7 +818,7 @@ async function submit() {
   max-width: 560px;
   font-style: italic;
   padding-left: 12px;
-  border-left: 2px solid var(--kite-green-line);
+  border-left: 2px solid var(--brand-green-line);
 }
 
 /* ── Datos del negocio ── */
@@ -861,8 +861,8 @@ async function submit() {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  background: var(--kite-green-soft);
-  border: 1px solid var(--kite-green-line);
+  background: var(--brand-green-soft);
+  border: 1px solid var(--brand-green-line);
   border-radius: 12px;
   padding: 20px 24px;
   margin-bottom: 32px;
@@ -874,15 +874,15 @@ async function submit() {
   border-radius: 50%;
   background: linear-gradient(
     135deg,
-    var(--kite-green),
-    var(--kite-green-dark)
+    var(--brand-green),
+    var(--brand-green-dark)
   );
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 24px var(--kite-green-glow);
+  box-shadow: 0 0 24px var(--brand-green-glow);
 }
 
 .lr-success__title {
@@ -894,7 +894,7 @@ async function submit() {
 
 .lr-success__code {
   font-size: 13px;
-  color: var(--kite-green);
+  color: var(--brand-green);
   font-weight: 700;
   margin: 0 0 6px;
 }
@@ -922,10 +922,10 @@ async function submit() {
 }
 
 .lr-section:focus-within {
-  border-color: var(--kite-green-line);
+  border-color: var(--brand-green-line);
   box-shadow:
-    0 0 0 1px var(--kite-green-line),
-    0 0 24px var(--kite-green-soft);
+    0 0 0 1px var(--brand-green-line),
+    0 0 24px var(--brand-green-soft);
 }
 
 .lr-section__head {
@@ -941,7 +941,7 @@ async function submit() {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--kite-green);
+  background: var(--brand-green);
   color: #ffffff;
   font-size: 13px;
   font-weight: 700;
@@ -949,7 +949,7 @@ async function submit() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 16px var(--kite-green-glow);
+  box-shadow: 0 0 16px var(--brand-green-glow);
 }
 
 .lr-section__title {
@@ -1032,7 +1032,7 @@ async function submit() {
 }
 
 .lr-req {
-  color: var(--kite-green);
+  color: var(--brand-green);
 }
 
 /* ── Inputs ── */
@@ -1052,11 +1052,11 @@ async function submit() {
 }
 
 .lr-input:focus {
-  border-color: var(--kite-green);
+  border-color: var(--brand-green);
   background: var(--bg-surface);
   box-shadow:
-    0 0 0 3px var(--kite-green-soft),
-    0 0 16px var(--kite-green-glow);
+    0 0 0 3px var(--brand-green-soft),
+    0 0 16px var(--brand-green-glow);
 }
 
 .lr-input::placeholder {
@@ -1099,7 +1099,7 @@ async function submit() {
 }
 
 .lr-counter--error {
-  color: var(--kite-green);
+  color: var(--brand-green);
 }
 
 /* ── Toggle buttons ── */
@@ -1125,17 +1125,17 @@ async function submit() {
 }
 
 .lr-toggle:hover {
-  border-color: var(--kite-green-line);
-  color: var(--kite-green);
-  background: var(--kite-green-soft);
-  box-shadow: 0 0 10px var(--kite-green-glow);
+  border-color: var(--brand-green-line);
+  color: var(--brand-green);
+  background: var(--brand-green-soft);
+  box-shadow: 0 0 10px var(--brand-green-glow);
 }
 
 .lr-toggle--active {
-  border-color: var(--kite-green);
-  background: var(--kite-green);
+  border-color: var(--brand-green);
+  background: var(--brand-green);
   color: #ffffff;
-  box-shadow: 0 0 18px var(--kite-green-glow);
+  box-shadow: 0 0 18px var(--brand-green-glow);
 }
 
 .lr-toggle__hint {
@@ -1169,10 +1169,10 @@ async function submit() {
 }
 
 .lr-file:hover {
-  border-color: var(--kite-green);
-  background: var(--kite-green-soft);
-  color: var(--kite-green);
-  box-shadow: 0 0 12px var(--kite-green-glow);
+  border-color: var(--brand-green);
+  background: var(--brand-green-soft);
+  color: var(--brand-green);
+  box-shadow: 0 0 12px var(--brand-green-glow);
 }
 
 .lr-file__input {
@@ -1224,9 +1224,9 @@ async function submit() {
 }
 
 .lr-check:has(.lr-check__input:checked) .lr-check__box {
-  background: var(--kite-green);
-  border-color: var(--kite-green);
-  box-shadow: 0 0 12px var(--kite-green-glow);
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  box-shadow: 0 0 12px var(--brand-green-glow);
 }
 
 .lr-check__text {
@@ -1242,7 +1242,7 @@ async function submit() {
   justify-content: center;
   gap: 8px;
   padding: 13px 32px;
-  background: var(--kite-green);
+  background: var(--brand-green);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -1257,21 +1257,21 @@ async function submit() {
     box-shadow 0.15s,
     background 0.15s;
   box-shadow:
-    0 0 20px var(--kite-green-glow),
+    0 0 20px var(--brand-green-glow),
     0 4px 16px rgba(45, 106, 79, 0.25);
 }
 
 .lr-submit:hover:not(:disabled) {
-  background: var(--kite-green-dark);
+  background: var(--brand-green-dark);
   transform: translateY(-2px);
   box-shadow:
-    0 0 32px var(--kite-green-glow),
-    0 8px 24px var(--kite-green-glow);
+    0 0 32px var(--brand-green-glow),
+    0 8px 24px var(--brand-green-glow);
 }
 
 .lr-submit:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 0 12px var(--kite-green-glow);
+  box-shadow: 0 0 12px var(--brand-green-glow);
 }
 
 .lr-submit:disabled {
@@ -1295,7 +1295,7 @@ async function submit() {
 }
 
 .lr-link:hover {
-  color: var(--kite-green);
+  color: var(--brand-green);
 }
 
 /* ── Spinner ── */

@@ -1,12 +1,12 @@
 <template>
-  <section class="kite-section" id="nosotros">
+  <section class="arigumi-section bg-surface" id="nosotros">
     <!-- Blobs decorativos -->
     <span class="blob blob--tr" aria-hidden="true" />
     <span class="blob blob--bl" aria-hidden="true" />
 
-    <div class="kite-section__container">
+    <div class="arigumi-section__container">
       <!-- Columna izquierda: contenido -->
-      <div class="kite-section__content">
+      <div class="arigumi-section__content">
 
         <!-- Divisor -->
         <div class="divider" aria-hidden="true">
@@ -72,7 +72,7 @@ const pillars: Pillar[] = [
    100% tokens de main.css — sin hardcode
 ═══════════════════════════════════ */
 
-.kite-section {
+.arigumi-section {
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -129,7 +129,7 @@ const pillars: Pillar[] = [
 }
 
 /* CONTENT */
-.kite-section__content {
+.arigumi-section__content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -303,7 +303,7 @@ const pillars: Pillar[] = [
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .kite-section__container {
+  .arigumi-section__container {
     padding: 0 var(--space-5);
   }
 }

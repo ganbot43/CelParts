@@ -75,7 +75,7 @@
                 <div class="seller-details">
                   <span class="seller-label">Tejido con amor por</span>
                   <span class="seller-name">{{ product.sellerName || 'Clara Gisbert Mendoza' }}</span>
-                  <span class="seller-phone">📱 Celular: {{ product.sellerPhone || '+51940756166' }}</span>
+                  <span class="seller-phone">📱 Celular: {{ product.sellerPhone || businessConfig?.whatsapp || '+51940756166' }}</span>
                 </div>
                 <div class="seller-badge" v-if="isOwner">Es tuyo ✨</div>
               </div>
@@ -122,7 +122,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { onMounted, onUnmounted, computed, ref } from 'vue'
+
+const businessConfig = useBusinessConfig()
 
 const props = defineProps({
   isOpen: Boolean,

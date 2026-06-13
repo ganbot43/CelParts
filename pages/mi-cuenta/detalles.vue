@@ -11,10 +11,16 @@
             <h1 class="detalles-title">Detalles de mi Cuenta</h1>
             <p class="detalles-subtitle">Revise sus datos personales de Arigumi. Mantener su teléfono y correo vigente ayuda a que le compren rápido.</p>
           </div>
-          <button class="btn btn-edit-data" @click="editData">
+          <button v-if="!isEditing" class="btn btn-edit-data" @click="isEditing = true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="edit-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             Editar<br/>Datos
           </button>
+          <div v-else class="edit-actions">
+            <button class="btn btn-cancel" @click="cancelEdit">Cancelar</button>
+            <button class="btn btn-save" :disabled="saving" @click="saveData">
+              {{ saving ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+          </div>
         </div>
 
         <!-- User Identity Box -->
@@ -34,50 +40,63 @@
           
           <div class="data-group">
             <label>NOMBRE</label>
-            <div class="data-value">{{ firstName }}</div>
+            <div v-if="!isEditing" class="data-value">{{ firstName }}</div>
+            <input v-else v-model="form.name" class="data-value sp-input" type="text" />
           </div>
           
           <div class="data-group">
             <label>APELLIDOS</label>
-            <div class="data-value">{{ lastName }}</div>
+            <div v-if="!isEditing" class="data-value">{{ lastName }}</div>
+            <input v-else v-model="form.lastName" class="data-value sp-input" type="text" />
           </div>
 
           <div class="data-group">
             <label>NOMBRE DE USUARIO (@)</label>
-            <div class="data-value monospace-text">@{{ user?.username || '—' }}</div>
+            <div v-if="!isEditing" class="data-value monospace-text">@{{ user?.username || '—' }}</div>
+            <input v-else v-model="form.username" class="data-value sp-input monospace-text" type="text" />
           </div>
 
           <div class="data-group">
             <label>GÉNERO</label>
-            <div class="data-value">{{ user?.gender || '—' }}</div>
+            <div v-if="!isEditing" class="data-value">{{ user?.gender || '—' }}</div>
+            <select v-else v-model="form.gender" class="data-value sp-input">
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+              <option value="Otro">Otro</option>
+            </select>
           </div>
 
           <div class="data-group">
             <label>FECHA DE NACIMIENTO</label>
-            <div class="data-value">{{ user?.birthDate || '—' }}</div>
+            <div v-if="!isEditing" class="data-value">{{ user?.birthDate || '—' }}</div>
+            <input v-else v-model="form.birthDate" class="data-value sp-input" type="date" />
           </div>
 
           <div class="data-group">
             <label>DNI (IDENTIFICACIÓN)</label>
-            <div class="data-value">{{ user?.dni || '08342155' }}</div>
+            <div v-if="!isEditing" class="data-value">{{ user?.dni || '08342155' }}</div>
+            <input v-else v-model="form.dni" class="data-value sp-input" type="text" />
           </div>
 
           <div class="data-group">
             <label>CELULAR WHATSAPP</label>
-            <div class="data-value whatsapp-value">
+            <div v-if="!isEditing" class="data-value whatsapp-value">
               <span class="active-dot"></span>
               {{ user?.phone || '+51940756166' }}
             </div>
+            <input v-else v-model="form.phone" class="data-value sp-input" type="text" />
           </div>
 
           <div class="data-group full-width">
             <label>DIRECCIÓN</label>
-            <div class="data-value">{{ user?.address || 'Av. Larco 452, Miraflores, Lima' }}</div>
+            <div v-if="!isEditing" class="data-value">{{ user?.address || 'Av. Larco 452, Miraflores, Lima' }}</div>
+            <input v-else v-model="form.address" class="data-value sp-input" type="text" />
           </div>
 
           <div class="data-group full-width">
             <label>CORREO ELECTRÓNICO DE CONTACTO</label>
             <div class="data-value monospace-text">{{ user?.email || 'clara.tejidos@arigumi.pe' }}</div>
+            <small v-if="isEditing" class="helper-text">El correo no se puede cambiar aquí.</small>
           </div>
 
           <div class="data-group full-width">
@@ -98,7 +117,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({
   layout: 'landing',
@@ -109,7 +130,6 @@ const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 
 const firstName = computed(() => user.value?.name || '—')
-
 const lastName = computed(() => user.value?.lastName || '—')
 
 const formattedRole = computed(() => {
@@ -118,8 +138,52 @@ const formattedRole = computed(() => {
   return role.charAt(0).toUpperCase() + role.slice(1)
 })
 
-const editData = () => {
-  alert('¡Próximamente! La edición de perfil se habilitará en la siguiente fase.')
+const isEditing = ref(false)
+const saving = ref(false)
+
+const form = ref({
+  name: user.value?.name || '',
+  lastName: user.value?.lastName || '',
+  username: user.value?.username || '',
+  gender: user.value?.gender || '',
+  birthDate: user.value?.birthDate || '',
+  dni: user.value?.dni || '',
+  phone: user.value?.phone || '',
+  address: user.value?.address || ''
+})
+
+watch(isEditing, (val) => {
+  if (val) {
+    form.value = {
+      name: user.value?.name || '',
+      lastName: user.value?.lastName || '',
+      username: user.value?.username || '',
+      gender: user.value?.gender || '',
+      birthDate: user.value?.birthDate || '',
+      dni: user.value?.dni || '',
+      phone: user.value?.phone || '',
+      address: user.value?.address || ''
+    }
+  }
+})
+
+const cancelEdit = () => {
+  isEditing.value = false
+}
+
+const saveData = async () => {
+  try {
+    saving.value = true
+    await authStore.updateProfile(form.value)
+    isEditing.value = false
+    // Opcional: mostrar un toast de éxito
+    alert('Perfil actualizado correctamente')
+  } catch (error) {
+    console.error(error)
+    alert('Ocurrió un error al guardar los cambios.')
+  } finally {
+    saving.value = false
+  }
 }
 </script>
 

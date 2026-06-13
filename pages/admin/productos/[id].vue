@@ -176,11 +176,11 @@ const form = ref({
 })
 
 // Fetch categories and subcategories
-const authHeaders = (authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}) as Record<string, string>;
-
-const { data: categories } = await useFetch<{ data: any[] }>('/api/admin/categories', { server: false, headers: authHeaders })
-const { data: subcategories } = await useFetch<{ data: any[] }>('/api/admin/subcategories', { server: false, headers: authHeaders })
-const { data: materials } = await useFetch<{ data: any[] }>('/api/admin/materials', { server: false, headers: authHeaders })
+const { data: initialData } = await useFetch<any>(`/api/admin/products/${route.params.id}`, { 
+  server: false
+});
+const { data: subcategories } = await useFetch<{ data: any[] }>('/api/admin/subcategories', { server: false })
+const { data: materials } = await useFetch<{ data: any[] }>('/api/admin/materials', { server: false })
 
 const filteredSubcategories = computed(() => {
   if (!form.value.categoryId || !subcategories.value?.data) return []
@@ -237,7 +237,8 @@ const saveProduct = async () => {
     router.push('/mi-cuenta')
   } catch (err: any) {
     const { parseError } = useApiError();
-    addToast({
+    const toast = useToast();
+    toast.add({
       title: 'Error al guardar',
       description: parseError(err),
       color: 'error'

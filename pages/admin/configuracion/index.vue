@@ -373,7 +373,7 @@ async function onLogoFileSelected(e: Event) {
   try {
     const fd = new FormData();
     fd.append("file", file);
-    const res: any = await $fetch("/api/upload?folder=business-config", {
+    const res: any = await $fetch("/api/upload?folder=business_config", {
       method: "POST",
       body: fd,
     });

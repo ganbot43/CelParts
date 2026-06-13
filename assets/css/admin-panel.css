@@ -280,7 +280,8 @@
    ============================================================ */
 .smart-panel-admin.admin-shell {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Sidebar */
@@ -481,6 +482,11 @@
     box-shadow var(--sp-t-fast) var(--sp-ease),
     background-color var(--sp-t-fast) var(--sp-ease),
     color var(--sp-t-fast) var(--sp-ease);
+}
+
+.smart-panel-admin :where(.admin-button) {
+  padding: 0.65rem 1.5rem;
+  font-size: var(--sp-text-sm);
 }
 
 .smart-panel-admin :where(.admin-button:hover, .admin-chip:hover) {

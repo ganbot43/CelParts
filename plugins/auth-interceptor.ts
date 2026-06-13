@@ -4,12 +4,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (process.client) {
     // @ts-ignore
     globalThis.$fetch = ofetch.create({
-      onRequest({ request, options }) {
-        const authStore = useAuthStore()
-        if (authStore.token) {
-          options.headers = new Headers(options.headers || {})
-          options.headers.set('Authorization', `Bearer ${authStore.token}`)
-        }
+      onRequest({ options }) {
+        options.credentials = 'include'; // Enviar cookies en cada petición automáticamente
       },
       async onResponseError({ response }) {
         if (response.status === 401 || response.status === 403) {

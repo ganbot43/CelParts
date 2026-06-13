@@ -236,10 +236,8 @@ async function save() {
   }
   saving.value = true
   try {
-    const token = authStore.token
     await $fetch(`/api/admin/reclamaciones/${props.reclamacion.id}`, {
       method: 'PUT',
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
       body: { estado: local.estado, respuesta: local.respuesta },
     })
     emit('updated')

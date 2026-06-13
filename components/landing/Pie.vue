@@ -93,8 +93,8 @@
             <div class="cp-footer__contact-label">
               Email
             </div>
-            <a href="mailto:hola@arigumi.pe" class="cp-footer__contact-val">
-              hola@arigumi.pe
+            <a :href="'mailto:' + (businessConfig?.email || 'hola@arigumi.pe')" class="cp-footer__contact-val">
+              {{ businessConfig?.email || 'hola@arigumi.pe' }}
             </a>
           </div>
 
@@ -102,8 +102,8 @@
             <div class="cp-footer__contact-label">
               WhatsApp
             </div>
-            <a href="tel:+51999999999" class="cp-footer__contact-val">
-              +51 999 999 999
+            <a :href="'tel:' + (businessConfig?.whatsapp || '+51999999999')" class="cp-footer__contact-val">
+              {{ businessConfig?.whatsapp || '+51 999 999 999' }}
             </a>
           </div>
 
@@ -112,7 +112,7 @@
               Ubicación
             </div>
             <span class="cp-footer__contact-val">
-              Perú
+              {{ businessConfig?.address || 'Perú' }}
             </span>
           </div>
 

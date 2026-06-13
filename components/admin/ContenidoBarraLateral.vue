@@ -109,6 +109,11 @@ const superadminItems = [
     label: "Configuración",
     svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M9 13.5A4.5 4.5 0 1 0 9 4.5a4.5 4.5 0 0 0 0 9Z" stroke="currentColor" stroke-width="1.4"/><path d="M12 2.5a6.5 6.5 0 0 1 5 5h1M1 10.5h1a6.5 6.5 0 0 1 5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
   },
+  {
+    to: "/admin/perfil",
+    label: "Mi Perfil",
+    svg: `<svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="5" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M3 15a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+  },
 ];
 
 function isActive(path: string) {

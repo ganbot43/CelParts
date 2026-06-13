@@ -129,8 +129,7 @@ useSeoMeta({ title: "Materiales — Admin" });
 
 const authStore = useAuthStore();
 const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/materials?all=true", { 
-  server: false,
-  headers: (authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}) as Record<string, string>
+  // credentials ya se envian por defecto en plugin
 });
 const items = computed(() => data.value?.data ?? []);
 const { formatDateTime } = useFormatDateTime();

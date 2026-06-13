@@ -91,7 +91,7 @@
             </div>
             <div class="field-group">
               <label for="phone">Celular (Para WhatsApp)</label>
-              <input id="phone" v-model="form.phone" type="text" placeholder="Ej. +51 940 756 166" required />
+              <input id="phone" v-model="form.phone" type="text" placeholder="Ej. +51 999 999 999" required />
             </div>
           </div>
 

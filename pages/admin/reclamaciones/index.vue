@@ -157,11 +157,8 @@ import ReclamacionesModal from './reclamacionesModal.vue';
 definePageMeta({ middleware: "auth", layout: "admin" });
 useSeoMeta({ title: "Libro de Reclamaciones — Admin" });
 
-const authStore = useAuthStore();
-const _authToken = authStore.token;
 const { data, refresh } = await useFetch('/api/admin/reclamaciones', {
-  server: false,
-  headers: _authToken ? { Authorization: `Bearer ${_authToken}` } : {}
+  method: 'GET'
 });
 const items = computed(() => data.value?.data ?? []);
 const { formatDateTime } = useFormatDateTime();

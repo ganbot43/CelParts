@@ -251,8 +251,7 @@ const authStore = useAuthStore();
 const { data, refresh } = await useFetch<{ data: any[] }>(
   "/api/admin/categories",
   { 
-    server: false,
-    headers: (authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}) as Record<string, string>
+    server: false
   }
 );
 const categories = computed(() => data.value?.data ?? []);

@@ -152,16 +152,11 @@
 definePageMeta({ middleware: "auth", layout: "admin" });
 useSeoMeta({ title: "Subcategorías — Admin" });
 
-const authStore = useAuthStore();
-const authHeaders = (authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}) as Record<string, string>;
-
-const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/subcategories", { 
-  server: false,
-  headers: authHeaders
+const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/subcategories?all=true", { 
+  server: false
 });
 const { data: categoriesData } = await useFetch<{ data: any[] }>("/api/admin/categories", { 
-  server: false,
-  headers: authHeaders
+  server: false
 });
 const items = computed(() => {
   const subs = data.value?.data ?? [];

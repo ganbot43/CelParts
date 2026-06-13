@@ -74,7 +74,6 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue';
-import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useAuthStore } from '~/stores/auth';
 
@@ -121,27 +120,26 @@ const stompClient = ref<Client | null>(null);
 const isConnected = ref(false);
 
 const connect = () => {
-  const authStore = useAuthStore();
-  const token = authStore.token;
-
-  const socket = new SockJS('http://localhost:8080/ws-chat');
+  if (typeof window === 'undefined') return; // Protección SSR
+  
+  console.log('[Chat] Intentando conectar WebSocket...');
+  
   const client = new Client({
-    webSocketFactory: () => socket as any,
+    brokerURL: 'ws://localhost:8080/ws-chat',
     reconnectDelay: 5000,
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
-    connectHeaders: {
-      Authorization: token ? `Bearer ${token}` : ''
+    debug: (str) => {
+      console.log('[STOMP]', str);
     }
   });
 
   client.onConnect = () => {
+    console.log('[Chat] ✅ Conectado exitosamente');
     isConnected.value = true;
     client.subscribe('/topic/messages/public', (message) => {
       if (message.body) {
         const msg = JSON.parse(message.body);
-        // Evitamos renderizar nuestro propio mensaje si el backend lo devuelve, 
-        // ya que lo dibujamos localmente al enviar.
         if (msg.sender !== 'user') {
           messages.value.push({
             sender: 'seller',
@@ -152,6 +150,19 @@ const connect = () => {
         }
       }
     });
+  };
+
+  client.onStompError = (frame) => {
+    console.error('[Chat] ❌ STOMP Error:', frame.headers['message'], frame.body);
+  };
+
+  client.onWebSocketError = (event) => {
+    console.error('[Chat] ❌ WebSocket Error:', event);
+  };
+
+  client.onWebSocketClose = (event) => {
+    console.log('[Chat] 🔌 WebSocket cerrado:', event);
+    isConnected.value = false;
   };
 
   client.activate();
@@ -477,8 +488,10 @@ watch(() => props.isOpen, (val) => {
     bottom: 0;
     right: 0;
     width: 100%;
-    height: 100%;
+    height: 100dvh; /* Soporte para la barra de navegación móvil */
+    height: 100vh;
     border-radius: 0;
+    border: none;
   }
 }
 </style>

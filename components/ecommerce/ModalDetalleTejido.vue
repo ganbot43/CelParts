@@ -99,9 +99,9 @@
                   </div>
                 </template>
                 <template v-else>
-                  <a :href="whatsappLink" target="_blank" class="btn btn-whatsapp-full">
-                    <span class="icon">💬</span> Contactar Tejedor por WhatsApp
-                  </a>
+                  <button @click="isChatOpen = true" class="btn btn-chat-full">
+                    <span class="icon">💬</span> Chatear con el Vendedor
+                  </button>
                 </template>
                 <button class="btn btn-cancel-full" @click="close">Regresar al Catálogo</button>
               </div>
@@ -111,11 +111,18 @@
         </div>
       </div>
     </Transition>
+    
+    <!-- Floating Chat Window -->
+    <EcommerceChatVendedor 
+      v-model:isOpen="isChatOpen"
+      :sellerName="product.sellerName"
+      :productName="product.name"
+    />
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -130,6 +137,8 @@ const emit = defineEmits(['update:isOpen', 'product-deleted'])
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
+
+const isChatOpen = ref(false);
 
 const isOwner = computed(() => {
   return user.value && props.product.sellerId === user.value.id
@@ -519,7 +528,7 @@ const whatsappLink = computed(() => {
   opacity: 0.9;
 }
 
-.btn-whatsapp-full {
+.btn-chat-full {
   background: var(--cp-sage);
   color: white;
   border: none;
@@ -535,7 +544,7 @@ const whatsappLink = computed(() => {
   text-decoration: none;
   transition: background var(--t-fast);
 }
-.btn-whatsapp-full:hover {
+.btn-chat-full:hover {
   background: var(--cp-sage-dark);
 }
 

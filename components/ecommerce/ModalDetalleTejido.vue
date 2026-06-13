@@ -155,8 +155,8 @@ const deleteProduct = async () => {
     close();
     emit('product-deleted', props.product.id);
   } catch (e) {
-    console.error("Error deleting product", e);
-    alert("No se pudo eliminar el producto");
+    const { parseError } = useApiError();
+    alert('Ocurrió un error al eliminar el producto: ' + parseError(e));
   }
 }
 

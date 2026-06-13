@@ -184,9 +184,9 @@ const form = ref({
 })
 
 // Fetch dependencies
-const { data: categories } = await useFetch('/api/admin/categories', { transform: (res: any) => res.data })
-const { data: subcategories } = await useFetch('/api/admin/subcategories', { transform: (res: any) => res.data })
-const { data: materials } = await useFetch('/api/admin/materials', { transform: (res: any) => res.data })
+const { data: categories } = await useFetch('/api/admin/categories', { transform: (res: any) => res.data.filter((x: any) => x.isActive === 1) })
+const { data: subcategories } = await useFetch('/api/admin/subcategories', { transform: (res: any) => res.data.filter((x: any) => x.isActive === 1) })
+const { data: materials } = await useFetch('/api/admin/materials', { transform: (res: any) => res.data.filter((x: any) => x.isActive === 1) })
 
 const filteredSubcategories = computed(() => {
   const catId = Number(form.value.categoryId)
@@ -218,7 +218,8 @@ const handleFileUpload = async (e: Event) => {
     })
     form.value.image = (res as any).url
   } catch (err: any) {
-    alert(err.data?.message || 'Error al subir la imagen')
+    const { parseError } = useApiError();
+    useAppToast().add({ title: 'Error', description: parseError(err), color: 'error' })
   } finally {
     uploadingImg.value = false
     target.value = '' 
@@ -271,7 +272,6 @@ const saveProduct = async () => {
       image: form.value.image,
       sellerId: user.value?.id,
       sellerName: user.value?.name,
-      // If user.value doesn't have phone, use a default or empty, but let's try reading user.value.phone
       sellerPhone: (user.value as any)?.phone || '+51999999999'
     }
 
@@ -283,7 +283,8 @@ const saveProduct = async () => {
     
     router.push('/mi-cuenta')
   } catch (err: any) {
-    alert(err.data?.message || 'Error al guardar')
+    const { parseError } = useApiError();
+    useAppToast().add({ title: 'Error', description: parseError(err), color: 'error' })
   } finally {
     isSaving.value = false
   }

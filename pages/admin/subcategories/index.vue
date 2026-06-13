@@ -60,11 +60,10 @@
                       <path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
                     </svg>
                   </button>
-                  <button class="sp-table-btn sp-table-btn--del" @click="deleteItem(s.id)" title="Eliminar">
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path d="M3 5h10M6 5V3h4v2M6 8v4M10 8v4M4 5l1 8h6l1-8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
+                  <label class="sp-drawer-switch" style="margin-bottom: 0; cursor: pointer;" title="Activar / Desactivar">
+                    <input type="checkbox" :checked="s.isActive" @change="toggleActive(s)" class="sp-drawer-switch__input" />
+                    <span class="sp-drawer-switch__track"><span class="sp-drawer-switch__thumb"></span></span>
+                  </label>
                 </div>
               </td>
             </tr>
@@ -126,13 +125,7 @@
               </div>
             </div>
 
-            <div class="sp-drawer-switches">
-              <label class="sp-drawer-switch">
-                <input type="checkbox" v-model="form.isActive" class="sp-drawer-switch__input" />
-                <span class="sp-drawer-switch__track"><span class="sp-drawer-switch__thumb"></span></span>
-                <span class="sp-drawer-switch__label">Activo</span>
-              </label>
-            </div>
+            <!-- Se eliminó el switch de Activo del modal -->
 
             <p v-if="formError" class="sp-drawer-error">{{ formError }}</p>
           </div>
@@ -226,17 +219,23 @@ async function save() {
     closeDrawer();
     await refresh();
   } catch (e: any) {
-    formError.value = e?.data?.message ?? 'Error al guardar';
+    const { parseError } = useApiError();
+    formError.value = parseError(e);
   } finally {
     saving.value = false;
   }
 }
 
-async function deleteItem(id: number) {
-  if (!confirm('¿Eliminar esta subcategoría?')) return;
-  await $fetch(`/api/admin/subcategories/${id}`, { method: 'DELETE' });
-  await refresh();
-  useAppToast().add({ title: 'Subcategoría eliminada', color: 'success' });
+async function toggleActive(s: any) {
+  try {
+    const payload = { ...s, isActive: s.isActive ? 0 : 1 };
+    await $fetch(`/api/admin/subcategories/${s.id}`, { method: 'PUT', body: payload });
+    useAppToast().add({ title: payload.isActive ? 'Subcategoría activada' : 'Subcategoría desactivada', color: 'success' });
+    await refresh();
+  } catch (e: any) {
+    const { parseError } = useApiError();
+    useAppToast().add({ title: 'Error', description: parseError(e), color: 'error' });
+  }
 }
 </script>
 

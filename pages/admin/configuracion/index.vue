@@ -45,6 +45,11 @@
           </div>
 
           <div class="sp-drawer-field">
+            <label class="sp-drawer-label">RUC <span class="sp-drawer-req">*</span></label>
+            <input v-model="form.ruc" class="sp-drawer-input" placeholder="20123456789" />
+          </div>
+
+          <div class="sp-drawer-field">
             <label class="sp-drawer-label">WhatsApp</label>
             <div class="cfg-input-group">
               <span class="cfg-input-prefix">
@@ -54,6 +59,11 @@
               </span>
               <input v-model="form.whatsapp" class="sp-drawer-input cfg-input-with-prefix" placeholder="+51 996 111 303" />
             </div>
+          </div>
+
+          <div class="sp-drawer-field">
+            <label class="sp-drawer-label">Correo electrónico</label>
+            <input v-model="form.email" class="sp-drawer-input" placeholder="contacto@ejemplo.com" />
           </div>
 
           <div class="sp-drawer-field">
@@ -301,6 +311,8 @@ const tabs: Array<{ key: "general" | "modulos" | "acceso", label: string, icon: 
 const form = reactive({
   name: config.value?.name ?? "",
   whatsapp: config.value?.whatsapp ?? "",
+  ruc: config.value?.ruc ?? "",
+  email: config.value?.email ?? "",
   address: config.value?.address ?? "",
   logoUrl: config.value?.logoUrl ?? "",
   stockEnabled: config.value?.stockEnabled ?? false,
@@ -314,6 +326,8 @@ watchEffect(() => {
   Object.assign(form, {
     name: config.value.name ?? "",
     whatsapp: config.value.whatsapp ?? "",
+    ruc: config.value.ruc ?? "",
+    email: config.value.email ?? "",
     address: config.value.address ?? "",
     logoUrl: config.value.logoUrl ?? "",
     stockEnabled: config.value.stockEnabled ?? false,
@@ -359,7 +373,7 @@ async function onLogoFileSelected(e: Event) {
   try {
     const fd = new FormData();
     fd.append("file", file);
-    const res: any = await $fetch("/api/upload", {
+    const res: any = await $fetch("/api/upload?folder=business-config", {
       method: "POST",
       body: fd,
     });
@@ -372,7 +386,8 @@ async function onLogoFileSelected(e: Event) {
       logoFileInputRef.value.value = "";
     }
   } catch (e: any) {
-    logoUploadError.value = e?.data?.message ?? "Error al subir la imagen";
+    const { parseError } = useApiError();
+    useAppToast().add({ title: 'Error', description: parseError(e), color: 'error' });
   } finally {
     uploadingLogo.value = false;
   }

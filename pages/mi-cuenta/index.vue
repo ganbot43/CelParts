@@ -128,7 +128,8 @@ const fetchProducts = async () => {
       offersPattern: p.offersPattern !== undefined ? p.offersPattern : Math.random() > 0.5,
     }))
   } catch (error) {
-    console.error("Error loading products:", error)
+    const { parseError } = useApiError();
+    alert('Error al obtener productos: ' + parseError(error))
   } finally {
     loading.value = false
   }
@@ -140,8 +141,8 @@ const deleteProduct = async (id: number) => {
     await $fetch(`/api/seller/products/${id}`, { method: 'DELETE' });
     products.value = products.value.filter(p => p.id !== id);
   } catch (e) {
-    console.error("Error deleting product", e);
-    alert("No se pudo eliminar el producto");
+    const { parseError } = useApiError();
+    alert('Error al eliminar producto: ' + parseError(e))
   }
 }
 

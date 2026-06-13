@@ -168,7 +168,8 @@ async function login() {
   try {
     await authStore.login(form.email, form.password)
   } catch (e: any) {
-    error.value = e?.data?.message || e?.message || "Credenciales inválidas. Inténtalo de nuevo."
+    const { parseError } = useApiError();
+    error.value = parseError(e);
   } finally {
     loading.value = false
   }

@@ -206,7 +206,8 @@ async function register() {
     }
   } catch (e: any) {
     // Si no existe el endpoint temporalmente, mostramos error
-    error.value = e?.data?.message || e?.message || "Servicio temporalmente no disponible. Inténtalo más tarde."
+    const { parseError } = useApiError();
+    error.value = parseError(e);
   } finally {
     loading.value = false
   }

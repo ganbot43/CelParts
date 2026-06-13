@@ -440,7 +440,8 @@ async function save() {
     closeDrawer();
     await refresh();
   } catch (e: any) {
-    formError.value = e?.data?.message ?? "Error al guardar";
+    const { parseError } = useApiError();
+    formError.value = parseError(e) ?? "Error al guardar";
   } finally {
     saving.value = false;
   }
@@ -472,7 +473,7 @@ async function onBannerFileSelected(e: Event) {
   try {
     const fd = new FormData();
     fd.append("file", file);
-    const res: any = await $fetch("/api/upload", {
+    const res: any = await $fetch("/api/upload?folder=banners", {
       method: "POST",
       body: fd,
     });

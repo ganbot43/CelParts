@@ -65,21 +65,10 @@
                       />
                     </svg>
                   </button>
-                  <button
-                    class="sp-table-btn sp-table-btn--del"
-                    @click="deleteCategory(cat.id)"
-                    title="Eliminar"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M3 5h10M6 5V3h4v2M6 8v4M10 8v4M4 5l1 8h6l1-8"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </button>
+                  <label class="sp-drawer-switch" style="margin-bottom: 0; cursor: pointer;" title="Activar / Desactivar">
+                    <input type="checkbox" :checked="cat.isActive" @change="toggleActive(cat)" class="sp-drawer-switch__input" />
+                    <span class="sp-drawer-switch__track"><span class="sp-drawer-switch__thumb"></span></span>
+                  </label>
                 </div>
               </td>
             </tr>
@@ -193,61 +182,9 @@
               <span class="sp-drawer-hint">ID del producto asociado a esta categoría</span>
             </div> -->
 
-            <div class="sp-drawer-field">
-              <label class="sp-drawer-label">Imagen Banner <span class="sp-drawer-hint-small">(opcional)</span></label>
-              <div v-if="form.imagenBanner" class="categoria-preview">
-                <img :src="form.imagenBanner" alt="Preview" />
-                <button
-                  type="button"
-                  class="categoria-preview-remove"
-                  @click="form.imagenBanner = ''"
-                  :disabled="uploadingBanner"
-                  title="Eliminar imagen"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M3 3l10 10M13 3L3 13"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <label
-                v-else
-                class="categoria-upload-zone"
-                :class="{ 'categoria-upload-zone--uploading': uploadingBanner }"
-              >
-                <input
-                  ref="bannerFileInputRef"
-                  type="file"
-                  accept="image/*"
-                  class="categoria-upload-input"
-                  @change="onBannerFileSelected"
-                />
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M12 5v14M5 12h14"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                <span v-if="!uploadingBanner">Subir imagen</span>
-                <span v-else class="categoria-uploading-text">Subiendo...</span>
-              </label>
-              <span class="sp-drawer-hint">Sube una imagen desde tu computadora (máx. 2 MB)</span>
-              <p v-if="bannerUploadError" class="sp-drawer-error">{{ bannerUploadError }}</p>
-            </div>
 
-            <div class="sp-drawer-switches">
-              <label class="sp-drawer-switch">
-                <input type="checkbox" v-model="form.isActive" class="sp-drawer-switch__input" />
-                <span class="sp-drawer-switch__track"><span class="sp-drawer-switch__thumb"></span></span>
-                <span class="sp-drawer-switch__label">Activo</span>
-              </label>
-            </div>
+
+            <!-- Se eliminó el switch de Activo del modal -->
 
             <p v-if="formError" class="sp-drawer-error">{{ formError }}</p>
           </div>
@@ -330,7 +267,7 @@ const uploadingBanner = ref(false);
 const bannerUploadError = ref("");
 const bannerFileInputRef = ref<HTMLInputElement>();
 
-const emptyForm = () => ({ name: "", seccion: null, idProducto: null, imagenBanner: "", isActive: true });
+const emptyForm = () => ({ name: "", seccion: null, idProducto: null, isActive: true });
 const form = reactive(emptyForm());
 
 function openDrawer(cat?: any) {
@@ -340,7 +277,6 @@ function openDrawer(cat?: any) {
     form.name = cat.name;
     form.seccion = cat.seccion || null;
     form.idProducto = cat.idProducto || null;
-    form.imagenBanner = cat.imagenBanner || "";
     form.isActive = cat.isActive !== false;
   } else {
     editingId.value = null;
@@ -377,59 +313,31 @@ async function save() {
     closeDrawer();
     await refresh();
   } catch (e: any) {
-    formError.value = e?.data?.message ?? "Error al guardar";
+    const { parseError } = useApiError();
+    formError.value = parseError(e);
   } finally {
     saving.value = false;
   }
 }
 
-async function onBannerFileSelected(e: Event) {
-  const input = e.target as HTMLInputElement;
-  if (!input.files?.length) return;
-  
-  const file = input.files[0];
-  bannerUploadError.value = "";
-  
-  // Validaciones
-  const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-  const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
-  
-  if (!ALLOWED.includes(file.type)) {
-    bannerUploadError.value = "Tipo no permitido: solo jpg, png, webp o gif";
-    input.value = "";
-    return;
-  }
-  
-  if (file.size > MAX_SIZE) {
-    bannerUploadError.value = "La imagen debe ser menor a 2 MB";
-    input.value = "";
-    return;
-  }
-  
-  uploadingBanner.value = true;
-  try {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res: any = await $fetch("/api/upload", {
-      method: "POST",
-      body: fd,
-    });
-    form.imagenBanner = res.url;
-    if (bannerFileInputRef.value) {
-      bannerFileInputRef.value.value = "";
-    }
-  } catch (e: any) {
-    bannerUploadError.value = e?.data?.message ?? "Error al subir la imagen";
-  } finally {
-    uploadingBanner.value = false;
-  }
-}
 
-async function deleteCategory(id: number) {
-  if (!confirm("¿Eliminar esta categoría?")) return;
-  await $fetch(`/api/admin/categories/${id}`, { method: "DELETE" });
-  await refresh();
-  useAppToast().add({ title: "Categoría eliminada", color: "success" });
+
+async function toggleActive(cat: any) {
+  try {
+    const payload = { ...cat, isActive: cat.isActive ? 0 : 1 };
+    await $fetch(`/api/admin/categories/${cat.id}`, {
+      method: "PUT",
+      body: payload,
+    });
+    useAppToast().add({
+      title: payload.isActive ? "Categoría activada" : "Categoría desactivada",
+      color: "success",
+    });
+    await refresh();
+  } catch (e: any) {
+    const { parseError } = useApiError();
+    useAppToast().add({ title: "Error", description: parseError(e), color: "error" });
+  }
 }
 </script>
 
@@ -440,95 +348,7 @@ async function deleteCategory(id: number) {
   gap: 1.25rem;
 }
 
-.categoria-preview {
-  margin-bottom: 1rem;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  background: #f5f5f5;
-  height: auto;
-  max-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
 
-.categoria-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.categoria-preview-remove {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  background: rgba(0, 0, 0, 0.7);
-  border: none;
-  border-radius: 0.375rem;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-
-.categoria-preview-remove:hover:not(:disabled) {
-  background: rgba(0, 0, 0, 0.9);
-}
-
-.categoria-preview-remove:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.categoria-upload-zone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 2rem 1rem;
-  border: 2px dashed #ddd;
-  border-radius: 0.5rem;
-  background: #f9f9f9;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: #666;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.categoria-upload-zone:hover {
-  border-color: #999;
-  background: #f0f0f0;
-}
-
-.categoria-upload-zone--uploading {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.categoria-upload-input {
-  display: none;
-}
-
-.categoria-uploading-text {
-  display: inline-block;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
 
 .sp-drawer-hint-small {
   font-size: 0.75rem;

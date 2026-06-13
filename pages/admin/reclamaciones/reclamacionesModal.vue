@@ -105,14 +105,14 @@
                 <span class="rd-field__key">¿Qué solicita?</span>
                 <span class="rd-field__val">{{ item.pedido }}</span>
               </div>
-              <div v-if="item.archivoUrl" class="rd-field rd-field--full">
+              <div v-if="item.adjunto" class="rd-field rd-field--full">
                 <span class="rd-field__key">Adjunto</span>
-                <a :href="item.archivoUrl" target="_blank" rel="noopener" class="rd-file-link">
+                <button type="button" @click="openAttachment(item.adjunto)" class="rd-file-link" :disabled="openingAttachment">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                     <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.41 17.41a2 2 0 0 1-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                  Ver archivo adjunto
-                </a>
+                  {{ openingAttachment ? 'Generando link...' : 'Ver archivo adjunto' }}
+                </button>
               </div>
             </div>
           </section>
@@ -245,9 +245,30 @@ async function save() {
     emit('updated')
     useAppToast().add({ title: 'Reclamo actualizado', color: 'success' })
   } catch (err) {
-    useAppToast().add({ title: err?.data?.message || 'Error guardando', color: 'error' })
+    const { parseError } = useApiError();
+    useAppToast().add({ title: 'Error', description: parseError(err), color: 'error' });
   } finally {
     saving.value = false
+  }
+}
+
+const openingAttachment = ref(false)
+
+async function openAttachment(url) {
+  if (openingAttachment.value) return;
+  openingAttachment.value = true;
+  try {
+    const res = await $fetch(`/api/upload/presigned?url=${encodeURIComponent(url)}`);
+    if (res && res.presignedUrl) {
+      window.open(res.presignedUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  } catch (err) {
+    console.error(err);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  } finally {
+    openingAttachment.value = false;
   }
 }
 </script>
@@ -363,10 +384,15 @@ async function save() {
   text-decoration: none;
   transition: background var(--sp-t-fast) var(--sp-ease);
   width: fit-content;
+  cursor: pointer;
 }
-.rd-file-link:hover {
+.rd-file-link:hover:not(:disabled) {
   background: var(--sp-primary);
   color: #fff;
+}
+.rd-file-link:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 /* Formulario */

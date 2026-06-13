@@ -661,14 +661,7 @@ const resetDefaults = {
 async function submit() {
   loading.value = true;
   try {
-    const fd = new FormData();
-    for (const k of Object.keys(form)) {
-      if (k === "declara") {
-        fd.append(k, form[k] ? "true" : "false");
-      } else if (form[k] !== null && form[k] !== undefined) {
-        fd.append(k, String(form[k]));
-      }
-    }
+    let adjuntoUrl = null;
     const f = fileRef.value?.files?.[0];
     if (f) {
       if (f.size > MAX_FILE_SIZE) {
@@ -677,14 +670,38 @@ async function submit() {
           description: "El adjunto debe pesar como máximo 5 MB.",
           color: "error",
         });
+        loading.value = false;
         return;
       }
-      fd.append("adjunto", f);
+      const uploadFd = new FormData();
+      uploadFd.append("file", f);
+      // Sube a S3 en carpeta complaints
+      const uploadRes = await $fetch("/api/upload?folder=complaints", {
+        method: "POST",
+        body: uploadFd,
+      });
+      adjuntoUrl = uploadRes.url;
     }
 
-    const res = await $fetch("/api/reclamaciones", {
+    const payload = {
+      customerName: form.nombre_completo,
+      tipoDocumento: form.tipo_documento,
+      numeroDocumento: form.numero_documento,
+      direccion: form.direccion,
+      telefono: form.telefono,
+      email: form.email,
+      tipoBien: form.tipo_bien,
+      descripcionBien: form.descripcion_bien,
+      monto: form.monto_reclamado,
+      tipoReclamo: form.tipo_reclamo,
+      descripcion: form.descripcion,
+      pedido: form.pedido_cliente,
+      adjunto: adjuntoUrl
+    };
+
+    const res = await $fetch("/api/complaints", {
       method: "POST",
-      body: fd,
+      body: payload,
     });
     result.value = res;
     await nextTick();
@@ -702,8 +719,8 @@ async function submit() {
     fileName.value = "";
   } catch (err) {
     console.error(err);
-    const message =
-      err?.data?.message || err?.message || "Error enviando reclamo";
+    const { parseError } = useApiError();
+    const message = parseError(err);
     addToast({ title: "Error", description: message, color: "error" });
   } finally {
     loading.value = false;

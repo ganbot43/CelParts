@@ -235,9 +235,13 @@ const saveProduct = async () => {
     })
     
     router.push('/mi-cuenta')
-  } catch (err) {
-    console.error('Error saving product:', err)
-    alert('Ocurrió un error al guardar el producto.')
+  } catch (err: any) {
+    const { parseError } = useApiError();
+    addToast({
+      title: 'Error al guardar',
+      description: parseError(err),
+      color: 'error'
+    });
   } finally {
     isSaving.value = false
   }

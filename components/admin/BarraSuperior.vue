@@ -63,10 +63,8 @@
           {{ initials }}
         </div>
         <div class="sp-topbar__user-info">
-          <span class="sp-topbar__user-name">{{
-            userDisplayName
-          }}</span>
-          <span class="sp-topbar__user-role">Administrador</span>
+          <span class="user-name">{{ session?.name || 'Admin' }}</span>
+          <span class="user-role">{{ session?.role || 'Administrator' }}</span>
         </div>
       </div>
 
@@ -206,7 +204,8 @@ async function logout() {
     const authStore = useAuthStore()
     authStore.user = null
   } catch (e) {
-    // ignore if store not available
+    const { parseError } = useApiError();
+    console.error('Logout error:', parseError(e))
   }
   await navigateTo("/login");
 }

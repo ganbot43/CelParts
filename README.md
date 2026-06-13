@@ -1,321 +1,40 @@
-# 🧶 Arigumi — Plataforma de Ecommerce Comunitario C2C
-
-Plataforma web full-stack con Server-Side Rendering (SSR) desarrollada con **Nuxt 3** para **Arigumi**. El proyecto está diseñado específicamente para conectar a artesanos adultos mayores en el Perú con compradores que valoran los tejidos y productos de crochet hechos a mano.
-
-A diferencia de un ecommerce tradicional, Arigumi implementa un **modelo híbrido colaborativo y circular (Client-to-Client)** donde los hilos de comunicación se cierran directamente vía WhatsApp sin intermediarios, respaldado por un potente panel administrativo para la moderación del mercado y el cumplimiento de la normativa legal peruana.
-
-## Qué tipo de proyecto es
-
-Es una aplicación web full-stack con SSR pensada para conectar artesanos con compradores dentro de un ecosistema C2C. Incluye:
-
-- Landing page institucional y secciones de marketing.
-- Catálogo de productos artesanales (tejidos, crochet, accesorios, entre otros) con contacto directo vía WhatsApp.
-- Panel de tejedor para que los vendedores gestionen su catálogo personal.
-- Panel admin para operaciones internas con roles diferenciados entre admin y superadmin.
-- Libro de Reclamaciones digital obligatorio por la legislación peruana.
-- Persistencia en MySQL con Drizzle ORM.
-
-## Sistema de Diseño Visual (Paleta Artesanal)
-
-La interfaz abandona las paletas corporativas frías para adoptar una estética orgánica, cálida y de alta accesibilidad para adultos mayores. Los estilos globales están centralizados en `assets/css/main.css` bajo las especificaciones de **Tailwind CSS v4**:
-
-| Token | Hex | Uso |
-|-------|-----|-----|
-| **Sage** | `#7d8e74` / `#6e7e65` | Color de marca y acciones afirmativas (ej: *Publicar un tapete*, *Ingresar*) |
-| **Earth** | `#584636` / `#9c8468` | Tipografía de encabezados premium y botones de edición secundaria |
-| **Cream Base** | `#faf8f5` / `#f7f5f0` | Fondo general estilo hueso/crema con textura de cuadrícula de 24×24 px |
-
-**Tipografía híbrida:** *Playfair Display* (serif elegante para slogans) + *Inter* (sans-serif de alto contraste para inputs y textos de lectura).
-
-## Arquitectura de Roles y Modelo C2C
-
-El esquema rompe el flujo lineal tradicional con un campo `mysqlEnum` en la tabla `users`:
-
-| Rol | Descripción |
-|-----|-------------|
-| `comprador` | Explora el catálogo, guarda favoritos y contacta al artesano directamente vía WhatsApp |
-| `vendedor` | Adulto mayor con acceso exclusivo a **"Mi Panel de Tejedor"** para gestionar su catálogo |
-| `vendedor_comprador` | Rol estrella: comercializa sus piezas y adquiere tejidos de otros miembros en la misma cuenta |
-| `admin` / `superadmin` | Modera publicaciones, administra `business_config`, banners y el Libro de Reclamaciones |
-
-## Tecnologías
-
-- Nuxt 3
-- Vue 3
-- TypeScript
-- MySQL
-- Drizzle ORM y Drizzle Kit
-- Pinia
-- Nuxt UI
-- Tailwind CSS v4
-- Nuxt Image, Nuxt Icon
-- nuxt-auth-utils para autenticación y sesión
-- AWS S3 SDK para almacenamiento de imágenes y adjuntos legales
-- bcryptjs para hashing de contraseñas
-- zod para validación de formularios
-- Google reCAPTCHA para protección contra bots
-- PM2 para gestión de procesos en producción
-- NGINX como servidor web y proxy inverso
-
-## Requisitos
-
-- Node.js 20
-- npm
-- MySQL 8 o superior
-- Opcional: Git Bash o WSL en Windows para ejecutar `reset-db.sh`
-
-Verifica tu versión de Node:
-
-```bash
-nvm use 20
-node -v
-```
-
-## Instalación
-
-1. Clona el repositorio.
-2. Instala dependencias:
-
-```bash
-npm install
-```
-
-3. Crea el archivo `.env` con las variables necesarias.
-
-## Variables de entorno
-
-El proyecto usa configuración de entorno para la base de datos, reCAPTCHA, sesión y S3.
-
-```env
-# Base de datos MySQL
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_USER=arigumi_user
-DB_PASSWORD=tu_password
-DB_NAME=arigumi
-
-# Sesión / auth
-NUXT_SESSION_PASSWORD=una_clave_larga_y_segura
-
-# App pública
-NUXT_PUBLIC_APP_NAME=Arigumi
-NUXT_PUBLIC_COMPANY_NAME=Arigumi
-NUXT_PUBLIC_SITE_NAME=Arigumi
-NUXT_PUBLIC_SITE_URL=https://arigumi.pe
-NUXT_PUBLIC_WHATSAPP=+51900000000
-
-# Google reCAPTCHA
-G_RECAPTCHA_SECRET_KEY=tu_secret_key
-G_RECAPTCHA_SITE_KEY=tu_site_key
-
-# S3
-S3_BUCKET=mi-bucket
-S3_REGION=us-east-1
-S3_ACCESS_KEY_ID=tu_key
-S3_SECRET_ACCESS_KEY=tu_secret
-S3_ROOT_PREFIX=arigumi
-```
-
-## Configurar S3 en AWS
-
-El proyecto sube archivos desde el backend usando `@aws-sdk/client-s3` en estos flujos:
-
-- `server/api/upload/image.post.ts` para imágenes de productos.
-- `server/api/(landing)/reclamaciones.post.ts` para adjuntos del libro de reclamaciones.
-
-Para que funcione en AWS necesitas:
-
-1. Crear un bucket S3 en la región que vayas a usar en `S3_REGION`.
-2. Crear un IAM user o credenciales de acceso para la app.
-3. Dar permisos mínimos de escritura al bucket: `s3:PutObject` y `s3:PutObjectAcl`.
-4. Asegurar lectura pública de los archivos si vas a consumir las URLs directas que devuelve la app.
-5. Cargar las variables `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` y `S3_ROOT_PREFIX`.
-
-Notas importantes:
-
-- El upload de imágenes falla si faltan credenciales S3.
-- El formulario de reclamaciones tiene fallback local a `public/uploads/complaints` solo cuando S3 no está configurado.
-- No hace falta configurar CORS para estos uploads porque la subida la hace el servidor, no el navegador directamente.
-- Si el bucket tiene bloqueado el acceso público, las URLs devueltas no serán visibles desde el navegador a menos que cambies el código para firmar URLs o sirvas los archivos por otro medio.
-
-Ejemplo de configuración mínima:
-
-```env
-S3_BUCKET=mi-bucket
-S3_REGION=us-east-1
-S3_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx
-S3_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-S3_ROOT_PREFIX=arigumi
-```
-
-## Base de datos
-
-La aplicación usa MySQL con Drizzle ORM. El esquema está definido en `server/db/schema.ts` y las migraciones se generan con Drizzle Kit.
-
-### Crear la base de datos
-
-```bash
-mysql -u root -p
-```
-
-Dentro del prompt de MySQL:
-
-```sql
-CREATE DATABASE arigumi CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-EXIT;
-```
-
-### Inicializar tablas y datos
-
-Forma recomendada:
-
-```bash
-./reset-db.sh
-```
-
-Ese script normalmente hace lo siguiente:
-
-1. Limpia la base de datos.
-2. Genera migraciones a partir del esquema.
-3. Aplica las migraciones.
-4. Carga datos iniciales con seed.
-
-Si prefieres hacerlo manualmente:
-
-```bash
-npm run db:generate
-npm run db:migrate
-npm run db:seed
-```
-
-### Tablas de la base de datos
-
-El esquema actual crea 12 tablas:
-
-| Tabla | Descripción |
-|-------|-------------|
-| `business_config` | Configuración general: logo, WhatsApp, dirección y flags del sistema |
-| `users` | Usuarios con roles diferenciados (`comprador` → `superadmin`) |
-| `categories` | Categorías principales del catálogo artesanal |
-| `subcategories` | Subcategorías vinculadas a una categoría |
-| `products` | Obras artesanales — incluye `material`, `price` (S/.), dimensiones (`sizeLength`, `sizeWidth`, `sizeUnit`) y flag `offersPattern` |
-| `product_images` | Imágenes alojadas en S3 |
-| `payment_methods` | Yape, Plin, transferencia bancaria, etc. |
-| `orders` | Pedidos realizados por clientes |
-| `order_items` | Detalle de productos dentro de cada pedido |
-| `order_status_logs` | Historial de cambios de estado de pedidos |
-| `banners` | Banners promocionales administrados por el dueño del sistema |
-| `complaints` | Libro de Reclamaciones digital (obligatorio por ley peruana) |
-
-### Datos de ejemplo
-
-El seed carga información de prueba para trabajar en local:
-
-- Usuarios administrativos.
-- Categorías y subcategorías.
-- Productos artesanales de ejemplo.
-- Métodos de pago.
-
-## Ejecutar el proyecto
-
-### Desarrollo
-
-```bash
-npm run dev
-```
-
-El sitio queda disponible en `http://localhost:3000`.
-
-### Build de producción
-
-```bash
-npm run build
-```
-
-Genera la carpeta `.output/` lista para despliegue.
-
-### Previsualizar el build
-
-```bash
-npm run preview
-```
-
-### Ejecutar el build generado
-
-```bash
-npm run start
-```
-
-## Comandos útiles
-
-```bash
-npm run dev
-npm run build
-npm run preview
-npm run start
-npm run db:generate
-npm run db:migrate
-npm run db:seed
-npm run db:studio
-```
-
-## Estructura general
-
-```text
-app.vue                  Layout raíz
-nuxt.config.ts           Configuración de Nuxt
-pages/                   Rutas públicas, catálogo y panel admin
-components/              Componentes reutilizables
-layouts/                 Layouts de la aplicación
-composables/             Lógica reutilizable
-stores/                  Stores de Pinia
-server/api/              Endpoints backend
-server/db/               Esquema, migraciones, seed y acceso a BD
-assets/css/              Estilos globales y tokens de diseño
-public/                  Archivos estáticos
-```
-
-## Despliegue con PM2
-
-```bash
-pm2 start ecosystem.config.jsx --env production
-pm2 save
-```
-
-Si ya generaste `.output/` en tu entorno de build, copia esa carpeta al servidor antes de arrancar PM2.
-
-## Notas de configuración
-
-- `nuxt.config.ts` habilita SSR.
-- El proyecto integra Google Fonts con *Playfair Display* e *Inter*.
-- La arquitectura C2C elimina el carrito tradicional: el cierre de venta ocurre directamente entre comprador y vendedor vía WhatsApp.
-
-## Solución de problemas
-
-### Las migraciones no se aplican
-
-- Revisa que `.env` tenga las credenciales correctas.
-- Vuelve a generar migraciones con `npm run db:generate`.
-- Aplica de nuevo con `npm run db:migrate`.
-
-### La conexión a MySQL falla
-
-- Confirma que MySQL esté levantado.
-- Valida `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` y `DB_NAME`.
-- Prueba la conexión manualmente:
-
-```bash
-mysql -u arigumi_user -p arigumi -h 127.0.0.1 -e "SELECT 1"
-```
-
-### El puerto 3000 está ocupado
-
-```bash
-npm run dev -- -p 3001
-```
-
-## Documentación relacionada
-
-- [Nuxt 3](https://nuxt.com/docs)
-- [Drizzle ORM](https://orm.drizzle.team)
-- [MySQL](https://dev.mysql.com/doc)
+# 🧶 Arigumi — Frontend Ecommerce (Rama: `arigumi-main`)
+
+¡Bienvenido al repositorio del Frontend de Arigumi! 
+
+> **IMPORTANTE:** Todo el código actualizado y funcional de este frontend se encuentra exclusivamente en la rama **`arigumi-main`**. Asegúrate de estar posicionado en esta rama al clonar el repositorio.
+
+## ¿Qué hace este proyecto?
+Esta es la interfaz visual (Cliente) desarrollada con **Nuxt 3** y **Vue.js**. Es la plataforma web donde los usuarios finales navegan, diseñada específicamente para conectar a artesanos adultos mayores con compradores. 
+
+**Características del Frontend:**
+- Landing page y catálogo de productos.
+- Integración de carrito de compras y proceso de checkout.
+- Panel administrativo para la gestión de productos y categorías.
+- Interfaz de Chat en tiempo real para negociaciones C2C (Client-to-Client).
+- Sistema de diseño accesible y amigable.
+
+## Arquitectura y Comunicación con el Backend
+Este proyecto **NO** tiene base de datos propia ni lógica de negocio profunda. Toda esa responsabilidad recae en los microservicios construidos en Spring Boot (Java).
+
+**¿Cómo se comunica?**
+El frontend nunca llama a los microservicios (usuarios, catálogo, chat) de manera individual. En su lugar, todas las peticiones HTTP y conexiones WebSocket (STOMP) apuntan hacia un único lugar: **El API Gateway**.
+- **URL Base de conexión:** `http://localhost:8080/`
+- El API Gateway se encarga internamente de enrutar la petición (ej. `/api/auth` al User Service, o `/ws-chat` al Chat Service).
+
+## ⚙️ Configuración Local para Desarrolladores
+
+Por medidas de seguridad, el archivo de variables de entorno (`.env`) ha sido excluido de este repositorio (`.gitignore`). **Si acabas de clonar este proyecto, debes configurarlo antes de ejecutarlo:**
+
+1. Solicita el archivo `.env` original al administrador del proyecto (Gino).
+2. Crea un archivo llamado **exactamente** `.env` en la raíz de este proyecto (al mismo nivel que el `package.json`).
+3. Pega el contenido proporcionado. Las variables clave incluyen la conexión al API Gateway (`NUXT_PUBLIC_API_BASE_URL=http://localhost:8080/api`), el JWT Secret, y las credenciales de AWS S3.
+4. Instala las dependencias necesarias. **Nota:** Debido a conflictos de versiones heredados, debes usar este comando exacto:
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+5. Arranca el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+6. El proyecto estará disponible en `http://localhost:3000`. Asegúrate de tener corriendo tu backend (Eureka, Gateway y Microservicios) para que la data cargue correctamente.

@@ -119,6 +119,8 @@ const messagesContainer = ref<HTMLElement | null>(null);
 const stompClient = ref<Client | null>(null);
 const isConnected = ref(false);
 
+const authStore = useAuthStore();
+
 const connect = () => {
   if (typeof window === 'undefined') return; // Protección SSR
   
@@ -126,6 +128,9 @@ const connect = () => {
   
   const client = new Client({
     brokerURL: 'ws://localhost:8080/ws-chat',
+    connectHeaders: {
+      Authorization: authStore.token ? `Bearer ${authStore.token}` : ''
+    },
     reconnectDelay: 5000,
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,

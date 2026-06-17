@@ -54,7 +54,7 @@
               <!-- Price & Size Box -->
               <div class="price-size-box">
                 <div class="box-col border-right">
-                  <span class="box-label">PRECIO DE VENTA</span>
+                  <span class="box-label">PRECIO UNITARIO</span>
                   <span class="box-price">{{ formatPrice(product.price) }}</span>
                   <span class="box-subtext">¡Sin comisiones intermedias!</span>
                 </div>

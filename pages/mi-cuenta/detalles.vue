@@ -107,7 +107,7 @@
         </div>
 
         <div class="protection-text">
-          <span class="check-circle">✓</span> Arígumi protege tu información personal y solo la comparte con compradores interesados en tus productos. Tus datos están seguros con nosotros.
+         <span class="check-circle">✓</span> arigumi prueba ci/cd 1:18 am
         </div>
 
       </div>

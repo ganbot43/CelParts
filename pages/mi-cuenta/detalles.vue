@@ -107,7 +107,7 @@
         </div>
 
         <div class="protection-text">
-          <span class="check-circle">✓</span> Arigumi protege los datos de sus mayores asociados. Sin spam publicitario.
+          <span class="check-circle">✓</span> Arígumi protege tu información personal y solo la comparte con compradores interesados en tus productos. Tus datos están seguros con nosotros.
         </div>
 
       </div>

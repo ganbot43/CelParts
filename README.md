@@ -38,3 +38,31 @@ Por medidas de seguridad, el archivo de variables de entorno (`.env`) ha sido ex
    npm run dev
    ```
 6. El proyecto estará disponible en `http://localhost:3000`. Asegúrate de tener corriendo tu backend (Eureka, Gateway y Microservicios) para que la data cargue correctamente.
+
+---
+
+## 🚀 CI/CD — Despliegue Automático
+
+Este repositorio cuenta con un pipeline de integración continua configurado con **GitHub Actions**.
+
+### ¿Cómo funciona?
+Cada vez que se hace un `git push` a la rama **`arigumi-main`**, GitHub Actions automáticamente:
+1. Instala dependencias y compila el proyecto Nuxt en un entorno Linux/amd64
+2. Construye la imagen Docker
+3. Sube la imagen actualizada a Docker Hub (`ganbito/frontend:latest`)
+
+### ¿Por qué GitHub Actions y no build local?
+El proyecto se desarrolla en **Mac Apple Silicon (arm64)**. Si se buildea localmente, la imagen generada es incompatible con el servidor de producción (Linux amd64). GitHub Actions corre en Linux, garantizando la arquitectura correcta automáticamente.
+
+### Secrets requeridos en el repositorio
+| Secret | Descripción |
+|---|---|
+| `DOCKER_NAME` | Usuario de Docker Hub (`ganbito`) |
+| `DOCKER_TOKEN` | Access Token generado en Docker Hub |
+
+### Desplegar en producción (PC local sin dominio)
+Una vez que el pipeline termine (check ✅ en GitHub Actions), en la PC de producción ejecutar:
+```bash
+docker-compose -f docker-compose.prod.yml pull
+docker-compose -f docker-compose.prod.yml up -d
+```

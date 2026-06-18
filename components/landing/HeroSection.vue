@@ -581,7 +581,6 @@
 
   .hero-stat:nth-child(3),
   .hero-stat:nth-child(5) {
-    border-top: 1px solid var(--border-light);
   }
 }
 </style>

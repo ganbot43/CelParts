@@ -233,7 +233,7 @@ const { data: order } = await useFetch<Order>(
 if (!order.value)
   throw createError({ statusCode: 404, message: "Pedido no encontrado" });
 
-useSeoMeta({ title: `Pedido ${order.value?.orderCode} — Joymar Utensilios` });
+useSeoMeta({ title: `Pedido ${order.value?.orderCode} — CelParts` });
 
 const waMessage = computed(() =>
   encodeURIComponent(
@@ -280,8 +280,8 @@ const waUrl = computed(
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: rgba(45, 106, 79, 0.08);
-  border: 2px solid rgba(45, 106, 79, 0.2);
+  background: rgba(0, 174, 239, 0.08);
+  border: 2px solid rgba(0, 174, 239, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -292,37 +292,37 @@ const waUrl = computed(
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2D6A4F, #1E4D38);
+  background: linear-gradient(135deg, var(--cp-electric), var(--cp-blue));
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 6px 20px rgba(45, 106, 79, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 174, 239, 0.35);
 }
 
 .success-title {
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 800;
-  color: #2B2B2B;
+  color: var(--text-primary);
   letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
 }
 
 .success-sub {
   font-size: 0.9375rem;
-  color: #777777;
+  color: var(--text-muted);
   margin-bottom: 1rem;
 }
 
 .order-code {
   font-weight: 700;
-  color: #2D6A4F;
+  color: var(--cp-electric);
   font-family: monospace;
   font-size: 1rem;
-  background: rgba(45, 106, 79, 0.08);
+  background: rgba(0, 174, 239, 0.08);
   padding: 0.1rem 0.5rem;
   border-radius: 6px;
-  border: 1px solid rgba(45, 106, 79, 0.2);
+  border: 1px solid rgba(0, 174, 239, 0.2);
 }
 
 .success-badge {
@@ -330,19 +330,19 @@ const waUrl = computed(
   align-items: center;
   gap: 0.4rem;
   padding: 0.35rem 0.875rem;
-  background: rgba(45, 106, 79, 0.08);
-  border: 1px solid rgba(45, 106, 79, 0.2);
+  background: rgba(0, 174, 239, 0.08);
+  border: 1px solid rgba(0, 174, 239, 0.2);
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #2D6A4F;
+  color: var(--cp-electric);
 }
 
 .badge-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #2D6A4F;
+  background: var(--cp-electric);
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
@@ -365,8 +365,8 @@ const waUrl = computed(
 }
 
 .confirm-card {
-  background: rgba(255, 255, 255, 0.76);
-  border: 1.5px solid rgba(226, 224, 217, 0.5);
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
   border-radius: 18px;
   overflow: hidden;
   backdrop-filter: blur(12px);
@@ -380,26 +380,26 @@ const waUrl = computed(
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 1.25rem;
-  border-bottom: 1.5px solid rgba(226, 224, 217, 0.5);
+  border-bottom: 1.5px solid var(--border-light);
 }
 
 .card-header-icon {
   width: 32px;
   height: 32px;
-  background: rgba(45, 106, 79, 0.08);
-  border: 1px solid rgba(45, 106, 79, 0.2);
+  background: rgba(0, 174, 239, 0.08);
+  border: 1px solid rgba(0, 174, 239, 0.2);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2D6A4F;
+  color: var(--cp-electric);
   flex-shrink: 0;
 }
 
 .card-title {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #2B2B2B;
+  color: var(--text-primary);
 }
 
 /* ─── Items list ─────────────────────────────────────────── */
@@ -416,7 +416,7 @@ const waUrl = computed(
   justify-content: space-between;
   gap: 1rem;
   padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(226, 224, 217, 0.5);
+  border-bottom: 1px solid var(--border-light);
 }
 .order-item:last-child {
   border-bottom: none;
@@ -432,12 +432,12 @@ const waUrl = computed(
 .order-item-qty {
   width: 24px;
   height: 24px;
-  background: rgba(45, 106, 79, 0.08);
-  border: 1px solid rgba(45, 106, 79, 0.2);
+  background: rgba(0, 174, 239, 0.08);
+  border: 1px solid rgba(0, 174, 239, 0.2);
   border-radius: 6px;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #2D6A4F;
+  color: var(--cp-electric);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -446,7 +446,7 @@ const waUrl = computed(
 
 .order-item-name {
   font-size: 0.85rem;
-  color: #555555;
+  color: var(--text-body);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -455,7 +455,7 @@ const waUrl = computed(
 .order-item-price {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #2B2B2B;
+  color: var(--text-primary);
   flex-shrink: 0;
 }
 
@@ -465,20 +465,20 @@ const waUrl = computed(
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.25rem;
-  background: rgba(45, 106, 79, 0.06);
-  border-top: 1.5px solid rgba(45, 106, 79, 0.2);
+  background: rgba(0, 174, 239, 0.06);
+  border-top: 1.5px solid rgba(0, 174, 239, 0.2);
 }
 
 .card-total-label {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #2B2B2B;
+  color: var(--text-primary);
 }
 
 .card-total-val {
   font-size: 1.4rem;
   font-weight: 900;
-  color: #2D6A4F;
+  color: var(--cp-electric);
   letter-spacing: -0.03em;
 }
 
@@ -495,18 +495,18 @@ const waUrl = computed(
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.875rem;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(226, 224, 217, 0.5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #555555;
+  color: var(--text-body);
   width: fit-content;
 }
 
 .payment-account {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1.5px solid rgba(226, 224, 217, 0.5);
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -517,19 +517,19 @@ const waUrl = computed(
   align-items: center;
   padding: 0.7rem 1rem;
   font-size: 0.85rem;
-  border-bottom: 1px solid rgba(226, 224, 217, 0.5);
+  border-bottom: 1px solid var(--border-light);
 }
 .account-row:last-child {
   border-bottom: none;
 }
 
 .account-key {
-  color: #999999;
+  color: var(--text-muted);
 }
 
 .account-val {
   font-weight: 700;
-  color: #2B2B2B;
+  color: var(--text-primary);
 }
 
 .qr-wrap {
@@ -538,7 +538,7 @@ const waUrl = computed(
 
 .qr-label {
   font-size: 0.75rem;
-  color: #999999;
+  color: var(--text-muted);
   font-weight: 500;
   margin-bottom: 0.75rem;
   text-transform: uppercase;
@@ -548,8 +548,8 @@ const waUrl = computed(
 .qr-frame {
   display: inline-block;
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.76);
-  border: 1.5px solid rgba(226, 224, 217, 0.5);
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
   border-radius: 14px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -565,8 +565,8 @@ const waUrl = computed(
 
 /* ─── WhatsApp card ──────────────────────────────────────── */
 .whatsapp-card {
-  background: rgba(255, 255, 255, 0.76);
-  border: 1.5px solid rgba(226, 224, 217, 0.5);
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
   border-radius: 18px;
   padding: 1.25rem;
   display: flex;
@@ -599,13 +599,13 @@ const waUrl = computed(
 .wa-title {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #2B2B2B;
+  color: var(--text-primary);
   margin-bottom: 0.2rem;
 }
 
 .wa-sub {
   font-size: 0.775rem;
-  color: #999999;
+  color: var(--text-muted);
 }
 
 .wa-btn {
@@ -642,11 +642,11 @@ const waUrl = computed(
   gap: 0.35rem;
   font-size: 0.85rem;
   font-weight: 500;
-  color: #999999;
+  color: var(--text-muted);
   text-decoration: none;
   transition: color 0.15s;
 }
 .back-link:hover {
-  color: #2D6A4F;
+  color: var(--cp-electric);
 }
 </style>

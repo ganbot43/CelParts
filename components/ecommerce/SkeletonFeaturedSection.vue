@@ -50,15 +50,13 @@
 }
 
 .sk-card {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(226, 224, 217, 0.5);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 26px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(17, 17, 17, 0.04), inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: var(--card-shadow);
 }
 
 .sk-card--hero {
@@ -66,7 +64,7 @@
 }
 
 .sk-img {
-  background: rgba(241, 239, 234, 0.9);
+  background: var(--bg-alt);
   aspect-ratio: 1;
   flex-shrink: 0;
 }
@@ -89,14 +87,14 @@
   height: 10px;
   width: 60px;
   border-radius: 6px;
-  background: rgba(45, 106, 79, 0.08);
+  background: rgba(7, 30, 82, 0.08);
   margin-bottom: 4px;
 }
 
 .sk-line {
   height: 14px;
   border-radius: 6px;
-  background: rgba(45, 106, 79, 0.08);
+  background: rgba(7, 30, 82, 0.08);
 }
 
 .sk-card--hero .sk-line {
@@ -106,7 +104,7 @@
 .sk-desc {
   height: 11px;
   border-radius: 6px;
-  background: rgba(45, 106, 79, 0.06);
+  background: rgba(7, 30, 82, 0.06);
 }
 
 .sk-footer {
@@ -120,14 +118,14 @@
   width: 70px;
   height: 20px;
   border-radius: 6px;
-  background: rgba(45, 106, 79, 0.12);
+  background: rgba(7, 30, 82, 0.12);
 }
 
 .sk-btn {
   width: 90px;
   height: 32px;
   border-radius: 999px;
-  background: rgba(233, 196, 106, 0.12);
+  background: rgba(37, 211, 102, 0.12);
 }
 
 .shimmer {

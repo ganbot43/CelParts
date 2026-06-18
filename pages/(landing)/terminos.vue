@@ -1,15 +1,15 @@
 <template>
-  <section class="py-20 text-[#333333] px-8 pt-40 lg:px-32 bg-white">
+  <section class="py-20 text-(--text-body) px-8 pt-40 lg:px-32 bg-(--bg-surface)">
     <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-4xl font-extrabold text-[#1A1A1A] mb-6">
+      <h2 class="text-4xl font-extrabold text-(--text-primary) mb-6">
         Términos y Condiciones
       </h2>
-      <p class="text-lg text-[#333333] mb-4">
-        Bienvenido a Kite. Al utilizar nuestros servicios,
+      <p class="text-lg text-(--text-body) mb-4">
+        Bienvenido a CelParts. Al utilizar nuestros servicios,
         aceptas cumplir con los siguientes términos y condiciones.
       </p>
 
-      <div class="text-left text-[#333333] mt-8 space-y-6">
+      <div class="text-left text-(--text-body) mt-8 space-y-6">
         <div>
           <h3 class="text-2xl font-semibold mb-2">
             1. Aceptación de los términos
@@ -33,7 +33,7 @@
           <h3 class="text-2xl font-semibold mb-2">3. Propiedad intelectual</h3>
           <p>
             Todos los derechos de propiedad intelectual sobre el contenido y los
-            servicios pertenecen a Kite. No puedes copiar,
+            servicios pertenecen a CelParts. No puedes copiar,
             distribuir o modificar ningún material sin nuestro consentimiento
             previo.
           </p>
@@ -44,7 +44,7 @@
             4. Limitación de responsabilidad
           </h3>
           <p>
-            Kite no sera responsable por daños directos,
+            CelParts no sera responsable por daños directos,
             indirectos, incidentales o consecuenciales derivados del uso o la
             imposibilidad de uso de nuestros servicios.
           </p>
@@ -67,16 +67,16 @@
 definePageMeta({ layout: 'landing' })
 
 useSeoMeta({
-  title: 'Terminos y Condiciones | Kite',
-  description: 'Revisa los terminos y condiciones de uso del sitio y servicios de Kite.',
-  ogTitle: 'Terminos y Condiciones | Kite',
-  ogDescription: 'Condiciones de uso, limitaciones y responsabilidades aplicables en Kite.',
+  title: 'Terminos y Condiciones | CelParts',
+  description: 'Revisa los terminos y condiciones de uso del sitio y servicios de CelParts.',
+  ogTitle: 'Terminos y Condiciones | CelParts',
+  ogDescription: 'Condiciones de uso, limitaciones y responsabilidades aplicables en CelParts.',
   ogType: 'article',
   ogUrl: 'https://kite.pe/terminos',
   ogImage: 'https://kite.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Terminos y Condiciones | Kite',
-  twitterDescription: 'Consulta los terminos y condiciones de Kite.',
+  twitterTitle: 'Terminos y Condiciones | CelParts',
+  twitterDescription: 'Consulta los terminos y condiciones de CelParts.',
   twitterImage: 'https://kite.pe/images/logo.png',
 })
 </script>
@@ -90,6 +90,6 @@ section {
 
 h2,
 h3 {
-  color: #1a1a1a;
+  color: var(--text-primary);
 }
 </style>

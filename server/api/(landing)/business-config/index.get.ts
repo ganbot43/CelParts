@@ -10,6 +10,7 @@ export default defineEventHandler(async () => {
   return {
     id: config.id,
     name: config.name,
+    ruc: config.ruc,
     logoUrl: config.logoUrl,
     whatsapp: config.whatsapp,
     address: config.address,

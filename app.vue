@@ -14,6 +14,13 @@ const { loggedIn } = useUserSession()
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 
+// Hydrate global business config
+const { data: configData } = await useFetch('/api/business-config')
+const businessState = useBusinessConfig()
+if (configData.value) {
+  businessState.value = configData.value as any
+}
+
 const siteUrl = computed(() => {
   const raw = String(runtimeConfig.public.siteUrl || 'https://joymarperu.com')
   return raw.replace(/\/$/, '')

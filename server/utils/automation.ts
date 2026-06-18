@@ -124,6 +124,9 @@ function createTransporter() {
         user: mailer.user,
         pass: mailer.password,
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     }),
   }
 }

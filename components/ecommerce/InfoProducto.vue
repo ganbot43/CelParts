@@ -180,71 +180,23 @@ async function manejarAgregar() {
 <style scoped>
 /* ─── Variables ────────────────────────────────────────────── */
 .info-producto {
-  --primary: #2D6A4F;
-  --primary-dark: #1E4D38;
-  --primary-glow: rgba(45, 106, 79, 0.22);
-  --primary-line: rgba(45, 106, 79, 0.2);
-  --accent: #E9C46A;
-  --radius: 14px;
-  --radius-sm: 8px;
-  --border: #e5e5e5;
-  --bg: #ffffff;
-  --bg2: #f5f5f5;
-  --text: #2b2b2b;
-  --text2: #777777;
+  --primary: var(--cp-blue);
+  --primary-dark: var(--cp-navy);
+  --primary-glow: rgba(18, 69, 196, 0.22);
+  --primary-line: rgba(18, 69, 196, 0.2);
+  --accent: var(--cp-electric);
+  --radius: var(--r-lg);
+  --radius-sm: var(--r-sm);
+  --border: var(--border-light);
+  --bg: var(--card-bg);
+  --bg2: var(--card-bg);
+  --text: var(--text-primary);
+  --text2: var(--text-faint);
   --green: #059669;
   --wa: #25d366;
   --wa-dark: #128c4a;
   --wa-glow: rgba(37, 211, 102, 0.22);
   --transition: 0.18s ease;
-}
-
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.info-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
 .info-produto {
@@ -273,7 +225,7 @@ async function manejarAgregar() {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(45, 106, 79, 0.75);
+  background: var(--cp-blue);
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 3px 9px;
   border-radius: 999px;
@@ -300,6 +252,7 @@ async function manejarAgregar() {
   background: var(--bg2);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
+  box-shadow: var(--card-shadow-sm);
 }
 
 /* ─── Precio + stock ── */
@@ -311,6 +264,7 @@ async function manejarAgregar() {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .info-precio-bloque,
@@ -323,7 +277,7 @@ async function manejarAgregar() {
 .info-divider-vertical {
   width: 1px;
   height: 40px;
-  background: #d9d9d9;
+  background: var(--border-mid);
   flex-shrink: 0;
 }
 
@@ -358,13 +312,15 @@ async function manejarAgregar() {
 }
 
 .info-stock-badge.en-stock {
-  background: #f0fdf4;
-  color: #15803d;
+  background: var(--cp-success-bg);
+  color: var(--cp-success-text);
+  border: 1px solid var(--cp-success-border);
 }
 
 .info-stock-badge.sin-stock {
-  background: #fef2f2;
-  color: #dc2626;
+  background: var(--cp-error-bg);
+  color: var(--cp-error-text);
+  border: 1px solid var(--cp-error-border);
 }
 
 .info-stock-dot {
@@ -375,10 +331,10 @@ async function manejarAgregar() {
 }
 
 .en-stock .info-stock-dot {
-  background: #16a34a;
+  background: var(--cp-success);
 }
 .sin-stock .info-stock-dot {
-  background: #dc2626;
+  background: var(--cp-error);
 }
 
 /* ─── Controles ── */
@@ -498,7 +454,7 @@ async function manejarAgregar() {
 .info-boton-agregar:hover:not(:disabled) {
   background: var(--primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.38);
+  box-shadow: 0 4px 20px rgba(18, 69, 196, 0.38);
 }
 
 .info-boton-agregar:active:not(:disabled) {

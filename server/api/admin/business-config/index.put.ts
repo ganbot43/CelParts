@@ -6,6 +6,7 @@ import { z } from 'zod'
 
 const schema = z.object({
   name:               z.string().min(2).optional(),
+  ruc:                z.string().optional().nullable(),
   logoUrl:            z.string().url().optional().nullable(),
   whatsapp:           z.string().optional(),
   address:            z.string().optional().nullable(),

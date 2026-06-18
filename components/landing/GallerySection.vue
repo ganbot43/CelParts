@@ -71,18 +71,6 @@ const items = [
   background: var(--bg-page);
 }
 
-/* Línea técnica superior */
-.gallery::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  z-index: 1;
-}
-
 /* Decoración de fondo */
 .gallery::after {
   content: '';
@@ -193,19 +181,6 @@ const items = [
 }
 
 /* Línea técnica top al hover */
-.gallery-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  opacity: 0;
-  transition: opacity var(--t-base) var(--ease-smooth);
-  z-index: 2;
-}
-
 .gallery-item:hover::before {
   opacity: 1;
 }

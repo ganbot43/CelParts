@@ -95,16 +95,6 @@ const categories: Category[] = [
   overflow: hidden;
 }
 
-/* Línea técnica superior */
-.empty-state::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-}
 
 /* Halo de fondo sutil */
 .empty-state::after {

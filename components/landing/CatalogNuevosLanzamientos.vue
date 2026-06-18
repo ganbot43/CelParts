@@ -130,17 +130,6 @@ const productsPageLink = {
 }
 
 /* Línea técnica de marca superior */
-.catalog::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  z-index: 1;
-}
-
 /* ── Container ── */
 .catalog-container {
   max-width: var(--container-width);

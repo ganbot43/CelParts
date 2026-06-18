@@ -120,19 +120,7 @@ async function addToCart() {
   height: 100%;
 }
 
-/* Línea técnica top en hover */
-.vf-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  opacity: 0;
-  transition: opacity var(--t-base) var(--ease-smooth);
-  z-index: 2;
-}
+
 
 .vf-card:hover {
   transform: translateY(-4px);
@@ -140,9 +128,7 @@ async function addToCart() {
   box-shadow: var(--card-shadow-hover);
 }
 
-.vf-card:hover::before {
-  opacity: 1;
-}
+
 
 /* ── Link wrapper ── */
 .vf-card__link {

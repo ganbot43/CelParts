@@ -363,21 +363,7 @@ h3 em {
     0 2px 0 0 rgba(0, 170, 255, 0.12);
 }
 
-.site-header::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  opacity: 0;
-  transition: opacity var(--t-slow) var(--ease-smooth);
-}
 
-.site-header.scrolled::after {
-  opacity: 1;
-}
 
 /* Nav links */
 .nav-link {
@@ -965,16 +951,7 @@ textarea::placeholder {
   overflow: hidden;
 }
 
-/* Línea técnica animada en el banner */
-.promo-banner::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-}
+
 
 .promo-banner-eyebrow {
   font-size: 0.65rem;
@@ -1029,15 +1006,7 @@ textarea::placeholder {
   overflow: hidden;
 }
 
-.section-cta::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-}
+
 
 /* Section divider visual */
 .section-divider {
@@ -1148,12 +1117,7 @@ textarea::placeholder {
    18. UTILIDADES VISUALES
 ═══════════════════════════════════════════════════════ */
 
-/* Línea técnica (firma CelParts) */
-.brand-line {
-  height: 2px;
-  background: var(--line-brand);
-  border: none;
-}
+
 
 /* Separador con dot */
 .dot-divider {

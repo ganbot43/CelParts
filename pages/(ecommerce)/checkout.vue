@@ -390,16 +390,16 @@ async function submitOrder() {
 <style scoped>
 /* ─── Variables ────────────────────────────────────────────── */
 .checkout-pagina {
-  --primary: #2D6A4F;
-  --primary-dark: #1E4D38;
-  --primary-glow: rgba(45, 106, 79, 0.18);
+  --primary: var(--cp-electric);
+  --primary-dark: var(--cp-blue);
+  --primary-glow: rgba(0, 174, 239, 0.18);
   --radius: 14px;
   --radius-sm: 8px;
-  --border: rgba(226, 224, 217, 0.5);
-  --bg: rgba(255, 255, 255, 0.72);
-  --bg2: rgba(255, 255, 255, 0.82);
-  --text: #111111;
-  --text2: #66625A;
+  --border: var(--border-light);
+  --bg: var(--bg-surface);
+  --bg2: var(--bg-alt);
+  --text: var(--text-primary);
+  --text2: var(--text-muted);
   --green: #059669;
   --transition: 0.18s ease;
 }
@@ -479,8 +479,8 @@ async function submitOrder() {
   width: 38px;
   height: 38px;
   border-radius: var(--radius-sm);
-  background: rgba(45, 106, 79, 0.06);
-  border: 1px solid rgba(45, 106, 79, 0.12);
+  background: rgba(0, 174, 239, 0.06);
+  border: 1px solid rgba(0, 174, 239, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -568,12 +568,12 @@ async function submitOrder() {
 
 .checkout-input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.12);
 }
 
 .checkout-input-error {
   border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1) !important;
+  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.1) !important;
 }
 
 .checkout-textarea {
@@ -613,20 +613,20 @@ async function submitOrder() {
 }
 
 .checkout-metodo-boton:hover {
-  border-color: rgba(45, 106, 79, 0.3);
-  background: rgba(45, 106, 79, 0.06);
+  border-color: rgba(0, 174, 239, 0.3);
+  background: rgba(0, 174, 239, 0.06);
 }
 
 .checkout-metodo-boton.activo {
   border-color: var(--primary);
-  background: rgba(45, 106, 79, 0.08);
+  background: rgba(0, 174, 239, 0.08);
 }
 
 .checkout-metodo-radio {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1.5px solid rgba(226, 224, 217, 0.9);
+  border: 1.5px solid var(--border-mid);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -683,8 +683,8 @@ async function submitOrder() {
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: rgba(45, 106, 79, 0.06);
-  border: 1px solid rgba(45, 106, 79, 0.2);
+  background: rgba(0, 174, 239, 0.06);
+  border: 1px solid rgba(0, 174, 239, 0.2);
   border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
@@ -736,7 +736,7 @@ async function submitOrder() {
 .checkout-boton-confirmar:hover:not(:disabled) {
   background: var(--primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(45, 106, 79, 0.35);
+  box-shadow: 0 4px 18px rgba(0, 174, 239, 0.35);
 }
 
 .checkout-boton-confirmar:active:not(:disabled) {
@@ -797,7 +797,7 @@ async function submitOrder() {
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: rgba(226, 224, 217, 0.9);
+  background: var(--border-mid);
   flex-shrink: 0;
 }
 

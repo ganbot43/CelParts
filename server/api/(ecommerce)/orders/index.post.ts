@@ -6,6 +6,7 @@ import { generateOrderCode } from '~/server/utils/orderCode'
 import { z } from 'zod'
 import { enhanceOrders } from '~/server/utils/db'
 import { sendOrderNotification } from '~/server/utils/automation'
+import { changeStockTx } from '~/server/services/inventory'
 
 const schema = z.object({
   customerName:      z.string().min(2),
@@ -112,7 +113,6 @@ export default defineEventHandler(async (event) => {
 
       // Descontar stock si aplica y registrar movimiento (usa helper para atomicidad)
       if (config?.stockEnabled && prod.trackStock) {
-        const { changeStockTx } = await import('~/server/services/inventory')
         const delta = -Number(item.quantity ?? 0)
         // will throw if product not found or stock invalid inside helper
         await changeStockTx(tx, prod.id, delta, {

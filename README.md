@@ -111,7 +111,8 @@ Para que funcione en AWS necesitas:
 2. Crear un IAM user o credenciales de acceso para la app.
 3. Dar permisos mínimos de escritura al bucket, por ejemplo `s3:PutObject` y `s3:PutObjectAcl` si luego decides hacer los objetos públicos por ACL o políticas.
 4. Asegurar lectura pública de los archivos si vas a consumir las URLs directas que devuelve la app, porque el código arma URLs públicas con el endpoint estándar de S3.
-5. Cargar las variables `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` y, si quieres organizar archivos por carpeta, `S3_ROOT_PREFIX`.
+5. Cargar las variables `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` y `S3_ROOT_PREFIX`.
+6. Los archivos se guardarán automáticamente organizados por año, mes y día dentro de carpetas como `products/YYYY/MM/DD/`, `banners/YYYY/MM/DD/`, o `complaints/YYYY/MM/DD/`.
 
 Notas importantes:
 
@@ -172,9 +173,9 @@ npm run db:seed
 
 ### Tablas de la base de datos
 
-El esquema actual crea 12 tablas:
+El esquema actual crea 13 tablas:
 
-- `business_config`: configuración general del negocio, logo, WhatsApp, dirección y flags del sistema.
+- `business_config`: configuración general del negocio, nombre, ruc, logo, WhatsApp, dirección y flags del sistema.
 - `users`: usuarios del sistema con roles diferenciados (superadmin y admin).
 - `categories`: categorías principales del catálogo (pantallas, baterías, cases, cargadores, protectores, entre otros).
 - `subcategories`: subcategorías relacionadas a una categoría.
@@ -184,6 +185,7 @@ El esquema actual crea 12 tablas:
 - `orders`: pedidos realizados por clientes.
 - `order_items`: detalle de productos dentro de cada pedido.
 - `order_status_logs`: historial de cambios de estado de pedidos.
+- `inventory_movements`: historial y registro de movimientos de inventario por compras o ajustes manuales.
 - `banners`: banners promocionales o de homepage.
 - `complaints`: registros del libro de reclamaciones.
 

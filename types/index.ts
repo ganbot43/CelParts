@@ -99,6 +99,7 @@ export interface PaymentMethod {
 export interface BusinessConfig {
   id:                 number
   name:               string
+  ruc:                string | null
   logoUrl:            string | null
   whatsapp:           string
   address:            string | null

@@ -43,16 +43,19 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  // Build a key with project root + date folders for better organization
   const ext = extname(file.filename || '') || '.jpg'
   const filename = `${randomUUID()}${ext}`
   const now = new Date()
   const year = now.getUTCFullYear()
   const month = String(now.getUTCMonth() + 1).padStart(2, '0')
   const day = String(now.getUTCDate()).padStart(2, '0')
+
+  const folderPart = parts?.find((part) => part.name === 'folder')
+  const folderStr = folderPart ? folderPart.data.toString().replace(/[^a-zA-Z0-9_-]/g, '') : 'general'
+
   const key = rootPrefix
-    ? `${rootPrefix}/${year}/${month}/${day}/${filename}`
-    : `${year}/${month}/${day}/${filename}`
+    ? `${rootPrefix}/${folderStr}/${year}/${month}/${day}/${filename}`
+    : `${folderStr}/${year}/${month}/${day}/${filename}`
 
   const buffer = file.data
 
@@ -65,7 +68,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     await s3.send(putCmd)
-  } catch (err) {
+  } catch (err: any) {
     console.error('S3 upload error:', {
       message: err?.message,
       code: err?.Code || err?.code,

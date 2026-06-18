@@ -200,7 +200,7 @@
                 name="email"
                 maxlength="254"
                 class="lr-input"
-                placeholder="hola@kite.com"
+                placeholder="hola@celparts.pe"
                 required
               />
               <span
@@ -589,16 +589,16 @@ import { useBusinessConfig } from "~/composables/useBusinessConfig";
 import { useAppToast } from "~/composables/useToast";
 
 useSeoMeta({
-  title: 'Libro de Reclamaciones | Kite',
-  description: 'Presenta tu reclamo o queja en el Libro de Reclamaciones de Kite de forma segura y rapida.',
-  ogTitle: 'Libro de Reclamaciones | Kite',
-  ogDescription: 'Canal oficial para registrar reclamos y quejas de clientes de Kite.',
+  title: 'Libro de Reclamaciones | CelParts',
+  description: 'Presenta tu reclamo o queja en el Libro de Reclamaciones de CelParts de forma segura y rapida.',
+  ogTitle: 'Libro de Reclamaciones | CelParts',
+  ogDescription: 'Canal oficial para registrar reclamos y quejas de clientes de CelParts.',
   ogType: 'website',
   ogUrl: 'https://kite.pe/libro-de-reclamaciones',
   ogImage: 'https://kite.pe/images/logo.png',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Libro de Reclamaciones | Kite',
-  twitterDescription: 'Registra tu reclamo en el Libro de Reclamaciones de Kite.',
+  twitterTitle: 'Libro de Reclamaciones | CelParts',
+  twitterDescription: 'Registra tu reclamo en el Libro de Reclamaciones de CelParts.',
   twitterImage: 'https://kite.pe/images/logo.png',
 })
 
@@ -715,28 +715,11 @@ async function submit() {
 /* ═══════════════════════════════════
   TOKENS KITE — LIGHT
 ═══════════════════════════════════ */
-.lr-page {
-  --kite-green: #2D6A4F;
-  --kite-green-dark: #1E4D38;
-  --kite-green-glow: rgba(45, 106, 79, 0.25);
-  --kite-green-soft: rgba(45, 106, 79, 0.08);
-  --kite-green-line: rgba(45, 106, 79, 0.2);
-  --kite-yellow: #E9C46A;
-  --kite-yellow-dim: rgba(233, 196, 106, 0.8);
-  --jm-surface: rgba(255, 255, 255, 0.76);
-  --jm-surface2: rgba(255, 255, 255, 0.7);
-  --jm-surface3: rgba(255, 255, 255, 0.82);
-  --jm-border: rgba(226, 224, 217, 0.5);
-  --jm-border-strong: rgba(226, 224, 217, 0.7);
-  --jm-text: #111111;
-  --jm-text-dim: #555555;
-  --jm-text-muted: #66625A;
-}
 
 /* ── Base ── */
 .lr-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, rgba(248, 247, 244, 0.96), rgba(241, 239, 234, 1));
+  background: var(--bg-page);
   padding: 48px 16px 80px;
   position: relative;
   overflow: hidden;
@@ -751,7 +734,7 @@ async function submit() {
   font-size: 72px;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: rgba(45, 106, 79, 0.04);
+  color: rgba(7, 30, 82, 0.04);
   pointer-events: none;
   white-space: nowrap;
   line-height: 1;
@@ -777,9 +760,9 @@ async function submit() {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #2D6A4F;
-  background: rgba(45, 106, 79, 0.06);
-  border: 1px solid var(--kite-green-line);
+  color: var(--cp-navy);
+  background: rgba(7, 30, 82, 0.06);
+  border: 1px solid rgba(0, 174, 239, 0.22);
   border-radius: 4px;
   padding: 5px 10px;
   margin-bottom: 20px;
@@ -789,7 +772,7 @@ async function submit() {
   font-size: clamp(36px, 6vw, 56px);
   font-weight: 700;
   line-height: 1.1;
-  color: var(--jm-text);
+  color: var(--text-primary);
   letter-spacing: -0.02em;
   margin: 0 0 16px;
 }
@@ -801,13 +784,13 @@ async function submit() {
   max-width: 560px;
   font-style: italic;
   padding-left: 12px;
-  border-left: 2px solid var(--kite-green-line);
+  border-left: 2px solid rgba(0, 174, 239, 0.22);
 }
 
 /* ── Datos del negocio ── */
 .lr-business {
   background: var(--jm-surface2);
-  border: 1px solid var(--jm-border);
+  border: 1px solid var(--border-light);
   border-radius: 10px;
   padding: 16px 20px;
   margin-bottom: 32px;
@@ -844,8 +827,8 @@ async function submit() {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  background: rgba(45, 106, 79, 0.05);
-  border: 1px solid var(--kite-green-line);
+  background: rgba(7, 30, 82, 0.05);
+  border: 1px solid rgba(0, 174, 239, 0.22);
   border-radius: 12px;
   padding: 20px 24px;
   margin-bottom: 32px;
@@ -857,8 +840,8 @@ async function submit() {
   border-radius: 50%;
   background: linear-gradient(
     135deg,
-    var(--kite-green),
-    var(--kite-green-dark)
+    var(--cp-electric),
+    var(--cp-blue)
   );
   color: #fff;
   display: flex;
@@ -871,13 +854,13 @@ async function submit() {
 .lr-success__title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--jm-text);
+  color: var(--text-primary);
   margin: 0 0 4px;
 }
 
 .lr-success__code {
   font-size: 13px;
-  color: var(--kite-green);
+  color: var(--cp-electric);
   font-weight: 700;
   margin: 0 0 6px;
 }
@@ -892,7 +875,7 @@ async function submit() {
 /* ── Secciones del formulario ── */
 .lr-section {
   background: rgba(255, 255, 255, 0.76);
-  border: 1px solid var(--jm-border);
+  border: 1px solid var(--border-light);
   border-radius: 12px;
   padding: 24px 28px;
   margin-bottom: 14px;
@@ -905,10 +888,10 @@ async function submit() {
 }
 
 .lr-section:focus-within {
-  border-color: var(--kite-green-line);
+  border-color: rgba(0, 174, 239, 0.22);
   box-shadow:
-    0 0 0 1px var(--kite-green-line),
-    0 0 24px rgba(45, 106, 79, 0.05);
+    0 0 0 1px rgba(0, 174, 239, 0.22),
+    0 0 24px rgba(7, 30, 82, 0.05);
 }
 
 .lr-section__head {
@@ -917,14 +900,14 @@ async function submit() {
   gap: 14px;
   margin-bottom: 22px;
   padding-bottom: 18px;
-  border-bottom: 1px solid var(--jm-border);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .lr-section__num {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--kite-green);
+  background: var(--cp-electric);
   color: #ffffff;
   font-size: 13px;
   font-weight: 700;
@@ -938,7 +921,7 @@ async function submit() {
 .lr-section__title {
   font-size: 17px;
   font-weight: 600;
-  color: var(--jm-text);
+  color: var(--text-primary);
   margin: 0 0 3px;
   letter-spacing: -0.01em;
 }
@@ -1015,7 +998,7 @@ async function submit() {
 }
 
 .lr-req {
-  color: var(--kite-green);
+  color: var(--cp-electric);
 }
 
 /* ── Inputs ── */
@@ -1025,7 +1008,7 @@ async function submit() {
   border: 1px solid var(--jm-border-strong);
   border-radius: 7px;
   font-size: 14px;
-  color: var(--jm-text);
+  color: var(--text-primary);
   background: #ffffff;
   transition:
     border-color 0.15s,
@@ -1035,11 +1018,11 @@ async function submit() {
 }
 
 .lr-input:focus {
-  border-color: var(--kite-green);
+  border-color: var(--cp-electric);
   background: #ffffff;
   box-shadow:
-    0 0 0 3px rgba(45, 106, 79, 0.12),
-    0 0 16px rgba(45, 106, 79, 0.06);
+    0 0 0 3px rgba(7, 30, 82, 0.12),
+    0 0 16px rgba(7, 30, 82, 0.06);
 }
 
 .lr-input::placeholder {
@@ -1057,7 +1040,7 @@ async function submit() {
 
 .lr-select option {
   background: #ffffff;
-  color: var(--jm-text);
+  color: var(--text-primary);
 }
 
 .lr-textarea {
@@ -1082,7 +1065,7 @@ async function submit() {
 }
 
 .lr-counter--error {
-  color: var(--kite-green);
+  color: var(--cp-electric);
 }
 
 /* ── Toggle buttons ── */
@@ -1108,15 +1091,15 @@ async function submit() {
 }
 
 .lr-toggle:hover {
-  border-color: var(--kite-green-line);
-  color: var(--kite-green);
-  background: rgba(45, 106, 79, 0.04);
-  box-shadow: 0 0 10px rgba(45, 106, 79, 0.1);
+  border-color: rgba(0, 174, 239, 0.22);
+  color: var(--cp-electric);
+  background: rgba(7, 30, 82, 0.04);
+  box-shadow: 0 0 10px rgba(7, 30, 82, 0.1);
 }
 
 .lr-toggle--active {
-  border-color: var(--kite-green);
-  background: var(--kite-green);
+  border-color: var(--cp-electric);
+  background: var(--cp-electric);
   color: #ffffff;
   box-shadow: 0 0 18px var(--kite-green-glow);
 }
@@ -1152,9 +1135,9 @@ async function submit() {
 }
 
 .lr-file:hover {
-  border-color: var(--kite-green);
+  border-color: var(--cp-electric);
   background: rgba(45, 106, 79, 0.04);
-  color: var(--kite-green);
+  color: var(--cp-electric);
   box-shadow: 0 0 12px rgba(45, 106, 79, 0.1);
 }
 
@@ -1170,7 +1153,7 @@ async function submit() {
 /* ── Footer del form ── */
 .lr-footer {
   background: #ffffff;
-  border: 1px solid var(--jm-border);
+  border: 1px solid var(--border-light);
   border-radius: 12px;
   padding: 24px 28px;
   display: flex;
@@ -1207,8 +1190,8 @@ async function submit() {
 }
 
 .lr-check:has(.lr-check__input:checked) .lr-check__box {
-  background: var(--kite-green);
-  border-color: var(--kite-green);
+  background: var(--cp-electric);
+  border-color: var(--cp-electric);
   box-shadow: 0 0 12px var(--kite-green-glow);
 }
 
@@ -1225,7 +1208,7 @@ async function submit() {
   justify-content: center;
   gap: 8px;
   padding: 13px 32px;
-  background: var(--kite-green);
+  background: var(--cp-electric);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -1245,7 +1228,7 @@ async function submit() {
 }
 
 .lr-submit:hover:not(:disabled) {
-  background: var(--kite-green-dark);
+  background: var(--cp-blue);
   transform: translateY(-2px);
   box-shadow:
     0 0 32px var(--kite-green-glow),
@@ -1278,7 +1261,7 @@ async function submit() {
 }
 
 .lr-link:hover {
-  color: var(--kite-green);
+  color: var(--cp-electric);
 }
 
 /* ── Spinner ── */

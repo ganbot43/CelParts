@@ -153,12 +153,9 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
 
 <style scoped>
 .catalog {
-  --kite-green: #2D6A4F;
-  --kite-green-dark: #1E4D38;
-  --kite-yellow: #E9C46A;
 
-  --text-title: #111111;
-  --text-muted: #66625A;
+  --text-title: var(--text-primary);
+  --text-muted: var(--text-muted);
 
   --bg: #F8F7F4;
   --bg-alt: #F1EFEA;
@@ -187,7 +184,7 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
   flex-wrap: wrap;
   margin-bottom: 28px;
   padding: 20px 22px;
-  border: 1px solid rgba(226, 224, 217, 0.5);
+  border: 1px solid var(--border-light);
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.56);
   backdrop-filter: blur(12px);
@@ -202,7 +199,7 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
 .section-label {
   font-size: 0.7rem;
   text-transform: uppercase;
-  color: var(--kite-green);
+  color: var(--cp-electric);
   font-weight: 700;
   letter-spacing: 0.1em;
   display: inline-flex;
@@ -216,7 +213,7 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
   display: inline-block;
   width: 12px;
   height: 1.5px;
-  background: var(--kite-green);
+  background: var(--cp-electric);
   border-radius: 2px;
 }
 
@@ -231,7 +228,7 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
 .accent-dot {
   width: 5px;
   height: 5px;
-  background: var(--kite-yellow);
+  background: var(--cp-sky);
   display: inline-block;
   border-radius: 50%;
   margin-left: 4px;
@@ -257,7 +254,7 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
 .filter-btn {
   padding: 0.4rem 1rem;
   border-radius: 999px;
-  border: 1px solid rgba(226, 224, 217, 0.5);
+  border: 1px solid var(--border-light);
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -274,14 +271,14 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
 }
 
 .filter-btn:hover {
-  border-color: var(--kite-green);
-  color: var(--kite-green);
+  border-color: var(--cp-electric);
+  color: var(--cp-electric);
 }
 
 .filter-btn.active {
-  background: var(--kite-green);
+  background: var(--cp-electric);
   color: #fff;
-  border-color: var(--kite-green);
+  border-color: var(--cp-electric);
 }
 
 /* ── Grid ── */
@@ -316,7 +313,7 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
   min-height: 42px;
   padding: 0 22px;
   border-radius: 999px;
-  background: var(--kite-green);
+  background: var(--cp-electric);
   color: #fff;
   font-size: 0.84rem;
   font-weight: 700;
@@ -329,7 +326,7 @@ watch(activeCategory, (newCategoryId) => fetchProducts(newCategoryId), {
 }
 
 .show-all-btn:hover {
-  background: var(--kite-green-dark);
+  background: var(--cp-blue);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(45, 106, 79, 0.28);
 }

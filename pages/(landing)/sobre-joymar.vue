@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white text-[#3A3A3A]">
+  <div class="bg-(--bg-surface) text-(--text-body)">
     <LandingAboutSection />
   </div>
 </template>

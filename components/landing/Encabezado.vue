@@ -1,8 +1,7 @@
 <template>
   <header class="cp-header" :class="{ 'cp-header--scrolled': scrolled }">
 
-    <!-- LÍNEA TÉCNICA DE MARCA (visible al hacer scroll) -->
-    <div class="cp-header__brand-line" />
+
 
     <!-- BACKDROP -->
     <div class="cp-header__blur" />
@@ -21,8 +20,13 @@
 
         <!-- LOGO -->
         <NuxtLink to="/" class="cp-logo" aria-label="CelParts — Inicio">
-          <img src="/images/logo.png" alt="CelParts" class="cp-logo__img" />
-          <img src="/images/logo-letra.png" alt="CelParts" class="cp-logo-letra__img" />
+          <template v-if="businessState?.logoUrl">
+            <img :src="businessState.logoUrl" :alt="businessState?.name || 'Logo'" class="cp-logo__img" style="object-fit: contain; width: auto" />
+          </template>
+          <template v-else>
+            <img src="/images/logo.png" alt="CelParts" class="cp-logo__img" />
+            <img src="/images/logo-letra.png" alt="CelParts" class="cp-logo-letra__img" />
+          </template>
         </NuxtLink>
       </div>
 
@@ -47,8 +51,7 @@
           <!-- MEGA MENU -->
           <Transition name="cp-fade">
             <div v-if="megaOpen" class="cp-mega" ref="megaRef" @mouseenter="cancelClose" @mouseleave="scheduleClose">
-              <!-- Línea técnica top del mega -->
-              <div class="cp-mega__top-line" />
+
 
               <div class="cp-mega__grid">
                 <!-- CATEGORÍAS -->
@@ -164,6 +167,7 @@ import { useFormatPrice } from "~/composables/useFormatPrice";
 
 const cartStore = useCartStore();
 const formatPrice = useFormatPrice();
+const businessState = useBusinessConfig();
 
 interface Category { id: number; name: string; slug: string; productCount?: number; }
 interface Subcategory { id: number; categoryId: number; name: string; slug: string; productCount?: number; }
@@ -314,22 +318,7 @@ onUnmounted(() => {
     border-color var(--t-slow) var(--ease-smooth);
 }
 
-/* ── LÍNEA TÉCNICA (firma de marca) ── */
-.cp-header__brand-line {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  opacity: 0;
-  z-index: 3;
-  transition: opacity var(--t-slow) var(--ease-smooth);
-}
 
-.cp-header--scrolled .cp-header__brand-line {
-  opacity: 1;
-}
 
 /* ── BACKDROP ── */
 .cp-header__blur {
@@ -338,7 +327,6 @@ onUnmounted(() => {
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
   background: rgba(255, 255, 255, 0.92);
-  border-bottom: 1px solid var(--border-light);
   box-shadow: var(--card-shadow-sm);
   transition:
     background var(--t-slow) var(--ease-smooth),
@@ -348,7 +336,6 @@ onUnmounted(() => {
 
 .cp-header--scrolled .cp-header__blur {
   background: rgba(255, 255, 255, 0.97);
-  border-bottom-color: var(--border-mid);
   box-shadow: var(--card-shadow);
 }
 
@@ -582,12 +569,7 @@ onUnmounted(() => {
   box-shadow: var(--card-shadow-hover);
 }
 
-/* Línea técnica top del mega */
-.cp-mega__top-line {
-  height: 2px;
-  background: var(--line-brand);
-  flex-shrink: 0;
-}
+
 
 .cp-mega__label {
   font-size: 0.625rem;

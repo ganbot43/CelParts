@@ -49,9 +49,14 @@
         </div>
 
         <div class="cfg-fields">
-          <div class="sp-drawer-field cfg-field--full">
+          <div class="sp-drawer-field">
             <label class="sp-drawer-label">Nombre del negocio <span class="sp-drawer-req">*</span></label>
             <input v-model="form.name" class="sp-drawer-input" placeholder="Mi tienda online" />
+          </div>
+
+          <div class="sp-drawer-field">
+            <label class="sp-drawer-label">RUC / Razón Social</label>
+            <input v-model="form.ruc" class="sp-drawer-input" placeholder="20123456789" />
           </div>
 
           <div class="sp-drawer-field">
@@ -292,6 +297,7 @@ const tabs = [
 
 const form = reactive({
   name: config.value?.name ?? "",
+  ruc: config.value?.ruc ?? "",
   whatsapp: config.value?.whatsapp ?? "",
   address: config.value?.address ?? "",
   logoUrl: config.value?.logoUrl ?? "",
@@ -305,6 +311,7 @@ watchEffect(() => {
   if (!config.value) return;
   Object.assign(form, {
     name: config.value.name ?? "",
+    ruc: config.value.ruc ?? "",
     whatsapp: config.value.whatsapp ?? "",
     address: config.value.address ?? "",
     logoUrl: config.value.logoUrl ?? "",

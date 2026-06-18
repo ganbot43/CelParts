@@ -6,49 +6,27 @@ import { eq, desc, and } from 'drizzle-orm'
 export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event)
-    const type = (query.type as string) || 'bestsellers'
+    const categoryId = query.categoryId as string | undefined
     const limit = 3
 
-    let rawData
+    let conditions = [eq(products.isActive, 1)]
+    if (categoryId && categoryId !== 'all') {
+      conditions.push(eq(products.categoryId, Number(categoryId)))
+    }
 
-    switch (type) {
-      case 'newest':
-        rawData = await db.select().from(products)
-          .where(eq(products.isActive, 1))
-          .orderBy(desc(products.createdAt))
-          .limit(limit)
-          .execute()
-        break
+    let rawData = await db.select().from(products)
+      .where(and(...conditions))
+      .orderBy(desc(products.createdAt))
+      .limit(limit)
+      .execute()
 
-      case 'offers':
-        rawData = await db.select().from(products)
-          .where(and(eq(products.isActive, 1), eq(products.isFeatured, 1)))
-          .orderBy(desc(products.createdAt))
-          .limit(limit)
-          .execute()
-        if (rawData.length === 0) {
-          rawData = await db.select().from(products)
-            .where(eq(products.isActive, 1))
-            .orderBy(desc(products.createdAt))
-            .limit(limit)
-            .execute()
-        }
-        break
-
-      case 'bestsellers':
-      default:
-        rawData = await db.select().from(products)
-          .where(and(eq(products.isActive, 1), eq(products.isFeatured, 1)))
-          .orderBy(desc(products.createdAt))
-          .limit(limit)
-          .execute()
-        if (rawData.length === 0) {
-          rawData = await db.select().from(products)
-            .where(eq(products.isActive, 1))
-            .limit(limit)
-            .execute()
-        }
-        break
+    // If no products found for category, fallback to any active products just to not break layout
+    if (rawData.length === 0) {
+      rawData = await db.select().from(products)
+        .where(eq(products.isActive, 1))
+        .orderBy(desc(products.createdAt))
+        .limit(limit)
+        .execute()
     }
 
     const data = await enhanceProducts(rawData)

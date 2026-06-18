@@ -1,6 +1,6 @@
 import { db } from '~/server/db'
 import { inventoryMovements, products, users } from '~/server/db/schema'
-import { desc, eq, sql, inArray } from 'drizzle-orm'
+import { desc, eq, sql, inArray, and } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -16,13 +16,10 @@ export default defineEventHandler(async (event) => {
   // total count
   let totalQ: any = db.select({ count: sql<number>`count(*)` }).from(inventoryMovements)
   let pageQ: any = db.select().from(inventoryMovements as any)
-  if (productId) {
-    totalQ = totalQ.where(eq(inventoryMovements.productId, productId))
-    pageQ = pageQ.where(eq(inventoryMovements.productId, productId))
-  }
-  if (type) {
-    totalQ = totalQ.where(eq(inventoryMovements.movementType, type))
-    pageQ = pageQ.where(eq(inventoryMovements.movementType, type))
+  
+  if (whereClauses.length > 0) {
+    totalQ = totalQ.where(and(...whereClauses))
+    pageQ = pageQ.where(and(...whereClauses))
   }
 
   const totalResult = await totalQ.execute()

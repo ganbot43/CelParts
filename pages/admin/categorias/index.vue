@@ -388,6 +388,7 @@ async function onBannerFileSelected(e: Event) {
   try {
     const fd = new FormData();
     fd.append("file", file);
+    fd.append("folder", "categories");
     const res: any = await $fetch("/api/upload/image", {
       method: "POST",
       body: fd,

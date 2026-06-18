@@ -493,21 +493,7 @@ onUnmounted(() => {
   background: var(--bg-surface);
   position: relative;
 }
-.ch::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--line-brand) 30%,
-    var(--line-brand) 70%,
-    transparent
-  );
-}
+
 
 .ch-icon {
   width: 42px;
@@ -706,21 +692,7 @@ onUnmounted(() => {
   background: var(--bg-surface);
   position: relative;
 }
-.cart-footer::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--line-brand) 30%,
-    var(--line-brand) 70%,
-    transparent
-  );
-}
+
 
 /* ─── Summary ──────────────────────────────────────────── */
 .summary {

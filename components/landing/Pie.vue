@@ -9,12 +9,12 @@
       <div class="jm-footer__brand">
         <NuxtLink to="/" class="jm-footer__logo" aria-label="Kite — Inicio">
           <div class="jm-footer__logo-img">
-            <img src="/images/logo.png" alt="Kite" width="58" height="58" />
+            <img :src="businessState?.logoUrl || '/images/logo.png'" alt="Logo" width="58" height="58" style="object-fit: contain" />
           </div>
 
           <div class="jm-footer__logo-text">
             <span class="jm-footer__logo-name">
-              CelParts
+              {{ businessState?.name || 'CelParts' }}
             </span>
 
             <span class="jm-footer__logo-sub">
@@ -136,15 +136,45 @@
         </div>
       </div>
 
+      <!-- LEGAL -->
+      <div class="jm-footer__col">
+        <div class="jm-footer__col-title">
+          Legal
+        </div>
+
+        <ul class="jm-footer__links">
+          <li>
+            <NuxtLink to="/terminos" class="jm-footer__link">
+              Términos y Condiciones
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/privacidad" class="jm-footer__link">
+              Política de Privacidad
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/libro-de-reclamaciones" class="jm-footer__link flex items-center gap-2">
+              Libro de Reclamaciones
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+
     </div>
 
     <!-- ═══════════════════════════════
          BOTTOM
     ═══════════════════════════════ -->
     <div class="jm-footer__bottom">
-      <span>
-        © {{ currentYear }} CelParts. Todos los derechos reservados.
-      </span>
+      <div style="display:flex; flex-direction:column; gap:0.25rem;">
+        <span>
+          © {{ currentYear }} {{ businessState?.name || 'CelParts' }}. Todos los derechos reservados.
+        </span>
+        <span v-if="businessState?.ruc" style="font-size: 0.8rem; opacity: 0.8">
+          RUC: {{ businessState.ruc }} <span v-if="businessState.address">| {{ businessState.address }}</span>
+        </span>
+      </div>
 
       <a href="https://smartcsperu.com" target="_blank" rel="noopener noreferrer" class="jm-footer__credit">
         Desarrollada por <strong>Smart CS</strong>
@@ -156,6 +186,7 @@
 <script setup>
 import { Instagram, Facebook, X } from "lucide-vue-next";
 const currentYear = new Date().getFullYear();
+const businessState = useBusinessConfig();
 </script>
 
 <style scoped>
@@ -166,7 +197,6 @@ const currentYear = new Date().getFullYear();
 .jm-footer {
   background: var(--bg-alt);
   color: var(--text-primary);
-  border-top: 1px solid var(--border-light);
   position: relative;
   overflow: hidden;
 }
@@ -194,7 +224,7 @@ const currentYear = new Date().getFullYear();
   margin: 0 auto;
   padding: clamp(60px, 6vw, 80px) var(--space-8);
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
   gap: var(--space-10);
 }
 
@@ -402,7 +432,6 @@ const currentYear = new Date().getFullYear();
 .jm-footer__bottom {
   position: relative;
   z-index: 2;
-  border-top: 1px solid var(--border-light);
   padding: var(--space-5) var(--space-8);
   display: flex;
   align-items: center;

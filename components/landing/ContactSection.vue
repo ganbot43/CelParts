@@ -179,18 +179,6 @@ function handleSubmit() {
   background: var(--bg-page);
 }
 
-/* Línea técnica superior */
-.contact::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  z-index: 1;
-}
-
 /* Decoración de fondo */
 .contact::after {
   content: '';

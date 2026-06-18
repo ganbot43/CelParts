@@ -197,17 +197,6 @@ const scroll = (dir: "left" | "right") => {
   padding: clamp(80px, 8vw, 120px) 0;
 }
 
-/* Línea técnica superior */
-.benefits::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-}
-
 /* ── Container ── */
 .benefits-container {
   max-width: var(--container-width);
@@ -314,18 +303,6 @@ const scroll = (dir: "left" | "right") => {
 }
 
 /* Línea técnica top en hover */
-.benefit-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  opacity: 0;
-  transition: opacity var(--t-base) var(--ease-smooth);
-}
-
 .benefit-card:hover {
   transform: translateY(-6px);
   border-color: var(--border-mid);

@@ -483,6 +483,7 @@ async function uploadFiles(files: File[]) {
   return Promise.all(files.map(async (file) => {
     const fd = new FormData()
     fd.append("file", file)
+    fd.append("folder", "products")
     const res: any = await $fetch("/api/upload/image", { method: "POST", body: fd })
     return res.url
   }))

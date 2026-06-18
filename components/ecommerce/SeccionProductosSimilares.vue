@@ -212,7 +212,7 @@ onUnmounted(() => {
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #2D6A4F;
+  color: var(--cp-blue);
   margin: 0;
 }
 
@@ -239,7 +239,7 @@ onUnmounted(() => {
   border-radius: 50%;
   border: 1px solid #e5e5e5;
   background: #ffffff;
-  box-shadow: 0 2px 12px rgba(45, 106, 79, 0.08);
+  box-shadow: 0 2px 12px rgba(18, 69, 196, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -254,10 +254,10 @@ onUnmounted(() => {
 }
 
 .similares-flecha:hover {
-  background: #2D6A4F;
-  border-color: #2D6A4F;
+  background: var(--cp-blue);
+  border-color: var(--cp-blue);
   color: #ffffff;
-  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.22);
+  box-shadow: 0 4px 20px rgba(18, 69, 196, 0.22);
   transform: translateY(-50%) scale(1.07);
 }
 

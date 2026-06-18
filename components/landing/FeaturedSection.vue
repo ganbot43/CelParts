@@ -18,15 +18,14 @@ interface FeaturedProductsResponse {
   data: Product[];
 }
 
-const tabMap = {
-  "Más vendidos": "bestsellers",
-  Novedades: "newest",
-  Ofertas: "offers",
-};
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
 
-const tabs = Object.keys(tabMap) as Array<keyof typeof tabMap>;
-
-const activeTab = ref<keyof typeof tabMap>("Más vendidos");
+const categories = ref<Category[]>([]);
+const activeTab = ref<string | number>('all');
 
 const products = ref<Product[]>([]);
 const loading = ref(true);
@@ -38,33 +37,30 @@ const heroProduct = computed(() => products.value[0] || null);
 
 const sideProducts = computed(() => products.value.slice(1, 3));
 
-const fetchFeaturedProducts = async (
-  tabName: keyof typeof tabMap
-) => {
+const fetchCategories = async () => {
+  try {
+    const res = await $fetch<{ data: Category[] }>('/api/landing/catalog-categories');
+    categories.value = res.data || [];
+  } catch (error) {
+    console.error('[CelParts] Error cargando categorias:', error);
+  }
+};
+
+const fetchFeaturedProducts = async (categoryId: string | number) => {
   try {
     loading.value = true;
-
-    const type = tabMap[tabName];
-
-    const { data } =
-      await $fetch<FeaturedProductsResponse>(
-        `/api/landing/featured-products?type=${type}`
-      );
-
+    const { data } = await $fetch<FeaturedProductsResponse>(`/api/landing/featured-products?categoryId=${categoryId}`);
     products.value = data || [];
   } catch (error) {
-    console.error(
-      "[CelParts] Error cargando productos destacados:",
-      error
-    );
-
+    console.error("[CelParts] Error cargando productos destacados:", error);
     products.value = [];
   } finally {
     loading.value = false;
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  await fetchCategories();
   fetchFeaturedProducts(activeTab.value);
 });
 
@@ -99,12 +95,14 @@ watch(activeTab, (newTab) => {
 
       <!-- ═════════ TABS ═════════ -->
       <div class="featured-tabs" role="tablist">
-
-        <button v-for="tab in tabs" :key="tab" class="featured-tab" :class="{ active: activeTab === tab }" role="tab"
-          :aria-selected="activeTab === tab" @click="activeTab = tab">
-          {{ tab }}
+        <button class="featured-tab" :class="{ active: activeTab === 'all' }" role="tab"
+          :aria-selected="activeTab === 'all'" @click="activeTab = 'all'">
+          Todos
         </button>
-
+        <button v-for="cat in categories" :key="cat.id" class="featured-tab" :class="{ active: activeTab === cat.id }" role="tab"
+          :aria-selected="activeTab === cat.id" @click="activeTab = cat.id">
+          {{ cat.name }}
+        </button>
       </div>
 
       <!-- ═════════ LOADING ═════════ -->
@@ -252,18 +250,6 @@ watch(activeTab, (newTab) => {
   padding: clamp(80px, 8vw, 120px) var(--space-8);
 }
 
-/* Línea técnica superior */
-.featured-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  z-index: 1;
-}
-
 /* Fondo decorativo radial */
 .featured-bg-deco {
   position: absolute;
@@ -409,19 +395,6 @@ watch(activeTab, (newTab) => {
 }
 
 /* Línea técnica top en hover */
-.featured-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-brand);
-  opacity: 0;
-  transition: opacity var(--t-base) var(--ease-smooth);
-  z-index: 1;
-}
-
 .featured-card:hover {
   transform: translateY(-6px);
   border-color: var(--border-mid);
@@ -533,7 +506,6 @@ watch(activeTab, (newTab) => {
   align-items: center;
   gap: var(--space-3);
   padding-top: var(--space-5);
-  border-top: 1px solid var(--border-light);
 }
 
 .featured-price {

@@ -94,12 +94,6 @@ watch(
 
 <style scoped>
 .galeria-producto {
-  --kite-green: #2D6A4F;
-  --kite-green-glow: rgba(45, 106, 79, 0.22);
-  --kite-green-line: rgba(45, 106, 79, 0.2);
-  --jm-card-border: #e8e8e8;
-  --jm-card-border-hover: rgba(45, 106, 79, 0.35);
-  --jm-img-bg: #f5f5f5;
   --radius: 14px;
   --radius-sm: 10px;
   --border: #e5e5e5;
@@ -142,7 +136,7 @@ watch(
 .galeria-imagen-principal-contenedor:hover {
   border-color: var(--jm-card-border-hover);
   box-shadow:
-    0 0 0 1px var(--kite-green-line),
+    0 0 0 1px rgba(0, 174, 239, 0.22),
     0 12px 40px rgba(0, 0, 0, 0.08),
     0 0 28px var(--kite-green-glow);
 }
@@ -203,7 +197,7 @@ watch(
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: var(--kite-green);
+  background: var(--cp-electric);
   color: #fff;
   font-size: 0.62rem;
   font-weight: 800;
@@ -231,7 +225,7 @@ watch(
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(45, 106, 79, 0.75);
+  background: var(--cp-blue);
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 3px 9px;
   border-radius: 999px;
@@ -269,14 +263,14 @@ watch(
 }
 
 .galeria-miniatura-boton:hover {
-  border-color: rgba(45, 106, 79, 0.3);
+  border-color: rgba(18, 69, 196, 0.3);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px var(--kite-green-glow);
 }
 
 .galeria-miniatura-boton.activa {
-  border: 1.5px solid var(--kite-green);
-  box-shadow: 0 0 0 1px var(--kite-green-line);
+  border: 1.5px solid var(--cp-electric);
+  box-shadow: 0 0 0 1px rgba(0, 174, 239, 0.22);
 }
 
 .galeria-miniatura-imagen {

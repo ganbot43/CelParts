@@ -11,6 +11,7 @@ import { relations, sql } from 'drizzle-orm'
 export const businessConfig = mysqlTable('business_config', {
   id:                 int('id').autoincrement().primaryKey(),
   name:               text('name').notNull(),
+  ruc:                varchar('ruc', { length: 20 }),
   logoUrl:            text('logo_url'),
   whatsapp:           text('whatsapp').notNull(),
   address:            text('address'),
@@ -57,6 +58,8 @@ export const subcategories = mysqlTable('subcategories', {
   slug:       varchar('slug', { length: 191 }).notNull().unique(),
   sortOrder:  int('sort_order').notNull().default(0),
   isActive:   int('is_active').notNull().default(1),
+  createdAt:  timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt:  timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
 // 5. products

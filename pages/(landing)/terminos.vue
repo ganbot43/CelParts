@@ -1,15 +1,15 @@
 <template>
-  <section class="py-20 text-(--text-body) px-8 pt-40 lg:px-32 bg-(--bg-surface)">
+  <section class="py-20 px-8 pt-40 lg:px-32 bg-base">
     <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-4xl font-extrabold text-(--text-primary) mb-6">
+      <h2 class="text-4xl font-extrabold text-primary mb-6">
         Términos y Condiciones
       </h2>
-      <p class="text-lg text-(--text-body) mb-4">
+      <p class="text-lg text-body mb-4">
         Bienvenido a CelParts. Al utilizar nuestros servicios,
         aceptas cumplir con los siguientes términos y condiciones.
       </p>
 
-      <div class="text-left text-(--text-body) mt-8 space-y-6">
+      <div class="text-left text-body mt-8 space-y-6">
         <div>
           <h3 class="text-2xl font-semibold mb-2">
             1. Aceptación de los términos
@@ -72,12 +72,12 @@ useSeoMeta({
   ogTitle: 'Terminos y Condiciones | CelParts',
   ogDescription: 'Condiciones de uso, limitaciones y responsabilidades aplicables en CelParts.',
   ogType: 'article',
-  ogUrl: 'https://kite.pe/terminos',
-  ogImage: 'https://kite.pe/images/logo.png',
+  ogUrl: 'https://celparts.pe/terminos',
+  ogImage: 'https://celparts.pe/images/logo.png',
   twitterCard: 'summary_large_image',
   twitterTitle: 'Terminos y Condiciones | CelParts',
   twitterDescription: 'Consulta los terminos y condiciones de CelParts.',
-  twitterImage: 'https://kite.pe/images/logo.png',
+  twitterImage: 'https://celparts.pe/images/logo.png',
 })
 </script>
 

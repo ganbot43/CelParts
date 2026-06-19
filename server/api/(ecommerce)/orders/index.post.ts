@@ -22,6 +22,11 @@ const schema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
+  if (!user || user.role !== 'customer') {
+    throw createError({ statusCode: 401, message: 'Debes iniciar sesión como cliente para comprar' })
+  }
+
   const body = await readBody(event)
   const data = validateBody(schema, body)
 
@@ -72,6 +77,7 @@ export default defineEventHandler(async (event) => {
   await db.transaction(async (tx) => {
     const [hdr] = await tx.insert(orders).values({
       orderCode:                  'PED-TEMP',
+      userId:                     user.id,
       paymentMethodId:            data.paymentMethodId,
       paymentMethodType:          paymentMethod?.type ?? null,
       paymentMethodLabel:         paymentMethod?.label ?? null,

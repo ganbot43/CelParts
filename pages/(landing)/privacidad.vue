@@ -1,11 +1,11 @@
 <template>
-  <section class="py-20 text-(--text-body) px-8 pt-40 lg:px-32 bg-(--bg-surface)">
-    <div class="max-w-4xl mx-auto">
-      <h2 class="text-4xl font-extrabold text-center mb-8">
+  <section class="py-20 px-8 pt-40 lg:px-32 bg-base">
+    <div class="max-w-4xl mx-auto text-body">
+      <h2 class="text-4xl font-extrabold text-center mb-8 text-primary">
         Política de Privacidad
       </h2>
       <p class="text-lg mb-6">
-        En <span class="font-semibold">CelParts</span>, respetamos y
+        En <span class="font-semibold text-primary">CelParts</span>, respetamos y
         valoramos la privacidad de nuestros usuarios. Esta política de
         privacidad describe cómo recopilamos, utilizamos y protegemos su
         información personal.
@@ -50,7 +50,7 @@
         Nos reservamos el derecho de modificar esta política de privacidad en
         cualquier momento. Los cambios se publicarán en esta página.
       </p>
-      <p class="mt-8 text-(--text-body)">
+      <p class="mt-8 text-body">
         Si tiene alguna duda o consulta sobre nuestra política de privacidad, no
         dude en contactarnos a través de nuestro formulario de contacto.
       </p>
@@ -67,12 +67,12 @@ useSeoMeta({
   ogTitle: 'Politica de Privacidad | CelParts',
   ogDescription: 'Informacion sobre tratamiento de datos personales y derechos del usuario en CelParts.',
   ogType: 'article',
-  ogUrl: 'https://kite.pe/privacidad',
-  ogImage: 'https://kite.pe/images/logo.png',
+  ogUrl: 'https://celparts.pe/privacidad',
+  ogImage: 'https://celparts.pe/images/logo.png',
   twitterCard: 'summary_large_image',
   twitterTitle: 'Politica de Privacidad | CelParts',
   twitterDescription: 'Consulta la politica de privacidad de CelParts.',
-  twitterImage: 'https://kite.pe/images/logo.png',
+  twitterImage: 'https://celparts.pe/images/logo.png',
 })
 </script>
 <style scoped>

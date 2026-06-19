@@ -78,10 +78,21 @@ const pillars: Pillar[] = [
   width: 100%;
   padding: clamp(80px, 8vw, 120px) 0;
   background: var(--bg-alt);
+  border-top: 1px solid var(--border-light);
   border-bottom: 1px solid var(--border-light);
 }
 
-
+/* Línea técnica superior */
+.kite-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  display: none; /* background: var(--line-brand); */
+  z-index: 1;
+}
 
 /* BLOBS / DECORACIÓN */
 .blob {

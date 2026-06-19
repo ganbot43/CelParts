@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-(--bg-surface) text-(--text-body)">
+  <div class="bg-base text-body">
     <LandingAboutSection />
   </div>
 </template>
@@ -10,21 +10,21 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Sobre Kite | Utensilios de Cocina de Calidad",
-  ogTitle: "Sobre Kite | Utensilios de Cocina Premium en Perú",
+  title: "Sobre CelParts | Repuestos & Accesorios de Calidad",
+  ogTitle: "Sobre CelParts | Repuestos Premium en Perú",
   description:
-    "Conoce la historia de Kite. Nacimos en el Perú con el propósito de llevar utensilios de cocina de alta calidad a cada hogar, con garantía comprobada y al precio justo.",
+    "Conoce la historia de CelParts. Nacimos en el Perú con el propósito de llevar repuestos y accesorios de alta calidad para celulares, con garantía comprobada y al precio justo.",
   ogDescription:
-    "Descubre nuestra misión: ofrecer utensilios de cocina de alta calidad, seleccionados cuidadosamente, con garantía comprobada y al precio justo.",
+    "Descubre nuestra misión: ofrecer repuestos de alta calidad, seleccionados cuidadosamente, con garantía comprobada y al precio justo.",
   keywords:
-    "Sobre Kite, Kite, historia, misión, valores, calidad, garantía, precio justo",
+    "Sobre CelParts, CelParts, repuestos, accesorios, celulares, calidad, garantía, precio justo",
   ogType: "website",
-  ogUrl: "https://kite.pe/sobre-joymar",
-  ogImage: "https://kite.pe/images/logo.png",
+  ogUrl: "https://celparts.pe/sobre-nosotros",
+  ogImage: "https://celparts.pe/images/logo.png",
   twitterCard: "summary_large_image",
-  twitterTitle: "Sobre Kite | Utensilios de Cocina Premium",
+  twitterTitle: "Sobre CelParts | Repuestos Premium",
   twitterDescription:
-    "Conoce quiénes somos y por qué nos apasiona ofrecer utensilios de cocina de la mejor calidad.",
-  twitterImage: "https://kite.pe/images/logo.png",
+    "Conoce quiénes somos y por qué nos apasiona ofrecer accesorios y repuestos de la mejor calidad.",
+  twitterImage: "https://celparts.pe/images/logo.png",
 });
 </script>

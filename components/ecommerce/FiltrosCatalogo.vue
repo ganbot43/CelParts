@@ -80,20 +80,20 @@ watch(filters, () => emit('change', filters))
 
 <style scoped>
 .filtros-panel {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  border-radius: 18px;
-  padding: 1rem;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 6px 22px rgba(17, 17, 17, 0.03), inset 0 1px 0 rgba(255,255,255,0.4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  padding: var(--space-4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--card-shadow-sm);
 }
 
 .filtros-label,
 .filtros-title {
   display: block;
-  color: #111111;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-weight: 800;
   margin-bottom: 0.5rem;
 }
 
@@ -108,11 +108,11 @@ watch(filters, () => emit('change', filters))
 .filtros-subchip {
   width: 100%;
   text-align: left;
-  border: 1px solid rgba(226, 224, 217, 0.6);
-  background: rgba(255, 255, 255, 0.72);
-  color: #66625a;
-  border-radius: 12px;
-  transition: all 0.18s ease;
+  border: 1px solid var(--border-light);
+  background: var(--bg-alt);
+  color: var(--text-muted);
+  border-radius: var(--r-sm);
+  transition: all var(--t-fast) var(--ease-smooth);
 }
 
 .filtros-chip {
@@ -127,25 +127,24 @@ watch(filters, () => emit('change', filters))
 
 .filtros-chip:hover,
 .filtros-subchip:hover {
-  border-color: rgba(45, 106, 79, 0.28);
-  background: rgba(45, 106, 79, 0.06);
-  color: #2D6A4F;
+  border-color: rgba(0, 174, 239, 0.3);
+  background: rgba(0, 174, 239, 0.04);
+  color: var(--cp-electric);
 }
 
 .filtros-chip.active,
 .filtros-subchip.active {
-  border-color: rgba(45, 106, 79, 0.34);
-  background: rgba(45, 106, 79, 0.08);
-  color: #2D6A4F;
+  border-color: var(--cp-electric);
+  background: rgba(0, 174, 239, 0.08);
+  color: var(--cp-electric);
   font-weight: 700;
-  box-shadow: 0 0 0 1px rgba(45, 106, 79, 0.12);
 }
 
 :deep(.filtros-input input) {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(226, 224, 217, 0.5);
-  border-radius: 12px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-sm);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 </style>

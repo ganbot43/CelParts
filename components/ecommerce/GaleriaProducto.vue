@@ -58,11 +58,11 @@
         @click="imagenSeleccionada = img.url"
         class="galeria-miniatura-boton"
         :class="{ activa: imagenSeleccionada === img.url }"
-        :aria-label="`Ver imagen ${idx + 1}`"
+        :aria-label="`Ver imagen ${(idx as number) + 1}`"
       >
         <img
           :src="img.url"
-          :alt="`${producto.name} ${idx + 1}`"
+          :alt="`${producto.name} ${(idx as number) + 1}`"
           class="galeria-miniatura-imagen"
         />
       </button>
@@ -93,30 +93,15 @@ watch(
 </script>
 
 <style scoped>
-.galeria-producto {
-  --radius: 14px;
-  --radius-sm: 10px;
-  --border: #e5e5e5;
-  --transition: 0.18s ease;
-}
+/* ═══════════════════════════════════
+   GALERÍA PRODUCTO — CELPARTS
+   100% tokens de main.css
+═══════════════════════════════════ */
 
-.galeria-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.galeria-produto {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Reutilizar layout igual que vf-card */
 .galeria-producto {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-3);
 }
 
 /* ── Imagen principal ── */
@@ -125,20 +110,19 @@ watch(
   width: 100%;
   aspect-ratio: 1;
   overflow: hidden;
-  border-radius: var(--radius);
-  background: var(--jm-img-bg);
-  border: 1px solid var(--jm-card-border);
+  border-radius: var(--r-lg);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-light);
   transition:
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+    border-color var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
 .galeria-imagen-principal-contenedor:hover {
-  border-color: var(--jm-card-border-hover);
+  border-color: var(--border-mid);
   box-shadow:
-    0 0 0 1px rgba(0, 174, 239, 0.22),
-    0 12px 40px rgba(0, 0, 0, 0.08),
-    0 0 28px var(--kite-green-glow);
+    0 0 0 1px rgba(0, 174, 239, 0.15),
+    0 12px 40px rgba(7, 30, 82, 0.10);
 }
 
 .galeria-imagen-principal {
@@ -160,7 +144,7 @@ watch(
   background: linear-gradient(
     to bottom,
     transparent 45%,
-    rgba(0, 0, 0, 0.45) 100%
+    rgba(7, 30, 82, 0.30) 100%
   );
   pointer-events: none;
 }
@@ -174,7 +158,7 @@ watch(
   align-items: center;
   justify-content: center;
   gap: 10px;
-  color: #d0d0d0;
+  color: var(--border-mid);
 }
 
 .galeria-placeholder-icono {
@@ -183,8 +167,8 @@ watch(
 }
 
 .galeria-placeholder-texto {
-  font-size: 13px;
-  color: #c0c0c0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
   font-weight: 500;
   letter-spacing: 0.02em;
 }
@@ -192,43 +176,46 @@ watch(
 /* ── Badge destacado ── */
 .galeria-insignia {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: var(--space-2);
+  left: var(--space-2);
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: var(--cp-electric);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--cp-navy);
   font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 4px 10px;
-  border-radius: 999px;
-  box-shadow: 0 2px 10px var(--kite-green-glow);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--card-shadow-sm);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .galeria-insignia-icono {
   width: 12px;
   height: 12px;
-  color: #E9C46A;
+  color: var(--cp-electric);
   flex-shrink: 0;
 }
 
 /* ── Categoría ── */
 .galeria-categoria {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: var(--space-2);
+  right: var(--space-2);
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fff;
-  background: var(--cp-blue);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--cp-white);
+  background: rgba(7, 30, 82, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   padding: 3px 9px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
@@ -236,7 +223,7 @@ watch(
 /* ── Miniaturas ── */
 .galeria-miniaturas {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
   overflow-x: auto;
   padding-bottom: 2px;
   scrollbar-width: none;
@@ -250,27 +237,27 @@ watch(
   flex-shrink: 0;
   width: 72px;
   height: 72px;
-  border: 1px solid var(--jm-card-border);
-  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-sm);
   overflow: hidden;
   cursor: pointer;
-  background: var(--jm-img-bg);
+  background: var(--bg-alt);
   transition:
-    border-color var(--transition),
-    transform var(--transition),
-    box-shadow var(--transition);
+    border-color var(--t-fast) var(--ease-smooth),
+    transform var(--t-fast) var(--ease-snappy),
+    box-shadow var(--t-fast) var(--ease-smooth);
   padding: 0;
 }
 
 .galeria-miniatura-boton:hover {
-  border-color: rgba(18, 69, 196, 0.3);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--kite-green-glow);
+  border-color: rgba(0, 174, 239, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 174, 239, 0.15);
 }
 
 .galeria-miniatura-boton.activa {
-  border: 1.5px solid var(--cp-electric);
-  box-shadow: 0 0 0 1px rgba(0, 174, 239, 0.22);
+  border: 2px solid var(--cp-electric);
+  box-shadow: 0 0 0 1px rgba(0, 174, 239, 0.2);
 }
 
 .galeria-miniatura-imagen {
@@ -278,7 +265,7 @@ watch(
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s var(--ease-snappy);
 }
 
 .galeria-miniatura-boton:hover .galeria-miniatura-imagen {
@@ -292,3 +279,5 @@ watch(
   }
 }
 </style>
+
+

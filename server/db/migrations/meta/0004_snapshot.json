@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "9e5c5a29-39c2-4061-ace0-d14f25344cfa",
-  "prevId": "70aab6ba-a67e-4acd-bfaf-031bbe40bb98",
+  "id": "bbfdd93c-af3b-468b-8ddc-34c4672c4065",
+  "prevId": "9e5c5a29-39c2-4061-ace0-d14f25344cfa",
   "tables": {
     "banners": {
       "name": "banners",
@@ -1314,6 +1314,13 @@
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "password_hash": {

@@ -8,14 +8,7 @@
         </p>
       </div>
       <button class="sp-page-btn" @click="openDrawer()">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-          <path
-            d="M8 3v10M3 8h10"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
+        <Plus class="w-3.5 h-3.5" stroke-width="2" />
         Nueva subcategoría
       </button>
     </div>
@@ -56,14 +49,10 @@
               <td class="sp-td">
                 <div class="sp-table-actions">
                   <button class="sp-table-btn sp-table-btn--edit" @click="openDrawer(s)" title="Editar">
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-                    </svg>
+                    <Pencil class="w-3.5 h-3.5" stroke-width="1.5" />
                   </button>
                   <button class="sp-table-btn sp-table-btn--del" @click="deleteItem(s.id)" title="Eliminar">
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path d="M3 5h10M6 5V3h4v2M6 8v4M10 8v4M4 5l1 8h6l1-8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <Trash2 class="w-3.5 h-3.5" stroke-width="1.5" />
                   </button>
                 </div>
               </td>
@@ -73,10 +62,7 @@
               <td colspan="6" class="sp-table-empty">
                 <div class="sp-table-empty__inner">
                   <div class="sp-table-empty__icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                      <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
+                    <Inbox class="w-8 h-8 text-current" stroke-width="1.5" />
                   </div>
                   <p class="sp-table-empty__msg">No hay subcategorías aún</p>
                   <button class="sp-table-empty__cta" @click="openDrawer()">Crear la primera</button>
@@ -100,9 +86,7 @@
               <h2 class="sp-drawer-header__title">{{ isEditing ? form.name || 'Subcategoría' : 'Crear subcategoría' }}</h2>
             </div>
             <button class="sp-drawer-close" @click="closeDrawer" aria-label="Cerrar">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
+              <X class="w-4 h-4" stroke-width="1.8" />
             </button>
           </div>
 
@@ -140,12 +124,8 @@
           <div class="sp-drawer-footer">
             <button class="sp-drawer-btn sp-drawer-btn--ghost" @click="closeDrawer">Cancelar</button>
             <button class="sp-drawer-btn sp-drawer-btn--primary" :disabled="saving" @click="save">
-              <svg v-if="saving" class="sp-drawer-spin" width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" stroke-dasharray="25 13" stroke-linecap="round" />
-              </svg>
-              <svg v-else width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
+              <Loader2 v-if="saving" class="sp-drawer-spin w-3.5 h-3.5" stroke-width="2" />
+              <Check v-else class="w-3.5 h-3.5 text-current" stroke-width="1.8" />
               {{ isEditing ? 'Guardar cambios' : 'Crear subcategoría' }}
             </button>
           </div>
@@ -156,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+import { Plus, Pencil, Trash2, Inbox, X, Loader2, Check } from "lucide-vue-next";
 definePageMeta({ middleware: "auth", layout: "admin" });
 useSeoMeta({ title: "Subcategorías — Admin" });
 

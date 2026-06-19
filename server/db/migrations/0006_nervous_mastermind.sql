@@ -1,0 +1,1 @@
+ALTER TABLE `business_config` ADD `email` varchar(255);

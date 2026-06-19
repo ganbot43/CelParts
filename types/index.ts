@@ -100,6 +100,7 @@ export interface BusinessConfig {
   id:                 number
   name:               string
   ruc:                string | null
+  email:              string | null
   logoUrl:            string | null
   whatsapp:           string
   address:            string | null

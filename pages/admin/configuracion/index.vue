@@ -60,6 +60,19 @@
           </div>
 
           <div class="sp-drawer-field">
+            <label class="sp-drawer-label">Correo electrónico</label>
+            <div class="cfg-input-group">
+              <span class="cfg-input-prefix">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <input v-model="form.email" class="sp-drawer-input cfg-input-with-prefix" type="email" placeholder="hola@mi-tienda.com" />
+            </div>
+          </div>
+
+          <div class="sp-drawer-field">
             <label class="sp-drawer-label">WhatsApp</label>
             <div class="cfg-input-group">
               <span class="cfg-input-prefix">
@@ -84,16 +97,25 @@
           </div>
 
           <div class="sp-drawer-field cfg-field--full">
-            <label class="sp-drawer-label">URL del Logo</label>
-            <p class="sp-drawer-hint">Pega el enlace directo a la imagen (PNG, JPG o SVG)</p>
-            <div class="cfg-input-group">
-              <span class="cfg-input-prefix">
-                <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
-                  <path d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.497z" fill="currentColor" opacity=".8" />
-                  <path d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5z" fill="currentColor" opacity=".8" />
-                </svg>
-              </span>
-              <input v-model="form.logoUrl" class="sp-drawer-input cfg-input-with-prefix" placeholder="https://cdn.ejemplo.com/logo.png" @input="logoError = false" />
+            <label class="sp-drawer-label">Logo del Negocio</label>
+            <p class="sp-drawer-hint">Sube una imagen desde tu PC (PNG, JPG o SVG, max 5MB)</p>
+            
+            <div style="margin-top: 8px;">
+              <input type="file" accept="image/*" class="cfg-hidden-input" ref="fileInput" @change="uploadLogo" style="display: none;" />
+              <button type="button" class="cfg-upload-btn" @click="triggerUpload" :disabled="uploadingLogo" style="width: 100%;">
+                <template v-if="uploadingLogo">
+                  <svg class="cfg-spin" width="14" height="14" viewBox="0 0 16 16" fill="none" style="margin-right: 6px;">
+                    <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" stroke-dasharray="28" stroke-dashoffset="10" stroke-linecap="round" />
+                  </svg>
+                  Subiendo imagen...
+                </template>
+                <template v-else>
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="margin-right: 6px;">
+                    <path d="M8 12V4m0 0L4.5 7.5M8 4l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Seleccionar archivo desde la PC
+                </template>
+              </button>
             </div>
           </div>
         </div>
@@ -277,6 +299,13 @@ const { data: config, refresh } = await useFetch<any>("/api/business-config");
 
 const activeTab = ref<"general" | "modulos" | "acceso">("general");
 
+const error = ref("");
+const saved = ref(false);
+const saving = ref(false);
+const logoError = ref(false);
+const fileInput = ref<HTMLInputElement | null>(null);
+const uploadingLogo = ref(false);
+
 const tabs = [
   {
     key: "general",
@@ -298,6 +327,7 @@ const tabs = [
 const form = reactive({
   name: config.value?.name ?? "",
   ruc: config.value?.ruc ?? "",
+  email: config.value?.email ?? "",
   whatsapp: config.value?.whatsapp ?? "",
   address: config.value?.address ?? "",
   logoUrl: config.value?.logoUrl ?? "",
@@ -312,6 +342,7 @@ watchEffect(() => {
   Object.assign(form, {
     name: config.value.name ?? "",
     ruc: config.value.ruc ?? "",
+    email: config.value.email ?? "",
     whatsapp: config.value.whatsapp ?? "",
     address: config.value.address ?? "",
     logoUrl: config.value.logoUrl ?? "",
@@ -321,11 +352,6 @@ watchEffect(() => {
     multiuserEnabled: config.value.multiuserEnabled ?? false,
   });
 });
-
-const saving = ref(false);
-const saved = ref(false);
-const error = ref("");
-const logoError = ref(false);
 
 const modules = [
   {
@@ -351,8 +377,6 @@ const modules = [
   },
 ] as const;
 
-type FormKey = "stockEnabled" | "autoPaymentEnabled" | "couponsEnabled" | "multiuserEnabled";
-
 async function save() {
   if (!form.name) return;
   saving.value = true;
@@ -366,11 +390,50 @@ async function save() {
     await refresh();
     saved.value = true;
     useAppToast().add({ title: "Configuración guardada", color: "success" });
-    setTimeout(() => (saved.value = false), 3500);
+    saved.value = true;
+    setTimeout(() => (saved.value = false), 3000);
   } catch (e: any) {
-    error.value = e?.data?.message ?? "Error al guardar. Inténtalo de nuevo.";
+    error.value = e.data?.message || "Ocurrió un error inesperado";
   } finally {
     saving.value = false;
+  }
+}
+
+function triggerUpload() {
+  fileInput.value?.click();
+}
+
+async function uploadLogo(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files?.length) return;
+  const file = input.files[0];
+  const MAX_SIZE = 5 * 1024 * 1024;
+  
+  if (file.size > MAX_SIZE) {
+    error.value = "La imagen debe ser menor a 5 MB";
+    input.value = "";
+    return;
+  }
+  
+  uploadingLogo.value = true;
+  error.value = "";
+  try {
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("folder", "photo-business");
+    const res: any = await $fetch("/api/upload/image", {
+      method: "POST",
+      body: fd,
+    });
+    form.logoUrl = res.url;
+    logoError.value = false;
+    if (fileInput.value) {
+      fileInput.value.value = "";
+    }
+  } catch (e: any) {
+    error.value = e?.data?.message ?? "Error al subir la imagen";
+  } finally {
+    uploadingLogo.value = false;
   }
 }
 </script>
@@ -379,6 +442,32 @@ async function save() {
 .cfg-page {
   padding: 1.5rem;
   max-width: 680px;
+}
+
+.cfg-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  background-color: var(--jm-surface2);
+  border: 1px solid var(--border-light);
+  color: var(--jm-text-light);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cfg-upload-btn:hover:not(:disabled) {
+  background-color: var(--jm-surface3);
+  color: var(--jm-text-main);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cfg-upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ── Tabs ── */

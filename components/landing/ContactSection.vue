@@ -3,8 +3,9 @@
 import { MessageCircle, Instagram, Facebook, Mail } from "lucide-vue-next";
 
 const { waLink } = useKite();
+const businessState = useBusinessConfig();
 
-const channels = [
+const channels = computed(() => [
   {
     icon: MessageCircle,
     label: "WhatsApp",
@@ -29,11 +30,11 @@ const channels = [
   {
     icon: Mail,
     label: "Correo electrónico",
-    handle: "hola@celparts.com",
-    href: "mailto:hola@celparts.com",
+    handle: businessState.value?.email || "hola@celparts.com",
+    href: `mailto:${businessState.value?.email || "hola@celparts.com"}`,
     type: "mail",
   },
-];
+]);
 
 const topics = [
   { value: "", label: "Selecciona una opción" },
@@ -122,7 +123,7 @@ function handleSubmit() {
 
           <div class="form-group">
             <label>Correo electrónico</label>
-            <input v-model="form.email" type="email" placeholder="hola@celparts.com" />
+            <input v-model="form.email" type="email" :placeholder="businessState?.email || 'hola@celparts.com'" />
           </div>
 
           <div class="form-group">

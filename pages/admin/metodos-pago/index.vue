@@ -12,14 +12,7 @@
         </p>
       </div>
       <button class="sp-page-btn" @click="openForm()">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <path
-            d="M8 3v10M3 8h10"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
+        <Plus class="w-3.5 h-3.5" stroke-width="2" />
         Nuevo método
       </button>
     </div>
@@ -45,36 +38,7 @@
                 <div class="sp-table-empty">
                   <div class="sp-table-empty__inner">
                     <div class="sp-table-empty__icon">
-                      <svg
-                        width="22"
-                        height="22"
-                        viewBox="0 0 40 40"
-                        fill="none"
-                      >
-                        <rect
-                          x="4"
-                          y="10"
-                          width="32"
-                          height="22"
-                          rx="4"
-                          stroke="currentColor"
-                          stroke-width="1.5"
-                        />
-                        <path
-                          d="M4 17h32"
-                          stroke="currentColor"
-                          stroke-width="1.5"
-                        />
-                        <rect
-                          x="8"
-                          y="23"
-                          width="8"
-                          height="3"
-                          rx="1"
-                          fill="currentColor"
-                          opacity=".4"
-                        />
-                      </svg>
+                      <CreditCard class="w-8 h-8 text-current" stroke-width="1.5" />
                     </div>
                     <p class="sp-table-empty__msg">
                       Sin métodos de pago configurados
@@ -116,7 +80,7 @@
                     color: typeColor(pm.type),
                   }"
                 >
-                  <span class="pm-type-icon" v-html="typeIcon(pm.type)" />
+                  <span class="pm-type-icon"><component :is="typeIcon(pm.type)" class="w-3.5 h-3.5" /></span>
                   {{ typeLabel(pm.type) }}
                 </span>
               </td>
@@ -158,29 +122,14 @@
                     @click="openForm(pm)"
                     title="Editar"
                   >
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M11.5 2.5a1.414 1.414 0 012 2L5 13H3v-2L11.5 2.5z"
-                        stroke="currentColor"
-                        stroke-width="1.3"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                    <Pencil class="w-3.5 h-3.5" stroke-width="1.5" />
                   </button>
                   <button
                     class="sp-table-btn sp-table-btn--del"
                     @click="confirmDelete(pm)"
                     title="Eliminar"
                   >
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M2 4h12M5 4V2.5a.5.5 0 01.5-.5h5a.5.5 0 01.5.5V4M6 7v4M10 7v4M3 4l.8 8.5a.5.5 0 00.5.5h7.4a.5.5 0 00.5-.5L13 4"
-                        stroke="currentColor"
-                        stroke-width="1.3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                    <Trash2 class="w-3.5 h-3.5" stroke-width="1.5" />
                   </button>
                 </div>
               </td>
@@ -212,14 +161,7 @@
               <h2 class="sp-drawer-header__title">Método de pago</h2>
             </div>
             <button class="sp-drawer-close" @click="showDrawer = false">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 3l10 10M13 3L3 13"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
+              <X class="w-4 h-4" stroke-width="1.5" />
             </button>
           </div>
 
@@ -247,7 +189,7 @@
                   "
                   @click="form.type = opt.value"
                 >
-                  <span class="pm-type-icon" v-html="typeIcon(opt.value)" />
+                  <span class="pm-type-icon"><component :is="typeIcon(opt.value)" class="w-4 h-4" /></span>
                   <span class="pm-type-opt-label">{{ opt.label }}</span>
                 </button>
               </div>
@@ -261,7 +203,7 @@
                   color: typeColor(form.type),
                 }"
               >
-                <span class="pm-type-icon" v-html="typeIcon(form.type)" />
+                <span class="pm-type-icon"><component :is="typeIcon(form.type)" class="w-4 h-4" /></span>
                 {{ typeLabel(form.type) }}
               </div>
             </div>
@@ -350,25 +292,7 @@
               <template v-if="!saving">
                 {{ editItem ? "Guardar cambios" : "Crear método" }}
               </template>
-              <svg
-                v-else
-                class="sp-drawer-spin"
-                width="14"
-                height="14"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <circle
-                  cx="8"
-                  cy="8"
-                  r="6"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-dasharray="28"
-                  stroke-dashoffset="10"
-                  stroke-linecap="round"
-                />
-              </svg>
+              <Loader2 v-else class="sp-drawer-spin w-4 h-4" stroke-width="2" />
             </button>
           </div>
         </div>
@@ -389,15 +313,7 @@
       <Transition name="pm-popup">
         <div v-if="deleteTarget" class="pm-confirm-popup">
           <div class="pm-confirm-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <AlertCircle class="w-6 h-6 text-current" stroke-width="1.5" />
           </div>
           <h3 class="pm-confirm-title">¿Eliminar método?</h3>
           <p class="pm-confirm-sub">
@@ -416,25 +332,7 @@
               :disabled="deleting"
               @click="doDelete"
             >
-              <svg
-                v-if="deleting"
-                class="sp-drawer-spin"
-                width="13"
-                height="13"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <circle
-                  cx="8"
-                  cy="8"
-                  r="6"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-dasharray="28"
-                  stroke-dashoffset="10"
-                  stroke-linecap="round"
-                />
-              </svg>
+              <Loader2 v-if="deleting" class="sp-drawer-spin w-4 h-4" stroke-width="2" />
               <template v-else>Sí, eliminar</template>
             </button>
           </div>
@@ -445,6 +343,8 @@
 </template>
 
 <script setup lang="ts">
+import { Plus, CreditCard, Pencil, Trash2, X, Loader2, AlertCircle, Smartphone, Landmark, MonitorSmartphone } from "lucide-vue-next";
+
 definePageMeta({ middleware: ["auth", "superadmin"], layout: "admin" });
 useSeoMeta({ title: "Métodos de Pago — Admin" });
 
@@ -484,12 +384,12 @@ function typeLabel(type: string) {
 }
 
 function typeIcon(type: string) {
-  const icons: Record<string, string> = {
-    yape: `<svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-    plin: `<svg viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="10" rx="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h14" stroke="currentColor" stroke-width="1.5"/></svg>`,
-    bank_transfer: `<svg viewBox="0 0 20 20" fill="none"><path d="M3 8.5L10 4l7 4.5H3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M5 9v5M10 9v5M15 9v5M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
-    culqi: `<svg viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10.5" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>`,
-    mercado_pago: `<svg viewBox="0 0 20 20" fill="none"><path d="M4 10c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13" r="3" stroke="currentColor" stroke-width="1.5"/></svg>`,
+  const icons: Record<string, any> = {
+    yape: Smartphone,
+    plin: Smartphone,
+    bank_transfer: Landmark,
+    culqi: CreditCard,
+    mercado_pago: MonitorSmartphone,
   };
   return icons[type] ?? icons.bank_transfer;
 }

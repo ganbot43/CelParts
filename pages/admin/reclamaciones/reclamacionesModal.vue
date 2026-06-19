@@ -2,10 +2,7 @@
   <!-- Cargando -->
   <template v-if="pending && !item">
     <div class="sp-modal-state">
-      <svg class="rd-spin" width="26" height="26" viewBox="0 0 26 26" fill="none">
-        <circle cx="13" cy="13" r="10" stroke="var(--sp-border-strong)" stroke-width="2"/>
-        <path d="M13 3A10 10 0 0 1 23 13" stroke="var(--sp-primary)" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+      <Loader2 class="rd-spin w-6 h-6 text-current" stroke-width="2" />
       <p class="sp-modal-state__text">Cargando reclamo...</p>
     </div>
   </template>
@@ -14,10 +11,7 @@
   <template v-else-if="error">
     <div class="sp-modal-state">
       <div class="sp-table-empty__icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M12 8v4m0 4h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+        <AlertCircle class="w-6 h-6 text-current" stroke-width="1.5" />
       </div>
       <p class="sp-modal-state__text">No se pudo cargar el reclamo.</p>
       <div class="sp-modal-state__actions">
@@ -55,10 +49,7 @@
         <!-- Datos del consumidor -->
         <section class="rd-card">
           <p class="rd-card__label">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.4"/>
-              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-            </svg>
+            <User class="w-3 h-3 text-current" stroke-width="1.5" />
             Consumidor
           </p>
           <div class="rd-fields">
@@ -91,10 +82,7 @@
           <!-- Bien contratado -->
           <section class="rd-card">
             <p class="rd-card__label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.4"/>
-                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="currentColor" stroke-width="1.4"/>
-              </svg>
+              <Package class="w-3 h-3 text-current" stroke-width="1.5" />
               Bien contratado
             </p>
             <div class="rd-fields">
@@ -118,10 +106,7 @@
           <!-- Detalle del reclamo -->
           <section class="rd-card">
             <p class="rd-card__label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4"/>
-                <path d="M12 8v4m0 4h.01" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-              </svg>
+              <MessageCircle class="w-3 h-3 text-current" stroke-width="1.5" />
               Detalle del reclamo
             </p>
             <div class="rd-fields">
@@ -136,9 +121,7 @@
               <div v-if="item.archivoUrl" class="rd-field rd-field--full">
                 <span class="rd-field__key">Adjunto</span>
                 <a :href="item.archivoUrl" target="_blank" rel="noopener" class="rd-file-link">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.41 17.41a2 2 0 0 1-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <Paperclip class="w-3 h-3 text-current" stroke-width="1.5" />
                   Ver archivo adjunto
                 </a>
               </div>
@@ -151,10 +134,7 @@
       <!-- Gestión y respuesta -->
       <section class="rd-card rd-card--action">
         <p class="rd-card__label">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <Briefcase class="w-3 h-3 text-current" stroke-width="1.5" />
           Gestión y respuesta
         </p>
 
@@ -185,23 +165,15 @@
               placeholder="Escribe la respuesta al cliente..."
             />
             <div class="rd-form__info">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M12 8v4m0 4h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
+              <Info class="w-3.5 h-3.5 text-current" stroke-width="1.5" />
               <span>Esta respuesta será registrada en el sistema. <strong>No se enviará por correo electrónico</strong> al cliente.</span>
             </div>
           </div>
 
           <div class="rd-form__actions">
             <button type="submit" class="sp-drawer-btn sp-drawer-btn--primary" :disabled="saving">
-              <svg v-if="saving" class="rd-spin" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="5" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-                <path d="M7 2A5 5 0 0 1 12 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              <svg v-else width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M13 3L6 10l-3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <Loader2 v-if="saving" class="rd-spin w-3.5 h-3.5" stroke-width="2" />
+              <Check v-else class="w-3.5 h-3.5 text-current" stroke-width="1.5" />
               {{ saving ? 'Guardando...' : 'Guardar cambios' }}
             </button>
             <button type="button" class="sp-drawer-btn sp-drawer-btn--ghost" @click="$emit('close')">
@@ -216,6 +188,8 @@
 </template>
 
 <script setup>
+import { Loader2, AlertCircle, User, Package, MessageCircle, Paperclip, Briefcase, Info, Check } from "lucide-vue-next";
+
 const props = defineProps({
   reclamacionId: { type: Number, required: true },
 })

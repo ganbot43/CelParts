@@ -130,6 +130,7 @@ const hasToasts = computed(() => toasts.value.length > 0)
   font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.2;
+  color: #ffffff;
 }
 
 .toast-description {

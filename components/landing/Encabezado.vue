@@ -21,12 +21,12 @@
         <!-- LOGO -->
         <NuxtLink to="/" class="cp-logo" aria-label="CelParts — Inicio">
           <template v-if="businessState?.logoUrl">
-            <img :src="businessState.logoUrl" :alt="businessState?.name || 'Logo'" class="cp-logo__img" style="object-fit: contain; width: auto" />
+            <img :src="businessState.logoUrl" :alt="businessState?.name || 'Logo'" class="cp-logo__img" style="object-fit: contain; width: auto; max-height: 48px; max-width: 200px;" />
           </template>
           <template v-else>
             <img src="/images/logo.png" alt="CelParts" class="cp-logo__img" />
-            <img src="/images/logo-letra.png" alt="CelParts" class="cp-logo-letra__img" />
           </template>
+          <img src="/images/logo-letra.png" alt="CelParts" class="cp-logo-letra__img" />
         </NuxtLink>
       </div>
 

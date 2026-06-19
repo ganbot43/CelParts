@@ -6,29 +6,14 @@
       @click="sidebarRef?.openDrawer()"
       aria-label="Abrir menú"
     >
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <path
-          d="M2 4h12M2 8h12M2 12h12"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-      </svg>
+      <Menu class="w-5 h-5 text-current" stroke-width="2" />
     </button>
 
     <!-- Breadcrumb / título -->
     <div class="sp-topbar__title-group">
       <span class="sp-topbar__section-label">Panel</span>
       <span class="sp-topbar__sep">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <path
-            d="M4 2l4 4-4 4"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <ChevronRight class="w-3.5 h-3.5 text-current" stroke-width="2.5" />
       </span>
       <h1 class="sp-topbar__page-title">{{ pageTitle }}</h1>
     </div>
@@ -80,51 +65,8 @@
         @click="logout"
         aria-label="Cerrar sesión"
       >
-        <svg
-          v-if="!loggingOut"
-          width="15"
-          height="15"
-          viewBox="0 0 16 16"
-          fill="none"
-        >
-          <path
-            d="M6 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-          <path
-            d="M10 11l3-3-3-3"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M13 8H6"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
-        <svg
-          v-else
-          class="sp-topbar__spinner"
-          width="15"
-          height="15"
-          viewBox="0 0 16 16"
-          fill="none"
-        >
-          <circle
-            cx="8"
-            cy="8"
-            r="6"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-dasharray="25 13"
-            stroke-linecap="round"
-          />
-        </svg>
+        <LogOut v-if="!loggingOut" class="w-4 h-4 text-current" stroke-width="2" />
+        <Loader2 v-else class="sp-topbar__spinner w-4 h-4 text-current animate-spin" stroke-width="2" />
         <span class="sp-topbar__logout-label">Salir</span>
       </button>
     </div>
@@ -132,6 +74,7 @@
 </template>
 
 <script setup lang="ts">
+import { Menu, ChevronRight, LogOut, Loader2 } from 'lucide-vue-next';
 import { useAuthStore } from '~/stores/auth'
 const route = useRoute();
 const loggingOut = ref(false);

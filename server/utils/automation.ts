@@ -138,20 +138,22 @@ function buildOrderRows(order: OrderLike): string {
   }
 
   return `
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-size:13px;color:#475569;">
       <thead>
         <tr>
-          <th align="left" style="padding:10px;border-bottom:1px solid #e5e5e5;font-size:12px;">Producto</th>
-          <th align="center" style="padding:10px;border-bottom:1px solid #e5e5e5;font-size:12px;">Cant.</th>
-          <th align="right" style="padding:10px;border-bottom:1px solid #e5e5e5;font-size:12px;">Subtotal</th>
+          <th align="left" style="padding:12px 10px;border-bottom:1px solid #f1f5f9;font-weight:700;color:#64748b;">Producto</th>
+          <th align="center" style="padding:12px 10px;border-bottom:1px solid #f1f5f9;font-weight:700;color:#64748b;">Cant.</th>
+          <th align="right" style="padding:12px 10px;border-bottom:1px solid #f1f5f9;font-weight:700;color:#64748b;">Precio</th>
+          <th align="right" style="padding:12px 10px;border-bottom:1px solid #f1f5f9;font-weight:700;color:#64748b;">Total</th>
         </tr>
       </thead>
       <tbody>
         ${lines.map((line) => `
           <tr>
-            <td style="padding:10px;border-bottom:1px solid #f1f1f1;font-size:13px;">${escapeHtml(line.productName)}</td>
-            <td align="center" style="padding:10px;border-bottom:1px solid #f1f1f1;font-size:13px;">${line.quantity}</td>
-            <td align="right" style="padding:10px;border-bottom:1px solid #f1f1f1;font-size:13px;">${formatCurrency(line.subtotal)}</td>
+            <td style="padding:14px 10px;border-bottom:1px solid #f8fafc;">${escapeHtml(line.productName)}</td>
+            <td align="center" style="padding:14px 10px;border-bottom:1px solid #f8fafc;">${line.quantity}</td>
+            <td align="right" style="padding:14px 10px;border-bottom:1px solid #f8fafc;">${formatCurrency(line.unitPrice)}</td>
+            <td align="right" style="padding:14px 10px;border-bottom:1px solid #f8fafc;">${formatCurrency(line.subtotal)}</td>
           </tr>
         `).join('')}
       </tbody>
@@ -159,73 +161,93 @@ function buildOrderRows(order: OrderLike): string {
   `
 }
 
-function buildOrderEmailHtml(order: OrderLike, title: string, note?: string) {
+function buildOrderEmailHtml(order: OrderLike, title: string, note?: string, bConfig?: any, isCustomer: boolean = false) {
   const customerName = escapeHtml(order.customerName ?? 'Cliente')
-  const customerPhone = escapeHtml(order.customerPhone ?? '-')
   const customerAddress = escapeHtml(order.customerAddress ?? '-')
   const statusRaw = order.status ?? 'pending'
   const status = escapeHtml(formatStatusLabel(statusRaw))
   const paymentMethod = escapeHtml(order.paymentMethod?.label ?? order.paymentMethod?.type ?? '-')
   const orderCode = escapeHtml(order.orderCode ?? 'PED-TEMP')
   const total = formatCurrency(order.total ?? order.subtotal ?? 0)
-  const customerNotes = order.customerNotes ? escapeHtml(order.customerNotes).replace(/\n/g, '<br>') : ''
+  
   const isNegativeStatus = /cancel|reject|fail|refunded|returned/i.test(statusRaw)
   const isPositiveStatus = /deliver|complete|paid|shipped/i.test(statusRaw)
-  const statusTone = isNegativeStatus
-    ? 'rgba(214, 106, 106, 0.12)'
-    : isPositiveStatus
-      ? 'rgba(45, 106, 79, 0.12)'
-      : 'rgba(233, 196, 106, 0.18)'
-  const statusBorder = isNegativeStatus
-    ? '#D66A6A'
-    : isPositiveStatus
-      ? '#2D6A4F'
-      : '#E9C46A'
-  const noteBlock = note ? `<div style="margin-top:14px;padding:12px 14px;background:rgba(45,106,79,0.06);border-left:4px solid #2D6A4F;color:#333;font-size:13px;line-height:1.6;border-radius:10px;">${escapeHtml(note).replace(/\n/g, '<br>')}</div>` : ''
+  
+  // Use sky blue by default for the example design
+  const primaryColor = '#0ea5e9'
+  
+  const statusBg = isNegativeStatus ? '#ef4444' : isPositiveStatus ? '#22c55e' : primaryColor
+  const noteBlock = note ? `<div style="margin-top:20px;padding:14px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;color:#0369a1;font-size:13px;line-height:1.5;"><strong>Nota:</strong> ${escapeHtml(note).replace(/\n/g, '<br>')}</div>` : ''
+
+  const businessName = bConfig?.name ? escapeHtml(bConfig.name) : 'CelParts'
+  
+  const bodyMessage = isCustomer 
+    ? '¡Gracias por tu preferencia! A continuación te mostramos los detalles de tu pedido.'
+    : 'Se ha registrado un nuevo pedido en el sistema.'
 
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${escapeHtml(title)} - ${orderCode}</title>
+  <title>${escapeHtml(title)}</title>
 </head>
-  <body style="margin:0;padding:0;background:linear-gradient(180deg,#F8F7F4 0%,#F1EFEA 100%);font-family:Arial,Helvetica,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:24px 12px;">
+<body style="margin:0;padding:0;background:#ffffff;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:20px 10px;">
     <tr>
       <td align="center">
-        <table width="640" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:640px;background:rgba(255,255,255,0.78);border:1px solid rgba(226,224,217,0.5);border-radius:12px;overflow:hidden;box-shadow:0 16px 36px rgba(17,17,17,0.06);">
+        <table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+          <!-- Header -->
           <tr>
-            <td style="background:linear-gradient(135deg,#101010,#141414 55%,#111111);padding:22px 28px;border-bottom:3px solid #E9C46A;">
-              <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#E9C46A;font-weight:700;">${escapeHtml(title)}</div>
-              <div style="font-size:22px;font-weight:700;color:#ffffff;margin-top:8px;">Pedido ${orderCode}</div>
+            <td align="center" style="background:${primaryColor};padding:24px;">
+              <h1 style="margin:0;font-size:24px;font-weight:700;color:#ffffff;">${escapeHtml(title)}</h1>
             </td>
           </tr>
+          
+          <!-- Body -->
           <tr>
-            <td style="padding:24px 28px 8px;">
-              <div style="font-size:13px;color:#666;line-height:1.6;">Se registró un nuevo movimiento de pedido en el sistema.</div>
-              <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                <div><div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#9E9A91;font-weight:700;">Cliente</div><div style="font-size:14px;color:#111;font-weight:600;margin-top:4px;">${customerName}</div></div>
-                <div><div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#9E9A91;font-weight:700;">Estado</div><div style="display:inline-flex;align-items:center;gap:8px;margin-top:4px;padding:8px 10px;background:${statusTone};border:1px solid ${statusBorder};border-radius:999px;font-size:13px;color:#111;font-weight:700;line-height:1;">${status}</div></div>
-                <div><div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#9E9A91;font-weight:700;">Teléfono</div><div style="font-size:14px;color:#111;font-weight:600;margin-top:4px;">${customerPhone}</div></div>
-                <div><div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#9E9A91;font-weight:700;">Pago</div><div style="font-size:14px;color:#111;font-weight:600;margin-top:4px;">${paymentMethod}</div></div>
+            <td style="padding:32px 24px;">
+              <p style="margin:0 0 20px 0;font-size:14px;color:#475569;">${bodyMessage}</p>
+              
+              <!-- Detalles Box -->
+              <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:20px;margin-bottom:24px;">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;line-height:1.6;color:#334155;">
+                  <tr>
+                    <td style="padding-bottom:8px;"><strong>Código de Pedido:</strong> <span style="color:${primaryColor};">${orderCode}</span></td>
+                  </tr>
+                  <tr>
+                    <td style="padding-bottom:8px;"><strong>Cliente:</strong> ${customerName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding-bottom:8px;"><strong>Dirección:</strong> ${customerAddress}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding-bottom:8px;"><strong>Método de Pago:</strong> ${paymentMethod}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Estado:</strong> <span style="display:inline-block;background:${statusBg};color:#ffffff;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;margin-left:4px;">${status}</span></td>
+                  </tr>
+                </table>
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:18px 28px 4px;">${buildOrderRows(order)}</td>
-          </tr>
-          <tr>
-            <td style="padding:16px 28px 24px;">
-              <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;background:rgba(255,255,255,0.72);border:1px solid rgba(226,224,217,0.5);border-radius:10px;padding:14px 16px;">
-                <div>
-                  <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#9E9A91;font-weight:700;">Total</div>
-                  <div style="font-size:22px;color:#2D6A4F;font-weight:800;margin-top:4px;">${total}</div>
-                </div>
-                <div style="text-align:right;font-size:12px;color:#66625A;line-height:1.5;max-width:260px;">${customerAddress}</div>
+              
+              <!-- Items Table -->
+              ${buildOrderRows(order)}
+              
+              <!-- Total -->
+              <div style="margin-top:24px;padding-top:24px;border-top:1px solid #e2e8f0;text-align:right;">
+                <span style="font-size:13px;color:#64748b;margin-right:12px;">TOTAL A PAGAR:</span>
+                <span style="font-size:24px;font-weight:800;color:${primaryColor};">${total}</span>
               </div>
-              ${customerNotes ? `<div style="margin-top:14px;font-size:13px;color:#444;line-height:1.7;"><strong>Notas del cliente:</strong><br>${customerNotes}</div>` : ''}
+              
               ${noteBlock}
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="background:#f8fafc;padding:24px;border-top:1px solid #e2e8f0;">
+              <p style="margin:0 0 8px 0;font-size:12px;color:#94a3b8;">${businessName} — Repuestos & Accesorios para Celulares</p>
+              <p style="margin:0;font-size:11px;color:#cbd5e1;">Este es un correo automático, por favor no respondas a este mensaje.</p>
             </td>
           </tr>
         </table>
@@ -236,16 +258,22 @@ function buildOrderEmailHtml(order: OrderLike, title: string, note?: string) {
 </html>`
 }
 
-async function sendAutomationEmail(subject: string, html: string) {
+import { db } from '~/server/db'
+import { businessConfig, users } from '~/server/db/schema'
+import { eq } from 'drizzle-orm'
+
+async function sendAutomationEmail(subject: string, html: string, configEmailOverride?: string) {
   const transporter = createTransporter()
   if (!transporter) {
     console.warn(`[automation] SMTP no configurado, se omite correo: ${subject}`)
     return false
   }
+  
+  const toEmail = configEmailOverride || transporter.mailer.from
 
   await transporter.transporter.sendMail({
     from: transporter.mailer.from,
-    to: transporter.mailer.from,
+    to: toEmail,
     subject,
     html,
   })
@@ -254,40 +282,78 @@ async function sendAutomationEmail(subject: string, html: string) {
 
 export async function sendOrderNotification(order: OrderLike, eventLabel: string, note?: string) {
   const label = formatEventLabel(eventLabel)
-  const title = eventLabel === 'created'
-    ? 'Nuevo pedido creado'
+  const isCreated = eventLabel === 'created'
+  
+  const adminTitle = isCreated
+    ? 'Nuevo Pedido Recibido'
     : `Pedido actualizado: ${label}`
+
+  const customerTitle = isCreated
+    ? 'Confirmación de Compra'
+    : `Tu pedido ha sido actualizado`
+
   const orderCode = order.orderCode ?? 'PED-TEMP'
-  return sendAutomationEmail(`${title} - ${orderCode}`, buildOrderEmailHtml(order, title, note))
+
+  const bConfig = await db.select().from(businessConfig).limit(1)
+  const config = bConfig[0]
+
+  // Enviar a Admin
+  await sendAutomationEmail(
+    `${adminTitle} - ${orderCode}`, 
+    buildOrderEmailHtml(order, adminTitle, note, config, false),
+    config?.email || undefined
+  )
+
+  // Enviar a Cliente si está logueado y tiene correo
+  if (order.userId) {
+    const userRows = await db.select().from(users).where(eq(users.id, order.userId)).limit(1)
+    const customerEmail = userRows[0]?.email
+    if (customerEmail) {
+      await sendAutomationEmail(
+        `${customerTitle} - ${orderCode}`, 
+        buildOrderEmailHtml(order, customerTitle, note, config, true),
+        customerEmail
+      )
+    }
+  }
+  
+  return true
 }
 
 export async function sendLowStockNotification(items: LowStockItem[]) {
+  const bConfig = await db.select().from(businessConfig).limit(1)
+  const config = bConfig[0]
+  const businessName = config?.name ? escapeHtml(config.name) : 'Smart Panel'
+  const logoUrl = config?.logoUrl ? escapeHtml(config.logoUrl) : ''
+  const toEmail = config?.email || undefined
+
   const rows = items.length
     ? items.map((item) => `
         <tr>
-          <td style="padding:10px;border-bottom:1px solid rgba(226,224,217,0.5);">${escapeHtml(item.name)}</td>
-          <td style="padding:10px;border-bottom:1px solid rgba(226,224,217,0.5);">${escapeHtml(item.category?.name ?? '-')}</td>
-          <td align="center" style="padding:10px;border-bottom:1px solid rgba(226,224,217,0.5);">${item.stock}</td>
+          <td style="padding:10px;border-bottom:1px solid #e2e8f0;color:#0f172a;">${escapeHtml(item.name)}</td>
+          <td style="padding:10px;border-bottom:1px solid #e2e8f0;color:#64748b;">${escapeHtml(item.category?.name ?? '-')}</td>
+          <td align="center" style="padding:10px;border-bottom:1px solid #e2e8f0;color:#ef4444;font-weight:700;">${item.stock}</td>
         </tr>
       `).join('')
-    : '<tr><td colspan="3" style="padding:12px;color:#66625A;">No hay productos bajo el umbral configurado.</td></tr>'
+    : '<tr><td colspan="3" style="padding:12px;color:#64748b;">No hay productos bajo el umbral configurado.</td></tr>'
 
   const html = `<!DOCTYPE html>
   <html lang="es">
   <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
-  <body style="margin:0;padding:24px;background:linear-gradient(180deg,#F8F7F4 0%,#F1EFEA 100%);font-family:Arial,Helvetica,sans-serif;">
-    <div style="max-width:720px;margin:0 auto;background:rgba(255,255,255,0.78);border:1px solid rgba(226,224,217,0.5);border-radius:12px;overflow:hidden;box-shadow:0 16px 36px rgba(17,17,17,0.06);">
-      <div style="padding:20px 24px;background:linear-gradient(135deg,#101010,#141414 55%,#111111);border-bottom:3px solid #E9C46A;color:#fff;">
-        <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#E9C46A;font-weight:700;">Alerta de inventario</div>
+  <body style="margin:0;padding:24px;background:#f8fafc;font-family:Arial,Helvetica,sans-serif;">
+    <div style="max-width:720px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);">
+      <div style="padding:22px 28px;background:linear-gradient(135deg, #1e3a8a, #356dff);border-bottom:3px solid #93c5fd;color:#fff;">
+        ${logoUrl ? `<img src="${logoUrl}" alt="${businessName}" style="max-height:40px;margin-bottom:15px;display:block;" />` : ''}
+        <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#dbeafe;font-weight:700;">Alerta de inventario</div>
         <div style="font-size:22px;font-weight:700;margin-top:8px;">Productos con stock bajo</div>
       </div>
       <div style="padding:20px 24px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
           <thead>
             <tr>
-              <th align="left" style="padding:10px;border-bottom:1px solid rgba(226,224,217,0.5);">Producto</th>
-              <th align="left" style="padding:10px;border-bottom:1px solid rgba(226,224,217,0.5);">Categoría</th>
-              <th align="center" style="padding:10px;border-bottom:1px solid rgba(226,224,217,0.5);">Stock</th>
+              <th align="left" style="padding:10px;border-bottom:1px solid #e2e8f0;color:#64748b;text-transform:uppercase;font-size:11px;">Producto</th>
+              <th align="left" style="padding:10px;border-bottom:1px solid #e2e8f0;color:#64748b;text-transform:uppercase;font-size:11px;">Categoría</th>
+              <th align="center" style="padding:10px;border-bottom:1px solid #e2e8f0;color:#64748b;text-transform:uppercase;font-size:11px;">Stock</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -297,5 +363,5 @@ export async function sendLowStockNotification(items: LowStockItem[]) {
   </body>
   </html>`
 
-  return sendAutomationEmail('Alerta de stock bajo', html)
+  return sendAutomationEmail('Alerta de stock bajo', html, toEmail)
 }

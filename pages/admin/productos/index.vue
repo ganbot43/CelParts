@@ -8,9 +8,7 @@
         </p>
       </div>
       <button class="sp-page-btn" @click="openDrawer()">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-          <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-        </svg>
+        <Plus class="w-3.5 h-3.5" stroke-width="2" />
         Nuevo producto
       </button>
     </div>
@@ -34,12 +32,7 @@
               <td class="sp-td">
                 <div class="sp-table-img">
                   <img v-if="product.images?.[0]?.url" :src="product.images[0].url" :alt="product.name" />
-                  <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5" />
-                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
-                    <path d="M3 15l5-5 4 4 3-3 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                      stroke-linejoin="round" />
-                  </svg>
+                  <Image v-else class="w-5 h-5 text-current opacity-50" stroke-width="1.5" />
                 </div>
               </td>
               <td class="sp-td">
@@ -71,16 +64,10 @@
               <td class="sp-td">
                 <div class="sp-table-actions">
                   <button class="sp-table-btn sp-table-btn--edit" @click="openDrawer(product)" title="Editar">
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor"
-                        stroke-width="1.4" stroke-linejoin="round" />
-                    </svg>
+                    <Pencil class="w-3.5 h-3.5" stroke-width="1.5" />
                   </button>
                   <button class="sp-table-btn sp-table-btn--del" @click="deleteProduct(product.id)" title="Eliminar">
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path d="M3 5h10M6 5V3h4v2M6 8v4M10 8v4M4 5l1 8h6l1-8" stroke="currentColor" stroke-width="1.4"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    <Trash2 class="w-3.5 h-3.5" stroke-width="1.5" />
                   </button>
                 </div>
               </td>
@@ -89,11 +76,7 @@
               <td colspan="8" class="sp-table-empty">
                 <div class="sp-table-empty__inner">
                   <div class="sp-table-empty__icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                      <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5" />
-                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="currentColor" stroke-width="1.5" />
-                      <path d="M12 12v4M10 14h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
+                    <Inbox class="w-8 h-8 text-current" stroke-width="1.5" />
                   </div>
                   <p class="sp-table-empty__msg">No hay productos aún</p>
                   <button class="sp-table-empty__cta" @click="openDrawer()">Crear el primero</button>
@@ -129,9 +112,7 @@
               <h2 class="sp-drawer-header__title">{{ isEditing ? form.name || "Producto" : "Crear producto" }}</h2>
             </div>
             <button class="sp-drawer-close" @click="closeDrawer" aria-label="Cerrar">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-              </svg>
+              <X class="w-4 h-4" stroke-width="1.8" />
             </button>
           </div>
           <div class="sp-drawer-body">
@@ -148,9 +129,7 @@
                   <img :src="url" :alt="`Imagen ${i + 1}`" />
                   <div class="prod-img-thumb__overlay">
                     <button class="prod-img-thumb__remove" @click="removeImageByUrl(i)" title="Eliminar">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                      </svg>
+                      <X class="w-3 h-3 text-current" stroke-width="1.6" />
                     </button>
                   </div>
                   <span v-if="i === 0" class="prod-img-thumb__badge">Principal</span>
@@ -161,9 +140,7 @@
                   <img :src="p" :alt="`Preview ${i + 1}`" />
                   <div class="prod-img-thumb__overlay">
                     <button class="prod-img-thumb__remove" @click="removePreview(i)" title="Eliminar">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                      </svg>
+                      <X class="w-3 h-3 text-current" stroke-width="1.6" />
                     </button>
                   </div>
                   <span v-if="images.length === 0 && i === 0" class="prod-img-thumb__badge">Principal</span>
@@ -174,9 +151,7 @@
                   @dragleave="isDraggingOver = false" @drop.prevent="onDropFile($event)">
                   <input ref="fileInputRef" type="file" accept="image/*" multiple class="prod-img-add__input"
                     @change="onFilesSelected" />
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                  </svg>
+                  <Plus class="w-5 h-5 text-current" stroke-width="1.8" />
                   <span>Agregar</span>
                 </label>
               </div>
@@ -184,20 +159,12 @@
                 :class="{ 'prod-img-dropzone--active': isDraggingOver }" @dragover.prevent="isDraggingOver = true"
                 @dragleave="isDraggingOver = false" @drop.prevent="onDropFile($event)">
                 <input type="file" accept="image/*" multiple class="prod-img-add__input" @change="onFilesSelected" />
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                  <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
-                  <path d="M3 15l5-5 4 4 3-3 6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                </svg>
+                <ImagePlus class="w-7 h-7 text-current" stroke-width="1.2" />
                 <span class="prod-img-dropzone__title">Arrastra imágenes aquí</span>
                 <span class="prod-img-dropzone__sub">o haz clic para seleccionar · jpg, png, webp · máx 2 MB</span>
               </label>
               <p v-if="imgError" class="prod-img-error">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2" />
-                  <path d="M6 4v2.5M6 8h.01" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
-                </svg>
+                <AlertCircle class="w-3 h-3 text-current" stroke-width="1.2" />
                 {{ imgError }}
               </p>
               <p v-if="allSlots.length > 0" class="prod-img-hint">La primera imagen es la principal · arrastra para
@@ -271,14 +238,8 @@
           <div class="sp-drawer-footer">
             <button class="sp-drawer-btn sp-drawer-btn--ghost" @click="closeDrawer">Cancelar</button>
             <button class="sp-drawer-btn sp-drawer-btn--primary" :disabled="saving" @click="save">
-              <svg v-if="saving" class="sp-drawer-spin" width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" stroke-dasharray="25 13"
-                  stroke-linecap="round" />
-              </svg>
-              <svg v-else width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
+              <Loader2 v-if="saving" class="sp-drawer-spin w-3.5 h-3.5" stroke-width="2" />
+              <Check v-else class="w-3.5 h-3.5 text-current" stroke-width="1.8" />
               {{ isEditing ? "Guardar cambios" : "Crear producto" }}
             </button>
           </div>
@@ -289,6 +250,7 @@
 </template>
 
 <script setup lang="ts">
+import { Plus, Image, Pencil, Trash2, Inbox, X, ImagePlus, AlertCircle, Loader2, Check } from "lucide-vue-next";
 import type { Product } from "~/types"
 definePageMeta({ middleware: "auth", layout: "admin" })
 useSeoMeta({ title: "Productos — Admin" })

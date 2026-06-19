@@ -247,7 +247,7 @@ async function login() {
     await fetchUserSession();
     const { user } = useUserSession();
 
-    if (user.value?.role === "admin") {
+    if (user.value?.role === "admin" || user.value?.role === "superadmin") {
       await navigateTo("/admin", { external: true });
     } else {
       const redirect = route.query.redirect as string;
@@ -568,7 +568,7 @@ async function login() {
 }
 .smart-input :deep(input:focus) {
   outline: none !important;
-  ring: none !important;
+  box-shadow: none !important;
 }
 .smart-input :deep(.ring-1),
 .smart-input :deep(.shadow) {

@@ -50,10 +50,7 @@
               </td>
               <td class="sp-td" @click.stop>
                 <button class="sp-table-btn sp-table-btn--view" title="Ver pedido" @click="openOrder(order.id)">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <ellipse cx="8" cy="8" rx="6" ry="4" stroke="currentColor" stroke-width="1.4" />
-                    <circle cx="8" cy="8" r="1.5" fill="currentColor" />
-                  </svg>
+                  <Eye class="w-3.5 h-3.5" stroke-width="2" />
                 </button>
               </td>
             </tr>
@@ -61,10 +58,7 @@
               <td colspan="6" class="sp-table-empty">
                 <div class="sp-table-empty__inner">
                   <div class="sp-table-empty__icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                      <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5" />
-                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="currentColor" stroke-width="1.5" />
-                    </svg>
+                    <Inbox class="w-8 h-8 text-current" stroke-width="1.5" />
                   </div>
                   <p class="sp-table-empty__msg">
                     No hay pedidos{{ statusFilter ? " con este estado" : "" }}
@@ -103,6 +97,7 @@
 </template>
 
 <script setup lang="ts">
+import { Eye, Inbox } from "lucide-vue-next";
 import PedidoModal from "./pedidoModal.vue"
 definePageMeta({ middleware: "auth", layout: "admin" })
 useSeoMeta({ title: "Pedidos — Admin" })

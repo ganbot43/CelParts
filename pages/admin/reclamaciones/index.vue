@@ -12,21 +12,7 @@
         </p>
       </div>
       <button class="sp-page-btn" @click="refresh">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <path
-            d="M14 2v4h-4M2 14v-4h4"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M13 5c-1.5-2-3.5-3-6-3-4 0-7 3-7 7s3 7 7 7c3 0 5.5-1.5 6.5-3.5"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
+        <RefreshCcw class="w-3.5 h-3.5" stroke-width="2" />
         Actualizar
       </button>
     </div>
@@ -81,21 +67,7 @@
                     title="Ver detalle"
                     @click.stop="openModal(r.id)"
                   >
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M8 3C4.5 3 1.5 8 1.5 8S4.5 13 8 13s6.5-5 6.5-5S11.5 3 8 3Z"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                        stroke-linejoin="round"
-                      />
-                      <circle
-                        cx="8"
-                        cy="8"
-                        r="2"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                      />
-                    </svg>
+                    <Eye class="w-3.5 h-3.5" stroke-width="2" />
                   </button>
                 </div>
               </td>
@@ -106,20 +78,7 @@
               <td colspan="6" class="sp-table-empty">
                 <div class="sp-table-empty__inner">
                   <div class="sp-table-empty__icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                      />
-                      <path
-                        d="M12 11v4M10 13h4"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                      />
-                    </svg>
+                    <Inbox class="w-8 h-8 text-current" stroke-width="1.5" />
                   </div>
                   <p class="sp-table-empty__msg">No hay reclamaciones aún</p>
                 </div>
@@ -152,6 +111,7 @@
 </template>
 
 <script setup>
+import { RefreshCcw, Eye, Inbox } from "lucide-vue-next";
 import ReclamacionesModal from './reclamacionesModal.vue';
 
 definePageMeta({ middleware: "auth", layout: "admin" });

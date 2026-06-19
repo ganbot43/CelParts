@@ -2,27 +2,7 @@
   <!-- Cargando -->
   <template v-if="!order && !error">
     <div class="sp-modal-state">
-      <svg
-        class="pmo-spin"
-        width="26"
-        height="26"
-        viewBox="0 0 26 26"
-        fill="none"
-      >
-        <circle
-          cx="13"
-          cy="13"
-          r="10"
-          stroke="var(--sp-border-strong)"
-          stroke-width="2"
-        />
-        <path
-          d="M13 3A10 10 0 0 1 23 13"
-          stroke="var(--sp-primary)"
-          stroke-width="2"
-          stroke-linecap="round"
-        />
-      </svg>
+      <Loader2 class="pmo-spin w-6 h-6 text-current" stroke-width="2" />
       <p class="sp-modal-state__text">Cargando pedido...</p>
     </div>
   </template>
@@ -31,21 +11,7 @@
   <template v-else-if="error">
     <div class="sp-modal-state">
       <div class="sp-table-empty__icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <circle
-            cx="12"
-            cy="12"
-            r="9"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path
-            d="M12 8v4m0 4h.01"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
+        <AlertCircle class="w-6 h-6 text-current" stroke-width="1.5" />
       </div>
       <p class="sp-modal-state__text">No se pudo cargar el pedido.</p>
       <div class="sp-modal-state__actions">
@@ -68,24 +34,7 @@
     <div class="sp-modal-header">
       <div class="pmo-header-inner">
         <div class="pmo-header-avatar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <rect
-              x="3"
-              y="3"
-              width="18"
-              height="18"
-              rx="3"
-              stroke="var(--sp-primary)"
-              stroke-width="1.5"
-            />
-            <path
-              d="M9 12l2 2 4-4"
-              stroke="var(--sp-primary)"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+            <Package class="w-5 h-5 text-(--sp-primary)" stroke-width="1.5" />
         </div>
         <div class="pmo-header-info">
           <div class="pmo-header-top">
@@ -114,21 +63,7 @@
                   'pmo-progress-dot--active': stepIsActive(step.value),
                 }"
               >
-                <svg
-                  v-if="stepIsDone(step.value)"
-                  width="10"
-                  height="10"
-                  viewBox="0 0 10 10"
-                  fill="none"
-                >
-                  <path
-                    d="M1.5 5l2.5 2.5 4.5-4"
-                    stroke="currentColor"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                <Check v-if="stepIsDone(step.value)" class="w-2.5 h-2.5" stroke-width="2.5" />
                 <div
                   v-else-if="stepIsActive(step.value)"
                   class="pmo-progress-dot__inner"
@@ -162,21 +97,7 @@
           <!-- Cliente -->
           <section class="pmo-card">
             <p class="pmo-card__label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <circle
-                  cx="12"
-                  cy="8"
-                  r="4"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                />
-                <path
-                  d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                  stroke-linecap="round"
-                />
-              </svg>
+              <User class="w-3.5 h-3.5 text-current" stroke-width="1.5" />
               Cliente
             </p>
             <div class="pmo-fields">
@@ -214,18 +135,7 @@
           <!-- Método de pago -->
           <section class="pmo-card">
             <p class="pmo-card__label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <rect
-                  x="2"
-                  y="5"
-                  width="20"
-                  height="14"
-                  rx="2"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                />
-                <path d="M2 10h20" stroke="currentColor" stroke-width="1.4" />
-              </svg>
+              <CreditCard class="w-3.5 h-3.5 text-current" stroke-width="1.5" />
               Método de pago
             </p>
             <div v-if="order.paymentMethodLabel" class="pmo-payment">
@@ -263,15 +173,7 @@
                     class="pmo-link"
                   >
                     Ver QR
-                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                      <path
-                        d="M2 10L10 2M10 2H5M10 2v5"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                    <ExternalLink class="w-2.5 h-2.5" stroke-width="1.5" />
                   </a>
                 </div>
               </div>
@@ -284,22 +186,7 @@
           <!-- Productos -->
           <section class="pmo-card">
             <p class="pmo-card__label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <rect
-                  x="2"
-                  y="7"
-                  width="20"
-                  height="14"
-                  rx="2"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                />
-                <path
-                  d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                />
-              </svg>
+              <ShoppingBag class="w-3.5 h-3.5 text-current" stroke-width="1.5" />
               Productos
             </p>
             <div class="pmo-items">
@@ -327,21 +214,7 @@
           <!-- Gestionar estado -->
           <section class="pmo-card">
             <p class="pmo-card__label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                />
-                <path
-                  d="M12 8v4l3 3"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                  stroke-linecap="round"
-                />
-              </svg>
+              <CheckCircle2 class="w-3.5 h-3.5 text-current" stroke-width="1.5" />
               Actualizar estado
             </p>
 
@@ -359,21 +232,7 @@
                 }"
               >
                 <div class="pmo-status-row__num">
-                  <svg
-                    v-if="isDone(opt.value)"
-                    width="11"
-                    height="11"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                  >
-                    <path
-                      d="M2 6l2.5 2.5L10 3.5"
-                      stroke="currentColor"
-                      stroke-width="1.6"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                  <Check v-if="isDone(opt.value)" class="w-3 h-3 text-current" stroke-width="2.5" />
                   <span v-else>{{
                     opt.value === "cancelled" ? "✕" : i + 1
                   }}</span>
@@ -424,28 +283,7 @@
                 "
                 @click="changeStatus"
               >
-                <svg
-                  v-if="updating"
-                  class="pmo-spin"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                >
-                  <circle
-                    cx="7"
-                    cy="7"
-                    r="5"
-                    stroke="rgba(255,255,255,0.3)"
-                    stroke-width="1.5"
-                  />
-                  <path
-                    d="M7 2A5 5 0 0 1 12 7"
-                    stroke="#fff"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
+                <Loader2 v-if="updating" class="pmo-spin w-4 h-4 text-current" stroke-width="2" />
                 {{ updating ? "Actualizando..." : "Confirmar cambio" }}
               </button>
             </div>
@@ -454,15 +292,7 @@
           <!-- Historial -->
           <section class="pmo-card">
             <p class="pmo-card__label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  stroke="currentColor"
-                  stroke-width="1.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <History class="w-3.5 h-3.5 text-current" stroke-width="1.5" />
               Historial
             </p>
             <AdminLineaTempoEstadoPedido :logs="timelineLogs" />
@@ -474,6 +304,7 @@
 </template>
 
 <script setup lang="ts">
+import { Loader2, AlertCircle, Package, Check, User, CreditCard, ExternalLink, ShoppingBag, CheckCircle2, History } from "lucide-vue-next";
 import type { Order } from "~/types";
 
 const props = defineProps<{ orderId: number | string }>();

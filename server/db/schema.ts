@@ -12,6 +12,7 @@ export const businessConfig = mysqlTable('business_config', {
   id:                 int('id').autoincrement().primaryKey(),
   name:               text('name').notNull(),
   ruc:                varchar('ruc', { length: 20 }),
+  email:              varchar('email', { length: 255 }),
   logoUrl:            text('logo_url'),
   whatsapp:           text('whatsapp').notNull(),
   address:            text('address'),

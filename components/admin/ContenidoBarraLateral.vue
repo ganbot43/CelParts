@@ -25,7 +25,9 @@
           :class="{ 'sp-nav-item--active': isActive(item.to) }"
           @click="emit('close')"
         >
-          <span class="sp-nav-item__icon" v-html="item.svg" />
+          <span class="sp-nav-item__icon">
+            <component :is="item.icon" class="w-5 h-5" stroke-width="1.5" />
+          </span>
           <span class="sp-nav-item__label">{{ item.label }}</span>
           <span v-if="isActive(item.to)" class="sp-nav-item__dot" />
         </NuxtLink>
@@ -41,7 +43,9 @@
           :class="{ 'sp-nav-item--active': isActive(item.to) }"
           @click="emit('close')"
         >
-          <span class="sp-nav-item__icon" v-html="item.svg" />
+          <span class="sp-nav-item__icon">
+            <component :is="item.icon" class="w-5 h-5" stroke-width="1.5" />
+          </span>
           <span class="sp-nav-item__label">{{ item.label }}</span>
           <span v-if="isActive(item.to)" class="sp-nav-item__dot" />
         </NuxtLink>
@@ -51,15 +55,7 @@
     <!-- Footer -->
     <div class="sp-sidebar__footer">
       <NuxtLink to="/" target="_blank" class="sp-footer-link">
-        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path
-            d="M6 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-3M9 2h5m0 0v5m0-5L7 10"
-            stroke="currentColor"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <ExternalLink class="w-4 h-4" stroke-width="2" />
         Ver tienda
       </NuxtLink>
     </div>
@@ -67,6 +63,10 @@
 </template>
 
 <script setup lang="ts">
+import { 
+  LayoutDashboard, ShoppingBag, Package, Archive, Tags, Layers, BookOpen, CreditCard, Settings, ExternalLink, BarChart
+} from "lucide-vue-next";
+
 const props = defineProps<{ user: any }>();
 const emit = defineEmits<{ (e: "close"): void }>();
 
@@ -76,37 +76,42 @@ const baseItems = [
   {
     to: "/admin",
     label: "Dashboard",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><rect x="1.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10.5" y="1.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="1.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="10.5" y="10.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>`,
+    icon: LayoutDashboard,
+  },
+  {
+    to: "/admin/reportes",
+    label: "Reportes",
+    icon: BarChart,
   },
   {
     to: "/admin/pedidos",
     label: "Pedidos",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 3V2a1 1 0 011-1h5a1 1 0 011 1v1M5 9h8M5 12h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+    icon: ShoppingBag,
   },
   {
     to: "/admin/productos",
     label: "Productos",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M2 5l7-3 7 3v8l-7 3-7-3V5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 2v14M2 5l7 3 7-3" stroke="currentColor" stroke-width="1.4"/></svg>`,
+    icon: Package,
   },
   {
     to: "/admin/inventario",
     label: "Inventario",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M3 4h12v10H3z" stroke="currentColor" stroke-width="1.4"/><path d="M3 8h12" stroke="currentColor" stroke-width="1.4"/></svg>`,
+    icon: Archive,
   },
   {
     to: "/admin/categorias",
     label: "Categorías",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M2 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM11 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V4zM2 11a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H3a1 1 0 01-1-1v-3zM11 11a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-3z" stroke="currentColor" stroke-width="1.4"/></svg>`,
+    icon: Tags,
   },
   {
     to: "/admin/subcategories",
     label: "Subcategorías",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><path d="M3 4h12v2H3zM3 8h12v2H3zM3 12h12v2H3z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    icon: Layers,
   },
   {
     to: "/admin/reclamaciones",
     label: "Libro de Reclamaciones",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 7h7M5.5 10h7M5.5 13h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+    icon: BookOpen,
   },
 ];
 
@@ -114,7 +119,12 @@ const superadminItems = [
   {
     to: "/admin/metodos-pago",
     label: "Métodos de Pago",
-    svg: `<svg viewBox="0 0 18 18" fill="none"><rect x="1.5" y="4" width="15" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 7.5h15" stroke="currentColor" stroke-width="1.4"/><rect x="4" y="10" width="4" height="1.5" rx=".75" fill="currentColor"/></svg>`,
+    icon: CreditCard,
+  },
+  {
+    to: "/admin/configuracion",
+    label: "Configuración",
+    icon: Settings,
   },
 ];
 

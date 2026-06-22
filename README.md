@@ -45,9 +45,23 @@ nvm use 20
 node -v
 ```
 
-## 🚀 Guía Rápida de Inicio (Quickstart)
+## 🐳 Despliegue y CI/CD (Docker)
 
-Sigue estos pasos en orden para levantar el proyecto desde cero de manera eficaz.
+El proyecto cuenta con una arquitectura de despliegue automatizada (CI/CD) impulsada por **Docker** y **GitHub Actions**.
+
+- **CI/CD Automático:** Al hacer `git push` a la rama `celparts-main`, GitHub Actions se encarga de hacer el build de la aplicación y enviar la imagen final a Docker Hub (`ganbito/celparts-ef3:latest`).
+- **Producción:** En el servidor solo requieres los archivos `docker-compose-celpartsEF3.prod.yml` y `.env`. No es necesario instalar Node ni compilar código en vivo.
+- **Desarrollo Local:** Tienes la opción de levantar MySQL o la app completa con `docker-compose-celpartsEF3.yml`.
+
+📚 **Guías de Arquitectura:**
+- 👉 [Ciclo de vida y Desarrollo (Workflow)](README-WORKFLOW.md)
+- 👉 [Guía de Despliegue en Servidor](README-DEPLOY.md)
+
+---
+
+## 🚀 Guía Rápida de Inicio (Quickstart Manual)
+
+Sigue estos pasos en orden para levantar el proyecto desde cero de manera tradicional.
 
 ### 1. Clonar el repositorio
 ```bash

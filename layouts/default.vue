@@ -45,8 +45,7 @@
       <EcommerceCarritoDrawer />
     </ClientOnly>
 
-    <!-- WhatsApp flotante -->
-    <SharedBotonWhatsapp />
+
   </div>
 </template>
 

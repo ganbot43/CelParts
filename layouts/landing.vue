@@ -8,7 +8,6 @@
       <EcommerceCarritoDrawer />
       <!-- WhatsApp button (behind cart if open) -->
       <!-- <LandingBotonWhatsapp /> -->
-      <LandingWaFloat />
       <!-- <LandingWaIcon /> -->
     </ClientOnly>
     <main>

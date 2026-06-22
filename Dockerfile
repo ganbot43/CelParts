@@ -16,9 +16,6 @@ RUN npm install --legacy-peer-deps
 # Copiar el resto del código fuente
 COPY . .
 
-# Configurar URL de proxy interno para Docker antes de compilar
-ENV API_PROXY_URL=http://api-gateway:8080/api
-
 # Compilar el proyecto Nuxt
 RUN npm run build
 

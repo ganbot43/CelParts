@@ -1,12 +1,13 @@
 import { enhanceProducts } from '~/server/utils/db'
 import { db } from '~/server/db'
 import { products } from '~/server/db/schema'
-import { eq, desc, and } from 'drizzle-orm'
+import { eq, desc, asc, and } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event)
     const categoryId = query.categoryId as string | undefined
+    const type = query.type as string | undefined
     const limit = 3
 
     let conditions = [eq(products.isActive, 1)]
@@ -14,9 +15,18 @@ export default defineEventHandler(async (event) => {
       conditions.push(eq(products.categoryId, Number(categoryId)))
     }
 
+    let orderByClause: any = desc(products.createdAt)
+    if (type === 'bestsellers') {
+      orderByClause = desc(products.isFeatured)
+    } else if (type === 'newest') {
+      orderByClause = desc(products.createdAt)
+    } else if (type === 'offers') {
+      orderByClause = asc(products.price)
+    }
+
     let rawData = await db.select().from(products)
       .where(and(...conditions))
-      .orderBy(desc(products.createdAt))
+      .orderBy(orderByClause)
       .limit(limit)
       .execute()
 

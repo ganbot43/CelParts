@@ -29,4 +29,4 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: ganbito/frontend:latest
+          tags: ganbito/celparts-ef3:latest

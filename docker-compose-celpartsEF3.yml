@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: celparts-mysql
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-mysql}
+      MYSQL_DATABASE: ${DB_NAME:-celparts}
+    volumes:
+      - mysql-celpartsEF3:/var/lib/mysql
+
+  celparts-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: celparts-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+
+volumes:
+  mysql-celpartsEF3:

@@ -5,36 +5,39 @@ import { MessageCircle, Instagram, Facebook, Mail } from "lucide-vue-next";
 const { waLink } = useKite();
 const businessState = useBusinessConfig();
 
-const channels = computed(() => [
-  {
-    icon: MessageCircle,
-    label: "WhatsApp",
-    handle: "+51 XXX XXX XXX · Respuesta inmediata",
-    href: "https://wa.me/51923821520",
-    type: "wa",
-  },
-  {
-    icon: Instagram,
-    label: "Instagram",
-    handle: "@celparts",
-    href: "https://instagram.com/celparts",
-    type: "ig",
-  },
-  {
-    icon: Facebook,
-    label: "Facebook",
-    handle: "CelParts SAC",
-    href: "https://facebook.com/celparts",
-    type: "fb",
-  },
-  {
-    icon: Mail,
-    label: "Correo electrónico",
-    handle: businessState.value?.email || "hola@celparts.com",
-    href: `mailto:${businessState.value?.email || "hola@celparts.com"}`,
-    type: "mail",
-  },
-]);
+const channels = computed(() => {
+  const config = businessState.value;
+  return [
+    {
+      icon: MessageCircle,
+      label: "WhatsApp",
+      handle: config?.whatsapp ? `${config.whatsapp} · Respuesta inmediata` : "+51 XXX XXX XXX · Respuesta inmediata",
+      href: config?.whatsapp ? `https://wa.me/${config.whatsapp.replace(/\D/g, '')}` : "https://wa.me/51923821520",
+      type: "wa",
+    },
+    {
+      icon: Instagram,
+      label: "Instagram",
+      handle: config?.socialLinks?.instagram ? `@${config.socialLinks.instagram}` : "@celparts",
+      href: config?.socialLinks?.instagram ? `https://instagram.com/${config.socialLinks.instagram}` : "https://instagram.com/celparts",
+      type: "ig",
+    },
+    {
+      icon: Facebook,
+      label: "Facebook",
+      handle: config?.socialLinks?.facebook ? config.socialLinks.facebook : "CelParts SAC",
+      href: config?.socialLinks?.facebook ? `https://facebook.com/${config.socialLinks.facebook}` : "https://facebook.com/celparts",
+      type: "fb",
+    },
+    {
+      icon: Mail,
+      label: "Correo electrónico",
+      handle: config?.email || "hola@celparts.com",
+      href: `mailto:${config?.email || "hola@celparts.com"}`,
+      type: "mail",
+    },
+  ];
+});
 
 const topics = [
   { value: "", label: "Selecciona una opción" },

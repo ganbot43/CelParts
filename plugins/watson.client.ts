@@ -5,6 +5,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   const serviceInstanceId = config.public.watsonServiceInstanceId as string | undefined
   const region = (config.public.watsonRegion as string | undefined) || "us-south"
   
+  const route = useRoute()
+  if (route.path.startsWith('/admin')) {
+    return // No cargar Watson en el panel de administrador
+  }
+
   if (integrationId && serviceInstanceId) {
     (window as any).watsonAssistantChatOptions = {
       integrationID: integrationId,

@@ -100,8 +100,8 @@ async function seed() {
 
   // 5. banners
   await db.insert(schema.banners).values([
-    { imageUrl: 'https://picsum.photos/1200/400?random=10', sortOrder: 0, isActive: 1 },
-    { imageUrl: 'https://picsum.photos/1200/400?random=11', sortOrder: 1, isActive: 1 },
+    { imageUrl: 'https://loremflickr.com/1200/400/ecommerce?random=1', sortOrder: 0, isActive: 1 },
+    { imageUrl: 'https://loremflickr.com/1200/400/technology?random=2', sortOrder: 1, isActive: 1 },
   ]).execute()
 
   // 6. products (12 productos de repuestos y accesorios de celulares)
@@ -136,7 +136,7 @@ async function seed() {
 
     await db.insert(schema.productImages).values({
       productId,
-      url:       `https://picsum.photos/600/600?random=${productId + 20}`,
+      url:       `https://loremflickr.com/600/600/smartphone,repair?lock=${productId}`,
       sortOrder: 0,
       isPrimary: 1,
     }).execute()

@@ -45,18 +45,75 @@ nvm use 20
 node -v
 ```
 
-## Instalación
+## 🚀 Guía Rápida de Inicio (Quickstart)
 
-1. Clona el repositorio.
-2. Instala dependencias:
+Sigue estos pasos en orden para levantar el proyecto desde cero de manera eficaz.
 
+### 1. Clonar el repositorio
 ```bash
+git clone https://github.com/tu-usuario/celparts-main.git
+cd celparts-main
+```
+
+### 2. Instalar dependencias
+Asegúrate de usar **Node.js 20**.
+```bash
+nvm use 20
 npm install
 ```
 
-3. Crea el archivo `.env` con las variables necesarias.
+### 3. Configurar variables de entorno
+Crea un archivo `.env` en la raíz del proyecto. Puedes copiar un archivo de ejemplo si existe o crear uno nuevo con las credenciales locales:
+```env
+# Base de datos MySQL local
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=celparts
 
-## Variables de entorno
+# Sesión / auth
+NUXT_SESSION_PASSWORD=una_clave_secreta_de_al_menos_32_caracteres_de_largo
+
+# Google reCAPTCHA (Dejar vacío en desarrollo si no hay validación estricta)
+G_RECAPTCHA_SITE_KEY=
+G_RECAPTCHA_SECRET_KEY=
+```
+*(Revisa la sección "Variables de entorno completas" más abajo para ver configuraciones de SMTP y S3).*
+
+### 4. Crear la Base de Datos
+Debes tener MySQL corriendo. Entra a tu cliente MySQL (por terminal o usando herramientas como XAMPP, DBeaver, etc.) y ejecuta:
+```sql
+CREATE DATABASE celparts CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+```
+
+### 5. Inicializar Tablas y Datos (Migraciones y Seed)
+Una vez creada la base de datos vacía, Drizzle ORM se encarga del resto. Tienes dos opciones eficaces:
+
+**Opción A (Recomendada si usas Bash):**
+Ejecuta el script de reinicio rápido que limpia la BD, aplica esquemas e inserta datos iniciales:
+```bash
+./reset-db.sh
+```
+
+**Opción B (Manual):**
+Si estás en Windows PowerShell o prefieres el control manual, ejecuta:
+```bash
+npm run db:generate   # Genera los archivos SQL del esquema
+npm run db:migrate    # Aplica las tablas a la base de datos
+npm run db:seed       # Inserta usuarios admin, productos y configuraciones por defecto
+```
+
+### 6. Ejecutar el Servidor de Desarrollo
+```bash
+npm run dev
+```
+🎉 ¡Listo! La plataforma está corriendo en `http://localhost:3000`. 
+*(Puedes acceder al admin en `http://localhost:3000/admin` usando las credenciales del seed).*
+
+---
+
+## Variables de entorno completas
 
 El proyecto usa configuración de entorno para la base de datos, correo, reCAPTCHA, sesión y S3.
 
@@ -82,20 +139,25 @@ NUXT_PUBLIC_WHATSAPP=+51900000000
 G_RECAPTCHA_SECRET_KEY=tu_secret_key
 G_RECAPTCHA_SITE_KEY=tu_site_key
 
-# SMTP
-SMTP_HOST=mail.example.com
+# SMTP (Envío de correos de pedidos)
+SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=info@celparts.pe
-SMTP_PASSWORD=tu_password
+SMTP_USER=tu_correo@gmail.com
+SMTP_PASSWORD=tu_app_password
 SMTP_FROM="CelParts <info@celparts.pe>"
 SMTP_SECURE=false
 
-# S3
+# S3 (Upload de imágenes)
 S3_BUCKET=mi-bucket
 S3_REGION=us-east-1
 S3_ACCESS_KEY_ID=tu_key
 S3_SECRET_ACCESS_KEY=tu_secret
 S3_ROOT_PREFIX=celparts
+
+# Watson Assistant (Chatbot de Inteligencia Artificial)
+WATSON_INTEGRATION_ID=tu_integration_id
+WATSON_REGION=us-south
+WATSON_SERVICE_INSTANCE_ID=tu_service_instance_id
 ```
 
 ## Configurar S3 en AWS
@@ -109,67 +171,16 @@ Para que funcione en AWS necesitas:
 
 1. Crear un bucket S3 en la región que vayas a usar en `S3_REGION`.
 2. Crear un IAM user o credenciales de acceso para la app.
-3. Dar permisos mínimos de escritura al bucket, por ejemplo `s3:PutObject` y `s3:PutObjectAcl` si luego decides hacer los objetos públicos por ACL o políticas.
-4. Asegurar lectura pública de los archivos si vas a consumir las URLs directas que devuelve la app, porque el código arma URLs públicas con el endpoint estándar de S3.
-5. Cargar las variables `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` y `S3_ROOT_PREFIX`.
-6. Los archivos se guardarán automáticamente organizados por año, mes y día dentro de carpetas como `products/YYYY/MM/DD/`, `banners/YYYY/MM/DD/`, o `complaints/YYYY/MM/DD/`.
+3. Dar permisos mínimos de escritura al bucket, por ejemplo `s3:PutObject` y `s3:PutObjectAcl`.
+4. Asegurar lectura pública de los archivos si vas a consumir las URLs directas.
+5. Los archivos se guardarán organizados por año, mes y día (ej. `products/YYYY/MM/DD/`).
 
 Notas importantes:
-
-- El upload de imágenes falla si faltan credenciales S3.
 - El formulario de reclamaciones tiene fallback local a `public/uploads/complaints` solo cuando S3 no está configurado.
-- No hace falta configurar CORS para estos uploads porque la subida la hace el servidor, no el navegador directamente.
-- Si el bucket tiene bloqueado el acceso público, las URLs devueltas no serán visibles desde el navegador a menos que cambies el código para firmar URLs o sirvas los archivos por otro medio.
 
-Ejemplo de configuración mínima:
+## Base de datos (Esquema completo)
 
-```env
-S3_BUCKET=mi-bucket
-S3_REGION=us-east-1
-S3_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx
-S3_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-S3_ROOT_PREFIX=celparts
-```
-
-## Base de datos
-
-La aplicación usa MySQL con Drizzle ORM. El esquema está definido en `server/db/schema.ts` y las migraciones se generan con Drizzle Kit.
-
-### Crear la base de datos
-
-```bash
-mysql -u root -p
-```
-
-Dentro del prompt de MySQL:
-
-```sql
-CREATE DATABASE celparts CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-EXIT;
-```
-
-### Inicializar tablas y datos
-
-Forma recomendada:
-
-```bash
-./reset-db.sh
-```
-
-Ese script normalmente hace lo siguiente:
-
-1. Limpia la base de datos.
-2. Genera migraciones a partir del esquema.
-3. Aplica las migraciones.
-4. Carga datos iniciales con seed.
-
-Si prefieres hacerlo manualmente:
-
-```bash
-npm run db:generate
-npm run db:migrate
-npm run db:seed
-```
+La aplicación usa MySQL con Drizzle ORM. El esquema está definido en `server/db/schema.ts`.
 
 ### Tablas de la base de datos
 

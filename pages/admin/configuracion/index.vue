@@ -306,7 +306,7 @@ const logoError = ref(false);
 const fileInput = ref<HTMLInputElement | null>(null);
 const uploadingLogo = ref(false);
 
-const tabs = [
+const tabs: Array<{ key: "general" | "modulos" | "acceso"; label: string; icon: string }> = [
   {
     key: "general",
     label: "General",

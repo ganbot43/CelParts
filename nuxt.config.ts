@@ -43,6 +43,9 @@ export default defineNuxtConfig({
       companyName: process.env.NUXT_PUBLIC_COMPANY_NAME || "CelParts SAC",
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? "https://joymarperu.com",
       siteName: process.env.NUXT_PUBLIC_SITE_NAME ?? "CelParts SAC",
+      watsonIntegrationId: process.env.WATSON_INTEGRATION_ID,
+      watsonRegion: process.env.WATSON_REGION,
+      watsonServiceInstanceId: process.env.WATSON_SERVICE_INSTANCE_ID,
     },
   },
 

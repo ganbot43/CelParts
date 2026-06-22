@@ -16,6 +16,7 @@ type OrderLike = {
   status?: string | null
   total?: number | null
   subtotal?: number | null
+  userId?: number | null
   createdAt?: string | Date | null
   paymentMethod?: {
     label?: string | null

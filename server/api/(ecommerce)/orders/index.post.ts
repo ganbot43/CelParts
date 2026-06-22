@@ -141,7 +141,9 @@ export default defineEventHandler(async (event) => {
     await db.select().from(orders).where(eq(orders.id, createdOrderId)).limit(1),
   ))[0]
 
-  await sendOrderNotification(order, 'created')
+  if (order) {
+    await sendOrderNotification(order as any, 'created')
+  }
 
   return order
 })

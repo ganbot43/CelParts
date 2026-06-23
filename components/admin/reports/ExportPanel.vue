@@ -59,6 +59,17 @@ async function fetchExportData() {
   return { orders, products };
 }
 
+const translateStatus = (status: string) => {
+  const statusMap: Record<string, string> = {
+    pending: 'Pendiente',
+    paid: 'Pagado',
+    shipped: 'Enviado',
+    delivered: 'Entregado',
+    cancelled: 'Cancelado'
+  };
+  return statusMap[status] || status;
+};
+
 async function exportExcel(type: 'orders' | 'products') {
   try {
     loading.value = true;
@@ -75,7 +86,7 @@ async function exportExcel(type: 'orders' | 'products') {
         'Cliente': o.customerName,
         'Teléfono': o.customerPhone,
         'Total (S/)': o.total,
-        'Estado': o.status,
+        'Estado': translateStatus(o.status),
         'Fecha': formatDateTime(o.createdAt),
         'Cant. Items': o.items?.length || 0
       }));
@@ -133,7 +144,7 @@ async function exportPdf(type: 'orders' | 'products') {
       body = data.orders.map((o: any) => [
         o.orderCode,
         o.customerName,
-        o.status,
+        translateStatus(o.status),
         `S/ ${o.total.toFixed(2)}`,
         formatDateTime(o.createdAt)
       ]);

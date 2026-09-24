@@ -1,89 +1,93 @@
 <template>
-  <section class="py-20 px-8 pt-40 lg:px-32 bg-base">
-    <div class="max-w-4xl mx-auto text-body">
-      <h2 class="text-4xl font-extrabold text-center mb-8 text-primary">
-        Política de Privacidad
-      </h2>
-      <p class="text-lg mb-6">
-        En <span class="font-semibold text-primary">CelParts</span>, respetamos y
-        valoramos la privacidad de nuestros usuarios. Esta política de
-        privacidad describe cómo recopilamos, utilizamos y protegemos su
-        información personal.
-      </p>
-      <h3 class="text-2xl font-semibold mb-4">
-        1. Información que Recopilamos
-      </h3>
-      <p class="mb-4">
-        Podemos recopilar información personal como nombre, correo electrónico,
-        número de teléfono y cualquier otro dato necesario para prestar nuestros
-        servicios. La recopilación se realiza de manera justa y transparente.
-      </p>
-      <h3 class="text-2xl font-semibold mb-4">2. Uso de la Información</h3>
-      <p class="mb-4">
-        Utilizamos la información recopilada para brindar, mantener y mejorar
-        nuestros servicios, así como para comunicarnos con usted en relación con
-        consultas o solicitudes.
-      </p>
-      <h3 class="text-2xl font-semibold mb-4">
-        3. Protección de la Información
-      </h3>
-      <p class="mb-4">
-        Implementamos medidas de seguridad adecuadas para proteger su
-        información contra accesos no autorizados, alteración o divulgación.
-      </p>
-      <h3 class="text-2xl font-semibold mb-4">
-        4. Compartición de Información
-      </h3>
-      <p class="mb-4">
-        No compartimos su información personal con terceros, excepto cuando sea
-        necesario para cumplir con la ley o prestar servicios específicos
-        solicitados por el usuario.
-      </p>
-      <h3 class="text-2xl font-semibold mb-4">5. Derechos del Usuario</h3>
-      <p class="mb-4">
-        Usted tiene derecho a acceder, rectificar o eliminar sus datos
-        personales en cualquier momento. Para ejercer estos derechos, puede
-        ponerse en contacto con nosotros.
-      </p>
-      <h3 class="text-2xl font-semibold mb-4">6. Cambios en la Política</h3>
-      <p class="mb-4">
-        Nos reservamos el derecho de modificar esta política de privacidad en
-        cualquier momento. Los cambios se publicarán en esta página.
-      </p>
-      <p class="mt-8 text-body">
-        Si tiene alguna duda o consulta sobre nuestra política de privacidad, no
-        dude en contactarnos a través de nuestro formulario de contacto.
-      </p>
-    </div>
-  </section>
+  <SharedDocumentoLegal
+    titulo="Política de privacidad"
+    :entrada="entrada"
+    :actualizado="actualizado"
+    :secciones="secciones"
+  />
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'landing' })
+import type { SeccionLegal } from "~/components/shared/DocumentoLegal.vue";
+
+definePageMeta({ layout: "landing" });
+
+const runtimeConfig = useRuntimeConfig();
+const siteUrl = String(runtimeConfig.public.siteUrl || "https://celparts.pe").replace(/\/$/, "");
+
+const entrada =
+  "Esta política explica qué datos te pedimos, para qué los usamos y qué puedes hacer con ellos. Solo recogemos lo necesario para venderte y entregarte un repuesto.";
+
+const actualizado = "23 de septiembre de 2026";
+
+const secciones: SeccionLegal[] = [
+  {
+    titulo: "Qué datos recopilamos",
+    parrafos: [
+      "Al crear una cuenta o hacer un pedido te pedimos tu nombre, correo electrónico, teléfono y dirección de entrega. Son los datos mínimos para procesar la compra y coordinar el envío.",
+      "Si nos escribes por el formulario de contacto o por WhatsApp, guardamos esa conversación para poder darte seguimiento.",
+      "No almacenamos datos de tarjetas: los pagos se realizan por transferencia o billetera móvil, fuera de este sitio.",
+    ],
+  },
+  {
+    titulo: "Para qué los usamos",
+    parrafos: [
+      "Para procesar tus pedidos, coordinar la entrega, emitir el comprobante y responder tus consultas. También para avisarte del estado de una compra.",
+      "No usamos tus datos para publicidad de terceros ni te inscribimos en listas de correo sin que lo pidas.",
+    ],
+  },
+  {
+    titulo: "Con quién los compartimos",
+    parrafos: [
+      "Compartimos lo imprescindible con la empresa de mensajería que entrega tu pedido: nombre, dirección y teléfono.",
+      "No vendemos ni cedemos tus datos a terceros. Solo los entregaríamos a una autoridad competente si la ley lo exigiera.",
+    ],
+  },
+  {
+    titulo: "Cómo los protegemos",
+    parrafos: [
+      "El sitio usa conexión cifrada. Las contraseñas se guardan cifradas y nadie del equipo puede leerlas.",
+      "El acceso a los pedidos está restringido: solo puedes ver los tuyos desde tu cuenta, y únicamente el personal de la tienda puede consultarlos para darte soporte.",
+    ],
+  },
+  {
+    titulo: "Cuánto tiempo los conservamos",
+    parrafos: [
+      "Conservamos los datos de tus pedidos mientras tu cuenta siga activa y durante el plazo que exige la normativa contable y tributaria peruana. Después se eliminan o se anonimizan.",
+    ],
+  },
+  {
+    titulo: "Tus derechos",
+    parrafos: [
+      "Puedes acceder a tus datos, corregirlos o pedir que los eliminemos en cualquier momento. Los datos de contacto y entrega los puedes editar tú directamente desde «Mi cuenta».",
+      "Para solicitar la eliminación de tu cuenta, escríbenos por WhatsApp o al correo de contacto. Ten en cuenta que los comprobantes de compra ya emitidos deben conservarse por obligación legal.",
+    ],
+  },
+  {
+    titulo: "Cookies",
+    parrafos: [
+      "Usamos almacenamiento local del navegador para recordar tu carrito, tus favoritos y tu sesión iniciada. Son necesarios para que la tienda funcione y no siguen tu actividad en otros sitios.",
+    ],
+  },
+  {
+    titulo: "Cambios en esta política",
+    parrafos: [
+      "Si cambiamos esta política, publicaremos la nueva versión en esta página con su fecha de actualización.",
+    ],
+  },
+];
+
+const description =
+  "Qué datos recopila CelParts, para qué los usa, con quién los comparte y cómo ejercer tus derechos.";
 
 useSeoMeta({
-  title: 'Politica de Privacidad | CelParts',
-  description: 'Conoce como CelParts recopila, usa y protege tus datos personales en nuestro sitio web.',
-  ogTitle: 'Politica de Privacidad | CelParts',
-  ogDescription: 'Informacion sobre tratamiento de datos personales y derechos del usuario en CelParts.',
-  ogType: 'article',
-  ogUrl: 'https://celparts.pe/privacidad',
-  ogImage: 'https://celparts.pe/images/logo.png',
-  twitterCard: 'summary_large_image',
-  twitterTitle: 'Politica de Privacidad | CelParts',
-  twitterDescription: 'Consulta la politica de privacidad de CelParts.',
-  twitterImage: 'https://celparts.pe/images/logo.png',
-})
+  title: "Política de privacidad — CelParts",
+  description,
+  ogTitle: "Política de privacidad — CelParts",
+  ogDescription: description,
+  ogType: "article",
+  ogUrl: `${siteUrl}/privacidad`,
+  ogImage: `${siteUrl}/images/logo.png`,
+  twitterCard: "summary_large_image",
+});
 </script>
-<style scoped>
-@import "@/assets/css/page.css";
-
-section {
-  line-height: 1.6;
-}
-
-h2,
-h3 {
-  color: var(--text-primary);
-}
-</style>

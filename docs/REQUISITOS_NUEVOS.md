@@ -205,7 +205,7 @@ export default defineNuxtConfig({
     s3Region: process.env.S3_REGION,
     s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
     s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    projectName: process.env.PROJECT_NAME ?? 'joymar_utensilios',
+    projectName: process.env.PROJECT_NAME ?? 'celparts',
     public: {
       appName:  process.env.NUXT_PUBLIC_APP_NAME ?? 'SMART CS',
       whatsapp: process.env.NUXT_PUBLIC_WHATSAPP ?? '',
@@ -225,9 +225,9 @@ S3_BUCKET=your-bucket-name
 S3_REGION=us-east-1
 S3_ACCESS_KEY_ID=your-access-key-id
 S3_SECRET_ACCESS_KEY=your-secret-access-key
-PROJECT_NAME=joymar_utensilios
+PROJECT_NAME=celparts
 NUXT_PUBLIC_APP_NAME="Mi Tienda"
-NUXT_PUBLIC_WHATSAPP="+51996111303"
+NUXT_PUBLIC_WHATSAPP="+51923821520"
 ```
 
 ### `drizzle.config.ts`
@@ -520,7 +520,7 @@ async function seed() {
   // 1. business_config
   db.insert(schema.businessConfig).values({
     name:        'Mi Tienda Demo',
-    whatsapp:    '+51996111303',
+    whatsapp:    '+51923821520',
     plan:        'basic',
     socialLinks: JSON.stringify({ instagram: 'mitienda', facebook: 'mitienda', tiktok: '' }),
   }).run()
@@ -528,8 +528,8 @@ async function seed() {
   // 2. users
   const hash = await bcrypt.hash('admin123', 10)
   db.insert(schema.users).values([
-    { name: 'Super Admin', email: 'joymar.peru@gmail.com', passwordHash: hash, role: 'superadmin' },
-    { name: 'Admin Tienda', email: 'joymar.peru@gmail.com', passwordHash: hash, role: 'admin' },
+    { name: 'Super Admin', email: 'info@celparts.pe', passwordHash: hash, role: 'superadmin' },
+    { name: 'Admin Tienda', email: 'info@celparts.pe', passwordHash: hash, role: 'admin' },
   ]).run()
 
   // 3. categories
@@ -1468,10 +1468,10 @@ module.exports = {
       S3_REGION:              'us-east-1',
       S3_ACCESS_KEY_ID:       'your-access-key-id',
       S3_SECRET_ACCESS_KEY:   'your-secret-access-key',
-      PROJECT_NAME:           'joymar_utensilios',
+      PROJECT_NAME:           'celparts',
       NUXT_SESSION_PASSWORD:  'CAMBIAR-POR-CLAVE-SEGURA-DE-32-CHARS',
       NUXT_PUBLIC_APP_NAME:   'Mi Tienda',
-      NUXT_PUBLIC_WHATSAPP:   '+51996111303',
+      NUXT_PUBLIC_WHATSAPP:   '+51923821520',
     },
   }],
 }

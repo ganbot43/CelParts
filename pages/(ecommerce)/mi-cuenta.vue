@@ -1,43 +1,67 @@
 <template>
-  <div class="cp-portal">
+  <div class="pt">
     <div class="cp-container">
-      <div class="cp-portal-grid">
-        <!-- Sidebar -->
-        <aside class="cp-portal-sidebar">
-          <div class="cp-portal-user">
-            <div class="cp-portal-avatar">
-              {{ userInitials }}
-            </div>
-            <div>
-              <p class="cp-portal-name">{{ user?.name }}</p>
-              <p class="cp-portal-email">{{ user?.email }}</p>
-            </div>
+      <nav class="pt__crumb" aria-label="Ubicación">
+        <NuxtLink to="/">Inicio</NuxtLink>
+        <span aria-hidden="true">/</span>
+        <span class="pt__crumb-now">Mi cuenta</span>
+      </nav>
+
+      <div class="pt__grid">
+        <!-- ═══ Barra de cuenta ═══ -->
+        <aside class="pt__aside">
+          <div class="pt__user">
+            <span class="pt__avatar" aria-hidden="true">{{ iniciales }}</span>
+            <span class="pt__user-text">
+              <strong>{{ user?.name || "Mi cuenta" }}</strong>
+              <small>{{ user?.email }}</small>
+            </span>
           </div>
 
-          <nav class="cp-portal-nav">
-            <NuxtLink to="/mi-cuenta" class="cp-portal-link" exact-active-class="cp-portal-link-active">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
+          <nav class="pt__nav" aria-label="Secciones de mi cuenta">
+            <NuxtLink
+              to="/mi-cuenta"
+              class="pt__link"
+              exact-active-class="is-active"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.5 12 3l9 7.5" />
+                <path d="M5.5 9.5V20h13V9.5" />
               </svg>
               Resumen
             </NuxtLink>
-            <NuxtLink to="/mi-cuenta/pedidos" class="cp-portal-link" active-class="cp-portal-link-active">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+
+            <NuxtLink
+              to="/mi-cuenta/pedidos"
+              class="pt__link"
+              active-class="is-active"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4.5 7.5h15l-1 12.5h-13z" />
+                <path d="M9 7.5V6a3 3 0 0 1 6 0v1.5" />
               </svg>
-              Mis Pedidos
+              Mis pedidos
             </NuxtLink>
-            <button @click="logout" class="cp-portal-link cp-portal-link-logout">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+
+            <NuxtLink to="/favoritos" class="pt__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.7 1.1-1a5.5 5.5 0 0 0 0-7.9z" />
               </svg>
-              Cerrar Sesión
-            </button>
+              Favoritos
+            </NuxtLink>
           </nav>
+
+          <button type="button" class="pt__logout" @click="logout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 4.5H7.5A1.5 1.5 0 0 0 6 6v12a1.5 1.5 0 0 0 1.5 1.5H15" />
+              <path d="M17 15.5 20.5 12 17 8.5M20.5 12H10" />
+            </svg>
+            Cerrar sesión
+          </button>
         </aside>
 
-        <!-- Main Content -->
-        <main class="cp-portal-content">
+        <!-- ═══ Contenido ═══ -->
+        <main class="pt__main">
           <NuxtPage />
         </main>
       </div>
@@ -46,163 +70,245 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'landing', middleware: 'auth-customer' });
+definePageMeta({ layout: "default", middleware: "auth-customer" });
+
 const { user, clear } = useUserSession();
 
-const userInitials = computed(() => {
-  if (!user.value?.name) return 'C';
-  return user.value.name.substring(0, 1).toUpperCase();
+const iniciales = computed(() => {
+  const nombre = String(user.value?.name ?? "").trim();
+  if (!nombre) return "C";
+  /* Dos iniciales cuando hay nombre y apellido: una sola letra en un
+     círculo de 48px se ve desangelada. */
+  const partes = nombre.split(/\s+/).filter(Boolean);
+  return partes
+    .slice(0, 2)
+    .map((p) => p[0]!.toUpperCase())
+    .join("");
 });
 
 async function logout() {
   await clear();
-  await navigateTo('/login');
+  await navigateTo("/login");
 }
 </script>
 
 <style scoped>
-.cp-portal {
-  padding: var(--space-8) 0;
-  min-height: calc(100vh - 80px);
-  background: var(--bg-body);
+.pt {
+  padding-block: var(--sp-6) var(--section-y);
 }
 
-.cp-portal-grid {
+.pt__crumb {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-medium);
+  color: var(--ink-faint);
+  margin-bottom: var(--sp-5);
+}
+
+.pt__crumb a:hover {
+  color: var(--accent-strong);
+}
+
+.pt__crumb-now {
+  color: var(--ink-body);
+  font-weight: var(--fw-semibold);
+}
+
+.pt__grid {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: var(--space-6);
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: var(--sp-6);
   align-items: start;
 }
 
-@media (max-width: 768px) {
-  .cp-portal-grid {
-    grid-template-columns: 1fr;
+/* ── Barra lateral ── */
+.pt__aside {
+  position: sticky;
+  top: calc(var(--header-total) + var(--sp-4));
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  overflow: hidden;
+}
+
+.pt__user {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--surface-sunken);
+}
+
+.pt__avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--cp-navy-900);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-black);
+  letter-spacing: 0.02em;
+}
+
+.pt__user-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.pt__user-text strong {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pt__user-text small {
+  font-size: var(--fs-2xs);
+  color: var(--ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pt__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-3);
+}
+
+.pt__link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 42px;
+  padding: 0 var(--sp-3);
+  border-radius: var(--radius-sm);
+  color: var(--ink-body);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  transition:
+    background var(--t-fast) var(--ease-smooth),
+    color var(--t-fast) var(--ease-smooth);
+}
+
+.pt__link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--ink-faint);
+  transition: color var(--t-fast) var(--ease-smooth);
+}
+
+.pt__link:hover {
+  background: var(--surface-sunken);
+  color: var(--ink-strong);
+}
+
+.pt__link.is-active {
+  background: var(--accent-quiet);
+  color: var(--accent-strong);
+  font-weight: var(--fw-bold);
+}
+
+.pt__link.is-active svg,
+.pt__link:hover svg {
+  color: currentColor;
+}
+
+.pt__logout {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  min-height: 46px;
+  padding: 0 var(--sp-4);
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  text-align: left;
+  transition:
+    background var(--t-fast) var(--ease-smooth),
+    color var(--t-fast) var(--ease-smooth);
+}
+
+.pt__logout svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.pt__logout:hover {
+  background: var(--cp-error-bg);
+  color: var(--cp-danger);
+}
+
+/* ── Contenido ── */
+.pt__main {
+  min-width: 0;
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 900px) {
+  .pt__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-4);
+  }
+
+  .pt__aside {
+    position: static;
+  }
+
+  /* La navegación pasa a fila deslizable: apilada verticalmente en
+     móvil empuja el contenido fuera de la primera pantalla. */
+  .pt__nav {
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .pt__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pt__link {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .pt__logout {
+    border-top: 0;
   }
 }
 
-/* Sidebar */
-.cp-portal-sidebar {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  box-shadow: var(--card-shadow-sm);
-}
+@media (max-width: 480px) {
+  .pt__user {
+    padding: var(--sp-3);
+  }
 
-.cp-portal-user {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-5);
-  background: rgba(0, 174, 239, 0.04);
-  border-bottom: 1px solid var(--border-light);
-}
-
-.cp-portal-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--cp-electric);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.25rem;
-}
-
-.cp-portal-name {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin: 0 0 2px;
-}
-
-.cp-portal-email {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 150px;
-}
-
-.cp-portal-nav {
-  display: flex;
-  flex-direction: column;
-  padding: var(--space-2);
-}
-
-.cp-portal-link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  color: var(--text-body);
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: var(--r-md);
-  transition: all var(--t-fast) var(--ease-smooth);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 0.95rem;
-  width: 100%;
-}
-
-.cp-portal-link svg {
-  width: 20px;
-  height: 20px;
-  color: var(--text-muted);
-  transition: color var(--t-fast);
-}
-
-.cp-portal-link:hover {
-  background: rgba(0, 174, 239, 0.04);
-  color: var(--cp-electric);
-}
-
-.cp-portal-link:hover svg {
-  color: var(--cp-electric);
-}
-
-.cp-portal-link-active {
-  background: rgba(0, 174, 239, 0.08);
-  color: var(--cp-electric);
-  font-weight: 700;
-}
-
-.cp-portal-link-active svg {
-  color: var(--cp-electric);
-}
-
-.cp-portal-link-logout {
-  color: #ef4444;
-  margin-top: var(--space-2);
-  border-top: 1px solid var(--border-light);
-  border-radius: 0 0 var(--r-md) var(--r-md);
-}
-
-.cp-portal-link-logout:hover {
-  background: rgba(239, 68, 68, 0.08);
-  color: #ef4444;
-}
-
-.cp-portal-link-logout svg {
-  color: #ef4444;
-}
-
-/* Content */
-.cp-portal-content {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-lg);
-  padding: var(--space-6);
-  min-height: 400px;
-  box-shadow: var(--card-shadow-sm);
+  .pt__avatar {
+    width: 36px;
+    height: 36px;
+    font-size: var(--fs-xs);
+  }
 }
 </style>

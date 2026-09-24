@@ -3,9 +3,9 @@
     <!-- Brand -->
     <div class="sp-sidebar__brand">
       <NuxtLink to="/admin" class="sp-brand" @click="emit('close')">
-        <img src="/images/logo.png" alt="Logo" class="sp-brand__logo" />
+        <img :src="logo" :alt="nombre" class="sp-brand__logo" />
         <div class="sp-brand__text">
-          <span class="sp-brand__name">Smart Panel</span>
+          <span class="sp-brand__name">{{ nombre }}</span>
           <span class="sp-brand__role">
             {{ user?.role === "superadmin" ? "Super Admin" : "Administrador" }}
           </span>
@@ -68,6 +68,10 @@ import {
 } from "lucide-vue-next";
 
 const props = defineProps<{ user: any }>();
+
+/* Logo y nombre salen de Configuración, igual que en la tienda: estaban
+   escritos a mano y el panel decía "Smart Panel" en vez del negocio. */
+const { logo, nombre } = useLogo();
 const emit = defineEmits<{ (e: "close"): void }>();
 
 const route = useRoute();
@@ -165,13 +169,18 @@ function isActive(path: string) {
   background: var(--sp-sidebar-hover-bg);
 }
 
+/* Alto fijo y ancho libre: admite tanto un isotipo cuadrado como un
+   logotipo apaisado sin deformar ninguno. Respaldo blanco porque la
+   barra es navy y un logo para fondo claro se perdería. */
 .sp-brand__logo {
-  width: 34px;
   height: 34px;
+  width: auto;
+  max-width: 108px;
   object-fit: contain;
-  border-radius: 8px;
-  background: var(--sp-sidebar-logo-bg);
-  padding: 3px;
+  object-position: left center;
+  border-radius: var(--sp-radius-xs);
+  background: #fff;
+  padding: 4px 6px;
   flex-shrink: 0;
 }
 

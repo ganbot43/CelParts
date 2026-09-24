@@ -14,15 +14,15 @@ export default defineEventHandler((event) => {
       : 'http'
   ).toLowerCase();
 
-  const isJoymarHost = host === 'joymarperu.com' || host === 'www.joymarperu.com';
-  const mustRedirect = isJoymarHost && (host !== 'joymarperu.com' || protocol !== 'https');
+  const isCelPartsHost = host === 'celparts.pe' || host === 'www.celparts.pe';
+  const mustRedirect = isCelPartsHost && (host !== 'celparts.pe' || protocol !== 'https');
 
   if (!mustRedirect) {
     return;
   }
 
   const requestUrl = getRequestURL(event);
-  const targetUrl = `https://joymarperu.com${requestUrl.pathname}${requestUrl.search}`;
+  const targetUrl = `https://celparts.pe${requestUrl.pathname}${requestUrl.search}`;
 
   return sendRedirect(event, targetUrl, 301);
 });

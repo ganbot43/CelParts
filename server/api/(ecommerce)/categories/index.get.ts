@@ -109,6 +109,9 @@ export default defineEventHandler(async (event) => {
           id: category.id,
           name: category.name,
           slug: category.slug,
+          /* La portada pinta cada categoría con su banner; sin esto
+             tendría que pedir /landing/category-grid por separado. */
+          image: category.imagenBanner || null,
           sortOrder: category.sortOrder,
           isActive: !!category.isActive,
           createdAt: category.createdAt,
@@ -121,11 +124,7 @@ export default defineEventHandler(async (event) => {
       // The frontend can decide whether to hide empty categories.
 
     return { data }
-  } catch (error: any) {
-    console.error('❌ Error en /api/categories:', error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: error.message || 'Error al cargar categorías',
-    })
+  } catch (error) {
+    handleApiError('/api/categories', error, 'Error al cargar categorías')
   }
 })

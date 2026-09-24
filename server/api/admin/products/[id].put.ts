@@ -12,6 +12,7 @@ const schema = z.object({
   subcategoryId: z.number().int().positive().optional().nullable(),
   description:   z.string().max(1000).optional().nullable(),
   price:         z.number().positive().optional(),
+  comparePrice:  z.number().positive().nullable().optional(),
   stock:         z.number().int().min(0).optional(),
   trackStock:    z.boolean().optional(),
   isFeatured:    z.boolean().optional(),

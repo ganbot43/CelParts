@@ -891,12 +891,7 @@ const timelineLogs = computed(() =>
   width: 100%;
   padding: 0.65rem 1.25rem;
   border-radius: var(--sp-radius-pill);
-  background: linear-gradient(
-    155deg,
-    var(--sp-blue-400, #378add) 0%,
-    var(--sp-primary) 55%,
-    var(--sp-primary-hover) 100%
-  );
+  background: var(--sp-action);
   color: #fff;
   font-size: var(--sp-text-sm);
   font-weight: 700;
@@ -904,7 +899,7 @@ const timelineLogs = computed(() =>
   border: none;
   cursor: pointer;
   box-shadow:
-    0 4px 16px rgba(53, 109, 255, 0.2),
+    0 2px 6px rgba(15, 45, 107, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   transition:
     transform var(--sp-t-fast) var(--sp-ease),
@@ -913,9 +908,10 @@ const timelineLogs = computed(() =>
 }
 
 .pmo-save-btn:hover:not(:disabled) {
+  background: var(--sp-action-hover);
   transform: translateY(-1px);
   box-shadow:
-    0 8px 24px rgba(53, 109, 255, 0.28),
+    0 4px 12px rgba(15, 45, 107, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 .pmo-save-btn:disabled {

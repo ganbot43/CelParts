@@ -11,12 +11,12 @@ import('dotenv/config').then(async () => {
     port: Number(process.env.DB_PORT ?? 3306),
     user: process.env.DB_USER ?? 'root',
     password: process.env.DB_PASSWORD ?? '',
-    database: process.env.DB_NAME ?? 'joymar',
+    database: process.env.DB_NAME ?? 'celparts',
   });
   
   try {
     await conn.execute('SET FOREIGN_KEY_CHECKS = 0');
-    const [tables] = await conn.execute(\"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?\", [process.env.DB_NAME ?? 'joymar']);
+    const [tables] = await conn.execute(\"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?\", [process.env.DB_NAME ?? 'celparts']);
     
     for (const table of tables) {
       console.log(\`   Dropping \${table.TABLE_NAME}...\`);

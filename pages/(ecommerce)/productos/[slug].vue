@@ -1,97 +1,83 @@
 <template>
-  <div class="pagina-detalle">
-    <!-- Breadcrumb -->
-    <div class="barra-breadcrumb">
-      <div class="contenedor">
-        <nav class="nav-breadcrumb">
-          <NuxtLink to="/productos" class="enlace-breadcrumb">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="w-3.5 h-3.5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 19.5 8.25 12l7.5-7.5"
-              />
-            </svg>
-            Productos
+  <div class="pd">
+    <div class="cp-container">
+      <!-- ═══ Migas ═══ -->
+      <nav class="pd__crumb" aria-label="Ubicación">
+        <NuxtLink to="/">Inicio</NuxtLink>
+        <span aria-hidden="true">/</span>
+        <NuxtLink to="/productos">Catálogo</NuxtLink>
+        <template v-if="producto?.category">
+          <span aria-hidden="true">/</span>
+          <NuxtLink :to="`/productos?categoria=${producto.category.slug}`">
+            {{ producto.category.name }}
           </NuxtLink>
-          <span class="separador-breadcrumb">/</span>
-          <span class="breadcrumb-actual">{{ producto?.name ?? "..." }}</span>
-        </nav>
-      </div>
-    </div>
+        </template>
+        <span aria-hidden="true">/</span>
+        <span class="pd__crumb-now">{{ producto?.name ?? "Cargando…" }}</span>
+      </nav>
 
-    <div class="contenedor py-10 lg:py-16">
-      <!-- Error -->
-      <div v-if="productLoadError && !producto" class="estado-error">
-        <div class="tarjeta-error">
-          <span class="error-pill">No pudimos cargar el producto</span>
-          <h2>La carga falló</h2>
-          <p>{{ productErrorMessage }}</p>
-          <button class="reintentar-btn" type="button" @click="retryProductFetch">
+      <!-- ═══ Error ═══ -->
+      <div v-if="loadError && !producto" class="pd__state">
+        <h1 class="pd__state-title">No pudimos cargar este producto</h1>
+        <p class="pd__state-text">{{ errorMessage }}</p>
+        <div class="pd__state-actions">
+          <button type="button" class="btn btn-primary btn-sm" @click="() => refreshProduct()">
             Reintentar
           </button>
+          <NuxtLink to="/productos" class="btn btn-outline btn-sm">Volver al catálogo</NuxtLink>
         </div>
       </div>
 
-      <!-- Loading -->
-      <div v-else-if="!producto" class="estado-cargando">
-        <div class="grilla-cargando">
-          <div class="imagen-cargando" />
-          <div class="info-cargando">
-            <div class="linea-cargando w-1/3" />
-            <div class="linea-cargando w-3/4 h-8" />
-            <div class="linea-cargando w-full" />
-            <div class="linea-cargando w-5/6" />
-            <div class="linea-cargando w-1/4 h-10 mt-4" />
-          </div>
+      <!-- ═══ Carga ═══ -->
+      <div v-else-if="!producto" class="pd__grid">
+        <div class="cp-skeleton pd__sk-media" />
+        <div class="pd__sk-info">
+          <div class="cp-skeleton pd__sk-line" style="width: 30%" />
+          <div class="cp-skeleton pd__sk-line" style="width: 78%; height: 30px" />
+          <div class="cp-skeleton pd__sk-line" style="width: 42%; height: 38px" />
+          <div class="cp-skeleton pd__sk-line" style="width: 100%; height: 48px" />
+          <div class="cp-skeleton pd__sk-line" style="width: 92%" />
+          <div class="cp-skeleton pd__sk-line" style="width: 70%" />
         </div>
       </div>
 
-      <!-- Product detail -->
-      <div v-else class="grilla-producto">
-        <!-- Galería -->
+      <!-- ═══ Ficha ═══ -->
+      <div v-else class="pd__grid">
         <EcommerceGaleriaProducto :producto="producto" />
 
-        <!-- Información del producto -->
         <EcommerceInfoProducto
           :producto="producto"
           :estoy-agregando="estoyAgregando"
           @agregar-al-carrito="manejarAgregarAlCarrito"
         />
       </div>
-
-      <!-- Productos similares -->
-      <EcommerceSeccionProductosSimilares
-        class="mt-10"
-        :productos="productoresSimilares"
-        subtitulo="Descubre más"
-        titulo="También te puede interesar"
-        @agregar-al-carrito="manejarAgregarProductoSimilar"
-      />
     </div>
+
+    <!-- ═══ Relacionados ═══
+         Misma fila que la portada: el usuario ya sabe cómo se lee. -->
+    <LandingFilaProductos
+      v-if="similares.length"
+      class="pd__similar"
+      eyebrow="Del mismo tipo"
+      title="También te puede interesar"
+      layout="rail"
+      :limit="12"
+      :products="similares"
+      href="/productos"
+      link-label="Ver catálogo"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "landing" });
+import type { DisplayProduct } from "~/composables/useProductDisplay";
 
-useSeoMeta({
-  title: "Producto — Celparts SAC",
-  description: "Detalle del producto.",
-});
+definePageMeta({ layout: "default" });
 
 const route = useRoute();
 const cartStore = useCartStore();
 const toast = useAppToast();
 
-const producto = computed<any>(() => productData.value ?? null);
 const estoyAgregando = ref(false);
 
 async function fetchWithTimeout<T>(
@@ -103,12 +89,9 @@ async function fetchWithTimeout<T>(
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    return (await $fetch<T>(url, {
-      ...options,
-      signal: controller.signal,
-    })) as T;
+    return (await $fetch<T>(url, { ...options, signal: controller.signal })) as T;
   } catch (error: any) {
-    if (error?.name === 'AbortError') {
+    if (error?.name === "AbortError") {
       throw new Error(`La solicitud superó los ${Math.round(timeoutMs / 1000)}s`);
     }
     throw error;
@@ -117,267 +100,228 @@ async function fetchWithTimeout<T>(
   }
 }
 
-const { data: productData, error: productLoadError, refresh: refreshProduct } = await useAsyncData<any>(
-  `producto-${String(route.params.slug)}`,
-  async () => {
-    return await fetchWithTimeout<any>(
-      `/api/products/${String(route.params.slug)}`,
-      {},
-      12000,
-    );
-  },
-  {
-    server: false,
-    lazy: true,
-  },
+const slug = computed(() => String(route.params.slug));
+
+const {
+  data: productData,
+  error: loadError,
+  refresh: refreshProduct,
+} = await useAsyncData<any>(
+  () => `producto-${slug.value}`,
+  () => fetchWithTimeout<any>(`/api/products/${slug.value}`, {}, 12000),
+  { lazy: true, watch: [slug] },
 );
 
-const productErrorMessage = computed(() =>
-  productLoadError.value?.message ?? 'No pudimos cargar el producto.',
+const producto = computed<any>(() => productData.value ?? null);
+
+const errorMessage = computed(
+  () => loadError.value?.message ?? "No pudimos cargar el producto.",
 );
 
-const retryProductFetch = async () => {
-  await refreshProduct();
-};
-
-const { data: datosSimilares } = await useAsyncData<{
-  data: any[];
-}>(
-  `productos-similares-${String(route.params.slug)}`,
+const { data: similaresData } = await useAsyncData<{ data: DisplayProduct[] }>(
+  () => `similares-${slug.value}`,
   async () => {
-    if (!producto.value?.id) {
-      return { data: [] };
-    }
-
-    return await fetchWithTimeout<{ data: any[] }>(
+    if (!producto.value?.id) return { data: [] };
+    return await fetchWithTimeout<{ data: DisplayProduct[] }>(
       `/api/products/similar?productId=${producto.value.id}`,
       {},
       12000,
     );
   },
-  {
-    server: false,
-    lazy: true,
-    watch: [() => producto.value?.id],
-  },
+  { server: false, lazy: true, watch: [() => producto.value?.id] },
 );
 
-const productoresSimilares = computed(() => datosSimilares.value?.data ?? []);
+const similares = computed(() => similaresData.value?.data ?? []);
+
+/* ── SEO ──
+   Cada ficha necesita su propio título y descripción: antes todas
+   compartían "Producto — CelParts", compitiendo entre sí. */
+const runtimeConfig = useRuntimeConfig();
+const siteUrl = String(runtimeConfig.public.siteUrl || "https://celparts.pe").replace(/\/$/, "");
+
+const seoDescription = computed(
+  () =>
+    producto.value?.description?.slice(0, 160) ||
+    "Repuestos y accesorios para celulares con garantía en Perú.",
+);
+
+const seoImage = computed(() => {
+  const imgs = producto.value?.images ?? [];
+  return imgs.find((i: any) => i.isPrimary)?.url ?? imgs[0]?.url ?? `${siteUrl}/images/logo.png`;
+});
+
+useSeoMeta({
+  title: () => (producto.value?.name ? `${producto.value.name} — CelParts` : "Producto — CelParts"),
+  description: seoDescription,
+  ogTitle: () => (producto.value?.name ? `${producto.value.name} — CelParts` : "Producto — CelParts"),
+  ogDescription: seoDescription,
+  ogType: "website",
+  ogImage: seoImage,
+  twitterCard: "summary_large_image",
+  twitterImage: seoImage,
+});
+
+/* Datos estructurados de producto: es lo que permite que el precio y
+   la disponibilidad aparezcan en el resultado de búsqueda. */
+useHead(() => ({
+  script: producto.value
+    ? [
+        {
+          type: "application/ld+json",
+          innerHTML: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: producto.value.name,
+            description: seoDescription.value,
+            image: seoImage.value,
+            sku: producto.value.slug,
+            category: producto.value.category?.name,
+            offers: {
+              "@type": "Offer",
+              url: `${siteUrl}/productos/${producto.value.slug}`,
+              priceCurrency: "PEN",
+              price: Number(producto.value.price ?? 0).toFixed(2),
+              availability:
+                producto.value.trackStock === false || (producto.value.stock ?? 0) > 0
+                  ? "https://schema.org/InStock"
+                  : "https://schema.org/OutOfStock",
+            },
+          }),
+        },
+      ]
+    : [],
+}));
 
 async function manejarAgregarAlCarrito(cantidad: number) {
+  if (!producto.value) return;
   estoyAgregando.value = true;
+
+  const images = producto.value.images ?? [];
+  const image = images.find((i: any) => i.isPrimary)?.url ?? images[0]?.url ?? undefined;
+
   cartStore.add({
     id: producto.value.id,
     name: producto.value.name,
     price: producto.value.price,
+    originalPrice:
+      Number(producto.value.comparePrice ?? 0) > Number(producto.value.price)
+        ? Number(producto.value.comparePrice)
+        : undefined,
     quantity: cantidad,
-    image: producto.value.images?.length
-      ? (producto.value.images.find((i: any) => i.isPrimary)?.url ??
-        producto.value.images[0].url)
-      : null,
+    image,
+    stock: producto.value.trackStock === false ? undefined : producto.value.stock,
   });
-  toast.add({
-    title: 'Agregado al carrito',
-    description: producto.value.name,
-    color: 'success',
-  });
-  await new Promise((r) => setTimeout(r, 450));
-  estoyAgregando.value = false;
-}
 
-async function manejarAgregarProductoSimilar(productoSimilar: any) {
-  cartStore.add({
-    id: productoSimilar.id,
-    name: productoSimilar.name,
-    price: productoSimilar.price,
-    quantity: 1,
-    image: productoSimilar.images?.length
-      ? (productoSimilar.images.find((i: any) => i.isPrimary)?.url ??
-        productoSimilar.images[0].url)
-      : null,
-  });
   toast.add({
-    title: 'Agregado al carrito',
-    description: productoSimilar.name,
-    color: 'success',
+    title: "Agregado al carrito",
+    description: `${producto.value.name}${cantidad > 1 ? ` · ${cantidad} unidades` : ""}`,
+    color: "success",
   });
+
+  await new Promise((r) => setTimeout(r, 420));
+  estoyAgregando.value = false;
 }
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   DETALLE PRODUCTO — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
-
-/* ─── Base ───────────────────────────────────────────────── */
-.pagina-detalle {
-  min-height: 100vh;
-  background: var(--bg-base);
-  padding-bottom: 4rem;
+.pd {
+  padding-block: var(--sp-6) 0;
 }
 
-.contenedor {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-@media (min-width: 640px) {
-  .contenedor {
-    padding: 0 1.5rem;
-  }
-}
-@media (min-width: 1024px) {
-  .contenedor {
-    padding: 0 2rem;
-  }
-}
-
-/* ─── Breadcrumb ─────────────────────────────────────────── */
-.barra-breadcrumb {
-  padding: 1.5rem 0 0;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-light);
-  padding-bottom: 1rem;
-}
-.nav-breadcrumb {
+/* ── Migas ── */
+.pd__crumb {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  font-size: 0.82rem;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-medium);
+  color: var(--ink-faint);
+  margin-bottom: var(--sp-6);
 }
-.enlace-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  transition: color var(--t-fast) var(--ease-smooth);
-  text-decoration: none;
+
+.pd__crumb a:hover {
+  color: var(--accent-strong);
 }
-.enlace-breadcrumb:hover {
-  color: var(--cp-electric);
-}
-.separador-breadcrumb {
-  color: var(--border-mid);
-}
-.breadcrumb-actual {
-  color: var(--text-primary);
-  font-weight: 600;
-  white-space: nowrap;
+
+.pd__crumb-now {
+  color: var(--ink-body);
+  font-weight: var(--fw-semibold);
+  max-width: 38ch;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 240px;
+  white-space: nowrap;
 }
 
-/* ─── Loading skeleton ───────────────────────────────────── */
-.estado-cargando,
-.estado-error {
-  padding: 2rem 0;
-}
-.tarjeta-error {
-  max-width: 34rem;
-  margin: 0 auto;
-  padding: var(--space-8);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-xl);
-  background: var(--bg-surface);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--card-shadow);
-}
-.error-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.35rem 0.7rem;
-  border-radius: var(--r-pill);
-  background: rgba(0, 174, 239, 0.08);
-  color: var(--cp-electric);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.tarjeta-error h2 {
-  margin: 1rem 0 0.5rem;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
-}
-.tarjeta-error p {
-  margin: 0;
-  color: var(--text-body);
-  line-height: 1.6;
-}
-.reintentar-btn {
-  margin-top: 1.5rem;
-  border: 0;
-  border-radius: var(--r-pill);
-  padding: 0.9rem 1.5rem;
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: all var(--t-fast) var(--ease-snappy);
-  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.15);
-}
-.reintentar-btn:hover {
-  background: var(--btn-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(7, 30, 82, 0.22);
-}
-.grilla-cargando {
+/* ── Ficha ──
+   Dos columnas con la galería algo más ancha: la foto es lo que se
+   inspecciona, el panel es lo que se lee. */
+.pd__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 1rem + 2.6vw, 3.5rem);
+  align-items: start;
+  padding-bottom: var(--section-y-sm);
 }
-@media (min-width: 1024px) {
-  .grilla-cargando {
-    grid-template-columns: 1fr 1fr;
-  }
+
+/* ── Esqueleto ── */
+.pd__sk-media {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
 }
-.imagen-cargando {
-  aspect-ratio: 1/1;
-  background: linear-gradient(110deg, var(--bg-alt) 8%, var(--bg-surface) 18%, var(--bg-alt) 33%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s linear infinite;
-  border-radius: var(--r-xl);
-  border: 1px solid var(--border-light);
-}
-.info-cargando {
+
+.pd__sk-info {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding-top: var(--space-2);
-}
-.linea-cargando {
-  height: 1rem;
-  border-radius: var(--r-sm);
-  background: linear-gradient(110deg, var(--bg-alt) 8%, var(--bg-surface) 18%, var(--bg-alt) 33%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s linear infinite;
-}
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  gap: var(--sp-4);
 }
 
-/* ─── Product grid ───────────────────────────────────────── */
-.grilla-producto {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
+.pd__sk-line {
+  height: 14px;
 }
-@media (min-width: 1024px) {
-  .grilla-producto {
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: start;
+
+/* ── Estados ── */
+.pd__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-16) var(--sp-5);
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  margin-bottom: var(--section-y-sm);
+}
+
+.pd__state-title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+}
+
+.pd__state-text {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  max-width: 48ch;
+}
+
+.pd__state-actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+/* ── Relacionados ── */
+.pd__similar {
+  border-top: 1px solid var(--line-soft);
+  background: var(--surface-sunken);
+}
+
+@media (max-width: 900px) {
+  .pd__grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>

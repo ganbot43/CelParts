@@ -206,8 +206,8 @@ function onKeydown(e: KeyboardEvent) {
 .orders-filter-btn--active {
   background: var(--sp-primary-soft);
   color: var(--sp-primary-ink);
-  border-color: rgba(53, 109, 255, 0.22);
-  box-shadow: 0 2px 8px rgba(53, 109, 255, 0.1);
+  border-color: rgba(0, 174, 239, 0.22);
+  box-shadow: 0 2px 8px rgba(0, 174, 239, 0.1);
 }
 
 .sp-tr--clickable {

@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
   site: {
-    url: "https://joymarperu.com",
+    url: "https://celparts.pe",
     name: "CelParts SAC",
   },
   compatibilityDate: "2024-11-01",
@@ -35,13 +35,13 @@ export default defineNuxtConfig({
     s3Region: process.env.S3_REGION,
     s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
     s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    s3RootPrefix: process.env.S3_ROOT_PREFIX ?? "joymar_utensilios",
+    s3RootPrefix: process.env.S3_ROOT_PREFIX ?? "celparts",
     public: {
       recaptchaSiteKey: process.env.G_RECAPTCHA_SITE_KEY,
       appName: process.env.NUXT_PUBLIC_APP_NAME ?? "CelParts SAC",
-      whatsapp: process.env.NUXT_PUBLIC_WHATSAPP ?? "+51996111303",
+      whatsapp: process.env.NUXT_PUBLIC_WHATSAPP ?? "+51923821520",
       companyName: process.env.NUXT_PUBLIC_COMPANY_NAME || "CelParts SAC",
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? "https://joymarperu.com",
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL ?? "https://celparts.pe",
       siteName: process.env.NUXT_PUBLIC_SITE_NAME ?? "CelParts SAC",
       watsonIntegrationId: process.env.WATSON_INTEGRATION_ID,
       watsonRegion: process.env.WATSON_REGION,
@@ -101,52 +101,52 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: "es" },
-      title: "Joymar Utensilios — Utensilios de Cocina Premium en Perú",
+      title: "CelParts | Repuestos y Accesorios para Celulares en Perú",
       meta: [
         { charset: "utf-8" },
         {
           name: "description",
           content:
-            "Joymar Utensilios: artículos de cocina de alta calidad, probados y certificados. Productos duraderos y funcionales para tu hogar. Tienda en Villa El Salvador, Lima.",
+            "CelParts: repuestos y accesorios de alta calidad para celulares en Perú. Pantallas, baterías, cases, cargadores y protectores con garantía comprobada.",
         },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { name: "author", content: "Joymar Utensilios" },
+        { name: "author", content: "CelParts" },
         { name: "theme-color", content: "#E31E24" },
         {
           name: "keywords",
           content:
-            "utensilios de cocina, menaje de hogar, ollas, sartenes, productos de cocina, artículos para el hogar, menaje, Lima, Perú",
+            "repuestos de celulares, accesorios para celulares, pantallas, baterías, cases, cargadores, protectores de pantalla, Lima, Perú",
         },
         {
           property: "og:title",
-          content: "Joymar Utensilios — Utensilios de Cocina Premium en Perú",
+          content: "CelParts | Repuestos y Accesorios para Celulares en Perú",
         },
         {
           property: "og:description",
           content:
-            "Joymar Utensilios: productos de cocina premium, probados y certificados. Menaje de hogar de alta calidad con garantía. Visita nuestro showroom en Villa El Salvador, Lima.",
+            "CelParts: repuestos y accesorios premium para celulares, seleccionados y probados. Alta calidad con garantía comprobada y al precio justo.",
         },
         { property: "og:type", content: "website" },
-        { property: "og:site_name", content: "Joymar Utensilios" },
+        { property: "og:site_name", content: "CelParts" },
         { property: "og:locale", content: "es_PE" },
         {
           property: "og:image",
-          content: "https://joymarperu.com/images/logo.png",
+          content: "https://celparts.pe/images/logo.png",
         },
-        { property: "og:image:alt", content: "Logo de Joymar Utensilios" },
+        { property: "og:image:alt", content: "Logo de CelParts" },
         { name: "twitter:card", content: "summary_large_image" },
         {
           name: "twitter:title",
-          content: "Joymar Utensilios — Utensilios de Cocina Premium en Perú",
+          content: "CelParts | Repuestos y Accesorios para Celulares en Perú",
         },
         {
           name: "twitter:description",
           content:
-            "Productos de cocina de alta calidad en Lima, Peru. Ollas, sartenes y mas para tu hogar.",
+            "Repuestos y accesorios de alta calidad para celulares en Lima, Peru. Pantallas, baterias, cases y mas.",
         },
         {
           name: "twitter:image",
-          content: "https://joymarperu.com/images/logo.png",
+          content: "https://celparts.pe/images/logo.png",
         },
         { name: "robots", content: "index, follow" },
       ],

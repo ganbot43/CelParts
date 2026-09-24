@@ -50,6 +50,27 @@
       "when": 1781829033652,
       "tag": "0006_nervous_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1790227252962,
+      "tag": "0007_fuzzy_norrin_radd",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1790227855907,
+      "tag": "0008_late_sir_ram",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1790277146585,
+      "tag": "0009_flawless_old_lace",
+      "breakpoints": true
     }
   ]
 }

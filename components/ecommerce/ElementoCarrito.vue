@@ -1,60 +1,68 @@
 <template>
-  <div class="cart-item">
-    <!-- Imagen / placeholder -->
-    <div class="item-img">
-      <img v-if="item.image && !imgError" :src="item.image" :alt="item.name" loading="lazy" @error="imgError = true" />
-      <span v-else class="img-placeholder">{{ item.emoji ?? "📦" }}</span>
+  <article class="ci">
+    <div class="ci__media">
+      <SharedImagen :src="item.image" :alt="item.name" fit="contain" />
     </div>
 
-    <!-- Info -->
-    <div class="item-info">
-      <div class="item-name" :title="item.name">{{ item.name }}</div>
-      <div v-if="item.variant" class="item-variant">{{ item.variant }}</div>
+    <div class="ci__body">
+      <div class="ci__top">
+        <p class="ci__name" :title="item.name">{{ item.name }}</p>
 
-      <!-- Price row -->
-      <div class="price-row">
-        <span class="item-price">{{ fmt(item.price) }}</span>
-        <span v-if="safeOriginal > safePrice" class="item-original">
-          {{ fmt(item.originalPrice) }}
-        </span>
-        <span v-if="discountPct > 0" class="item-discount">-{{ discountPct }}%</span>
+        <button
+          type="button"
+          class="ci__remove"
+          :aria-label="`Quitar ${item.name} del carrito`"
+          @click="$emit('remove')"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
       </div>
 
-      <!-- Controls -->
-      <div class="item-bottom">
-        <div class="qty-ctrl" role="group" aria-label="Cantidad">
-          <button class="qty-btn" aria-label="Reducir cantidad" @click="$emit('decrement')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-              stroke="currentColor" width="14" height="14">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+      <p v-if="item.variant" class="ci__variant">{{ item.variant }}</p>
+
+      <div class="ci__prices">
+        <span class="ci__unit">{{ fmt(safePrice) }} c/u</span>
+        <template v-if="discountPct > 0">
+          <span class="ci__was">{{ fmt(safeOriginal) }}</span>
+          <span class="ci__off">-{{ discountPct }}%</span>
+        </template>
+      </div>
+
+      <div class="ci__foot">
+        <div class="ci__qty" role="group" aria-label="Cantidad">
+          <button type="button" aria-label="Reducir cantidad" @click="$emit('decrement')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <path d="M5 12h14" />
             </svg>
           </button>
-          <span class="qty-num" aria-live="polite">{{ safeQty }}</span>
-          <button class="qty-btn" aria-label="Aumentar cantidad" @click="$emit('increment')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-              stroke="currentColor" width="14" height="14">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          <span aria-live="polite">{{ safeQty }}</span>
+          <button
+            type="button"
+            aria-label="Aumentar cantidad"
+            :disabled="atMax"
+            @click="$emit('increment')"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <path d="M12 5v14M5 12h14" />
             </svg>
           </button>
         </div>
 
-        <div class="item-subtotal">{{ fmt(safePrice * safeQty) }}</div>
-
-        <button class="del-btn" aria-label="Eliminar producto" @click="$emit('remove')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-            width="15" height="15">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-          </svg>
-        </button>
+        <span class="ci__subtotal">{{ fmt(safePrice * safeQty) }}</span>
       </div>
+
+      <!-- Aviso de tope: sin esto el botón "+" simplemente deja de
+           responder y parece que la página se rompió. -->
+      <p v-if="atMax && safeStock > 0" class="ci__limit">
+        Es todo el stock disponible.
+      </p>
     </div>
-  </div>
+  </article>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-
 interface CartItemType {
   id: number | string;
   name: string;
@@ -69,27 +77,27 @@ interface CartItemType {
 
 const props = defineProps<{ item: CartItemType }>();
 
-defineEmits<{
-  increment: [];
-  decrement: [];
-  remove: [];
-}>();
+defineEmits<{ increment: []; decrement: []; remove: [] }>();
 
-const imgError = ref(false);
+/* Helpers para nunca tener NaN en el template: los valores vienen de
+   localStorage y pueden llegar como cadenas. */
+const toNumber = (value: unknown) => {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+};
 
-// Helpers para nunca tener NaN en el template
-const safePrice = computed(() => {
-  const n = Number(props.item.price);
-  return Number.isFinite(n) ? n : 0;
-});
-const safeOriginal = computed(() => {
-  const n = Number(props.item.originalPrice);
-  return Number.isFinite(n) ? n : 0;
-});
+const safePrice = computed(() => toNumber(props.item.price));
+const safeOriginal = computed(() => toNumber(props.item.originalPrice));
+const safeStock = computed(() => toNumber(props.item.stock));
+
 const safeQty = computed(() => {
-  const n = Number(props.item.qty);
-  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 1;
+  const n = toNumber(props.item.qty);
+  return n > 0 ? Math.floor(n) : 1;
 });
+
+/* Mismo tope que aplica el store al incrementar (99 sin control de
+   inventario): el botón se desactiva en lugar de no hacer nada. */
+const atMax = computed(() => safeQty.value >= (safeStock.value || 99));
 
 const discountPct = computed(() => {
   if (!safeOriginal.value || safeOriginal.value <= safePrice.value) return 0;
@@ -108,189 +116,182 @@ function fmt(amount: unknown): string {
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   ELEMENTO CARRITO — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
-.cart-item {
-  display: flex;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border-radius: var(--r-md);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition:
-    border-color var(--t-fast) var(--ease-smooth),
-    background var(--t-fast) var(--ease-smooth),
-    box-shadow var(--t-fast) var(--ease-smooth);
-  box-shadow: var(--card-shadow-sm);
+.ci {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  transition: border-color var(--t-base) var(--ease-smooth);
 }
 
-.cart-item:hover {
-  border-color: rgba(0, 174, 239, 0.2);
-  background: var(--bg-alt);
-  box-shadow: 0 10px 30px rgba(7, 30, 82, 0.08);
+.ci:hover {
+  border-color: var(--line);
 }
 
-/* ── Image ───────────────────────────────── */
-.item-img {
+.ci__media {
   width: 72px;
   height: 72px;
-  border-radius: var(--r-sm);
-  border: 1px solid var(--border-light);
-  background: var(--bg-alt);
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-xs);
+  background: var(--surface-media);
+  overflow: hidden;
 }
 
-.item-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.ci__media :deep(img) {
+  padding: 4px;
 }
 
-.img-placeholder {
-  font-size: 28px;
-  line-height: 1;
-}
-
-/* ── Info ────────────────────────────────── */
-.item-info {
-  flex: 1;
+.ci__body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
   min-width: 0;
 }
 
-.item-name {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.item-variant {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* ── Price ───────────────────────────────── */
-.price-row {
+.ci__top {
   display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+
+.ci__name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  line-height: var(--leading-snug);
+  color: var(--ink-strong);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ci__remove {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 6px;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--ink-faint);
+  transition:
+    color var(--t-fast) var(--ease-smooth),
+    background var(--t-fast) var(--ease-smooth);
 }
 
-.item-price {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--cp-navy);
+.ci__remove svg {
+  width: 13px;
+  height: 13px;
 }
 
-.item-original {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+.ci__remove:hover {
+  color: var(--cp-danger);
+  background: var(--cp-error-bg);
+}
+
+.ci__variant {
+  font-size: var(--fs-2xs);
+  color: var(--ink-muted);
+}
+
+.ci__prices {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.ci__unit {
+  font-size: var(--fs-2xs);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ci__was {
+  font-size: var(--fs-2xs);
+  color: var(--ink-faint);
   text-decoration: line-through;
 }
 
-.item-discount {
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: var(--cp-navy);
-  background: rgba(0, 174, 239, 0.12);
-  border: 1px solid rgba(0, 174, 239, 0.22);
-  padding: 1px 6px;
-  border-radius: var(--r-sm);
+.ci__off {
+  font-size: 0.625rem;
+  font-weight: var(--fw-black);
+  color: var(--cp-success);
 }
 
-/* ── Bottom row ──────────────────────────── */
-.item-bottom {
+.ci__foot {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 8px;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
 }
 
-/* ── Qty control ─────────────────────────── */
-.qty-ctrl {
-  display: flex;
+.ci__qty {
+  display: inline-flex;
   align-items: center;
-  gap: 2px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-sm);
-  padding: 2px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
 }
 
-.qty-btn {
-  width: 26px;
-  height: 26px;
-  border: none;
-  border-radius: var(--r-sm);
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  transition: all var(--t-fast) var(--ease-smooth);
-}
-
-.qty-btn:hover {
-  background: var(--bg-alt);
-  color: var(--cp-electric);
-  box-shadow: 0 1px 4px rgba(0, 174, 239, 0.15);
-}
-
-.qty-num {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  min-width: 22px;
-  text-align: center;
-}
-
-/* ── Subtotal ────────────────────────────── */
-.item-subtotal {
-  flex: 1;
-  text-align: right;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-/* ── Delete ──────────────────────────────── */
-.del-btn {
+.ci__qty button {
   width: 28px;
   height: 28px;
-  border: none;
-  border-radius: var(--r-sm);
-  background: transparent;
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
-  transition: all var(--t-fast) var(--ease-smooth);
-  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-strong);
+  transition: background var(--t-fast) var(--ease-smooth);
 }
 
-.del-btn:hover {
-  background: rgba(220, 38, 38, 0.1);
-  color: #dc2626;
-  /* Color de alerta rojo */
+.ci__qty button svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ci__qty button:hover:not(:disabled) {
+  background: var(--surface-inset);
+}
+
+.ci__qty button:disabled {
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+.ci__qty span {
+  min-width: 28px;
+  text-align: center;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.ci__subtotal {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.ci__limit {
+  margin-top: 4px;
+  font-size: 0.625rem;
+  font-weight: var(--fw-semibold);
+  color: var(--cp-warning);
 }
 </style>

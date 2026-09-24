@@ -1,361 +1,374 @@
 <template>
-  <div class="summary-card">
-    <!-- Header -->
-    <div class="summary-header">
-      <div class="summary-icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.8"
-          stroke="currentColor"
-          class="w-4 h-4"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185Z"
-          />
-        </svg>
-      </div>
-      <h3 class="summary-title">Resumen del pedido</h3>
-    </div>
+  <aside class="rc">
+    <header class="rc__head">
+      <h2 class="rc__title">Tu pedido</h2>
+      <span class="rc__count">
+        {{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? "artículo" : "artículos" }}
+      </span>
+    </header>
 
-    <!-- Items -->
-    <div class="summary-items">
-      <div v-for="item in cartStore.items" :key="item.id" class="summary-item">
-        <div class="item-left">
-          <!-- Thumbnail -->
-          <div class="item-thumb">
-            <img
-              v-if="item.image"
-              :src="item.image"
-              :alt="item.name"
-              class="item-thumb-img"
-            />
-            <svg
-              v-else
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1"
-              stroke="currentColor"
-              class="w-4 h-4 text-gray-300"
+    <!-- ── Artículos ──
+         Editables aquí mismo: descubrir en el último paso que pediste
+         dos en vez de uno y tener que volver al catálogo pierde ventas. -->
+    <ul class="rc__items">
+      <li v-for="item in cartStore.items" :key="item.id" class="rc__item">
+        <span class="rc__thumb">
+          <SharedImagen :src="item.image" :alt="item.name" fit="contain" />
+        </span>
+
+        <span class="rc__info">
+          <span class="rc__name" :title="item.name">{{ item.name }}</span>
+
+          <span v-if="editable" class="rc__qty" role="group" aria-label="Cantidad">
+            <button
+              type="button"
+              :aria-label="`Quitar una unidad de ${item.name}`"
+              @click="cartStore.decrement(item.id)"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-              />
-            </svg>
-          </div>
-          <div class="item-info">
-            <p class="item-name">{{ item.name }}</p>
-            <p class="item-qty">× {{ item.qty }}</p>
-          </div>
-        </div>
-        <span class="item-price">{{
-          formatPrice.format(item.price * (item.qty ?? 0))
-        }}</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                <path d="M5 12h14" />
+              </svg>
+            </button>
+            <span>{{ item.qty }}</span>
+            <button
+              type="button"
+              :aria-label="`Agregar una unidad de ${item.name}`"
+              :disabled="atMax(item)"
+              @click="cartStore.increment(item.id)"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </button>
+          </span>
+
+          <span v-else class="rc__qty-static">× {{ item.qty }}</span>
+        </span>
+
+        <span class="rc__line">
+          <span class="rc__line-total">{{ formatPrice.format(lineTotal(item)) }}</span>
+          <button
+            v-if="editable"
+            type="button"
+            class="rc__drop"
+            :aria-label="`Quitar ${item.name} del pedido`"
+            @click="cartStore.remove(item.id)"
+          >
+            Quitar
+          </button>
+        </span>
+      </li>
+    </ul>
+
+    <!-- ── Totales ── -->
+    <dl class="rc__totals">
+      <div>
+        <dt>Subtotal</dt>
+        <dd>{{ formatPrice.format(cartStore.subtotal) }}</dd>
       </div>
+
+      <div v-if="cartStore.discount > 0" class="rc__totals-save">
+        <dt>Descuento</dt>
+        <dd>− {{ formatPrice.format(cartStore.discount) }}</dd>
+      </div>
+
+      <div class="rc__totals-shipping">
+        <dt>Envío</dt>
+        <dd>Por coordinar</dd>
+      </div>
+    </dl>
+
+    <div class="rc__grand">
+      <span>Total</span>
+      <strong>{{ formatPrice.format(cartStore.total) }}</strong>
     </div>
 
-    <!-- Divider -->
-    <div class="summary-divider" />
+    <p class="rc__note">
+      Precios en soles con IGV incluido. El costo de envío se coordina contigo
+      tras confirmar el pedido.
+    </p>
 
-    <!-- Subtotal + Total -->
-    <div class="summary-totals">
-      <div class="total-row">
-        <span class="total-row-label">Subtotal</span>
-        <span class="total-row-val">{{
-          formatPrice.format(cartStore.total)
-        }}</span>
-      </div>
-      <!-- <div class="total-row">
-        <span class="total-row-label">Envío</span>
-        <span class="shipping-free">Por coordinar</span>
-      </div> -->
-    </div>
-
-    <!-- Grand total -->
-    <div class="grand-total">
-      <span class="grand-label">Total</span>
-      <span class="grand-val">{{ formatPrice.format(cartStore.total) }}</span>
-    </div>
-
-    <!-- Trust badges -->
-    <!-- <div class="trust-strip">
-      <div class="trust-item">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-3.5 h-3.5"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
-          />
-        </svg>
-        Pago seguro
-      </div>
-      <div class="trust-sep" />
-      <div class="trust-item">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-3.5 h-3.5"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-          />
-        </svg>
-        Datos protegidos
-      </div>
-    </div> -->
-  </div>
+    <!-- El botón de confirmar lo pone el checkout; el carrito lateral no
+         necesita ninguno aquí. -->
+    <slot name="acciones" />
+  </aside>
 </template>
 
 <script setup lang="ts">
+import type { CartItem } from "~/stores/cart";
+
+withDefaults(defineProps<{ editable?: boolean }>(), { editable: true });
+
 const cartStore = useCartStore();
 const formatPrice = useFormatPrice();
+
+const toNumber = (value: unknown) => {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+};
+
+const lineTotal = (item: CartItem) => toNumber(item.price) * toNumber(item.qty);
+
+/* Mismo tope que aplica el store al incrementar: el botón se desactiva
+   en lugar de dejar de responder sin explicación. */
+const atMax = (item: CartItem) =>
+  toNumber(item.qty) >= (toNumber(item.stock) || 99);
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   RESUMEN CARRITO — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
-
-/* ─── Card ───────────────────────────────────────────────── */
-.summary-card {
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  position: sticky;
-  top: 5.5rem;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--card-shadow);
-}
-
-/* ─── Header ─────────────────────────────────────────────── */
-.summary-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--border-light);
-  position: relative;
-}
-
-.summary-header::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--line-brand) 30%, var(--line-brand) 70%, transparent);
-}
-
-.summary-icon {
-  width: 32px;
-  height: 32px;
-  background: rgba(0, 174, 239, 0.06);
-  border: 1px solid rgba(0, 174, 239, 0.15);
-  border-radius: var(--r-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cp-electric);
-  flex-shrink: 0;
-}
-
-.summary-title {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
-}
-
-/* ─── Items ──────────────────────────────────────────────── */
-.summary-items {
-  padding: var(--space-4) var(--space-4);
+.rc {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  max-height: 260px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 174, 239, 0.2) transparent;
-}
-.summary-items::-webkit-scrollbar {
-  width: 3px;
-}
-.summary-items::-webkit-scrollbar-thumb {
-  background: rgba(0, 174, 239, 0.2);
-  border-radius: var(--r-pill);
+  padding: var(--sp-5);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
 }
 
-.summary-item {
+/* ── Cabecera ── */
+.rc__head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-3);
-}
-.item-left {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-width: 0;
-  flex: 1;
-}
-.item-thumb {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--r-sm);
-  background: var(--bg-alt);
-  border: 1px solid var(--border-light);
-  overflow: hidden;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
 }
 
-.item-thumb-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.item-info {
-  min-width: 0;
-}
-.item-name {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.rc__title {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
 }
 
-.item-qty {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin-top: 0.1rem;
-}
-.item-price {
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--cp-navy);
-  flex-shrink: 0;
-}
-
-/* ─── Divider ────────────────────────────────────────────── */
-.summary-divider {
-  height: 1px;
-  background: var(--border-light);
-  margin: 0 var(--space-4);
-}
-
-/* ─── Totals ─────────────────────────────────────────────── */
-.summary-totals {
-  padding: var(--space-3) var(--space-4) 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.82rem;
-}
-.total-row-label {
-  color: var(--text-muted);
-  font-weight: 600;
-}
-.total-row-val {
-  font-weight: 700;
-  color: var(--text-body);
-}
-
-.shipping-free {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-/* ─── Grand total ────────────────────────────────────────── */
-.grand-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-4);
-  margin: var(--space-3) var(--space-4) var(--space-4);
-  background: var(--bg-alt);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-md);
-}
-
-.grand-label {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: 0.06em;
+.rc__count {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
+  color: var(--ink-faint);
 }
 
-.grand-val {
-  font-family: var(--font-display);
+/* ── Artículos ── */
+.rc__items {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* Con quince piezas la columna se haría más alta que la pantalla y el
+     total quedaría fuera de vista. */
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.rc__item {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  gap: var(--sp-3);
+  align-items: center;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.rc__thumb {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-xs);
+  background: var(--surface-media);
+  overflow: hidden;
+}
+
+.rc__thumb :deep(img) {
+  padding: 3px;
+}
+
+.rc__info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.rc__name {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  line-height: var(--leading-snug);
+  color: var(--ink-strong);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rc__qty {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+}
+
+.rc__qty button {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: var(--ink-strong);
+  transition: background var(--t-fast) var(--ease-smooth);
+}
+
+.rc__qty button svg {
+  width: 11px;
+  height: 11px;
+}
+
+.rc__qty button:hover:not(:disabled) {
+  background: var(--surface-inset);
+}
+
+.rc__qty button:disabled {
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+.rc__qty > span {
+  min-width: 26px;
+  text-align: center;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.rc__qty-static {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.rc__line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.rc__line-total {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.rc__drop {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+  color: var(--ink-faint);
+  transition: color var(--t-fast) var(--ease-smooth);
+}
+
+.rc__drop:hover {
+  color: var(--cp-danger);
+}
+
+/* ── Totales ── */
+.rc__totals {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: var(--sp-4) 0;
+}
+
+.rc__totals > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.rc__totals dt {
+  font-size: var(--fs-xs);
+  color: var(--ink-muted);
+}
+
+.rc__totals dd {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.rc__totals-save dd {
+  color: var(--cp-success);
+}
+
+.rc__totals-shipping dd {
+  font-weight: var(--fw-medium);
+  color: var(--ink-muted);
+}
+
+.rc__grand {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line);
+}
+
+.rc__grand span {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+}
+
+.rc__grand strong {
   font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--cp-navy);
-  letter-spacing: -0.03em;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
-/* ─── Trust strip ────────────────────────────────────────── */
-.trust-strip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4) var(--space-4);
-  border-top: 1px solid var(--border-light);
+.rc__note {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-2xs);
+  line-height: var(--leading-normal);
+  color: var(--ink-faint);
 }
 
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-.trust-item svg {
-  color: var(--cp-electric);
-  opacity: 0.65;
-}
-.trust-sep {
-  width: 1px;
-  height: 14px;
-  background: var(--border-light);
+@media (max-width: 520px) {
+  .rc {
+    padding: var(--sp-4);
+  }
+
+  .rc__item {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+  }
+
+  .rc__thumb {
+    width: 44px;
+    height: 44px;
+  }
 }
 </style>
-
-

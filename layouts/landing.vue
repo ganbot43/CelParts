@@ -1,25 +1,36 @@
 <template>
-  <div>
+  <div class="cp-shell">
     <LandingEncabezado />
-    <!-- <LandingAppNavbar /> -->
 
-    <!-- Global cart drawer for landing layout -->
-    <ClientOnly>
-      <EcommerceCarritoDrawer />
-      <!-- WhatsApp button (behind cart if open) -->
-      <!-- <LandingBotonWhatsapp /> -->
-      <!-- <LandingWaIcon /> -->
-    </ClientOnly>
-    <main>
+    <main class="cp-shell__main">
       <slot />
     </main>
+
+    <LandingPie />
+
     <ClientOnly>
-      <LandingPie />
+      <EcommerceCarritoDrawer />
+      <LandingWaFloat />
     </ClientOnly>
   </div>
 </template>
 
 <script setup lang="ts">
-// Layout para la landing corporativa — usa Header y Footer de la landing
+/* Portada y páginas de contenido. Comparte shell con la zona de compra:
+   cruzar de / a /productos no debe sentirse como entrar a otra web.
+   La diferencia con `default` es solo de intención semántica. */
 import "~/assets/css/main.css";
 </script>
+
+<style scoped>
+.cp-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-page);
+}
+
+.cp-shell__main {
+  flex: 1;
+}
+</style>

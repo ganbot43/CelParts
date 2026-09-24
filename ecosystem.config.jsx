@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "joymarperu-app",
+      name: "celparts-app",
       script: ".output/server/index.mjs",
       cwd: __dirname,
       instances: 1,

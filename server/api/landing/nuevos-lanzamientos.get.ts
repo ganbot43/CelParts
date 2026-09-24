@@ -30,17 +30,20 @@ export default defineEventHandler(async (event) => {
         name: product.name,
         slug: product.slug,
         price: product.price,
+        comparePrice: product.comparePrice ?? null,
         category: product.category,
+        subcategory: product.subcategory,
         images: product.images || [],
+        /* La tarjeta decide "En stock" / "Agotado" con estos dos campos.
+           Sin ellos interpretaba stock = 0 y marcaba todo sin stock. */
+        stock: product.stock,
+        trackStock: product.trackStock === 1,
         isFeatured: product.isFeatured === 1,
+        nuevoLanzamiento: product.nuevoLanzamiento === 1,
       })),
       total: totalResult[0]?.count ?? data.length,
     }
-  } catch (error: any) {
-    console.error('❌ Error en /api/landing/nuevos-lanzamientos:', error.message || error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: error.message || 'Error al cargar nuevos lanzamientos',
-    })
+  } catch (error) {
+    handleApiError('/api/landing/nuevos-lanzamientos', error, 'Error al cargar nuevos lanzamientos')
   }
 })

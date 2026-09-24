@@ -164,7 +164,7 @@ async function exportPdf(type: 'orders' | 'products') {
       head,
       body,
       theme: 'grid',
-      headStyles: { fillColor: [53, 109, 255] },
+      headStyles: { fillColor: [0, 174, 239] },
       styles: { fontSize: 9 }
     });
 

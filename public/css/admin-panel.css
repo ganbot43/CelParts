@@ -1,5 +1,5 @@
 /* Copia ligera de assets/css/admin-panel.css — inyectada dinámicamente para admin layout */
-:root{--sp-bg:#f2f6fb;--sp-surface:#fff;--sp-primary:#356dff}
+:root{--sp-bg:#f2f6fb;--sp-surface:#fff;--sp-primary:#00aeef}
 .smart-panel-admin{font-family:Nunito Sans,Segoe UI,system-ui,sans-serif}
 .smart-panel-admin .admin-shell__sidebar{background:#15202e}
 /* Scrollbar admin */

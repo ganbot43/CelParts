@@ -21,67 +21,85 @@ defineProps<{
 </template>
 
 <style scoped>
+/* Alineado con los botones del sistema (assets/css/main.css §6):
+   acción primaria en navy, sin halos de color ni levitación. El cyan
+   sólido con texto blanco daba 2.5:1 de contraste —ilegible— y el
+   resplandor lo hacía parecer fluorescente sobre fondo claro. */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
-  font-size: .92rem;
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tracking-tight);
   border-radius: var(--radius-sm);
-  padding: .7rem 1.4rem;
+  padding: 0 var(--sp-6);
+  height: 44px;
   cursor: pointer;
-  border: none;
-  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+  border: 1px solid transparent;
   white-space: nowrap;
   text-decoration: none;
+  transition:
+    background var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    color var(--t-base) var(--ease-smooth);
 }
 
 .btn-primary {
-  background: var(--cp-electric);
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 174, 239, 0.2);
+  background: var(--action-bg);
+  color: var(--action-ink);
 }
+
 .btn-primary:hover {
-  background: #0099e6;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0, 174, 239, 0.35);
+  background: var(--action-bg-hover);
+  color: var(--action-ink);
 }
 
 .btn-outline {
-  background: transparent;
-  color: var(--cp-electric);
-  border: 2px solid var(--cp-electric);
+  background: var(--surface-raised);
+  color: var(--ink-strong);
+  border-color: var(--line);
 }
+
 .btn-outline:hover {
-  background: var(--cp-electric);
-  color: #ffffff;
-  transform: translateY(-2px);
+  background: var(--surface-inset);
+  border-color: var(--line-strong);
+  color: var(--ink-strong);
 }
 
 .btn-wa {
-  background: #25D366;
+  background: #25d366;
   color: #fff;
-  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.20);
-}
-.btn-wa:hover {
-  background: #1ebe59;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(37, 211, 102, .3);
 }
 
+.btn-wa:hover {
+  background: #1fb855;
+  color: #fff;
+}
+
+/* Sobre banda oscura: el blanco es lo que destaca */
 .btn-accent {
   background: #ffffff;
-  color: var(--cp-navy);
-  font-weight: 700;
-  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
-}
-.btn-accent:hover {
-  background: var(--cp-ice);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+  color: var(--cp-navy-900);
+  font-weight: var(--fw-bold);
 }
 
-.btn-sm { padding: .45rem .85rem; font-size: .82rem; }
-.btn-lg { padding: .85rem 1.8rem; font-size: 1rem; border-radius: 10px; }
+.btn-accent:hover {
+  background: var(--cp-cyan-50);
+  color: var(--cp-navy-900);
+}
+
+.btn-sm {
+  height: 36px;
+  padding: 0 var(--sp-4);
+  font-size: var(--fs-xs);
+}
+
+.btn-lg {
+  height: 52px;
+  padding: 0 var(--sp-8);
+  font-size: var(--fs-body);
+}
 </style>

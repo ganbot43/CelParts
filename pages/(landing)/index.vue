@@ -1,136 +1,165 @@
 <template>
-  <div class="bg-(--k-bg) text-(--k-text)">
-    <!-- HERO -->
-    <LandingHeroSection />
+  <div class="home">
+    <!-- 1 · Portada — carrusel de banners + dos accesos fijos -->
+    <LandingHeroCarousel />
 
-    <!-- BENEFICIOS / CONFIANZA -->
-    <LandingBenefitsSection />
+    <!-- 2 · Promesas de servicio, en banda fina -->
+    <LandingBarraConfianza />
 
-    <!-- LANZAMIENTOS -->
-    <LandingCatalogNuevosLanzamientos />
+    <!-- 3 · Categorías: la entrada real al catálogo -->
+    <LandingCategoriasDestacadas />
 
-    <!-- DESTACADOS -->
-    <LandingFeaturedSection />
+    <!-- 4 · Destacados en rejilla -->
+    <LandingFilaProductos
+      section-id="destacados"
+      eyebrow="Selección de la tienda"
+      title="Lo más pedido"
+      subtitle="Las piezas que más salen del almacén, con stock confirmado."
+      layout="grid"
+      :limit="8"
+      :products="destacados"
+      :loading="pendingDestacados"
+      href="/productos"
+      link-label="Ver catálogo"
+      show-empty
+    />
 
-    <!-- CATEGORÍAS -->
-    <LandingCategoryGrid sectionId="1" />
-    <LandingCategoryGrid sectionId="2" />
+    <!-- 5 · Corte visual: dos mensajes -->
+    <LandingBannerPromo variant="split" />
 
-    <!-- SOBRE NOSOTROS -->
+    <!-- 6 · Novedades en carril -->
+    <LandingFilaProductos
+      section-id="nuevos-lanzamientos"
+      eyebrow="Recién llegado"
+      title="Últimos ingresos"
+      subtitle="Lo que entró esta semana al almacén."
+      layout="rail"
+      :limit="12"
+      :products="novedades"
+      :loading="pendingNovedades"
+      href="/productos?nuevoLanzamiento=1"
+      link-label="Ver novedades"
+    />
+
+    <!-- 7 · Banda de marca a todo el ancho -->
+    <LandingBannerPromo variant="wide" />
+
+    <!-- 8 · Quiénes somos -->
     <LandingAboutSection />
 
-    <!-- GALERÍA -->
-    <LandingGallerySection />
-
-    <!-- UBICACIÓN -->
-    <!--<LandingLocationSection />-->
-
-    <!-- CONTACTO -->
+    <!-- 9 · Contacto -->
     <LandingContactSection />
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: "landing",
+import type { DisplayProduct } from "~/composables/useProductDisplay";
+
+definePageMeta({ layout: "landing" });
+
+/* =========================================
+   DATOS
+   Las dos filas se piden en paralelo y en diferido: la portada pinta
+   el carrusel y las categorías sin esperar al catálogo.
+========================================= */
+
+const { data: destacadosData, pending: pendingDestacados } = await useFetch<{
+  data: DisplayProduct[];
+}>("/api/landing/featured-products", {
+  query: { type: "bestsellers", limit: 8 },
+  key: "home-destacados",
+  default: () => ({ data: [] }),
+  lazy: true,
 });
+
+const { data: novedadesData, pending: pendingNovedades } = await useFetch<{
+  data: DisplayProduct[];
+}>("/api/landing/nuevos-lanzamientos", {
+  query: { limit: 12 },
+  key: "home-novedades",
+  default: () => ({ data: [] }),
+  lazy: true,
+});
+
+const destacados = computed(() => destacadosData.value?.data ?? []);
+const novedades = computed(() => novedadesData.value?.data ?? []);
 
 /* =========================================
    SEO
 ========================================= */
 
+const runtimeConfig = useRuntimeConfig();
+const siteUrl = String(runtimeConfig.public.siteUrl || "https://celparts.pe").replace(/\/$/, "");
+const siteName = String(runtimeConfig.public.siteName || "CelParts SAC");
+const logoUrl = `${siteUrl}/images/logo.png`;
+
+const title = "CelParts | Repuestos y Accesorios para Celulares en Perú";
+const description =
+  "Repuestos y accesorios de alta calidad para celulares en Perú: pantallas, baterías, flex, conectores y accesorios con garantía y envíos a todo el país.";
+
 useSeoMeta({
-  title:
-    "CelParts | Repuestos y Accesorios para Celulares en Perú",
-
-  ogTitle:
-    "CelParts | Repuestos y Accesorios para Celulares en Perú",
-
-  description:
-    "CelParts ofrece repuestos y accesorios de alta calidad para celulares en Perú. ¡Compra ahora y encuentra lo que necesitas!",
-
-  ogDescription:
-    "CelParts ofrece repuestos y accesorios de alta calidad para celulares en Perú. ¡Compra ahora y encuentra lo que necesitas!",
-
-  keywords:
-    "CelParts, repuestos, accesorios, celulares, Perú",
-
+  title,
+  description,
+  ogTitle: title,
+  ogDescription: description,
   ogType: "website",
-
-  ogUrl:
-    "https://kite.pe",
-
-  ogImage:
-    "https://kite.pe/images/logo.png",
-
-  twitterCard:
-    "summary_large_image",
-
-  twitterTitle:
-    "CelParts | Repuestos y Accesorios para Celulares en Perú",
-
-  twitterDescription:
-    "CelParts ofrece repuestos y accesorios de alta calidad para celulares en Perú. ¡Compra ahora y encuentra lo que necesitas!",
-
-  twitterImage:
-    "https://kite.pe/images/logo.png",
+  ogUrl: `${siteUrl}/`,
+  ogImage: logoUrl,
+  twitterCard: "summary_large_image",
+  twitterTitle: title,
+  twitterDescription: description,
+  twitterImage: logoUrl,
 });
 
 /* =========================================
-   STRUCTURED DATA
+   DATOS ESTRUCTURADOS
+   Apuntaban a otra marca (kite.pe) heredada de una plantilla previa.
 ========================================= */
 
 useHead({
   script: [
     {
       type: "application/ld+json",
-
       innerHTML: JSON.stringify({
         "@context": "https://schema.org",
-
-        "@type": "Organization",
-
-        name: "Kite",
-
-        url: "https://kite.pe",
-
-        logo: "https://kite.pe/images/logo.png",
-
-        sameAs: [
-          "https://www.instagram.com/kite.pe/",
-        ],
-
+        "@type": "Store",
+        name: siteName,
+        url: `${siteUrl}/`,
+        logo: logoUrl,
+        image: logoUrl,
+        description,
+        areaServed: "PE",
         contactPoint: {
           "@type": "ContactPoint",
-
-          contactType:
-            "customer service",
-
-          telephone:
-            "+51 996 111 303",
-
+          contactType: "customer service",
+          telephone: "+51 923 821 520",
           areaServed: "PE",
-
           availableLanguage: ["es"],
         },
       }),
     },
-
     {
       type: "application/ld+json",
-
       innerHTML: JSON.stringify({
         "@context": "https://schema.org",
-
         "@type": "WebSite",
-
-        name: "Kite",
-
-        url: "https://kite.pe",
-
+        name: siteName,
+        url: `${siteUrl}/`,
         inLanguage: "es-PE",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${siteUrl}/productos?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
       }),
     },
   ],
 });
 </script>
+
+<style scoped>
+.home {
+  background: var(--surface-page);
+  color: var(--ink-body);
+}
+</style>

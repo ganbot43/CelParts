@@ -1,844 +1,684 @@
 <template>
-  <div class="info-producto">
-    <!-- Categoría + Título -->
-    <div class="info-encabezado">
-      <p v-if="producto?.category" class="info-categoria">
-        {{ producto.category.name }}
+  <div class="ip">
+    <!-- ── Identidad ── -->
+    <div class="ip__head">
+      <NuxtLink
+        v-if="producto?.category"
+        :to="`/productos?categoria=${producto.category.slug}`"
+        class="ip__cat"
+      >
+        {{ typeLabel }}
+      </NuxtLink>
+
+      <h1 class="ip__name">{{ producto?.name }}</h1>
+
+      <p class="ip__stock" :class="`ip__stock--${stockTone}`">
+        <span class="ip__stock-dot" aria-hidden="true" />
+        {{ detailedStockLabel }}
       </p>
-      <h1 class="info-titulo">{{ producto?.name }}</h1>
     </div>
 
-    <!-- Descripción -->
-    <p v-if="producto?.description" class="info-descripcion">
-      {{ producto.description }}
-    </p>
+    <!-- ── Precio ──
+         Lo primero que se mira. El ahorro se dice en soles, no solo en
+         porcentaje: "ahorras S/ 40" pesa más que "-18%". -->
+    <div class="ip__pricing">
+      <div class="ip__price-row">
+        <span class="ip__price">{{ formatPrice.format(price) }}</span>
+        <template v-if="comparePrice">
+          <span class="ip__was">{{ formatPrice.format(comparePrice) }}</span>
+          <span class="ip__off">-{{ discountPct }}%</span>
+        </template>
+      </div>
 
-    <!-- Precio + Stock -->
-    <div class="info-precio-contenedor">
-      <div class="info-precio-bloque">
-        <span class="info-etiqueta">Precio</span>
-        <p class="info-precio">{{ formatPrice.format(producto?.price) }}</p>
-      </div>
-      <div class="info-divider-vertical" />
-      <div class="info-stock-bloque">
-        <span class="info-etiqueta">Disponibilidad</span>
-        <div
-          class="info-stock-badge"
-          :class="(producto?.stock ?? 0) > 0 ? 'en-stock' : 'sin-stock'"
-        >
-          <span class="info-stock-dot" />
-          {{ (producto?.stock ?? 0) > 0 ? "En stock" : "Agotado" }}
-        </div>
-      </div>
+      <p v-if="comparePrice" class="ip__saving">
+        Ahorras {{ formatPrice.format(saving) }}
+      </p>
+      <p class="ip__tax">Precio final. IGV incluido.</p>
     </div>
 
-    <!-- Cantidad + CTAs -->
-    <div class="info-controles">
-      <div class="info-cantidad-wrap">
-        <span class="info-etiqueta">Cantidad</span>
-        <div class="info-cantidad-botonera">
-          <button
-            class="info-cantidad-boton"
-            @click="cantidad--"
-            :disabled="cantidad <= 1"
-            aria-label="Reducir cantidad"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              width="14"
-              height="14"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M5 12h14"
-              />
-            </svg>
-          </button>
-          <input
-            v-model.number="cantidad"
-            type="number"
-            class="info-cantidad-entrada"
-            min="1"
-            max="999"
-          />
-          <button
-            class="info-cantidad-boton"
-            @click="cantidad++"
-            aria-label="Aumentar cantidad"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              width="14"
-              height="14"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Botones acción -->
-      <div class="info-botones">
-        <!-- Agregar al carrito -->
+    <!-- ── Compra ── -->
+    <div class="ip__buy">
+      <div class="ip__qty" :class="{ 'is-disabled': isOut }">
         <button
-          class="info-boton-agregar"
-          @click="manejarAgregar"
-          :disabled="estoyAgregando"
+          type="button"
+          aria-label="Quitar una unidad"
+          :disabled="isOut || cantidad <= 1"
+          @click="setCantidad(cantidad - 1)"
         >
-          <svg
-            v-if="!estoyAgregando"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            class="info-boton-icono"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-            />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M5 12h14" />
           </svg>
-          <svg
-            v-else
-            class="info-boton-spinner"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            />
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-          {{ estoyAgregando ? "Agregando..." : "Agregar al carrito" }}
         </button>
 
-        <!-- WhatsApp -->
+        <input
+          :value="cantidad"
+          type="number"
+          min="1"
+          :max="maxCantidad"
+          inputmode="numeric"
+          aria-label="Cantidad"
+          :disabled="isOut"
+          @input="setCantidad(Number(($event.target as HTMLInputElement).value))"
+        />
 
-        <a
-          :href="waLink(`Hola, me interesa el producto: ${producto?.name}`)"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="info-boton-wa"
-          :title="`Consultar por ${producto?.name}`"
+        <button
+          type="button"
+          aria-label="Agregar una unidad"
+          :disabled="isOut || cantidad >= maxCantidad"
+          @click="setCantidad(cantidad + 1)"
         >
-          <svg class="info-boton-icono" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"
-            />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14" />
           </svg>
-        </a>
+        </button>
       </div>
+
+      <button
+        type="button"
+        class="ip__add"
+        :disabled="isOut || estoyAgregando"
+        @click="manejarAgregar"
+      >
+        <span v-if="estoyAgregando" class="ip__spinner" aria-hidden="true" />
+        {{ isOut ? "Sin stock" : estoyAgregando ? "Agregando…" : "Añadir al carrito" }}
+      </button>
+
+      <ClientOnly>
+        <button
+          type="button"
+          class="ip__fav"
+          :class="{ 'is-on': isFavorite }"
+          :aria-pressed="isFavorite"
+          :aria-label="isFavorite ? 'Quitar de favoritos' : 'Guardar en favoritos'"
+          @click="toggleFavorite"
+        >
+          <svg viewBox="0 0 24 24" :fill="isFavorite ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.7 1.1-1a5.5 5.5 0 0 0 0-7.9z" />
+          </svg>
+        </button>
+      </ClientOnly>
     </div>
+
+    <!-- Agotado: la única salida útil es avisar por WhatsApp -->
+    <a
+      v-if="isOut"
+      :href="waLink(`Hola, ¿cuándo vuelve a haber stock de: ${producto?.name}?`)"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="ip__restock"
+    >
+      <LandingWaIcon :size="15" />
+      Avísame cuando vuelva a haber stock
+    </a>
+
+    <a
+      v-else
+      :href="waLink(`Hola, quiero consultar por: ${producto?.name}`)"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="ip__ask"
+    >
+      <LandingWaIcon :size="15" />
+      ¿Dudas de compatibilidad? Consúltanos
+    </a>
+
+    <!-- ── Servicio ── -->
+    <ul class="ip__perks">
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 7h11v10H2zM13 10h4l4 4v3h-8z" /><circle cx="6" cy="17" r="2" /><circle cx="17" cy="17" r="2" />
+        </svg>
+        <span><strong>Envío a todo el Perú</strong> Lima y provincias, con seguimiento.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2.5 4 6v6c0 4.6 3.2 8.5 8 9.5 4.8-1 8-4.9 8-9.5V6z" /><path d="m9 12 2 2 4-4" />
+        </svg>
+        <span><strong>Garantía</strong> Cambio si la pieza sale fallada.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="7" y="2.5" width="10" height="19" rx="2" /><path d="M11 18.5h2" />
+        </svg>
+        <span><strong>Compatibilidad</strong> Confirmamos tu modelo antes de enviar.</span>
+      </li>
+    </ul>
+
+    <!-- ── Descripción ── -->
+    <section v-if="producto?.description" class="ip__desc">
+      <h2 class="ip__desc-title">Descripción</h2>
+      <p class="ip__desc-text">{{ producto.description }}</p>
+    </section>
+
+    <!-- ── Ficha técnica ──
+         Tabla, no párrafo: son datos que se consultan, no que se leen. -->
+    <section class="ip__specs">
+      <h2 class="ip__desc-title">Detalle</h2>
+      <dl class="ip__specs-list">
+        <div v-if="producto?.category">
+          <dt>Categoría</dt>
+          <dd>{{ producto.category.name }}</dd>
+        </div>
+        <div v-if="producto?.subcategory">
+          <dt>Tipo</dt>
+          <dd>{{ producto.subcategory.name }}</dd>
+        </div>
+        <div>
+          <dt>Código</dt>
+          <dd class="ip__mono">{{ producto?.slug ?? "—" }}</dd>
+        </div>
+        <div>
+          <dt>Disponibilidad</dt>
+          <dd>{{ detailedStockLabel }}</dd>
+        </div>
+      </dl>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useFavoritesStore } from "~/stores/favorites";
+import { useProductDisplay } from "~/composables/useProductDisplay";
+
 const props = defineProps<{
   producto: any;
   estoyAgregando?: boolean;
 }>();
 
-const emit = defineEmits<{
-  agregarAlCarrito: [cantidad: number];
-}>();
+const emit = defineEmits<{ agregarAlCarrito: [cantidad: number] }>();
 
 const formatPrice = useFormatPrice();
-const { waLink } = useKite();
+const favorites = useFavoritesStore();
+const toast = useAppToast();
+const { waLink } = useWhatsapp();
+
+const {
+  image,
+  typeLabel,
+  price,
+  comparePrice,
+  discountPct,
+  saving,
+  tracked,
+  stock,
+  isOut,
+  stockTone,
+} = useProductDisplay(() => props.producto);
+
+/* "En stock" a secas no ayuda a decidir: saber que quedan 3 unidades
+   sí. Y si el producto no controla inventario, no se inventa una cifra. */
+const detailedStockLabel = computed(() => {
+  if (!tracked.value) return "Disponible";
+  if (stock.value <= 0) return "Agotado";
+  if (stock.value <= 5)
+    return `Quedan ${stock.value} ${stock.value === 1 ? "unidad" : "unidades"}`;
+  return "En stock";
+});
+
+/* Sin control de inventario no hay tope real; 99 evita que el campo
+   acepte cifras absurdas. */
+const maxCantidad = computed(() =>
+  tracked.value ? Math.max(1, stock.value) : 99,
+);
+
 const cantidad = ref(1);
 
-async function manejarAgregar() {
+function setCantidad(value: number) {
+  const n = Number.isFinite(value) ? Math.floor(value) : 1;
+  cantidad.value = Math.min(Math.max(1, n), maxCantidad.value);
+}
+
+/* Si el tope baja (otro producto, stock actualizado) la cantidad se
+   ajusta sola en vez de enviar más de lo que hay. */
+watch(maxCantidad, (max) => {
+  if (cantidad.value > max) cantidad.value = Math.max(1, max);
+});
+
+watch(
+  () => props.producto?.id,
+  () => {
+    cantidad.value = 1;
+  },
+);
+
+const isFavorite = computed(() =>
+  props.producto ? favorites.has(props.producto.id) : false,
+);
+
+function toggleFavorite() {
+  if (!props.producto) return;
+  const added = favorites.toggle({
+    id: props.producto.id,
+    name: props.producto.name,
+    slug: props.producto.slug,
+    price: props.producto.price,
+    comparePrice: props.producto.comparePrice ?? null,
+    image: image.value,
+  });
+  toast.add({
+    title: added ? "Guardado en favoritos" : "Quitado de favoritos",
+    description: props.producto.name,
+    color: added ? "success" : "neutral",
+  });
+}
+
+function manejarAgregar() {
+  if (isOut.value) return;
   emit("agregarAlCarrito", cantidad.value);
   cantidad.value = 1;
 }
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   INFO PRODUCTO — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
-
-/* ─── Layout ── */
-.info-producto {
+.ip {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--sp-5);
 }
 
-/* ─── Encabezado ── */
-.info-encabezado {
+/* ── Identidad ── */
+.ip__head {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--sp-2);
 }
 
-.info-categoria {
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+.ip__cat {
+  align-self: flex-start;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
-  color: var(--cp-white);
-  background: rgba(7, 30, 82, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 3px 9px;
-  border-radius: var(--r-pill);
-  width: fit-content;
-  backdrop-filter: blur(6px);
+  color: var(--accent-strong);
 }
 
-.info-titulo {
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 4vw, 1.9rem);
-  font-weight: 800;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1.2;
-  letter-spacing: -0.03em;
+.ip__cat:hover {
+  color: var(--accent);
 }
 
-/* ─── Descripción ── */
-.info-descripcion {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--text-body);
-  line-height: 1.7;
-  padding: var(--space-4);
-  background: var(--bg-alt);
-  border-radius: var(--r-sm);
-  border: 1px solid var(--border-light);
+.ip__name {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.14;
+  color: var(--ink-strong);
 }
 
-/* ─── Precio + stock ── */
-.info-precio-contenedor {
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  padding: var(--space-4);
-  background: var(--bg-alt);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-lg);
-}
-
-.info-precio-bloque,
-.info-stock-bloque {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.info-divider-vertical {
-  width: 1px;
-  height: 40px;
-  background: var(--border-light);
-  flex-shrink: 0;
-}
-
-.info-etiqueta {
-  display: block;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.info-precio {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: var(--cp-navy);
-  margin: 0;
-  letter-spacing: -0.04em;
-  line-height: 1;
-}
-
-/* ─── Stock badge ── */
-.info-stock-badge {
+.ip__stock {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: var(--r-sm);
-  width: fit-content;
-}
-
-.info-stock-badge.en-stock {
-  background: rgba(22, 163, 74, 0.08);
-  color: #16a34a;
-}
-
-.info-stock-badge.sin-stock {
-  background: rgba(220, 38, 38, 0.08);
-  color: #dc2626;
-}
-
-.info-stock-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.en-stock .info-stock-dot {
-  background: #16a34a;
-}
-.sin-stock .info-stock-dot {
-  background: #dc2626;
-}
-
-/* ─── Controles ── */
-.info-controles {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.info-cantidad-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.info-cantidad-botonera {
-  display: flex;
-  align-items: center;
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-sm);
-  overflow: hidden;
-  background: var(--bg-surface);
-  width: fit-content;
-}
-
-.info-cantidad-boton {
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: transparent;
-  color: var(--text-body);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background var(--t-fast) var(--ease-smooth), color var(--t-fast) var(--ease-smooth);
-  flex-shrink: 0;
-}
-
-.info-cantidad-boton:hover:not(:disabled) {
-  background: var(--bg-alt);
-  color: var(--cp-electric);
-}
-
-.info-cantidad-boton:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.info-cantidad-entrada {
-  width: 56px;
-  height: 40px;
-  border: none;
-  border-left: 1px solid var(--border-light);
-  border-right: 1px solid var(--border-light);
-  background: transparent;
-  text-align: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  outline: none;
-}
-
-.info-cantidad-entrada::-webkit-outer-spin-button,
-.info-cantidad-entrada::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
-.info-cantidad-entrada[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
-/* ─── Botones acción ── */
-.info-botones {
-  display: flex;
-  gap: var(--space-2);
-}
-
-/* ─── Botón agregar ── */
-.info-boton-agregar {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0.75rem 1.25rem;
-  border: none;
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.15);
-  transition:
-    background var(--t-fast) var(--ease-smooth),
-    transform var(--t-fast) var(--ease-snappy),
-    box-shadow var(--t-fast) var(--ease-smooth);
-  position: relative;
-  overflow: hidden;
-}
-
-.info-boton-agregar::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.12);
-  opacity: 0;
-  transition: opacity var(--t-fast) var(--ease-smooth);
-}
-.info-boton-agregar:hover:not(:disabled)::before {
-  opacity: 1;
-}
-
-.info-boton-agregar:hover:not(:disabled) {
-  background: var(--btn-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(7, 30, 82, 0.22);
-  color: var(--btn-primary-text);
-}
-
-.info-boton-agregar:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.info-boton-agregar:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-/* ─── Botón WhatsApp ── */
-.info-boton-wa {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem;
-  background: rgba(37, 211, 102, 0.10);
-  border: 1.5px solid rgba(37, 211, 102, 0.25);
-  color: #25d366;
-  border-radius: var(--r-sm);
-  text-decoration: none;
-  transition:
-    background var(--t-fast) var(--ease-smooth),
-    transform var(--t-fast) var(--ease-snappy),
-    box-shadow var(--t-fast) var(--ease-smooth);
-}
-
-.info-boton-wa:hover {
-  background: #25d366;
-  border-color: #25d366;
-  color: var(--cp-white);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.30);
-}
-
-.info-boton-wa:active {
-  transform: translateY(0);
-}
-
-/* ─── Íconos ── */
-.info-boton-icono {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
-.info-boton-spinner {
-  width: 15px;
-  height: 15px;
-  animation: spin 0.75s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ─── Responsive ── */
-@media (max-width: 600px) {
-  .info-producto {
-    gap: var(--space-4);
-  }
-  .info-precio-contenedor {
-    gap: var(--space-4);
-    padding: var(--space-3);
-  }
-  .info-precio {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .info-precio {
-    font-size: 1.3rem;
-  }
-}
-
-/* ─── Layout ── */
-.info-producto {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* ─── Encabezado ── */
-.info-encabezado {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.info-categoria {
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #fff;
-  background: rgba(7, 30, 82, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 3px 9px;
-  border-radius: 999px;
-  width: fit-content;
-  backdrop-filter: blur(6px);
-}
-
-.info-titulo {
-  font-size: clamp(22px, 4vw, 30px);
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-/* ─── Descripción ── */
-.info-descripcion {
-  margin: 0;
-  font-size: 14px;
-  color: #555555;
-  line-height: 1.7;
-  padding: 14px 16px;
-  background: var(--bg2);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-}
-
-/* ─── Precio + stock ── */
-.info-precio-contenedor {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 16px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-
-.info-precio-bloque,
-.info-stock-bloque {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.info-divider-vertical {
-  width: 1px;
-  height: 40px;
-  background: #d9d9d9;
-  flex-shrink: 0;
-}
-
-.info-etiqueta {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text2);
-}
-
-.info-precio {
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--cp-navy);
-  margin: 0;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-/* ─── Stock badge ── */
-.info-stock-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 6px;
-  width: fit-content;
-}
-
-.info-stock-badge.en-stock {
-  background: #f0fdf4;
-  color: #15803d;
-}
-
-.info-stock-badge.sin-stock {
-  background: #fef2f2;
-  color: #dc2626;
-}
-
-.info-stock-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.en-stock .info-stock-dot {
-  background: #16a34a;
-}
-.sin-stock .info-stock-dot {
-  background: #dc2626;
-}
-
-/* ─── Controles ── */
-.info-controles {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.info-cantidad-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.info-cantidad-botonera {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  background: var(--bg);
-  width: fit-content;
-}
-
-.info-cantidad-boton {
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background var(--transition);
-  flex-shrink: 0;
-}
-
-.info-cantidad-boton:hover:not(:disabled) {
-  background: #ffffff;
-  color: var(--cp-navy);
-}
-
-.info-cantidad-boton:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.info-cantidad-entrada {
-  width: 56px;
-  height: 40px;
-  border: none;
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-  background: transparent;
-  text-align: center;
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--text);
-  outline: none;
-}
-
-.info-cantidad-entrada::-webkit-outer-spin-button,
-.info-cantidad-entrada::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
-.info-cantidad-entrada[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
-/* ─── Botones acción ── */
-.info-botones {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* ─── Botón agregar ── */
-.info-boton-agregar {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 7px;
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  padding: 0.6rem 1rem;
-  border: none;
+}
+
+.ip__stock-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.ip__stock--ok {
+  color: var(--cp-success);
+}
+.ip__stock--low {
+  color: var(--cp-warning);
+}
+.ip__stock--none {
+  color: var(--ink-faint);
+}
+
+/* ── Precio ── */
+.ip__pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--sp-5);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-sunken);
+}
+
+.ip__price-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+.ip__price {
+  font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.25rem);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.ip__was {
+  font-size: var(--fs-sm);
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+.ip__off {
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  background: var(--cp-navy-900);
+  color: #fff;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-wide);
+}
+
+.ip__saving {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--cp-success);
+}
+
+.ip__tax {
+  font-size: var(--fs-2xs);
+  color: var(--ink-faint);
+}
+
+/* ── Compra ── */
+.ip__buy {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+}
+
+.ip__qty {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.15);
-  transition:
-    background var(--transition),
-    transform 0.18s ease,
-    box-shadow var(--transition);
-  position: relative;
+  background: var(--surface-raised);
   overflow: hidden;
 }
 
-.info-boton-agregar::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.12);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.info-boton-agregar:hover:not(:disabled)::before {
-  opacity: 1;
+.ip__qty.is-disabled {
+  opacity: 0.5;
 }
 
-.info-boton-agregar:hover:not(:disabled) {
-  background: var(--btn-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(7, 30, 82, 0.22);
-}
-
-.info-boton-agregar:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.info-boton-agregar:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-/* ─── Botón WhatsApp ── */
-.info-boton-wa {
-  flex-shrink: 0;
+.ip__qty button {
+  width: 40px;
+  height: 48px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.6rem 0.75rem;
-  background: #25d366;
-  color: #fff;
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  box-shadow: 0 2px 12px rgba(37, 211, 102, 0.22);
-  transition:
-    background var(--transition),
-    transform 0.18s ease,
-    box-shadow var(--transition);
+  border: 0;
+  background: transparent;
+  color: var(--ink-strong);
+  transition: background var(--t-fast) var(--ease-smooth);
 }
 
-.info-boton-wa:hover {
-  background: #128c4a;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.38);
-}
-
-.info-boton-wa:active {
-  transform: translateY(0);
-}
-
-/* ─── Íconos ── */
-.info-boton-icono {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
-.info-boton-spinner {
+.ip__qty button svg {
   width: 15px;
   height: 15px;
-  animation: spin 0.75s linear infinite;
-  flex-shrink: 0;
 }
 
-@keyframes spin {
+.ip__qty button:hover:not(:disabled) {
+  background: var(--surface-inset);
+}
+
+.ip__qty button:disabled {
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+.ip__qty input {
+  width: 46px;
+  height: 48px;
+  border: 0;
+  border-inline: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+}
+
+.ip__qty input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.ip__qty input::-webkit-outer-spin-button,
+.ip__qty input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ip__add {
+  flex: 1;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  border: 1px solid var(--action-bg);
+  border-radius: var(--radius-sm);
+  background: var(--action-bg);
+  color: var(--action-ink);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
+  transition:
+    background var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth);
+}
+
+.ip__add:hover:not(:disabled) {
+  background: var(--action-bg-hover);
+  border-color: var(--action-bg-hover);
+}
+
+.ip__add:disabled {
+  background: var(--surface-inset);
+  border-color: var(--line-soft);
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+.ip__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: ip-spin 0.7s linear infinite;
+}
+
+@keyframes ip-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* ─── Responsive ── */
-@media (max-width: 600px) {
-  .info-producto {
-    gap: 16px;
-  }
-  .info-precio-contenedor {
-    gap: 14px;
-    padding: 14px;
-  }
-  .info-precio {
-    font-size: 22px;
-  }
+.ip__fav {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--ink-muted);
+  transition:
+    color var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth);
 }
 
-@media (max-width: 380px) {
-  .info-precio {
-    font-size: 20px;
+.ip__fav svg {
+  width: 19px;
+  height: 19px;
+}
+
+.ip__fav:hover {
+  color: var(--ink-strong);
+  border-color: var(--line-strong);
+}
+
+.ip__fav.is-on {
+  color: var(--accent-strong);
+  border-color: var(--accent-line);
+  background: var(--accent-quiet);
+}
+
+/* ── Enlaces de contacto ── */
+.ip__ask,
+.ip__restock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  transition:
+    border-color var(--t-base) var(--ease-smooth),
+    color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth);
+}
+
+.ip__ask:hover,
+.ip__restock:hover {
+  border-color: #25d366;
+  color: #128c46;
+  background: rgba(37, 211, 102, 0.06);
+}
+
+.ip__restock {
+  border-color: var(--accent-line);
+  background: var(--accent-quiet);
+  color: var(--accent-strong);
+}
+
+/* ── Servicio ── */
+.ip__perks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin: 0;
+  padding: var(--sp-4) 0;
+  list-style: none;
+  border-block: 1px solid var(--line-soft);
+}
+
+.ip__perks li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.ip__perks svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--accent-strong);
+}
+
+.ip__perks span {
+  font-size: var(--fs-xs);
+  color: var(--ink-muted);
+  line-height: var(--leading-normal);
+}
+
+.ip__perks strong {
+  display: block;
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+}
+
+/* ── Descripción y ficha ── */
+.ip__desc-title {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: var(--sp-3);
+}
+
+.ip__desc-text {
+  font-size: var(--fs-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--ink-body);
+  white-space: pre-line;
+}
+
+.ip__specs-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ip__specs-list > div {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.ip__specs-list > div:first-child {
+  border-top: 1px solid var(--line-soft);
+}
+
+.ip__specs-list dt {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--ink-muted);
+}
+
+.ip__specs-list dd {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--ink-strong);
+}
+
+.ip__mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs) !important;
+  color: var(--ink-muted) !important;
+  word-break: break-all;
+}
+
+@media (max-width: 560px) {
+  .ip__buy {
+    flex-wrap: wrap;
+  }
+
+  .ip__add {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .ip__fav {
+    margin-left: auto;
+  }
+
+  .ip__specs-list > div {
+    grid-template-columns: 110px minmax(0, 1fr);
   }
 }
 </style>

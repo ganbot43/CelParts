@@ -343,7 +343,7 @@ export async function sendLowStockNotification(items: LowStockItem[]) {
   <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
   <body style="margin:0;padding:24px;background:#f8fafc;font-family:Arial,Helvetica,sans-serif;">
     <div style="max-width:720px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);">
-      <div style="padding:22px 28px;background:linear-gradient(135deg, #1e3a8a, #356dff);border-bottom:3px solid #93c5fd;color:#fff;">
+      <div style="padding:22px 28px;background:linear-gradient(135deg, #071e52, #0077c8);border-bottom:3px solid #00aeef;color:#fff;">
         ${logoUrl ? `<img src="${logoUrl}" alt="${businessName}" style="max-height:40px;margin-bottom:15px;display:block;" />` : ''}
         <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#dbeafe;font-weight:700;">Alerta de inventario</div>
         <div style="font-size:22px;font-weight:700;margin-top:8px;">Productos con stock bajo</div>

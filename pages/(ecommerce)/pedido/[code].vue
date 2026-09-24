@@ -1,677 +1,552 @@
 <template>
-  <div class="confirm-page">
-    <div class="container">
-      <div v-if="order" class="confirm-layout">
-        <!-- ── Success hero ── -->
-        <div class="success-hero">
-          <div class="success-icon-ring">
-            <div class="success-icon-inner">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2.5"
-                stroke="currentColor"
-                class="w-8 h-8"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m4.5 12.75 6 6 9-13.5"
-                />
-              </svg>
-            </div>
-          </div>
-          <h1 class="success-title">¡Pedido confirmado!</h1>
-          <p class="success-sub">
-            Tu pedido
-            <span class="order-code">{{ order.orderCode }}</span>
-            fue registrado exitosamente.
-          </p>
-          <div class="success-badge">
-            <span class="badge-dot" />
-            Procesando pedido
-          </div>
-        </div>
+  <div class="cf">
+    <div class="cp-container">
+      <!-- ── Carga ── -->
+      <div v-if="pending" class="cf__loading">
+        <div class="cp-skeleton" style="height: 120px" />
+        <div class="cp-skeleton" style="height: 260px" />
+      </div>
 
-        <!-- ── Cards grid ── -->
-        <div class="cards-stack">
-          <!-- Productos -->
-          <div class="confirm-card">
-            <div class="card-header">
-              <div class="card-header-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.8"
-                  stroke="currentColor"
-                  class="w-4 h-4"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
-                  />
-                </svg>
-              </div>
-              <h2 class="card-title">Productos del pedido</h2>
-            </div>
-
-            <div class="items-list">
-              <div
-                v-for="item in order.items"
-                :key="item.id"
-                class="order-item"
-              >
-                <div class="order-item-left">
-                  <div class="order-item-qty">{{ item.quantity }}</div>
-                  <span class="order-item-name">{{ item.productName }}</span>
-                </div>
-                <span class="order-item-price">{{
-                  formatPrice.format(item.subtotal)
-                }}</span>
-              </div>
-            </div>
-
-            <div class="card-total">
-              <span class="card-total-label">Total del pedido</span>
-              <span class="card-total-val">{{
-                formatPrice.format(order.total)
-              }}</span>
-            </div>
-          </div>
-
-          <!-- Instrucciones de pago -->
-          <div v-if="order.paymentMethodLabel" class="confirm-card">
-            <div class="card-header">
-              <div class="card-header-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.8"
-                  stroke="currentColor"
-                  class="w-4 h-4"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-                  />
-                </svg>
-              </div>
-              <h2 class="card-title">Instrucciones de pago</h2>
-            </div>
-
-            <div class="payment-body">
-              <div class="payment-method-tag">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-4 h-4"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-                Pago via {{ order.paymentMethodLabel }}
-              </div>
-
-              <div
-                v-if="order.paymentMethodAccountNumber"
-                class="payment-account"
-              >
-                <div class="account-row">
-                  <span class="account-key">Número de cuenta</span>
-                  <span class="account-val">{{
-                    order.paymentMethodAccountNumber
-                  }}</span>
-                </div>
-                <div v-if="order.paymentMethodAccountName" class="account-row">
-                  <span class="account-key">Titular</span>
-                  <span class="account-val">{{
-                    order.paymentMethodAccountName
-                  }}</span>
-                </div>
-              </div>
-
-              <div v-if="order.paymentMethodQrUrl" class="qr-wrap">
-                <p class="qr-label">Escanea para pagar</p>
-                <div class="qr-frame">
-                  <img
-                    :src="order.paymentMethodQrUrl"
-                    alt="QR de pago"
-                    class="qr-img"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- WhatsApp CTA -->
-          <div class="whatsapp-card">
-            <div class="wa-icon-wrap">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-7 h-7"
-              >
-                <path
-                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"
-                />
-              </svg>
-            </div>
-            <div class="wa-text">
-              <p class="wa-title">Envía tu comprobante de pago</p>
-              <p class="wa-sub">Te confirmaremos tu pedido a la brevedad</p>
-            </div>
-
-            <a :href="waUrl" target="_blank" class="wa-btn">
-              Enviar por WhatsApp
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="w-4 h-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                />
-              </svg>
-            </a>
-          </div>
-
-          <!-- Back link -->
-          <div class="back-wrap">
-            <NuxtLink to="/productos" class="back-link">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="w-4 h-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.75 19.5 8.25 12l7.5-7.5"
-                />
-              </svg>
-              Seguir comprando
-            </NuxtLink>
-          </div>
+      <!-- ── Sin sesión o pedido ajeno ── -->
+      <div v-else-if="!order" class="cf__state">
+        <h1 class="cf__state-title">
+          {{ sinSesion ? "Inicia sesión para ver tu pedido" : "No encontramos ese pedido" }}
+        </h1>
+        <p class="cf__state-text">
+          {{
+            sinSesion
+              ? "Por seguridad, el detalle de un pedido solo se muestra a la cuenta que lo hizo."
+              : "El código no existe o pertenece a otra cuenta."
+          }}
+        </p>
+        <div class="cf__state-actions">
+          <NuxtLink v-if="sinSesion" :to="loginHref" class="btn btn-primary btn-sm">
+            Iniciar sesión
+          </NuxtLink>
+          <NuxtLink to="/productos" class="btn btn-outline btn-sm">Ver catálogo</NuxtLink>
         </div>
       </div>
+
+      <template v-else>
+        <!-- ── Confirmación ── -->
+        <header class="cf__hero">
+          <span class="cf__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m5 12 5 5L20 7" />
+            </svg>
+          </span>
+
+          <h1 class="cf__title">¡Pedido confirmado!</h1>
+          <p class="cf__lead">
+            Guardamos tu pedido <strong>{{ order.orderCode }}</strong>.
+            Te escribiremos por WhatsApp para coordinar la entrega.
+          </p>
+
+          <EcommerceEstadoPedido :status="order.status" />
+        </header>
+
+        <!-- Qué toca hacer ahora. El estado real, no un texto fijo:
+             antes decía siempre "Procesando pedido". -->
+        <p v-if="ayuda(order.status)" class="cf__next">
+          <strong>Siguiente paso:</strong> {{ ayuda(order.status) }}
+        </p>
+
+        <div class="cf__grid">
+          <!-- ── Productos ── -->
+          <section class="cf__card">
+            <h2 class="cf__card-title">Tu pedido</h2>
+
+            <ul class="cf__items">
+              <li v-for="item in order.items" :key="item.id">
+                <span class="cf__item-qty">{{ item.quantity }}×</span>
+                <span class="cf__item-name">{{ item.productName }}</span>
+                <span class="cf__item-sub">{{ formatPrice.format(item.subtotal) }}</span>
+              </li>
+            </ul>
+
+            <div class="cf__total">
+              <span>Total</span>
+              <strong>{{ formatPrice.format(order.total) }}</strong>
+            </div>
+
+            <dl v-if="order.customerAddress" class="cf__ship">
+              <div>
+                <dt>Entregar a</dt>
+                <dd>{{ order.customerName }}</dd>
+              </div>
+              <div>
+                <dt>Dirección</dt>
+                <dd>{{ order.customerAddress }}</dd>
+              </div>
+              <div v-if="order.customerReference">
+                <dt>Referencia</dt>
+                <dd>{{ order.customerReference }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- ── Pago ── -->
+          <section v-if="order.paymentMethodLabel" class="cf__card cf__card--pay">
+            <h2 class="cf__card-title">Cómo pagar</h2>
+
+            <p class="cf__pay-method">{{ order.paymentMethodLabel }}</p>
+
+            <dl v-if="order.paymentMethodAccountNumber || order.paymentMethodAccountName" class="cf__pay-data">
+              <div v-if="order.paymentMethodAccountNumber">
+                <dt>Número / cuenta</dt>
+                <dd>
+                  <span>{{ order.paymentMethodAccountNumber }}</span>
+                  <button type="button" class="cf__copy" @click="copiar(order.paymentMethodAccountNumber)">
+                    {{ copiado ? "Copiado" : "Copiar" }}
+                  </button>
+                </dd>
+              </div>
+              <div v-if="order.paymentMethodAccountName">
+                <dt>Titular</dt>
+                <dd>{{ order.paymentMethodAccountName }}</dd>
+              </div>
+              <div>
+                <dt>Monto exacto</dt>
+                <dd class="cf__pay-amount">{{ formatPrice.format(order.total) }}</dd>
+              </div>
+            </dl>
+
+            <div v-if="order.paymentMethodQrUrl" class="cf__qr">
+              <SharedImagen
+                :src="order.paymentMethodQrUrl"
+                alt="Código QR para pagar"
+                fit="contain"
+              />
+            </div>
+
+            <a :href="waUrl" target="_blank" rel="noopener noreferrer" class="cf__wa">
+              <LandingWaIcon :size="16" />
+              Enviar comprobante por WhatsApp
+            </a>
+
+            <p class="cf__pay-note">
+              Tu pedido se despacha cuando confirmemos el pago.
+            </p>
+          </section>
+        </div>
+
+        <div class="cf__foot">
+          <NuxtLink :to="`/mi-cuenta/pedidos/${order.orderCode}`" class="btn btn-outline btn-sm">
+            Seguir mi pedido
+          </NuxtLink>
+          <NuxtLink to="/productos" class="btn btn-ghost btn-sm">Seguir comprando</NuxtLink>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Order } from "~/types";
-
-definePageMeta({ layout: "landing" });
+definePageMeta({ layout: "default" });
 
 const route = useRoute();
-const config = useRuntimeConfig();
 const formatPrice = useFormatPrice();
+const { ayuda } = useEstadoPedido();
+const businessState = useBusinessConfig();
+const { WA_NUMBER } = useWhatsapp();
 
-const { data: order } = await useFetch<Order>(
-  `/api/orders/${route.params.code}`,
-);
-if (!order.value)
-  throw createError({ statusCode: 404, message: "Pedido no encontrado" });
+const code = computed(() => String(route.params.code));
 
-useSeoMeta({ title: `Pedido ${order.value?.orderCode} — Celparts SAC` });
+/* `default` evita que un 401/404 rompa la página entera: se muestra el
+   mensaje correspondiente en su lugar. */
+const { data: order, error, pending } = await useFetch<any>(
+  () => `/api/orders/${code.value}`,
+  { default: () => null },
+);
 
-const waMessage = computed(() =>
-  encodeURIComponent(
-    `Hola! Realicé el pedido *${order.value?.orderCode}* por S/ ${order.value?.total.toFixed(2)}. Adjunto comprobante de pago.`,
-  ),
+const sinSesion = computed(() => error.value?.statusCode === 401);
+
+const loginHref = computed(
+  () => `/login?redirect=${encodeURIComponent(`/pedido/${code.value}`)}`,
 );
-const waUrl = computed(
-  () => `https://wa.me/${config.public.whatsapp}?text=${waMessage.value}`,
+
+useSeoMeta({
+  title: () => `Pedido ${code.value} — CelParts`,
+  /* Página personal: no aporta a los buscadores y su contenido es
+     distinto para cada visitante. */
+  robots: "noindex, nofollow",
+});
+
+const waNumero = computed(() =>
+  String(businessState.value?.whatsapp || WA_NUMBER).replace(/\D/g, ""),
 );
+
+const waUrl = computed(() => {
+  const total = Number(order.value?.total ?? 0).toFixed(2);
+  const texto = `Hola, realicé el pedido ${order.value?.orderCode} por S/ ${total}. Adjunto el comprobante de pago.`;
+  return `https://wa.me/${waNumero.value}?text=${encodeURIComponent(texto)}`;
+});
+
+const copiado = ref(false);
+
+async function copiar(valor: string) {
+  try {
+    await navigator.clipboard.writeText(valor);
+    copiado.value = true;
+    setTimeout(() => (copiado.value = false), 1800);
+  } catch {
+    /* Sin permiso de portapapeles el número sigue a la vista. */
+  }
+}
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   PEDIDO CONFIRMADO — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
-
-/* ─── Page ───────────────────────────────────────────────── */
-.confirm-page {
-  min-height: 100vh;
-  background: var(--bg-base);
-  padding: 3rem 0 5rem;
+.cf {
+  padding-block: var(--sp-8) var(--section-y);
 }
 
-.container {
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-@media (min-width: 640px) {
-  .container {
-    padding: 0 1.5rem;
-  }
-}
-
-.confirm-layout {
+.cf__loading {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--sp-4);
+  max-width: 900px;
+  margin-inline: auto;
 }
 
-/* ─── Success hero ───────────────────────────────────────── */
-.success-hero {
+/* ── Confirmación ── */
+.cf__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
   text-align: center;
-  padding: 1rem 0 0.5rem;
+  max-width: 44ch;
+  margin: 0 auto var(--sp-6);
 }
 
-.success-icon-ring {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  background: rgba(0, 174, 239, 0.08);
-  border: 2px solid rgba(0, 174, 239, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.25rem;
-}
-
-.success-icon-inner {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: var(--btn-primary-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cp-white);
-  box-shadow: 0 6px 20px rgba(7, 30, 82, 0.25);
-}
-
-.success-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
-}
-
-.success-sub {
-  font-size: 0.95rem;
-  color: var(--text-body);
-  margin-bottom: 1rem;
-}
-
-.order-code {
-  font-weight: 800;
-  color: var(--cp-electric);
-  font-family: monospace;
-  font-size: 1rem;
-  background: rgba(0, 174, 239, 0.08);
-  padding: 0.1rem 0.5rem;
-  border-radius: var(--r-sm);
-  border: 1px solid rgba(0, 174, 239, 0.2);
-}
-
-.success-badge {
+.cf__check {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.875rem;
-  background: rgba(0, 174, 239, 0.08);
-  border: 1px solid rgba(0, 174, 239, 0.2);
-  border-radius: var(--r-pill);
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--cp-electric);
-}
-
-.badge-dot {
-  width: 7px;
-  height: 7px;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  background: var(--cp-electric);
-  animation: pulse-dot 1.5s ease-in-out infinite;
+  background: var(--cp-success-bg);
+  border: 1px solid var(--cp-success-border);
+  color: var(--cp-success);
 }
 
-@keyframes pulse-dot {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.75);
-  }
+.cf__check svg {
+  width: 26px;
+  height: 26px;
 }
 
-/* ─── Cards ──────────────────────────────────────────────── */
-.cards-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+.cf__title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-strong);
 }
 
-.confirm-card {
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--card-shadow-sm);
+.cf__lead {
+  font-size: var(--fs-sm);
+  line-height: var(--leading-normal);
+  color: var(--ink-muted);
 }
 
-/* ─── Card header ────────────────────────────────────────── */
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: 1rem 1.25rem;
-  border-bottom: 1.5px solid var(--border-light);
-  position: relative;
-}
-.card-header::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--line-brand) 30%, var(--line-brand) 70%, transparent);
+.cf__lead strong {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
 }
 
-.card-header-icon {
-  width: 32px;
-  height: 32px;
-  background: rgba(0, 174, 239, 0.06);
-  border: 1px solid rgba(0, 174, 239, 0.15);
-  border-radius: var(--r-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cp-electric);
-  flex-shrink: 0;
+.cf__next {
+  max-width: 900px;
+  margin: 0 auto var(--sp-5);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-sm);
+  background: var(--accent-quiet);
+  font-size: var(--fs-xs);
+  line-height: var(--leading-normal);
+  color: var(--accent-strong);
+  text-align: center;
 }
 
-.card-title {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
+.cf__next strong {
+  font-weight: var(--fw-black);
 }
 
-/* ─── Items list ─────────────────────────────────────────── */
-.items-list {
-  padding: var(--space-3) 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+/* ── Disposición ── */
+.cf__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  align-items: start;
+  max-width: 900px;
+  margin-inline: auto;
 }
 
-.order-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border-light);
-}
-.order-item:last-child {
-  border-bottom: none;
+.cf__card {
+  padding: var(--sp-5);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
 }
 
-.order-item-left {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-width: 0;
+.cf__card--pay {
+  background: var(--surface-sunken);
 }
 
-.order-item-qty {
-  width: 24px;
-  height: 24px;
-  background: rgba(0, 174, 239, 0.08);
-  border: 1px solid rgba(0, 174, 239, 0.18);
-  border-radius: var(--r-sm);
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: var(--cp-navy);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.order-item-name {
-  font-size: 0.875rem;
-  color: var(--text-body);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.order-item-price {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  flex-shrink: 0;
-}
-
-/* ─── Card total ─────────────────────────────────────────── */
-.card-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.25rem;
-  background: rgba(7, 30, 82, 0.03);
-  border-top: 1.5px solid var(--border-light);
-}
-
-.card-total-label {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 800;
-  color: var(--text-primary);
+.cf__card-title {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: var(--sp-3);
 }
 
-.card-total-val {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--cp-navy);
-  letter-spacing: -0.04em;
+/* ── Artículos ── */
+.cf__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* ─── Payment ────────────────────────────────────────────── */
-.payment-body {
-  padding: 1.25rem;
+.cf__items li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--sp-3);
+  align-items: baseline;
+  padding: var(--sp-2) 0;
+}
+
+.cf__item-qty {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-black);
+  color: var(--accent-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.cf__item-name {
+  font-size: var(--fs-xs);
+  color: var(--ink-strong);
+  line-height: var(--leading-snug);
+}
+
+.cf__item-sub {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cf__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-top: var(--sp-3);
+  margin-top: var(--sp-2);
+  border-top: 1px solid var(--line);
+}
+
+.cf__total span {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+}
+
+.cf__total strong {
+  font-size: 1.375rem;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.cf__ship {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0 0;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line-soft);
 }
 
-.payment-method-tag {
+.cf__ship > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cf__ship dt {
+  font-size: 0.625rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.cf__ship dd {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--ink-strong);
+  line-height: var(--leading-normal);
+}
+
+/* ── Pago ── */
+.cf__pay-method {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+  margin-bottom: var(--sp-3);
+}
+
+.cf__pay-data {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
+}
+
+.cf__pay-data > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.cf__pay-data dt {
+  font-size: var(--fs-xs);
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+
+.cf__pay-data dd {
+  margin: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.875rem;
-  background: var(--bg-alt);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-pill);
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-body);
-  width: fit-content;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
-.payment-account {
-  background: var(--bg-alt);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-md);
-  overflow: hidden;
+.cf__pay-amount {
+  font-size: var(--fs-sm) !important;
+  color: var(--accent-strong) !important;
 }
 
-.account-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.7rem 1rem;
-  font-size: 0.875rem;
-  border-bottom: 1px solid var(--border-light);
-}
-.account-row:last-child {
-  border-bottom: none;
-}
-
-.account-key {
-  color: var(--text-muted);
+.cf__copy {
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-xs);
+  background: var(--surface-raised);
+  padding: 2px 8px;
+  font-family: inherit;
+  font-size: 0.625rem;
+  font-weight: var(--fw-bold);
+  color: var(--accent-strong);
+  white-space: nowrap;
 }
 
-.account-val {
-  font-weight: 700;
-  color: var(--text-primary);
+.cf__copy:hover {
+  background: var(--accent-soft);
 }
 
-.qr-wrap {
-  text-align: center;
+.cf__qr {
+  width: 160px;
+  height: 160px;
+  margin: var(--sp-4) auto 0;
+  padding: var(--sp-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
 }
 
-.qr-label {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.qr-frame {
-  display: inline-block;
-  padding: 0.75rem;
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-lg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: var(--card-shadow-sm);
-}
-
-.qr-img {
-  width: 148px;
-  height: 148px;
-  border-radius: var(--r-sm);
-  display: block;
-}
-
-/* ─── WhatsApp card ──────────────────────────────────────── */
-.whatsapp-card {
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-xl);
-  padding: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--card-shadow-sm);
-}
-
-.wa-icon-wrap {
-  width: 48px;
-  height: 48px;
-  background: #f0fdf4;
-  border: 1.5px solid #bbf7d0;
-  border-radius: var(--r-lg);
-  display: flex;
+.cf__wa {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #16a34a;
-  flex-shrink: 0;
+  gap: var(--sp-2);
+  width: 100%;
+  height: 46px;
+  margin-top: var(--sp-4);
+  border-radius: var(--radius-sm);
+  background: #25d366;
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  transition: background var(--t-base) var(--ease-smooth);
 }
 
-.wa-text {
-  flex: 1;
-  min-width: 0;
+.cf__wa:hover {
+  background: #1fb855;
+  color: #fff;
 }
 
-.wa-title {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.2rem;
-}
-
-.wa-sub {
-  font-size: 0.775rem;
-  color: var(--text-muted);
-}
-
-.wa-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.65rem 1.25rem;
-  background: #22c55e;
-  color: #ffffff;
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 700;
-  border-radius: var(--r-md);
-  text-decoration: none;
-  transition: all var(--t-fast) var(--ease-snappy);
-  white-space: nowrap;
-  flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
-}
-.wa-btn:hover {
-  background: #16a34a;
-  transform: translateY(-1px);
-  box-shadow: 0 5px 16px rgba(34, 197, 94, 0.4);
-}
-
-/* ─── Back link ──────────────────────────────────────────── */
-.back-wrap {
+.cf__pay-note {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-2xs);
+  line-height: var(--leading-normal);
+  color: var(--ink-muted);
   text-align: center;
-  padding: 0.5rem 0;
 }
 
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color var(--t-fast) var(--ease-smooth);
+/* ── Pie ── */
+.cf__foot {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-6);
 }
-.back-link:hover {
-  color: var(--cp-electric);
+
+/* ── Estados ── */
+.cf__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-16) var(--sp-5);
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.cf__state-title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+}
+
+.cf__state-text {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  max-width: 44ch;
+}
+
+.cf__state-actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+@media (max-width: 820px) {
+  .cf__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .cf__foot {
+    flex-direction: column;
+  }
 }
 </style>

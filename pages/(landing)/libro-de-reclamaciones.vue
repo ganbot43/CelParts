@@ -723,14 +723,14 @@ async function submit() {
   --kite-green-line: rgba(0, 174, 239, 0.2);
   --kite-yellow: #eab308;
   --kite-yellow-dim: rgba(234, 179, 8, 0.8);
-  --jm-surface: var(--bg-surface);
-  --jm-surface2: var(--bg-surface);
-  --jm-surface3: var(--bg-surface);
-  --jm-border: var(--border-light);
-  --jm-border-strong: var(--border-mid);
-  --jm-text: var(--text-primary);
-  --jm-text-dim: var(--text-body);
-  --jm-text-muted: var(--text-muted);
+  --cp-surface: var(--bg-surface);
+  --cp-surface2: var(--bg-surface);
+  --cp-surface3: var(--bg-surface);
+  --cp-border-line: var(--border-light);
+  --cp-border-strong: var(--border-mid);
+  --cp-text: var(--text-primary);
+  --cp-text-dim: var(--text-body);
+  --cp-text-muted: var(--text-muted);
 }
 
 /* ── Base ── */
@@ -789,14 +789,14 @@ async function submit() {
   font-size: clamp(36px, 6vw, 56px);
   font-weight: 700;
   line-height: 1.1;
-  color: var(--jm-text);
+  color: var(--ink-strong);
   letter-spacing: -0.02em;
   margin: 0 0 16px;
 }
 
 .lr-header__legal {
   font-size: 13px;
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
   line-height: 1.6;
   max-width: 560px;
   font-style: italic;
@@ -806,8 +806,8 @@ async function submit() {
 
 /* ── Datos del negocio ── */
 .lr-business {
-  background: var(--jm-surface2);
-  border: 1px solid var(--jm-border);
+  background: var(--surface-sunken);
+  border: 1px solid var(--line-soft);
   border-radius: 10px;
   padding: 16px 20px;
   margin-bottom: 32px;
@@ -829,13 +829,13 @@ async function submit() {
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
   font-weight: 700;
 }
 
 .lr-business__val {
   font-size: 13px;
-  color: var(--jm-text-dim);
+  color: var(--ink-muted);
   font-weight: 500;
 }
 
@@ -871,7 +871,7 @@ async function submit() {
 .lr-success__title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--jm-text);
+  color: var(--ink-strong);
   margin: 0 0 4px;
 }
 
@@ -884,7 +884,7 @@ async function submit() {
 
 .lr-success__sub {
   font-size: 13px;
-  color: var(--jm-text-dim);
+  color: var(--ink-muted);
   margin: 0;
   line-height: 1.5;
 }
@@ -892,7 +892,7 @@ async function submit() {
 /* ── Secciones del formulario ── */
 .lr-section {
   background: rgba(255, 255, 255, 0.76);
-  border: 1px solid var(--jm-border);
+  border: 1px solid var(--line-soft);
   border-radius: 12px;
   padding: 24px 28px;
   margin-bottom: 14px;
@@ -917,7 +917,7 @@ async function submit() {
   gap: 14px;
   margin-bottom: 22px;
   padding-bottom: 18px;
-  border-bottom: 1px solid var(--jm-border);
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .lr-section__num {
@@ -938,14 +938,14 @@ async function submit() {
 .lr-section__title {
   font-size: 17px;
   font-weight: 600;
-  color: var(--jm-text);
+  color: var(--ink-strong);
   margin: 0 0 3px;
   letter-spacing: -0.01em;
 }
 
 .lr-section__sub {
   font-size: 12px;
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
   margin: 0;
   font-style: italic;
 }
@@ -1002,7 +1002,7 @@ async function submit() {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--jm-text-dim);
+  color: var(--ink-muted);
 }
 
 .lr-label-opt {
@@ -1011,7 +1011,7 @@ async function submit() {
   letter-spacing: 0;
   font-style: italic;
   font-size: 11px;
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
 }
 
 .lr-req {
@@ -1022,10 +1022,10 @@ async function submit() {
 .lr-input {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--jm-border-strong);
+  border: 1px solid var(--line);
   border-radius: 7px;
   font-size: 14px;
-  color: var(--jm-text);
+  color: var(--ink-strong);
   background: var(--bg-surface);
   transition:
     border-color 0.15s,
@@ -1043,7 +1043,7 @@ async function submit() {
 }
 
 .lr-input::placeholder {
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
 }
 
 .lr-select {
@@ -1057,7 +1057,7 @@ async function submit() {
 
 .lr-select option {
   background: var(--bg-surface);
-  color: var(--jm-text);
+  color: var(--ink-strong);
 }
 
 .lr-textarea {
@@ -1071,7 +1071,7 @@ async function submit() {
   display: block;
   font-size: 11px;
   font-weight: 600;
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
   margin-top: 4px;
   text-align: right;
   transition: color 0.2s ease;
@@ -1099,10 +1099,10 @@ async function submit() {
   gap: 3px;
   padding: 9px 14px;
   border-radius: 7px;
-  border: 1px solid var(--jm-border-strong);
+  border: 1px solid var(--line);
   background: var(--bg-surface);
   font-size: 13px;
-  color: var(--jm-text-dim);
+  color: var(--ink-muted);
   cursor: pointer;
   transition: all 0.15s;
 }
@@ -1123,7 +1123,7 @@ async function submit() {
 
 .lr-toggle__hint {
   font-size: 10px;
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
   font-style: italic;
   font-weight: 400;
   text-transform: none;
@@ -1140,15 +1140,15 @@ async function submit() {
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  border: 1px dashed var(--jm-border-strong);
+  border: 1px dashed var(--line);
   border-radius: 7px;
-  background: var(--jm-surface2);
+  background: var(--surface-sunken);
   cursor: pointer;
   transition:
     border-color 0.15s,
     background 0.15s,
     box-shadow 0.15s;
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
 }
 
 .lr-file:hover {
@@ -1170,7 +1170,7 @@ async function submit() {
 /* ── Footer del form ── */
 .lr-footer {
   background: #ffffff;
-  border: 1px solid var(--jm-border);
+  border: 1px solid var(--line-soft);
   border-radius: 12px;
   padding: 24px 28px;
   display: flex;
@@ -1195,7 +1195,7 @@ async function submit() {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  border: 1.5px solid var(--jm-border-strong);
+  border: 1.5px solid var(--line);
   background: #ffffff;
   flex-shrink: 0;
   display: flex;
@@ -1214,7 +1214,7 @@ async function submit() {
 
 .lr-check__text {
   font-size: 13px;
-  color: var(--jm-text-dim);
+  color: var(--ink-muted);
   line-height: 1.5;
 }
 
@@ -1266,13 +1266,13 @@ async function submit() {
 
 .lr-privacy {
   font-size: 11px;
-  color: var(--jm-text-muted);
+  color: var(--ink-muted);
   font-style: italic;
   margin: 0;
 }
 
 .lr-link {
-  color: var(--jm-text-dim);
+  color: var(--ink-muted);
   text-decoration: underline;
   transition: color 0.15s;
 }

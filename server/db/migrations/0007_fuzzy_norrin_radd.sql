@@ -1,0 +1,1 @@
+ALTER TABLE `products` ADD `compare_price` double;

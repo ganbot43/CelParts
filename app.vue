@@ -22,7 +22,7 @@ if (configData.value) {
 }
 
 const siteUrl = computed(() => {
-  const raw = String(runtimeConfig.public.siteUrl || 'https://joymarperu.com')
+  const raw = String(runtimeConfig.public.siteUrl || 'https://celparts.pe')
   return raw.replace(/\/$/, '')
 })
 

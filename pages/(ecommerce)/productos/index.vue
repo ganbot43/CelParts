@@ -1,1871 +1,1149 @@
 <template>
-  <div class="catalog-page">
-    <div class="catalog-body">
-      <!-- Mobile filter toggle -->
-      <button
-        class="mobile-filter-toggle lg:hidden"
-        @click="sidebarOpen = !sidebarOpen"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.8"
-          stroke="currentColor"
-          width="15"
-          height="15"
+  <div class="cat">
+    <div class="cp-container">
+      <!-- ═══ Cabecera ═══ -->
+      <nav class="cat__crumb" aria-label="Ubicación">
+        <NuxtLink to="/">Inicio</NuxtLink>
+        <span aria-hidden="true">/</span>
+        <NuxtLink to="/productos">Catálogo</NuxtLink>
+        <template v-if="activeCategory">
+          <span aria-hidden="true">/</span>
+          <!-- La categoría solo es enlace si hay una subcategoría después;
+               si es el último nivel, se marca como posición actual. -->
+          <NuxtLink v-if="activeSubcategory" :to="`/productos?categoria=${activeCategory.slug}`">
+            {{ activeCategory.name }}
+          </NuxtLink>
+          <span v-else class="cat__crumb-now">{{ activeCategory.name }}</span>
+        </template>
+        <template v-if="activeSubcategory">
+          <span aria-hidden="true">/</span>
+          <span class="cat__crumb-now">{{ activeSubcategory.name }}</span>
+        </template>
+      </nav>
+
+      <header class="cat__head">
+        <h1 class="cat__title">{{ pageTitle }}</h1>
+        <p class="cat__count">
+          <template v-if="pending">Buscando…</template>
+          <template v-else>
+            <strong>{{ total }}</strong>
+            {{ total === 1 ? "producto" : "productos" }}
+            <template v-if="filters.q"> para “{{ filters.q }}”</template>
+          </template>
+        </p>
+      </header>
+
+      <div class="cat__layout">
+        <!-- ═══ Filtros ═══ -->
+        <aside
+          class="cat__aside"
+          :class="{ 'is-open': asideOpen }"
+          aria-label="Filtros"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-          />
-        </svg>
-        Filtros
-        <span v-if="activeFilterCount" class="filter-badge">{{
-          activeFilterCount
-        }}</span>
-      </button>
+          <div class="cat__aside-head">
+            <span>Filtros</span>
+            <button type="button" class="cat__aside-close" aria-label="Cerrar filtros" @click="asideOpen = false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
 
-      <div class="catalog-layout">
-        <!-- ── SIDEBAR ── -->
-        <aside class="sidebar" :class="{ 'sidebar-open': sidebarOpen }">
-          <div class="sidebar-inner">
-            <!-- Mobile header -->
-            <div class="sidebar-mobile-header lg:hidden">
-              <div class="sidebar-mobile-title-row">
-                <span class="sidebar-mobile-title">Filtros</span>
-                <span v-if="activeFilterCount" class="sidebar-mobile-badge"
-                  >{{ activeFilterCount }} activos</span
+          <div class="cat__aside-body">
+            <!-- Categorías -->
+            <section class="cat__block">
+              <p class="cat__block-title">Categorías</p>
+
+              <button
+                type="button"
+                class="cat__cat"
+                :class="{ 'is-active': !filters.categoria && !filters.nuevoLanzamiento }"
+                @click="selectCategory(null)"
+              >
+                Todo el catálogo
+              </button>
+
+              <button
+                type="button"
+                class="cat__cat"
+                :class="{ 'is-active': filters.nuevoLanzamiento }"
+                @click="toggleNovedades"
+              >
+                Novedades
+              </button>
+
+              <div v-for="cat in categories" :key="cat.id" class="cat__cat-group">
+                <button
+                  type="button"
+                  class="cat__cat"
+                  :class="{ 'is-active': filters.categoria === cat.slug && !filters.subcategoria }"
+                  @click="selectCategory(cat.slug)"
                 >
+                  {{ cat.name }}
+                  <small>{{ cat.productCount }}</small>
+                </button>
+
+                <!-- Las subcategorías solo se despliegan en la categoría
+                     abierta: mostrarlas todas convierte el panel en una
+                     lista de cincuenta enlaces. -->
+                <div v-if="filters.categoria === cat.slug && cat.subcategories?.length" class="cat__subs">
+                  <button
+                    v-for="sub in cat.subcategories"
+                    :key="sub.id"
+                    type="button"
+                    class="cat__sub"
+                    :class="{ 'is-active': filters.subcategoria === sub.slug }"
+                    @click="selectSubcategory(sub.slug)"
+                  >
+                    {{ sub.name }}
+                    <small>{{ sub.productCount }}</small>
+                  </button>
+                </div>
               </div>
-              <button
-                @click="sidebarOpen = false"
-                class="sidebar-close-btn"
-                aria-label="Cerrar filtros"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2.2"
-                  stroke="currentColor"
-                  width="14"
-                  height="14"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M6 18 18 6M6 6l12 12"
-                  />
-                </svg>
+            </section>
+
+            <!-- Precio -->
+            <section class="cat__block">
+              <p class="cat__block-title">Precio (S/)</p>
+              <div class="cat__price">
+                <input
+                  v-model.number="priceDraft.min"
+                  type="number"
+                  min="0"
+                  inputmode="numeric"
+                  class="cat__price-input"
+                  placeholder="Desde"
+                  aria-label="Precio mínimo"
+                  @keydown.enter="applyPrice"
+                />
+                <span aria-hidden="true">—</span>
+                <input
+                  v-model.number="priceDraft.max"
+                  type="number"
+                  min="0"
+                  inputmode="numeric"
+                  class="cat__price-input"
+                  placeholder="Hasta"
+                  aria-label="Precio máximo"
+                  @keydown.enter="applyPrice"
+                />
+              </div>
+              <button type="button" class="btn btn-soft btn-sm cat__price-apply" @click="applyPrice">
+                Aplicar
               </button>
-            </div>
+            </section>
 
-            <!-- ─ Búsqueda ─ -->
-            <div class="filter-section">
-              <button
-                class="filter-section__header"
-                @click="toggleSection('search')"
-              >
-                <span class="filter-section__title-row">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    width="13"
-                    height="13"
-                    class="filter-section__icon"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                    />
-                  </svg>
-                  Búsqueda
-                  <span v-if="filters.q" class="section-active-dot" />
-                </span>
-                <svg
-                  class="collapse-chevron"
-                  :class="{ 'collapse-chevron--open': openSections.search }"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2.2"
-                  stroke="currentColor"
-                  width="13"
-                  height="13"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </button>
-              <Transition name="section">
-                <div v-show="openSections.search" class="filter-section__body">
-                  <form class="search-row" @submit.prevent="applySearch">
-                    <UInput
-                      v-model="searchDraft"
-                      placeholder="Buscar productos..."
-                      class="search-input w-full"
-                    />
-                    <button
-                      type="submit"
-                      class="search-btn"
-                      aria-label="Buscar"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2.2"
-                        stroke="currentColor"
-                        width="14"
-                        height="14"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                        />
-                      </svg>
-                    </button>
-                  </form>
-                  <button
-                    v-if="filters.q"
-                    @click="clearSearch"
-                    class="clear-field-btn"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      width="11"
-                      height="11"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18 18 6M6 6l12 12"
-                      />
-                    </svg>
-                    Limpiar búsqueda
-                  </button>
-                </div>
-              </Transition>
-            </div>
-
-            <div class="filter-divider" />
-
-            <!-- ─ Precio ─ -->
-            <div class="filter-section">
-              <button
-                class="filter-section__header"
-                @click="toggleSection('price')"
-              >
-                <span class="filter-section__title-row">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    width="13"
-                    height="13"
-                    class="filter-section__icon"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
-                  Precio
-                  <span
-                    v-if="
-                      filters.precioMin !== null || filters.precioMax !== null
-                    "
-                    class="section-active-dot"
-                  />
-                </span>
-                <svg
-                  class="collapse-chevron"
-                  :class="{ 'collapse-chevron--open': openSections.price }"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2.2"
-                  stroke="currentColor"
-                  width="13"
-                  height="13"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </button>
-              <Transition name="section">
-                <div v-show="openSections.price" class="filter-section__body">
-                  <div class="price-range-grid">
-                    <div class="price-field">
-                      <label class="price-field__label">Mínimo</label>
-                      <div class="price-field__input-wrap">
-                        <span class="price-field__prefix">S/</span>
-                        <UInput
-                          v-model.number="filters.precioMin"
-                          type="number"
-                          placeholder="0"
-                          min="0"
-                          @update:model-value="onFilterChange(filters)"
-                          class="price-input w-full"
-                        />
-                      </div>
-                    </div>
-                    <div class="price-range-sep">—</div>
-                    <div class="price-field">
-                      <label class="price-field__label">Máximo</label>
-                      <div class="price-field__input-wrap">
-                        <span class="price-field__prefix">S/</span>
-                        <UInput
-                          v-model.number="filters.precioMax"
-                          type="number"
-                          placeholder="999"
-                          min="0"
-                          @update:model-value="onFilterChange(filters)"
-                          class="price-input w-full"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    v-if="
-                      filters.precioMin !== null || filters.precioMax !== null
-                    "
-                    @click="
-                      () => {
-                        filters.precioMin = null;
-                        filters.precioMax = null;
-                        onFilterChange(filters);
-                      }
-                    "
-                    class="clear-field-btn"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      width="11"
-                      height="11"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18 18 6M6 6l12 12"
-                      />
-                    </svg>
-                    Limpiar precio
-                  </button>
-                </div>
-              </Transition>
-            </div>
-
-            <div class="filter-divider" />
-
-            <!-- ─ Ordenamiento ─ -->
-            <div class="filter-section">
-              <button
-                class="filter-section__header"
-                @click="toggleSection('sort')"
-              >
-                <span class="filter-section__title-row">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    width="13"
-                    height="13"
-                    class="filter-section__icon"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
-                    />
-                  </svg>
-                  Ordenar
-                  <span v-if="filters.sort" class="section-active-dot" />
-                </span>
-                <svg
-                  class="collapse-chevron"
-                  :class="{ 'collapse-chevron--open': openSections.sort }"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2.2"
-                  stroke="currentColor"
-                  width="13"
-                  height="13"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </button>
-              <Transition name="section">
-                <div v-show="openSections.sort" class="filter-section__body">
-                  <div class="sort-options">
-                    <button
-                      v-for="opt in sortOptions"
-                      :key="opt.value"
-                      @click="
-                        () => {
-                          filters.sort = opt.value;
-                          onFilterChange(filters);
-                        }
-                      "
-                      :class="[
-                        'sort-option',
-                        filters.sort === opt.value && 'sort-option--active',
-                      ]"
-                    >
-                      <span class="sort-option__radio">
-                        <span
-                          v-if="filters.sort === opt.value"
-                          class="sort-option__radio-dot"
-                        />
-                      </span>
-                      <span class="sort-option__icon" aria-hidden="true">{{
-                        opt.icon
-                      }}</span>
-                      <span class="sort-option__label">{{ opt.label }}</span>
-                    </button>
-                  </div>
-                </div>
-              </Transition>
-            </div>
-
-            <div class="filter-divider" />
-
-            <!-- ─ Categorías ─ -->
-            <div class="filter-section">
-              <button
-                class="filter-section__header"
-                @click="toggleSection('cats')"
-              >
-                <span class="filter-section__title-row">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    width="13"
-                    height="13"
-                    class="filter-section__icon"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
-                    />
-                  </svg>
-                  Categorías
-                  <span
-                    v-if="
-                      filters.categoria ||
-                      filters.subcategoria ||
-                      filters.nuevoLanzamiento
-                    "
-                    class="section-active-dot"
-                  />
-                </span>
-                <svg
-                  class="collapse-chevron"
-                  :class="{ 'collapse-chevron--open': openSections.cats }"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2.2"
-                  stroke="currentColor"
-                  width="13"
-                  height="13"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </button>
-              <Transition name="section">
-                <div v-show="openSections.cats" class="filter-section__body">
-                  <ul class="category-list">
-                    <li>
-                      <button
-                        @click="toggleNuevoLanzamiento()"
-                        :class="[
-                          'category-btn',
-                          filters.nuevoLanzamiento && 'category-btn--active',
-                        ]"
-                      >
-                        <span
-                          class="cat-pip"
-                          :class="{
-                            'cat-pip--active': filters.nuevoLanzamiento,
-                          }"
-                        />
-                        <span class="cat-btn-label">Nuevo lanzamiento</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        @click="selectCategory(null)"
-                        :class="[
-                          'category-btn',
-                          !filters.categoria &&
-                            !filters.subcategoria &&
-                            !filters.nuevoLanzamiento &&
-                            'category-btn--active',
-                        ]"
-                      >
-                        <span
-                          class="cat-pip"
-                          :class="{
-                            'cat-pip--active':
-                              !filters.categoria &&
-                              !filters.subcategoria &&
-                              !filters.nuevoLanzamiento,
-                          }"
-                        />
-                        <span class="cat-btn-label">Todos los productos</span>
-                      </button>
-                    </li>
-                    <li v-for="cat in categories?.data ?? []" :key="cat.slug">
-                      <button
-                        @click="selectCategory(cat.slug)"
-                        :class="[
-                          'category-btn',
-                          filters.categoria === cat.slug &&
-                            !filters.nuevoLanzamiento &&
-                            'category-btn--active',
-                        ]"
-                      >
-                        <span
-                          class="cat-pip"
-                          :class="{
-                            'cat-pip--active':
-                              filters.categoria === cat.slug &&
-                              !filters.nuevoLanzamiento,
-                          }"
-                        />
-                        <span class="cat-btn-label">{{ cat.name }}</span>
-                        <!-- <span v-if="cat.productCount" class="cat-count-pill">{{
-                          cat.productCount
-                        }}</span> -->
-                      </button>
-                      <Transition name="subcats">
-                        <ul
-                          v-if="
-                            filters.categoria === cat.slug &&
-                            cat.subcategories?.length
-                          "
-                          class="subcategory-list"
-                        >
-                          <li v-for="sub in cat.subcategories" :key="sub.slug">
-                            <button
-                              @click="selectSubcategory(sub.slug)"
-                              :class="[
-                                'subcategory-btn',
-                                filters.subcategoria === sub.slug &&
-                                  'subcategory-btn--active',
-                              ]"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2.5"
-                                stroke="currentColor"
-                                width="10"
-                                height="10"
-                                class="shrink-0"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                                />
-                              </svg>
-                              {{ sub.name }}
-                            </button>
-                          </li>
-                        </ul>
-                      </Transition>
-                    </li>
-                  </ul>
-                </div>
-              </Transition>
-            </div>
-
-            <!-- Reset global -->
-            <Transition name="fade">
-              <button
-                v-if="activeFilterCount"
-                @click="resetFilters"
-                class="reset-btn"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  width="13"
-                  height="13"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                  />
-                </svg>
-                Limpiar todos los filtros
-                <span class="reset-btn__badge">{{ activeFilterCount }}</span>
-              </button>
-            </Transition>
+            <button
+              v-if="activeFilters.length"
+              type="button"
+              class="btn btn-ghost btn-sm cat__clear"
+              @click="resetFilters"
+            >
+              Quitar todos los filtros
+            </button>
           </div>
         </aside>
 
-        <!-- Overlay mobile -->
-        <div
-          v-if="sidebarOpen"
-          class="sidebar-overlay lg:hidden"
-          @click="sidebarOpen = false"
-        />
+        <Transition name="cat-fade">
+          <div v-if="asideOpen" class="cat__scrim" @click="asideOpen = false" />
+        </Transition>
 
-        <!-- ── MAIN ── -->
-        <main class="products-main">
-          <!-- Toolbar -->
-          <div class="toolbar">
-            <div class="results-info">
-              <template v-if="!pending">
-                <span class="count-num">{{ products?.data?.length ?? 0 }}</span>
-                <span class="count-label">productos encontrados</span>
-              </template>
-              <span v-else class="count-searching">
-                <span class="dot" /><span class="dot" /><span class="dot" />
-                Buscando...
-              </span>
-            </div>
-            <div class="toolbar-right">
-              <div v-if="activeFilterCount && filters.q" class="filter-chips">
-                <span class="chip">
-                  "{{ filters.q }}"
-                  <button
-                    @click="clearSearch"
-                    class="chip-remove"
-                    aria-label="Quitar filtro"
-                  >
-                    ×
-                  </button>
-                </span>
-              </div>
-              <!-- Sort quick access desktop -->
-              <div class="toolbar-sort">
-                <select
-                  v-model="filters.sort"
-                  @change="onFilterChange(filters)"
-                  class="toolbar-select"
-                  aria-label="Ordenar por"
-                >
-                  <option
-                    v-for="opt in sortOptions"
-                    :key="opt.value"
-                    :value="opt.value"
-                  >
-                    {{ opt.label }}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Grid -->
-          <div class="products-grid">
-            <template v-if="pending">
-              <div v-for="i in 8" :key="`sk-${i}`" class="product-skeleton" />
-            </template>
-            <template v-else>
-              <EcommerceTarjetaProducto
-                v-for="product in products?.data ?? []"
-                :key="product.id"
-                :product="product"
-                :mostrar-boton="true"
-                @agregar-al-carrito="manejarAgregarAlCarrito"
-              />
-            </template>
-
-            <!-- Empty state -->
-            <div
-              v-if="!pending && (products?.data?.length ?? 0) === 0"
-              class="empty-state"
-            >
-              <div class="empty-icon-wrap">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.2"
-                  stroke="currentColor"
-                  width="36"
-                  height="36"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                  />
-                </svg>
-              </div>
-              <p class="empty-title">Sin resultados</p>
-              <p class="empty-sub">
-                Prueba con otros filtros o términos de búsqueda
-              </p>
-              <button @click="resetFilters" class="btn-primary">
-                Limpiar filtros
-              </button>
-            </div>
-          </div>
-
-          <!-- Load more -->
-          <div
-            v-if="(products?.data?.length ?? 0) >= filters.limit"
-            class="load-more-wrap"
-          >
-            <button
-              @click="filters.page++"
-              :disabled="pending"
-              class="btn-load-more"
-            >
-              <svg
-                v-if="!pending"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                width="15"
-                height="15"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
-                />
+        <!-- ═══ Resultados ═══ -->
+        <div class="cat__main">
+          <!-- Barra de herramientas -->
+          <div class="cat__toolbar">
+            <button type="button" class="cat__filter-btn" @click="asideOpen = true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6h16M7 12h10M10 18h4" />
               </svg>
-              {{ pending ? "Cargando..." : "Cargar más productos" }}
+              Filtros
+              <span v-if="activeFilters.length" class="cat__filter-pip">{{ activeFilters.length }}</span>
+            </button>
+
+            <div class="cat__sort">
+              <label for="cat-sort">Ordenar</label>
+              <select id="cat-sort" v-model="sortModel" class="cat__sort-select">
+                <option v-for="opt in sortOptions" :key="opt.value" :value="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Filtros activos -->
+          <ul v-if="activeFilters.length" class="cat__pills">
+            <li v-for="pill in activeFilters" :key="pill.key">
+              <button type="button" class="cat__pill" @click="pill.clear()">
+                {{ pill.label }}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </li>
+          </ul>
+
+          <!-- Carga -->
+          <div v-if="pending" class="cp-grid">
+            <div v-for="i in filters.limit" :key="`sk-${i}`" class="cat__skeleton">
+              <div class="cp-skeleton cat__skeleton-media" />
+              <div class="cp-skeleton cat__skeleton-line" style="width: 42%" />
+              <div class="cp-skeleton cat__skeleton-line" style="width: 88%" />
+              <div class="cp-skeleton cat__skeleton-line" style="width: 50%; height: 18px" />
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div v-else-if="error" class="cat__state">
+            <h2 class="cat__state-title">No pudimos cargar el catálogo</h2>
+            <p class="cat__state-text">{{ error.message || "Vuelve a intentarlo en un momento." }}</p>
+            <button type="button" class="btn btn-primary btn-sm" @click="() => refresh()">Reintentar</button>
+          </div>
+
+          <!-- Productos -->
+          <div v-else-if="products.length" class="cp-grid">
+            <EcommerceTarjetaProducto
+              v-for="product in products"
+              :key="product.id"
+              :product="product"
+            />
+          </div>
+
+          <!-- Sin resultados -->
+          <div v-else class="cat__state">
+            <h2 class="cat__state-title">Sin resultados</h2>
+            <p class="cat__state-text">
+              <template v-if="filters.q">
+                No encontramos nada para “{{ filters.q }}”. Prueba con el modelo
+                del equipo o el tipo de pieza.
+              </template>
+              <template v-else>
+                Ningún producto coincide con estos filtros.
+              </template>
+            </p>
+            <button type="button" class="btn btn-primary btn-sm" @click="resetFilters">
+              Quitar los filtros
             </button>
           </div>
-        </main>
+
+          <!-- Paginación -->
+          <nav v-if="totalPages > 1 && !pending" class="cat__pager" aria-label="Paginación">
+            <button
+              type="button"
+              class="cat__pager-btn"
+              :disabled="filters.page <= 1"
+              @click="goToPage(filters.page - 1)"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 6-6 6 6 6" />
+              </svg>
+              Anterior
+            </button>
+
+            <ul class="cat__pager-list">
+              <li v-for="(page, i) in pageList" :key="`p-${i}`">
+                <span v-if="page === '…'" class="cat__pager-gap">…</span>
+                <button
+                  v-else
+                  type="button"
+                  class="cat__pager-num"
+                  :class="{ 'is-active': page === filters.page }"
+                  :aria-current="page === filters.page ? 'page' : undefined"
+                  @click="goToPage(page as number)"
+                >
+                  {{ page }}
+                </button>
+              </li>
+            </ul>
+
+            <button
+              type="button"
+              class="cat__pager-btn"
+              :disabled="filters.page >= totalPages"
+              @click="goToPage(filters.page + 1)"
+            >
+              Siguiente
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m9 6 6 6-6 6" />
+              </svg>
+            </button>
+          </nav>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "landing" });
+import type { DisplayProduct } from "~/composables/useProductDisplay";
 
-useSeoMeta({
-  title: "Catálogo — Celparts SAC",
-  description: "Explora toda nuestra gama de productos para móviles.",
-});
+definePageMeta({ layout: "default" });
 
-const route = useRoute();
-const sidebarOpen = ref(false);
-const searchDraft = ref("");
-
-const sortOptions = [
-  { value: "", label: "Recomendado", icon: "⭐" },
-  { value: "precio-asc", label: "Precio: menor a mayor", icon: "↑" },
-  { value: "precio-desc", label: "Precio: mayor a menor", icon: "↓" },
-  { value: "nombre-asc", label: "Nombre: A → Z", icon: "A" },
-  { value: "nombre-desc", label: "Nombre: Z → A", icon: "Z" },
-];
-
-const openSections = reactive({
-  search: false,
-  price: false,
-  sort: false,
-  cats: false,
-});
-
-function syncOpenSectionsFromFilters() {
-  openSections.search = Boolean(filters.q);
-  openSections.price = filters.precioMin !== null || filters.precioMax !== null;
-  openSections.sort = Boolean(filters.sort);
-  openSections.cats =
-    Boolean(filters.categoria) ||
-    Boolean(filters.subcategoria) ||
-    filters.nuevoLanzamiento;
-}
-
-function toggleSection(key: keyof typeof openSections) {
-  openSections[key] = !openSections[key];
-}
-
-type CatalogProduct = {
+type Subcategory = { id: number; name: string; slug: string; productCount: number };
+type Category = {
   id: number;
   name: string;
   slug: string;
-  description: string | null;
-  price: number;
-  category?: { name: string } | null;
-  subcategory?: { name: string } | null;
-  images?: Array<{ id: number; url: string; isPrimary: boolean }>;
-  isFeatured: boolean;
+  productCount: number;
+  subcategories?: Subcategory[];
 };
 
-const { data: categories } = await useFetch("/api/categories", {
+const route = useRoute();
+const asideOpen = ref(false);
+
+const sortOptions = [
+  { value: "", label: "Más recientes" },
+  { value: "precio-asc", label: "Precio: menor a mayor" },
+  { value: "precio-desc", label: "Precio: mayor a menor" },
+  { value: "nombre-asc", label: "Nombre: A → Z" },
+  { value: "nombre-desc", label: "Nombre: Z → A" },
+];
+
+/* ── Estado de filtros, siempre derivado de la URL ──
+   La URL es la fuente de verdad: así un enlace a una categoría filtrada
+   se puede compartir y el botón atrás del navegador funciona. */
+const readQuery = (value: unknown) => (Array.isArray(value) ? value[0] : value);
+
+const toStringOrNull = (value: unknown) => {
+  const raw = readQuery(value);
+  if (raw == null) return null;
+  const str = String(raw).trim();
+  return str || null;
+};
+
+const toNumberOrNull = (value: unknown) => {
+  const raw = readQuery(value);
+  if (raw == null || raw === "") return null;
+  const num = Number(raw);
+  return Number.isFinite(num) ? num : null;
+};
+
+const toBool = (value: unknown) => {
+  const raw = String(readQuery(value) ?? "");
+  return raw === "1" || raw === "true";
+};
+
+const toPositiveInt = (value: unknown, fallback: number) => {
+  const num = Number(readQuery(value));
+  return Number.isFinite(num) && num >= 1 ? Math.floor(num) : fallback;
+};
+
+const filters = computed(() => ({
+  categoria: toStringOrNull(route.query.categoria),
+  subcategoria: toStringOrNull(route.query.subcategoria),
+  nuevoLanzamiento: toBool(route.query.nuevoLanzamiento),
+  q: toStringOrNull(route.query.q) ?? "",
+  precioMin: toNumberOrNull(route.query.precioMin),
+  precioMax: toNumberOrNull(route.query.precioMax),
+  sort: toStringOrNull(route.query.sort) ?? "",
+  page: toPositiveInt(route.query.page, 1),
+  limit: toPositiveInt(route.query.limit, 24),
+}));
+
+/* Navegar reescribe la query completa: así ningún parámetro viejo
+   sobrevive a un cambio de filtro. */
+function applyFilters(patch: Record<string, any>, keepPage = false) {
+  const next = { ...filters.value, ...patch };
+  if (!keepPage) next.page = 1;
+
+  const query: Record<string, string> = {};
+  if (next.categoria) query.categoria = String(next.categoria);
+  if (next.subcategoria) query.subcategoria = String(next.subcategoria);
+  if (next.nuevoLanzamiento) query.nuevoLanzamiento = "1";
+  if (next.q) query.q = String(next.q);
+  if (next.precioMin != null) query.precioMin = String(next.precioMin);
+  if (next.precioMax != null) query.precioMax = String(next.precioMax);
+  if (next.sort) query.sort = String(next.sort);
+  query.page = String(next.page);
+  query.limit = String(next.limit);
+
+  asideOpen.value = false;
+  return navigateTo({ path: "/productos", query });
+}
+
+/* ── Datos ── */
+const { data: categoriesData } = await useFetch<{ data: Category[] }>("/api/categories", {
   query: { active: true },
-  server: false,
+  key: "catalogo-categorias",
+  default: () => ({ data: [] }),
   lazy: true,
 });
 
-const toNumberOrNull = (v: any) => {
-  if (v == null) return null;
-  const val = Array.isArray(v) ? v[0] : v;
-  const n = Number(val);
-  return Number.isNaN(n) ? null : n;
-};
-
-const readQueryValue = (value: unknown) =>
-  Array.isArray(value) ? value[0] : value;
-
-const toQueryStringOrNull = (value: unknown) => {
-  const normalized = readQueryValue(value);
-  if (normalized == null) return null;
-  const stringValue = String(normalized).trim();
-  return stringValue ? stringValue : null;
-};
-
-const filters = reactive({
-  categoria: toQueryStringOrNull(route.query.categoria) as string | null,
-  subcategoria: toQueryStringOrNull(route.query.subcategoria) as string | null,
-  nuevoLanzamiento:
-    String(readQueryValue(route.query.nuevoLanzamiento) ?? '') === '1' ||
-    String(readQueryValue(route.query.nuevoLanzamiento) ?? '') === 'true',
-  q: (readQueryValue(route.query.q) ?? "") as string,
-  precioMin: toNumberOrNull(route.query.precioMin),
-  precioMax: toNumberOrNull(route.query.precioMax),
-  sort: (readQueryValue(route.query.sort) ?? "") as string,
-  page: (() => {
-    const p = readQueryValue(route.query.page);
-    const n = Number(p);
-    return Number.isNaN(n) ? 1 : n;
-  })(),
-  limit: (() => {
-    const l = readQueryValue(route.query.limit);
-    const n = Number(l);
-    return Number.isNaN(n) ? 24 : n;
-  })(),
-});
-
-const syncFiltersFromRoute = () => {
-  filters.categoria = toQueryStringOrNull(route.query.categoria) as string | null;
-  filters.subcategoria = toQueryStringOrNull(route.query.subcategoria) as string | null;
-  filters.nuevoLanzamiento =
-    String(readQueryValue(route.query.nuevoLanzamiento) ?? '') === '1' ||
-    String(readQueryValue(route.query.nuevoLanzamiento) ?? '') === 'true';
-  filters.q = (readQueryValue(route.query.q) ?? "") as string;
-  filters.precioMin = toNumberOrNull(route.query.precioMin);
-  filters.precioMax = toNumberOrNull(route.query.precioMax);
-  filters.sort = (readQueryValue(route.query.sort) ?? "") as string;
-  searchDraft.value = filters.q;
-  const routePage = Number(readQueryValue(route.query.page));
-  filters.page = Number.isNaN(routePage) ? 1 : routePage;
-  const routeLimit = Number(readQueryValue(route.query.limit));
-  filters.limit = Number.isNaN(routeLimit) ? 24 : routeLimit;
-  syncOpenSectionsFromFilters();
-};
-
-watch(
-  () => route.query,
-  () => {
-    syncFiltersFromRoute();
-  },
-  { deep: true },
+const categories = computed(() =>
+  (categoriesData.value?.data ?? []).filter((c) => (c.productCount ?? 0) > 0),
 );
 
-syncFiltersFromRoute();
-
-const activeFilterCount = computed(() => {
-  let count = 0;
-  if (filters.categoria) count++;
-  if (filters.subcategoria) count++;
-  if (filters.nuevoLanzamiento) count++;
-  if (filters.q) count++;
-  if (filters.precioMin !== null) count++;
-  if (filters.precioMax !== null) count++;
-  if (filters.sort) count++;
-  return count;
+const productQuery = computed(() => {
+  const f = filters.value;
+  const q: Record<string, string> = {
+    page: String(f.page),
+    limit: String(f.limit),
+  };
+  if (f.categoria) q.categoria = f.categoria;
+  if (f.subcategoria) q.subcategoria = f.subcategoria;
+  if (f.nuevoLanzamiento) q.nuevoLanzamiento = "1";
+  if (f.q) q.q = f.q;
+  if (f.precioMin != null) q.precioMin = String(f.precioMin);
+  if (f.precioMax != null) q.precioMax = String(f.precioMax);
+  if (f.sort) q.sort = f.sort;
+  return q;
 });
 
-const queryParams = computed(() => {
-  const q: Record<string, any> = {}
-  if (filters.categoria != null) q.categoria = String(filters.categoria)
-  if (filters.subcategoria != null) q.subcategoria = String(filters.subcategoria)
-  if (filters.nuevoLanzamiento) q.nuevoLanzamiento = '1'
-  if (filters.q) q.q = filters.q
-  if (filters.precioMin != null) q.precioMin = String(filters.precioMin)
-  if (filters.precioMax != null) q.precioMax = String(filters.precioMax)
-  if (filters.sort) q.sort = filters.sort
-  if (filters.page != null) q.page = String(filters.page)
-  if (filters.limit != null) q.limit = String(filters.limit)
-  return q
-})
-
-const { data: products, pending } = await useFetch<{
-  data: CatalogProduct[];
+const { data, pending, error, refresh } = await useFetch<{
+  data: DisplayProduct[];
   page: number;
   limit: number;
   total: number;
 }>("/api/products", {
-  query: queryParams,
-  watch: [queryParams],
+  query: productQuery,
+  watch: [productQuery],
 });
 
-const cartStore = useCartStore();
-const toast = useAppToast();
-const addingIds = ref(new Set<number>());
+const products = computed(() => data.value?.data ?? []);
+const total = computed(() => data.value?.total ?? 0);
+const totalPages = computed(() => Math.max(1, Math.ceil(total.value / filters.value.limit)));
 
-async function manejarAgregarAlCarrito(producto: any) {
-  addingIds.value.add(producto.id);
-  cartStore.add({
-    id: producto.id,
-    name: producto.name,
-    price: producto.price,
-    quantity: 1,
-    image: producto.images?.length
-      ? (producto.images.find((i: any) => i.isPrimary)?.url ??
-        producto.images[0].url)
-      : null,
-  });
-  toast.add({
-    title: "Agregado al carrito",
-    description: producto.name,
-    color: "success",
-  });
-  await new Promise((r) => setTimeout(r, 450));
-  addingIds.value.delete(producto.id);
-}
+/* ── Etiquetas ── */
+const activeCategory = computed(() =>
+  categories.value.find((c) => c.slug === filters.value.categoria) ?? null,
+);
 
-function selectCategory(slug: string | null) {
-  filters.categoria = slug;
-  filters.subcategoria = null;
-  filters.nuevoLanzamiento = false;
-  openSections.cats = true;
-  onFilterChange(filters);
-}
+const activeSubcategory = computed(
+  () =>
+    activeCategory.value?.subcategories?.find(
+      (s) => s.slug === filters.value.subcategoria,
+    ) ?? null,
+);
 
-function toggleNuevoLanzamiento() {
-  filters.nuevoLanzamiento = !filters.nuevoLanzamiento;
-  if (filters.nuevoLanzamiento) {
-    filters.categoria = null;
-    filters.subcategoria = null;
+const pageTitle = computed(() => {
+  if (filters.value.q) return `Resultados para “${filters.value.q}”`;
+  if (activeSubcategory.value) return activeSubcategory.value.name;
+  if (activeCategory.value) return activeCategory.value.name;
+  if (filters.value.nuevoLanzamiento) return "Novedades";
+  return "Repuestos y accesorios";
+});
+
+const formatPrice = useFormatPrice();
+
+/* Chips de lo que está aplicado, cada uno con su propio "quitar".
+   Sin esto el usuario no sabe por qué ve 3 resultados. */
+const activeFilters = computed(() => {
+  const f = filters.value;
+  const pills: Array<{ key: string; label: string; clear: () => void }> = [];
+
+  if (f.q) {
+    pills.push({ key: "q", label: `“${f.q}”`, clear: () => applyFilters({ q: "" }) });
   }
-  openSections.cats = true;
-  onFilterChange(filters);
+  if (f.nuevoLanzamiento) {
+    pills.push({
+      key: "nuevo",
+      label: "Novedades",
+      clear: () => applyFilters({ nuevoLanzamiento: false }),
+    });
+  }
+  if (activeCategory.value) {
+    pills.push({
+      key: "cat",
+      label: activeCategory.value.name,
+      clear: () => applyFilters({ categoria: null, subcategoria: null }),
+    });
+  }
+  if (activeSubcategory.value) {
+    pills.push({
+      key: "sub",
+      label: activeSubcategory.value.name,
+      clear: () => applyFilters({ subcategoria: null }),
+    });
+  }
+  if (f.precioMin != null || f.precioMax != null) {
+    const from = f.precioMin != null ? formatPrice.format(f.precioMin) : "S/ 0.00";
+    const to = f.precioMax != null ? formatPrice.format(f.precioMax) : "sin tope";
+    pills.push({
+      key: "precio",
+      label: `${from} — ${to}`,
+      clear: () => applyFilters({ precioMin: null, precioMax: null }),
+    });
+  }
+
+  return pills;
+});
+
+/* ── Acciones ── */
+function selectCategory(slug: string | null) {
+  applyFilters({ categoria: slug, subcategoria: null, nuevoLanzamiento: false });
 }
 
 function selectSubcategory(slug: string) {
-  filters.subcategoria = slug;
-  filters.nuevoLanzamiento = false;
-  openSections.cats = true;
-  onFilterChange(filters);
+  /* Volver a tocar la subcategoría abierta la deselecciona: es lo que
+     espera quien la usa como interruptor. */
+  const next = filters.value.subcategoria === slug ? null : slug;
+  applyFilters({ subcategoria: next, nuevoLanzamiento: false });
+}
+
+function toggleNovedades() {
+  applyFilters({
+    nuevoLanzamiento: !filters.value.nuevoLanzamiento,
+    categoria: null,
+    subcategoria: null,
+  });
+}
+
+const priceDraft = reactive({
+  min: filters.value.precioMin as number | null,
+  max: filters.value.precioMax as number | null,
+});
+
+watch(filters, (f) => {
+  priceDraft.min = f.precioMin;
+  priceDraft.max = f.precioMax;
+});
+
+function applyPrice() {
+  let min = Number.isFinite(Number(priceDraft.min)) ? Number(priceDraft.min) : null;
+  let max = Number.isFinite(Number(priceDraft.max)) ? Number(priceDraft.max) : null;
+  if (min !== null && min < 0) min = null;
+  if (max !== null && max < 0) max = null;
+  /* Invertidos no devuelven nada: se ordenan en lugar de mostrar cero
+     resultados sin explicación. */
+  if (min !== null && max !== null && min > max) [min, max] = [max, min];
+  applyFilters({ precioMin: min, precioMax: max });
 }
 
 function resetFilters() {
-  filters.categoria = null;
-  filters.subcategoria = null;
-  filters.q = "";
-  filters.precioMin = null;
-  filters.precioMax = null;
-  filters.sort = "";
-  filters.nuevoLanzamiento = false;
-  searchDraft.value = "";
-  onFilterChange(filters);
+  navigateTo({ path: "/productos", query: { page: "1", limit: String(filters.value.limit) } });
+  asideOpen.value = false;
 }
 
-function onFilterChange(f: any) {
-  Object.assign(filters, f);
-  filters.page = 1;
-  const q: Record<string, any> = {
-    ...(filters.categoria != null
-      ? { categoria: String(filters.categoria) }
-      : {}),
-    ...(filters.subcategoria != null
-      ? { subcategoria: String(filters.subcategoria) }
-      : {}),
-    ...(filters.nuevoLanzamiento ? { nuevoLanzamiento: "1" } : {}),
-    ...(filters.q ? { q: String(filters.q) } : {}),
-    ...(filters.precioMin != null
-      ? { precioMin: String(filters.precioMin) }
-      : {}),
-    ...(filters.precioMax != null
-      ? { precioMax: String(filters.precioMax) }
-      : {}),
-    ...(filters.sort ? { sort: String(filters.sort) } : {}),
-    page: String(filters.page),
-    limit: String(filters.limit),
-  };
-  navigateTo({ path: "/productos", query: q, replace: true });
+const sortModel = computed({
+  get: () => filters.value.sort,
+  set: (value: string) => applyFilters({ sort: value }),
+});
+
+function goToPage(page: number) {
+  const target = Math.min(Math.max(1, page), totalPages.value);
+  if (target === filters.value.page) return;
+  applyFilters({ page: target }, true);
+  if (import.meta.client) window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function applySearch() {
-  filters.q = searchDraft.value.trim();
-  openSections.search = true;
-  onFilterChange(filters);
-}
+/* Ventana de páginas con elipsis: con 40 páginas no caben todas. */
+const pageList = computed<Array<number | "…">>(() => {
+  const current = filters.value.page;
+  const last = totalPages.value;
+  if (last <= 7) return Array.from({ length: last }, (_, i) => i + 1);
 
-function clearSearch() {
-  searchDraft.value = "";
-  filters.q = "";
-  openSections.search = false;
-  onFilterChange(filters);
-}
+  const pages = new Set<number>([1, last, current]);
+  for (const offset of [-1, 1]) {
+    const page = current + offset;
+    if (page > 1 && page < last) pages.add(page);
+  }
+
+  const sorted = [...pages].sort((a, b) => a - b);
+  const out: Array<number | "…"> = [];
+  let prev = 0;
+  for (const page of sorted) {
+    if (prev && page - prev > 1) out.push("…");
+    out.push(page);
+    prev = page;
+  }
+  return out;
+});
+
+/* El cajón de filtros bloquea el fondo mientras está abierto. */
+watch(asideOpen, (open) => {
+  if (import.meta.client) document.body.style.overflow = open ? "hidden" : "";
+});
+
+onUnmounted(() => {
+  if (import.meta.client) document.body.style.overflow = "";
+});
+
+/* ── SEO ──
+   Las páginas filtradas o paginadas generan combinaciones infinitas;
+   solo la portada del catálogo se indexa. */
+useSeoMeta({
+  title: () => `${pageTitle.value} — CelParts`,
+  description:
+    "Catálogo de repuestos y accesorios para celulares: pantallas, baterías, flex, conectores y accesorios con garantía y envíos a todo el Perú.",
+  robots: () =>
+    activeFilters.value.length || filters.value.page > 1
+      ? "noindex, follow"
+      : "index, follow",
+});
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   CATÁLOGO PRODUCTOS — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
-
-/* ─── Page ───────────────────────────────────────────────── */
-.catalog-page {
-  min-height: 100vh;
-  background: var(--bg-base);
+.cat {
+  padding-block: var(--sp-6) var(--section-y);
 }
 
-/* ─── Body ──────────────────────────────────────────────── */
-.catalog-body {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 1.75rem 1.25rem 5rem;
-}
-
-/* ─── Mobile filter toggle ──────────────────────────────── */
-.mobile-filter-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  padding: 0.55rem 1.1rem;
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-md);
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--text-body);
-  cursor: pointer;
-  letter-spacing: 0.02em;
-  transition:
-    border-color var(--t-fast) var(--ease-smooth),
-    color var(--t-fast) var(--ease-smooth),
-    background var(--t-fast) var(--ease-smooth);
-}
-.mobile-filter-toggle:hover {
-  border-color: rgba(0, 174, 239, 0.35);
-  color: var(--cp-electric);
-  background: rgba(0, 174, 239, 0.04);
-}
-.filter-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  background: var(--cp-electric);
-  color: var(--cp-white);
-  font-size: 0.65rem;
-  font-weight: 800;
-  border-radius: var(--r-pill);
-}
-
-/* ─── Layout ────────────────────────────────────────────── */
-.catalog-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-@media (min-width: 1024px) {
-  .catalog-layout {
-    grid-template-columns: 276px 1fr;
-  }
-}
-
-/* ─── Sidebar ───────────────────────────────────────────── */
-.sidebar {
-  display: none;
-}
-@media (min-width: 1024px) {
-  .sidebar {
-    display: block;
-  }
-}
-
-@media (max-width: 1023px) {
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 300px;
-    height: 100vh;
-    z-index: 50;
-    transform: translateX(-100%);
-    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    display: block;
-  }
-  .sidebar.sidebar-open {
-    transform: translateX(0);
-  }
-}
-
-.sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  z-index: 40;
-  backdrop-filter: blur(2px);
-}
-
-.sidebar-inner {
-  background: var(--bg-surface);
-  border-radius: var(--r-xl);
-  border: 1px solid var(--border-light);
-  padding: 0;
-  position: sticky;
-  top: 1.5rem;
-  overflow: hidden;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--card-shadow);
-}
-@media (max-width: 1023px) {
-  .sidebar-inner {
-    border-radius: 0;
-    height: 100%;
-    overflow-y: auto;
-    position: static;
-  }
-}
-
-/* ─── Sidebar mobile header ─────────────────────────────── */
-.sidebar-mobile-header {
+/* ── Cabecera ── */
+.cat__crumb {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.1rem;
-  border-bottom: 1px solid var(--border-light);
-  background: var(--bg-alt);
-}
-.sidebar-mobile-title-row {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.sidebar-mobile-title {
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.01em;
-}
-.sidebar-mobile-badge {
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: var(--r-pill);
-  background: rgba(0, 174, 239, 0.08);
-  border: 1px solid rgba(0, 174, 239, 0.2);
-  color: var(--cp-electric);
-  letter-spacing: 0.04em;
-}
-.sidebar-close-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--r-sm);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all var(--t-fast) var(--ease-smooth);
-}
-.sidebar-close-btn:hover {
-  background: rgba(0, 174, 239, 0.06);
-  border-color: rgba(0, 174, 239, 0.2);
-  color: var(--cp-electric);
-}
-
-/* ═══════════════════════════════════
-   FILTER SECTIONS — COLLAPSIBLE
-═══════════════════════════════════ */
-.filter-section {
-  border-bottom: none;
-}
-
-.filter-section__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0.85rem 1.1rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background var(--t-fast) var(--ease-smooth);
-  gap: 0.5rem;
-}
-.filter-section__header:hover {
-  background: rgba(0, 174, 239, 0.04);
-}
-
-.filter-section__title-row {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-body);
-}
-.filter-section__icon {
-  color: var(--cp-electric);
-  flex-shrink: 0;
-}
-
-.section-active-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--cp-electric);
-  flex-shrink: 0;
-  box-shadow: 0 0 0 2px rgba(0, 174, 239, 0.2);
-}
-
-.collapse-chevron {
-  color: var(--text-muted);
-  flex-shrink: 0;
-  transition:
-    transform 0.22s ease,
-    color var(--t-fast) var(--ease-smooth);
-}
-.collapse-chevron--open {
-  transform: rotate(180deg);
-  color: var(--cp-electric);
-}
-
-.filter-section__body {
-  padding: 0 1.1rem 1rem;
-}
-
-/* Transitions */
-.section-enter-active,
-.section-leave-active {
-  transition:
-    opacity 0.2s ease,
-    max-height 0.22s ease,
-    padding 0.22s ease;
-  overflow: hidden;
-}
-.section-enter-from,
-.section-leave-to {
-  opacity: 0;
-  max-height: 0;
-  padding-bottom: 0;
-}
-.section-enter-to,
-.section-leave-from {
-  opacity: 1;
-  max-height: 500px;
-}
-
-.filter-divider {
-  height: 1px;
-  background: var(--border-light);
-  margin: 0;
-}
-
-/* ─── Search field ──────────────────────────────────────── */
-.search-row {
-  display: flex;
-  align-items: stretch;
-  gap: 0.4rem;
-}
-.search-btn {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--r-sm);
-  border: none;
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  cursor: pointer;
-  transition:
-    background var(--t-fast) var(--ease-smooth),
-    transform var(--t-fast) var(--ease-snappy);
-}
-.search-btn:hover {
-  background: var(--btn-primary-hover);
-  transform: translateY(-1px);
-}
-.search-input :deep(input) {
-  background: var(--bg-alt) !important;
-  border-color: var(--border-light) !important;
-  color: var(--text-primary) !important;
-  font-size: 0.85rem !important;
-  border-radius: var(--r-sm) !important;
-  height: 36px !important;
-}
-.search-input :deep(input:focus) {
-  border-color: rgba(0, 174, 239, 0.5) !important;
-  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.09) !important;
-  background: var(--bg-surface) !important;
-}
-.search-input :deep(input::placeholder) {
-  color: var(--text-muted) !important;
-}
-
-.clear-field-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: color var(--t-fast) var(--ease-smooth);
-}
-.clear-field-btn:hover {
-  color: var(--cp-electric);
-}
-
-/* ─── Price range ───────────────────────────────────────── */
-.price-range-grid {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.5rem;
-}
-.price-field {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  min-width: 0;
-}
-.price-field__label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-.price-field__input-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.price-field__prefix {
-  position: absolute;
-  left: 9px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--cp-electric);
-  pointer-events: none;
-  z-index: 1;
-  line-height: 1;
-}
-.price-input :deep(input) {
-  background: var(--bg-alt) !important;
-  border-color: var(--border-light) !important;
-  color: var(--text-primary) !important;
-  font-size: 0.85rem !important;
-  border-radius: var(--r-sm) !important;
-  height: 36px !important;
-  padding-left: 24px !important;
-}
-.price-input :deep(input:focus) {
-  border-color: rgba(0, 174, 239, 0.5) !important;
-  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.09) !important;
-  background: var(--bg-surface) !important;
-}
-.price-input :deep(input::placeholder) {
-  color: var(--text-muted) !important;
-}
-.price-range-sep {
-  font-size: 0.8rem;
-  color: var(--border-mid);
-  font-weight: 600;
-  padding-bottom: 0.5rem;
-  flex-shrink: 0;
-}
-
-/* ─── Sort options ──────────────────────────────────────── */
-.sort-options {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.sort-option {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  width: 100%;
-  padding: 0.55rem 0.7rem;
-  border-radius: var(--r-sm);
-  border: 1px solid transparent;
-  background: transparent;
-  cursor: pointer;
-  text-align: left;
-  transition:
-    background var(--t-fast) var(--ease-smooth),
-    border-color var(--t-fast) var(--ease-smooth);
-}
-.sort-option:hover {
-  background: rgba(0, 174, 239, 0.06);
-  border-color: rgba(0, 174, 239, 0.15);
-}
-.sort-option--active {
-  background: rgba(0, 174, 239, 0.08);
-  border-color: rgba(0, 174, 239, 0.25);
-}
-.sort-option__radio {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border-mid);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: border-color var(--t-fast) var(--ease-smooth);
-}
-.sort-option--active .sort-option__radio {
-  border-color: var(--cp-electric);
-}
-.sort-option__radio-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--cp-electric);
-}
-.sort-option__icon {
-  font-size: 0.7rem;
-  font-weight: 800;
-  width: 18px;
-  text-align: center;
-  color: var(--text-muted);
-  flex-shrink: 0;
-}
-.sort-option--active .sort-option__icon {
-  color: var(--cp-electric);
-}
-.sort-option__label {
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--text-body);
-  transition: color var(--t-fast) var(--ease-smooth);
-}
-.sort-option:hover .sort-option__label,
-.sort-option--active .sort-option__label {
-  color: var(--cp-electric);
-  font-weight: 600;
-}
-
-/* ─── Categories ────────────────────────────────────────── */
-.category-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-.category-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  width: 100%;
-  text-align: left;
-  padding: 0.52rem 0.65rem;
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid transparent;
-  transition:
-    background var(--t-fast) var(--ease-smooth),
-    border-color var(--t-fast) var(--ease-smooth);
-}
-.category-btn:hover {
-  background: rgba(0, 174, 239, 0.06);
-  border-color: rgba(0, 174, 239, 0.15);
-}
-.category-btn--active {
-  background: rgba(0, 174, 239, 0.08);
-  border-color: rgba(0, 174, 239, 0.25);
-}
-.cat-pip {
-  width: 3px;
-  height: 16px;
-  border-radius: 2px;
-  background: var(--border-mid);
-  flex-shrink: 0;
-  transition: background var(--t-fast) var(--ease-smooth);
-}
-.cat-pip--active {
-  background: var(--cp-electric);
-}
-.cat-btn-label {
-  flex: 1;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-body);
-  transition: color var(--t-fast) var(--ease-smooth);
-  line-height: 1.3;
-}
-.category-btn:hover .cat-btn-label,
-.category-btn--active .cat-btn-label {
-  color: var(--cp-navy);
-  font-weight: 600;
-}
-.cat-count-pill {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  background: var(--bg-alt);
-  border: 1px solid var(--border-light);
-  padding: 1px 6px;
-  border-radius: var(--r-pill);
-  flex-shrink: 0;
-  transition: all var(--t-fast) var(--ease-smooth);
-}
-.category-btn--active .cat-count-pill {
-  background: rgba(0, 174, 239, 0.08);
-  border-color: rgba(0, 174, 239, 0.2);
-  color: var(--cp-electric);
-}
-
-/* ─── Subcategories ─────────────────────────────────────── */
-.subcategory-list {
-  list-style: none;
-  margin: 0.15rem 0 0.25rem 1.1rem;
-  padding: 0 0 0 0.85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  border-left: 2px solid rgba(0, 174, 239, 0.2);
-}
-.subcategory-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  width: 100%;
-  text-align: left;
-  padding: 0.38rem 0.5rem;
-  border-radius: var(--r-sm);
-  font-size: 0.815rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition:
-    color var(--t-fast) var(--ease-smooth),
-    background var(--t-fast) var(--ease-smooth);
-}
-.subcategory-btn:hover {
-  color: var(--cp-electric);
-  background: rgba(0, 174, 239, 0.06);
-}
-.subcategory-btn--active {
-  color: var(--cp-navy);
-  font-weight: 700;
-}
-.subcats-enter-active,
-.subcats-leave-active {
-  transition:
-    opacity 0.18s ease,
-    max-height 0.2s ease;
-  overflow: hidden;
-}
-.subcats-enter-from,
-.subcats-leave-to {
-  opacity: 0;
-  max-height: 0;
-}
-.subcats-enter-to,
-.subcats-leave-from {
-  opacity: 1;
-  max-height: 400px;
-}
-
-/* ─── Reset button ──────────────────────────────────────── */
-.reset-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  margin: 0.75rem 1.1rem 1.1rem;
-  padding: 0.6rem 0.75rem;
-  width: calc(100% - 2.2rem);
-  border: 1.5px solid rgba(0, 174, 239, 0.25);
-  border-radius: var(--r-md);
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--cp-electric);
-  cursor: pointer;
-  background: rgba(0, 174, 239, 0.06);
-  transition: all var(--t-fast) var(--ease-smooth);
-  letter-spacing: 0.01em;
-}
-.reset-btn:hover {
-  background: rgba(0, 174, 239, 0.12);
-  border-color: var(--cp-electric);
-}
-.reset-btn__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  border-radius: var(--r-pill);
-  background: var(--cp-electric);
-  color: var(--cp-white);
-  font-size: 0.65rem;
-  font-weight: 800;
-}
-
-/* Fade transition */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.18s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* ─── Toolbar ───────────────────────────────────────────── */
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-  padding: 0.75rem 1rem;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-lg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--card-shadow-sm);
+  gap: var(--sp-2);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-medium);
+  color: var(--ink-faint);
+  margin-bottom: var(--sp-4);
 }
-.results-info {
+
+.cat__crumb a:hover {
+  color: var(--accent-strong);
+}
+
+.cat__crumb-now {
+  color: var(--ink-body);
+  font-weight: var(--fw-semibold);
+}
+
+.cat__head {
   display: flex;
   align-items: baseline;
-  gap: 0.45rem;
-}
-.count-num {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--cp-navy);
-  line-height: 1;
-}
-.count-label {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-.count-searching {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.875rem;
-  color: var(--text-muted);
-}
-.dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--cp-electric);
-  animation: blink 1.2s infinite;
-}
-.dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-@keyframes blink {
-  0%, 80%, 100% { opacity: 0.2; }
-  40% { opacity: 1; }
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: var(--sp-6);
 }
 
-.toolbar-right {
+.cat__title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-strong);
+}
+
+.cat__count {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+}
+
+.cat__count strong {
+  color: var(--ink-strong);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Disposición ── */
+.cat__layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: var(--sp-8);
+  align-items: start;
+}
+
+/* ── Panel de filtros ── */
+.cat__aside {
+  position: sticky;
+  top: calc(var(--header-total) + var(--sp-4));
+  max-height: calc(100vh - var(--header-total) - var(--sp-8));
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  overflow: hidden;
+}
+
+.cat__aside-head {
+  display: none;
+}
+
+.cat__aside-body {
+  padding: var(--sp-4);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.cat__block-title {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: var(--sp-3);
+}
+
+.cat__cat {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  width: 100%;
+  min-height: 36px;
+  padding: 0 var(--sp-3);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--ink-body);
+  font-family: inherit;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  text-align: left;
+  transition:
+    background var(--t-fast) var(--ease-smooth),
+    color var(--t-fast) var(--ease-smooth);
 }
-.filter-chips {
+
+.cat__cat small {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.cat__cat:hover {
+  background: var(--surface-sunken);
+  color: var(--ink-strong);
+}
+
+.cat__cat.is-active {
+  background: var(--accent-quiet);
+  color: var(--accent-strong);
+  font-weight: var(--fw-bold);
+}
+
+.cat__cat.is-active small {
+  color: var(--accent-strong);
+}
+
+.cat__subs {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+  flex-direction: column;
+  gap: 1px;
+  margin: 2px 0 var(--sp-2) var(--sp-3);
+  padding-left: var(--sp-2);
+  border-left: 1px solid var(--line-soft);
 }
-.chip {
+
+.cat__sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  width: 100%;
+  min-height: 32px;
+  padding: 0 var(--sp-2);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: inherit;
+  font-size: var(--fs-2xs);
+  text-align: left;
+  transition:
+    background var(--t-fast) var(--ease-smooth),
+    color var(--t-fast) var(--ease-smooth);
+}
+
+.cat__sub small {
+  font-weight: var(--fw-bold);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.cat__sub:hover {
+  background: var(--surface-sunken);
+  color: var(--ink-strong);
+}
+
+.cat__sub.is-active {
+  color: var(--accent-strong);
+  font-weight: var(--fw-bold);
+}
+
+/* ── Precio ── */
+.cat__price {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--ink-faint);
+  font-size: var(--fs-2xs);
+}
+
+.cat__price-input {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  background: var(--surface-raised);
+  color: var(--ink-strong);
+  font-size: var(--fs-xs);
+}
+
+.cat__price-apply {
+  width: 100%;
+  margin-top: var(--sp-2);
+}
+
+.cat__clear {
+  width: 100%;
+  border: 1px solid var(--line-soft);
+}
+
+/* ── Barra de herramientas ── */
+.cat__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.cat__filter-btn {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--ink-strong);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+}
+
+.cat__filter-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.cat__filter-pip {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.25rem 0.65rem;
-  background: rgba(0, 174, 239, 0.08);
-  border: 1px solid rgba(0, 174, 239, 0.2);
-  border-radius: var(--r-pill);
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--cp-electric);
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background: var(--cp-navy-900);
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: var(--fw-black);
 }
-.chip-remove {
-  font-size: 1rem;
-  line-height: 1;
-  color: var(--cp-electric);
-  cursor: pointer;
-  opacity: 0.65;
-  background: none;
-  border: none;
+
+.cat__sort {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-left: auto;
+}
+
+.cat__sort label {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.cat__sort-select {
+  height: 38px;
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--ink-strong);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+}
+
+/* ── Chips de filtro activo ── */
+.cat__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-5);
   padding: 0;
-}
-.chip-remove:hover {
-  opacity: 1;
+  list-style: none;
 }
 
-/* Toolbar sort select */
-.toolbar-sort {
-  position: relative;
-}
-.toolbar-select {
-  appearance: none;
-  padding: 0.45rem 2rem 0.45rem 0.75rem;
-  background: var(--bg-alt)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%2300AEEF' width='12' height='12'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E")
-    no-repeat right 0.55rem center;
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-sm);
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-body);
-  cursor: pointer;
-  min-width: 160px;
-  transition:
-    border-color var(--t-fast) var(--ease-smooth),
-    box-shadow var(--t-fast) var(--ease-smooth);
-}
-.toolbar-select:hover {
-  border-color: rgba(0, 174, 239, 0.3);
-}
-.toolbar-select:focus {
-  outline: none;
-  border-color: var(--cp-electric);
-  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.09);
+.cat__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-pill);
+  background: var(--accent-quiet);
+  color: var(--accent-strong);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  max-width: 260px;
 }
 
-/* ─── Products grid ─────────────────────────────────────── */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-@media (min-width: 540px) {
-  .products-grid {
-    gap: 1.1rem;
-  }
-}
-@media (min-width: 768px) {
-  .products-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (min-width: 1280px) {
-  .products-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.15rem;
-  }
+.cat__pill svg {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
 }
 
-/* ─── Skeleton ──────────────────────────────────────────── */
-.product-skeleton {
-  background: linear-gradient(100deg, var(--bg-surface) 8%, var(--bg-alt) 20%, var(--bg-surface) 36%);
-  background-size: 300% 100%;
-  animation: shimmer 1.5s ease infinite;
-  border-radius: var(--r-md);
-  aspect-ratio: 3/4;
-  border: 1px solid var(--border-light);
-}
-@keyframes shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+.cat__pill:hover {
+  background: var(--accent-soft);
 }
 
-/* ─── Empty state ───────────────────────────────────────── */
-.empty-state {
-  grid-column: 1 / -1;
+/* ── Esqueleto ── */
+.cat__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: var(--sp-4);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-raised);
+}
+
+.cat__skeleton-media {
+  aspect-ratio: 1 / 1;
+  border-radius: 0;
+  margin-bottom: var(--sp-2);
+}
+
+.cat__skeleton-line {
+  height: 11px;
+  margin-inline: var(--sp-4);
+}
+
+/* ── Estados ── */
+.cat__state {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-16) var(--sp-5);
   text-align: center;
-  padding: 4rem 2rem;
-  background: var(--bg-surface);
-  border: 1.5px dashed var(--border-light);
-  border-radius: var(--r-xl);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
 }
-.empty-icon-wrap {
-  width: 68px;
-  height: 68px;
-  background: var(--bg-alt);
-  border: 1.5px solid var(--border-light);
-  border-radius: 50%;
+
+.cat__state-title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+}
+
+.cat__state-text {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  max-width: 48ch;
+  margin-bottom: var(--sp-2);
+}
+
+/* ── Paginación ── */
+.cat__pager {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 1.1rem;
-  color: var(--text-muted);
-}
-.empty-title {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 0.35rem;
-  letter-spacing: -0.02em;
-}
-.empty-sub {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  margin-bottom: 1.4rem;
-  max-width: 300px;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-10);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--line-soft);
 }
 
-/* ─── Buttons ───────────────────────────────────────────── */
-.btn-primary {
+.cat__pager-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.65rem 1.6rem;
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 700;
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 4px 14px rgba(7, 30, 82, 0.15);
+  gap: 6px;
+  height: 38px;
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--ink-strong);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
   transition:
-    background var(--t-fast) var(--ease-smooth),
-    transform var(--t-fast) var(--ease-snappy),
-    box-shadow var(--t-fast) var(--ease-smooth);
-}
-.btn-primary:hover {
-  background: var(--btn-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 22px rgba(7, 30, 82, 0.22);
-}
-.btn-primary:active {
-  transform: translateY(0);
+    border-color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth);
 }
 
-.btn-load-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.7rem 2rem;
-  background: var(--bg-surface);
-  color: var(--text-body);
-  font-size: 0.875rem;
-  font-weight: 600;
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  transition: all var(--t-fast) var(--ease-smooth);
+.cat__pager-btn svg {
+  width: 14px;
+  height: 14px;
 }
-.btn-load-more:hover:not(:disabled) {
-  border-color: var(--cp-electric);
-  color: var(--cp-electric);
-  background: rgba(0, 174, 239, 0.04);
+
+.cat__pager-btn:hover:not(:disabled) {
+  border-color: var(--accent-line);
+  background: var(--accent-quiet);
+  color: var(--accent-strong);
 }
-.btn-load-more:disabled {
-  opacity: 0.5;
+
+.cat__pager-btn:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-.load-more-wrap {
-  margin-top: 2.5rem;
+.cat__pager-list {
   display: flex;
-  justify-content: center;
-}
-.products-main {
-  min-width: 0;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* ─── Responsive tweaks ─────────────────────────────────── */
-@media (max-width: 480px) {
-  .catalog-body {
-    padding: 1rem 0.85rem 4rem;
+.cat__pager-num {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--ink-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  transition:
+    background var(--t-fast) var(--ease-smooth),
+    color var(--t-fast) var(--ease-smooth);
+}
+
+.cat__pager-num:hover {
+  background: var(--surface-sunken);
+  color: var(--ink-strong);
+}
+
+.cat__pager-num.is-active {
+  background: var(--cp-navy-900);
+  border-color: var(--cp-navy-900);
+  color: #fff;
+}
+
+.cat__pager-gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 34px;
+  color: var(--ink-faint);
+  font-size: var(--fs-xs);
+}
+
+/* ── Cajón móvil ── */
+.cat__scrim {
+  display: none;
+}
+
+.cat-fade-enter-active,
+.cat-fade-leave-active {
+  transition: opacity var(--t-base) var(--ease-smooth);
+}
+.cat-fade-enter-from,
+.cat-fade-leave-to {
+  opacity: 0;
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 1024px) {
+  .cat__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
   }
-  .toolbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+
+  .cat__filter-btn {
+    display: inline-flex;
   }
-  .toolbar-sort {
+
+  /* El panel pasa a cajón lateral: en tablet una columna fija de 250px
+     se come el ancho que necesita la rejilla. */
+  .cat__aside {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 120;
+    width: min(330px, 88vw);
+    max-height: none;
+    border: 0;
+    border-right: 1px solid var(--line-soft);
+    border-radius: 0;
+    box-shadow: var(--shadow-lg);
+    transform: translateX(-100%);
+    transition: transform var(--t-base) var(--ease-smooth);
+  }
+
+  .cat__aside.is-open {
+    transform: translateX(0);
+  }
+
+  .cat__aside-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding-inline: var(--sp-4);
+    border-bottom: 1px solid var(--line-soft);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-black);
+    color: var(--ink-strong);
+    flex-shrink: 0;
+  }
+
+  .cat__aside-close {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink-body);
+  }
+
+  .cat__aside-close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .cat__scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    background: var(--overlay);
+  }
+}
+
+@media (max-width: 640px) {
+  .cat__head {
+    padding-bottom: var(--sp-4);
+    margin-bottom: var(--sp-4);
+  }
+
+  .cat__sort label {
+    display: none;
+  }
+
+  .cat__pager {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cat__pager-list {
+    order: -1;
     width: 100%;
+    justify-content: center;
+    margin-bottom: var(--sp-2);
   }
-  .toolbar-select {
-    width: 100%;
-  }
-  .products-grid {
-    gap: 0.75rem;
+
+  .cat__pager-btn {
+    flex: 1;
+    justify-content: center;
   }
 }
 </style>

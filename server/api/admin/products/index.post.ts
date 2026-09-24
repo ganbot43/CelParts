@@ -13,6 +13,9 @@ const schema = z.object({
   subcategoryId: z.number().int().positive().optional().nullable(),
   description:   z.string().max(1000).optional().nullable(),
   price:         z.number().positive(),
+  /* Precio tachado. Solo cuenta si es mayor que price: la validación
+     evita publicar un "descuento" del 0% o negativo. */
+  comparePrice:  z.number().positive().nullable().optional(),
   stock:         z.number().int().min(0).default(0),
   trackStock:    z.boolean().default(false),
   isFeatured:    z.boolean().default(false),
@@ -61,7 +64,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  return (await enhanceProducts(
+  return created(event, (await enhanceProducts(
     await db.select().from(products).where(eq(products.id, productId)).limit(1),
-  ))[0]
+  ))[0])
 })

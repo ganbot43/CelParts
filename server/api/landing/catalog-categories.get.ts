@@ -16,11 +16,7 @@ export default defineEventHandler(async () => {
         slug: category.slug,
       })),
     }
-  } catch (error: any) {
-    console.error('❌ Error en /api/landing/catalog-categories:', error.message || error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: error.message || 'Error al cargar categorías del catálogo',
-    })
+  } catch (error) {
+    handleApiError('/api/landing/catalog-categories', error, 'Error al cargar categorías del catálogo')
   }
 })

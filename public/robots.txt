@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://joymarperu.com/sitemap.xml
-Host: joymarperu.com
+Sitemap: https://celparts.pe/sitemap.xml
+Host: celparts.pe

@@ -134,6 +134,6 @@ export default defineEventHandler(async (event) => {
 
   } catch (err: any) {
     console.error('[reclamaciones.post]', err)
-    throw createError({ statusCode: err.statusCode ?? 500, statusMessage: err.statusMessage ?? err.message ?? 'Error interno' })
+    throw createError({ statusCode: err.statusCode ?? 500, message: err.message ?? 'Error interno' })
   }
 })

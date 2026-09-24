@@ -8,7 +8,10 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const categoryId = query.categoryId as string | undefined
     const type = query.type as string | undefined
-    const limit = 3
+    /* El límite era fijo en 3: servía a un bloque de tres tarjetas que
+       ya no existe. Ahora la fila de portada pide cuantas necesite. */
+    const requested = Number(query.limit ?? 3)
+    const limit = Number.isFinite(requested) ? Math.min(24, Math.max(1, requested)) : 3
 
     let conditions = [eq(products.isActive, 1)]
     if (categoryId && categoryId !== 'all') {
@@ -46,18 +49,19 @@ export default defineEventHandler(async (event) => {
       name: p.name,
       slug: p.slug,
       price: p.price,
+      comparePrice: p.comparePrice ?? null,
       description: p.description,
       category: p.category,
+      subcategory: p.subcategory,
       images: p.images || [],
+      stock: p.stock,
+      trackStock: p.trackStock === 1,
       isFeatured: p.isFeatured === 1,
+      nuevoLanzamiento: p.nuevoLanzamiento === 1,
     }))
 
     return { data: mappedData }
-  } catch (error: any) {
-    console.error('❌ Error en /api/landing/featured-products:', error.message || error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: error.message || 'Error al cargar productos destacados',
-    })
+  } catch (error) {
+    handleApiError('/api/landing/featured-products', error, 'Error al cargar productos destacados')
   }
 })

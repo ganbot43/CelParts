@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700;0,6..12,800;1,6..12,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 /* ============================================================
@@ -13,21 +13,24 @@
    ============================================================ */
 .smart-panel-admin {
 
-  /* — Palette — */
-  --sp-blue-50: #eff4ff;
-  --sp-blue-100: #dce8fd;
-  --sp-blue-200: #b9d1fb;
-  --sp-blue-400: #5b8ef8;
-  --sp-blue-500: #356dff;
-  --sp-blue-600: #2558ed;
-  --sp-blue-700: #1a44d4;
-  --sp-blue-900: #0f2a7a;
+  /* — Palette —
+     Misma rampa que la tienda (assets/css/tokens.css §1). Los nombres
+     --sp-blue-* se conservan para no tocar las 2000 líneas de reglas
+     que los referencian, pero los valores ya son los de la marca. */
+  --sp-blue-50: #f4fbff;   /* velo cyan */
+  --sp-blue-100: #e8f6ff;  /* azul niebla */
+  --sp-blue-200: #c0e8ff;  /* azul hielo */
+  --sp-blue-400: #50d0ff;  /* cyan claro */
+  --sp-blue-500: #00aeef;  /* CYAN MARCA */
+  --sp-blue-600: #0077c8;  /* azul eléctrico */
+  --sp-blue-700: #003f8a;  /* azul marino */
+  --sp-blue-900: #071e52;  /* navy del logo */
 
   --sp-slate-0: #ffffff;
   --sp-slate-50: #f8fafc;
   --sp-slate-100: #f1f5f9;
-  --sp-slate-150: #eaf0f7;
-  --sp-slate-200: #e2e8f0;
+  --sp-slate-150: #eef2f7;
+  --sp-slate-200: #e6ecf2;
   --sp-slate-300: #cbd5e1;
   --sp-slate-400: #94a3b8;
   --sp-slate-500: #64748b;
@@ -46,10 +49,20 @@
   --sp-red-soft: rgba(239, 68, 68, 0.1);
 
   /* — Semantic colors — */
-  --sp-primary: var(--sp-blue-500);
-  --sp-primary-hover: var(--sp-blue-600);
-  --sp-primary-soft: rgba(53, 109, 255, 0.10);
+  /* Sobre superficie clara el cyan no llega a contraste para un botón
+     sólido con texto blanco: la acción primaria es navy, igual que en
+     la tienda. El cyan vive en acentos, foco y estados activos. */
+  --sp-primary: var(--sp-blue-900);
+  --sp-primary-hover: #0f2d6b;
+  --sp-primary-soft: rgba(0, 174, 239, 0.10);
   --sp-primary-ink: var(--sp-blue-700);
+  --sp-accent: var(--sp-blue-500);
+
+  /* Color de los botones de acción. Sólido a propósito: el degradado
+     anterior cruzaba de cyan claro a navy y el arranque se leía como
+     fluorescente sobre fondo blanco. */
+  --sp-action: var(--sp-blue-600);
+  --sp-action-hover: #005ba8;
 
   --sp-success: var(--sp-green-500);
   --sp-success-soft: var(--sp-green-soft);
@@ -59,34 +72,40 @@
   --sp-danger-soft: var(--sp-red-soft);
 
   /* — Surfaces — */
-  --sp-bg: #f2f6fb;
+  --sp-bg: #f6f9fc;
   --sp-surface: rgba(255, 255, 255, 0.95);
   --sp-surface-solid: #ffffff;
   --sp-surface-muted: var(--sp-slate-50);
   --sp-surface-subtle: var(--sp-slate-100);
 
   /* — Borders — */
-  --sp-border: #dde5ef;
-  --sp-border-strong: #c6d3e2;
+  --sp-border: #e6ecf2;
+  --sp-border-strong: #cbd5e1;
+  /* Usados por reportes y los modales de pedidos; faltaban y las
+     reglas que los referencian no pintaban nada. */
+  --sp-border-soft: #eef2f7;
+  --sp-primary-border: rgba(0, 174, 239, 0.28);
 
   /* — Text — */
-  --sp-text: #1c2e42;
-  --sp-text-strong: #0e1c2b;
-  --sp-text-muted: #56677a;
-  --sp-text-soft: #8097af;
+  --sp-text: #334155;
+  --sp-text-strong: #0f172a;
+  --sp-text-muted: #64748b;
+  /* No baja de 3:1 sobre blanco: es texto pequeño de apoyo
+     (pistas, contadores) y por debajo deja de leerse. */
+  --sp-text-soft: #7d8ea6;
   --sp-text-inverse: #ffffff;
 
   /* — Sidebar — */
-  --sp-sidebar-bg: #15202e;
+  --sp-sidebar-bg: #071e52;
   --sp-sidebar-border: rgba(255, 255, 255, 0.07);
-  --sp-sidebar-text: #7f96ad;
-  --sp-sidebar-text-hover: #c8d8e8;
+  --sp-sidebar-text: rgba(192, 232, 255, 0.62);
+  --sp-sidebar-text-hover: rgba(232, 246, 255, 0.92);
   --sp-sidebar-text-active: #ffffff;
   --sp-sidebar-hover-bg: rgba(255, 255, 255, 0.06);
-  --sp-sidebar-active-bg: rgba(53, 109, 255, 0.20);
-  --sp-sidebar-active-dot: var(--sp-primary);
+  --sp-sidebar-active-bg: rgba(0, 174, 239, 0.16);
+  --sp-sidebar-active-dot: var(--sp-blue-500);
   --sp-sidebar-label: rgba(255, 255, 255, 0.22);
-  --sp-sidebar-brand-name: #e8f0f9;
+  --sp-sidebar-brand-name: #e8f6ff;
   --sp-sidebar-brand-role: rgba(255, 255, 255, 0.28);
   --sp-sidebar-logo-bg: rgba(255, 255, 255, 0.08);
   --sp-sidebar-footer-link: rgba(255, 255, 255, 0.25);
@@ -98,22 +117,23 @@
   --sp-topbar-border: rgba(220, 230, 240, 0.90);
 
   /* — Shadows — */
-  --sp-shadow-xs: 0 1px 3px rgba(15, 23, 42, 0.06);
-  --sp-shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.07);
-  --sp-shadow-md: 0 10px 30px rgba(15, 23, 42, 0.10);
-  --sp-shadow-lg: 0 20px 56px rgba(15, 23, 42, 0.13);
+  --sp-shadow-xs: 0 1px 2px rgba(15, 45, 107, 0.05);
+  --sp-shadow-sm: 0 1px 2px rgba(15, 45, 107, 0.04), 0 4px 12px rgba(15, 45, 107, 0.045);
+  --sp-shadow-md: 0 2px 4px rgba(15, 45, 107, 0.04), 0 10px 28px rgba(15, 45, 107, 0.07);
+  --sp-shadow-lg: 0 4px 10px rgba(15, 45, 107, 0.05), 0 22px 52px rgba(15, 45, 107, 0.10);
 
   /* — Radii — */
-  --sp-radius-xs: 0.5rem;
-  --sp-radius-sm: 0.75rem;
-  --sp-radius-md: 1rem;
-  --sp-radius-lg: 1.25rem;
-  --sp-radius-xl: 1.5rem;
+  --sp-radius-xs: 6px;
+  --sp-radius-sm: 10px;
+  --sp-radius-md: 14px;
+  --sp-radius-lg: 18px;
+  --sp-radius-xl: 22px;
+  --sp-radius-2xl: 26px;
   --sp-radius-pill: 999px;
 
   /* — Typography — */
-  --sp-font: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
-  --sp-font-display: 'Nunito Sans', system-ui, sans-serif;
+  --sp-font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sp-font-display: var(--sp-font);
 
   --sp-text-xs: 0.72rem;
   --sp-text-sm: 0.8125rem;
@@ -180,10 +200,9 @@
   font-family: var(--sp-font);
   font-size: var(--sp-text-base);
   color: var(--sp-text);
-  background:
-    radial-gradient(ellipse 60% 40% at 0% 0%, rgba(53, 109, 255, 0.09), transparent),
-    radial-gradient(ellipse 50% 35% at 100% 0%, rgba(16, 185, 129, 0.07), transparent),
-    linear-gradient(170deg, #f6f9fd 0%, var(--sp-bg) 50%, #eef4fa 100%);
+  /* Fondo plano: los dos halos radiales (azul y verde) teñían toda la
+     interfaz y peleaban con el cyan de marca. */
+  background: var(--sp-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -245,7 +264,7 @@
 
 .smart-panel-admin :where(input:focus, textarea:focus, select:focus) {
   outline: none;
-  border-color: rgba(53, 109, 255, 0.6);
+  border-color: rgba(0, 174, 239, 0.6);
   box-shadow: 0 0 0 3.5px var(--sp-primary-soft), var(--sp-shadow-xs);
 }
 
@@ -388,7 +407,7 @@
 /* Hover row */
 .smart-panel-admin :where(.hover\:bg-gray-50:hover, .hover\:bg-gray-100:hover,
   .dark\:hover\:bg-gray-800\/40:hover, .dark\:hover\:bg-gray-800\/50:hover) {
-  background: rgba(53, 109, 255, 0.05) !important;
+  background: rgba(0, 174, 239, 0.05) !important;
 }
 
 /* ============================================================
@@ -463,7 +482,7 @@
 }
 
 .smart-panel-admin :where(.admin-table-wrap tbody tr:hover) {
-  background: rgba(53, 109, 255, 0.04);
+  background: rgba(0, 174, 239, 0.04);
 }
 
 /* — Buttons — */
@@ -488,13 +507,13 @@
 }
 
 .smart-panel-admin :where(.admin-button--primary) {
-  background: linear-gradient(160deg, var(--sp-blue-400) 0%, var(--sp-primary) 60%, var(--sp-primary-hover) 100%);
+  background: var(--sp-action);
   color: #fff;
-  box-shadow: 0 8px 22px rgba(53, 109, 255, 0.20);
+  box-shadow: 0 2px 6px rgba(15, 45, 107, 0.16);
 }
 
 .smart-panel-admin :where(.admin-button--primary:hover) {
-  box-shadow: 0 12px 28px rgba(53, 109, 255, 0.28);
+  box-shadow: 0 4px 12px rgba(15, 45, 107, 0.22);
 }
 
 .smart-panel-admin :where(.admin-button--ghost) {
@@ -531,7 +550,7 @@
   padding: 0.4rem 0.75rem;
   background: var(--sp-primary-soft);
   color: var(--sp-primary-ink);
-  border: 1px solid rgba(53, 109, 255, 0.14);
+  border: 1px solid rgba(0, 174, 239, 0.14);
   font-size: var(--sp-text-xs);
 }
 
@@ -753,12 +772,11 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   font-weight: 800;
   letter-spacing: -0.02em;
   text-decoration: none;
-  transition: color var(--sp-t) var(--sp-ease), text-shadow var(--sp-t) var(--sp-ease);
+  transition: color var(--sp-t) var(--sp-ease);
 }
 
 .smart-panel-admin .admin-footer-brand:hover {
-  color: var(--sp-primary-hover);
-  text-shadow: 0 0 12px rgba(53, 109, 255, 0.3);
+  color: var(--sp-action);
 }
 
 /* ============================================================
@@ -918,7 +936,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   width: 2rem;
   height: 2rem;
   border-radius: var(--sp-radius-pill);
-  background: linear-gradient(135deg, var(--sp-blue-400), var(--sp-primary-hover));
+  background: var(--sp-action);
   color: #fff;
   font-size: var(--sp-text-xs);
   font-weight: 800;
@@ -926,7 +944,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   align-items: center;
   justify-content: center;
   letter-spacing: 0.02em;
-  box-shadow: 0 2px 8px rgba(53, 109, 255, 0.28);
+  box-shadow: 0 2px 6px rgba(15, 45, 107, 0.16);
   flex-shrink: 0;
 }
 
@@ -1027,11 +1045,16 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 
 /* ── Token bridge (redeclara en :root para que el drawer los vea) ── */
 :root {
-  --sp-blue-400: #5b8ef8;
-  --sp-primary: #356dff;
-  --sp-primary-hover: #2558ed;
-  --sp-primary-soft: rgba(53, 109, 255, 0.10);
-  --sp-primary-ink: #1a44d4;
+  --sp-blue-400: #50d0ff;
+  --sp-blue-500: #00aeef;
+  --sp-blue-900: #071e52;
+  --sp-primary: #071e52;
+  --sp-primary-hover: #0f2d6b;
+  --sp-primary-soft: rgba(0, 174, 239, 0.10);
+  --sp-primary-ink: #003f8a;
+  --sp-accent: #00aeef;
+  --sp-action: #0077c8;
+  --sp-action-hover: #005ba8;
 
   --sp-danger: #ef4444;
   --sp-danger-soft: rgba(239, 68, 68, 0.10);
@@ -1039,47 +1062,54 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   --sp-success: #10b981;
   --sp-success-soft: rgba(16, 185, 129, 0.11);
 
-  --sp-border: #dde5ef;
-  --sp-border-strong: #c6d3e2;
+  --sp-border: #e6ecf2;
+  --sp-border-strong: #cbd5e1;
+  /* Usados por reportes y los modales de pedidos; faltaban y las
+     reglas que los referencian no pintaban nada. */
+  --sp-border-soft: #eef2f7;
+  --sp-primary-border: rgba(0, 174, 239, 0.28);
 
   --sp-surface-solid: #ffffff;
   --sp-surface-muted: #f8fafc;
   --sp-surface-subtle: #f1f5f9;
   --sp-slate-50: #f8fafc;
 
-  --sp-text: #1c2e42;
-  --sp-text-strong: #0e1c2b;
-  --sp-text-muted: #56677a;
-  --sp-text-soft: #8097af;
+  --sp-text: #334155;
+  --sp-text-strong: #0f172a;
+  --sp-text-muted: #64748b;
+  /* No baja de 3:1 sobre blanco: es texto pequeño de apoyo
+     (pistas, contadores) y por debajo deja de leerse. */
+  --sp-text-soft: #7d8ea6;
 
   /* Sidebar tokens (needed for teleported mobile drawer) */
-  --sp-sidebar-bg: #15202e;
+  --sp-sidebar-bg: #071e52;
   --sp-sidebar-border: rgba(255, 255, 255, 0.07);
-  --sp-sidebar-text: #7f96ad;
-  --sp-sidebar-text-hover: #c8d8e8;
+  --sp-sidebar-text: rgba(192, 232, 255, 0.62);
+  --sp-sidebar-text-hover: rgba(232, 246, 255, 0.92);
   --sp-sidebar-text-active: #ffffff;
   --sp-sidebar-hover-bg: rgba(255, 255, 255, 0.06);
-  --sp-sidebar-active-bg: rgba(53, 109, 255, 0.20);
-  --sp-sidebar-active-dot: #356dff;
+  --sp-sidebar-active-bg: rgba(0, 174, 239, 0.16);
+  --sp-sidebar-active-dot: #00aeef;
   --sp-sidebar-label: rgba(255, 255, 255, 0.22);
-  --sp-sidebar-brand-name: #e8f0f9;
+  --sp-sidebar-brand-name: #e8f6ff;
   --sp-sidebar-brand-role: rgba(255, 255, 255, 0.28);
   --sp-sidebar-logo-bg: rgba(255, 255, 255, 0.08);
   --sp-sidebar-footer-link: rgba(255, 255, 255, 0.25);
   --sp-sidebar-footer-hover: rgba(255, 255, 255, 0.60);
   --sp-sidebar-footer-bg: rgba(255, 255, 255, 0.05);
 
-  --sp-shadow-xs: 0 1px 3px rgba(15, 23, 42, 0.06);
-  --sp-shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.07);
+  --sp-shadow-xs: 0 1px 2px rgba(15, 45, 107, 0.05);
+  --sp-shadow-sm: 0 1px 2px rgba(15, 45, 107, 0.04), 0 4px 12px rgba(15, 45, 107, 0.045);
 
-  --sp-radius-xs: 0.5rem;
-  --sp-radius-sm: 0.75rem;
-  --sp-radius-md: 1rem;
-  --sp-radius-lg: 1.25rem;
-  --sp-radius-xl: 1.5rem;
+  --sp-radius-xs: 6px;
+  --sp-radius-sm: 10px;
+  --sp-radius-md: 14px;
+  --sp-radius-lg: 18px;
+  --sp-radius-xl: 22px;
+  --sp-radius-2xl: 26px;
   --sp-radius-pill: 999px;
 
-  --sp-font: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  --sp-font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --sp-text-xs: 0.72rem;
   --sp-text-sm: 0.8125rem;
@@ -1098,7 +1128,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgba(15, 23, 42, 0.38);
+  background: rgba(15, 45, 107, 0.38);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
 }
@@ -1109,10 +1139,13 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   inset-block: 0;
   right: 0;
   z-index: 50;
+  /* Aísla el repintado: lo que cambie dentro del panel no obliga al
+     navegador a recalcular el resto de la página. */
+  contain: layout paint;
   width: min(26rem, 100vw);
   background: var(--sp-surface-solid);
   border-left: 1px solid var(--sp-border);
-  box-shadow: -12px 0 48px rgba(15, 23, 42, 0.14);
+  box-shadow: -12px 0 48px rgba(15, 45, 107, 0.14);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1177,7 +1210,15 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 /* ── Body ── */
 .sp-drawer-body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  /* Al llegar al final, el scroll saltaba a la página de detrás: eso es
+     lo que se siente como un tirón. `contain` lo detiene en el panel. */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  /* Reserva el carril de la barra para que el contenido no se desplace
+     lateralmente cuando aparece. */
+  scrollbar-gutter: stable;
   padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
@@ -1225,14 +1266,15 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 }
 
 .sp-drawer-btn--primary {
-  background: linear-gradient(155deg, var(--sp-blue-400) 0%, var(--sp-primary) 55%, var(--sp-primary-hover) 100%);
+  background: var(--sp-action);
   color: #fff;
-  box-shadow: 0 6px 18px rgba(53, 109, 255, 0.22);
+  box-shadow: 0 2px 6px rgba(15, 45, 107, 0.16);
 }
 
 .sp-drawer-btn--primary:hover {
+  background: var(--sp-action-hover);
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(53, 109, 255, 0.30);
+  box-shadow: 0 4px 12px rgba(15, 45, 107, 0.22);
 }
 
 .sp-drawer-btn--primary:disabled {
@@ -1283,7 +1325,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 
 .sp-drawer-input:focus {
   outline: none;
-  border-color: rgba(53, 109, 255, 0.55);
+  border-color: rgba(0, 174, 239, 0.55);
   box-shadow: 0 0 0 3.5px var(--sp-primary-soft), var(--sp-shadow-xs);
 }
 
@@ -1396,9 +1438,17 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 }
 
 /* ── Vue transitions ── */
+/* El desenfoque se apaga mientras dura el movimiento. backdrop-filter
+   obliga a recapturar y desenfocar todo el fondo en cada fotograma: con
+   el panel deslizándose por encima, el área a recalcular cambia
+   constantemente y la animación baja a unos pocos fps. Se aplica al
+   terminar, que es cuando se aprecia. */
 .sp-drawer-overlay-enter-active,
 .sp-drawer-overlay-leave-active {
   transition: opacity 220ms var(--sp-ease);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  will-change: opacity;
 }
 
 .sp-drawer-overlay-enter-from,
@@ -1406,9 +1456,14 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   opacity: 0;
 }
 
+/* will-change promueve el panel a su propia capa antes de empezar, de
+   modo que el desplazamiento no repinta la sombra ni el contenido en
+   cada fotograma. Solo durante la animación: dejarlo fijo reserva
+   memoria de vídeo sin motivo. */
 .sp-drawer-panel-enter-active,
 .sp-drawer-panel-leave-active {
   transition: transform 260ms var(--sp-ease);
+  will-change: transform;
 }
 
 .sp-drawer-panel-enter-from,
@@ -1443,6 +1498,10 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 .sp-table-scroll {
   overflow: auto;
   flex: 1;
+  /* Desplazamiento horizontal contenido: al llegar al borde no debe
+     tirar de la navegación del navegador (gesto de «atrás»). */
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ── Table base ── */
@@ -1491,7 +1550,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 }
 
 .sp-table .sp-tr:hover {
-  background: rgba(53, 109, 255, 0.035);
+  background: rgba(0, 174, 239, 0.035);
 }
 
 .sp-table .sp-tr:last-child .sp-td {
@@ -1610,7 +1669,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 .sp-table-btn--edit:hover {
   background: var(--sp-primary-soft);
   color: var(--sp-primary);
-  border-color: rgba(53, 109, 255, 0.2);
+  border-color: rgba(0, 174, 239, 0.2);
 }
 
 .sp-table-btn--del:hover {
@@ -1688,7 +1747,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 .sp-badge--primary {
   background: var(--sp-primary-soft);
   color: var(--sp-primary-ink);
-  border: 1px solid rgba(53, 109, 255, 0.14);
+  border: 1px solid rgba(0, 174, 239, 0.14);
 }
 
 .sp-badge--primary .sp-badge__dot {
@@ -1733,7 +1792,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   color: var(--sp-primary);
   font-weight: 700;
   background: var(--sp-primary-soft);
-  border: 1px solid rgba(53, 109, 255, 0.15);
+  border: 1px solid rgba(0, 174, 239, 0.15);
   border-radius: var(--sp-radius-pill);
   padding: 0.35rem 0.85rem;
   cursor: pointer;
@@ -1742,7 +1801,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 }
 
 .sp-table-empty__cta:hover {
-  background: rgba(53, 109, 255, 0.15);
+  background: rgba(0, 174, 239, 0.15);
 }
 
 /* ── Toolbar (encabezado de página con título + acción) ── */
@@ -1778,13 +1837,13 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   gap: 0.5rem;
   padding: 0.6rem 1.1rem;
   border-radius: var(--sp-radius-pill);
-  background: linear-gradient(155deg, var(--sp-blue-400) 0%, var(--sp-primary) 55%, var(--sp-primary-hover) 100%);
+  background: var(--sp-action);
   color: #fff;
   font-size: var(--sp-text-sm);
   font-weight: 700;
   border: none;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(53, 109, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 6px rgba(15, 45, 107, 0.16);
   transition:
     transform var(--sp-t-fast) var(--sp-ease),
     box-shadow var(--sp-t-fast) var(--sp-ease);
@@ -1792,8 +1851,9 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 }
 
 .sp-page-btn:hover {
+  background: var(--sp-action-hover);
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(53, 109, 255, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 12px rgba(15, 45, 107, 0.22);
 }
 
 .sp-page-btn:active {
@@ -1837,7 +1897,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 .smart-panel-admin .sp-sidebar-toggle:hover {
   background: var(--sp-primary-soft);
   color: var(--sp-primary);
-  border-color: rgba(53, 109, 255, 0.2);
+  border-color: rgba(0, 174, 239, 0.2);
 }
 
 /* ── Overlay oscuro detrás del drawer ── */
@@ -1854,6 +1914,9 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 .sp-sidebar-overlay-enter-active,
 .sp-sidebar-overlay-leave-active {
   transition: opacity 220ms var(--sp-ease);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  will-change: opacity;
 }
 
 .sp-sidebar-overlay-enter-from,
@@ -1864,6 +1927,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 .sp-sidebar-drawer-enter-active,
 .sp-sidebar-drawer-leave-active {
   transition: transform 270ms var(--sp-ease);
+  will-change: transform;
 }
 
 .sp-sidebar-drawer-enter-from,
@@ -1979,8 +2043,8 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   flex-direction: column;
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.06),
-    0 32px 80px rgba(15, 23, 42, 0.22),
-    0 8px 28px rgba(15, 23, 42, 0.12);
+    0 32px 80px rgba(15, 45, 107, 0.22),
+    0 8px 28px rgba(15, 45, 107, 0.12);
 }
 
 /* ── Header ── */
@@ -2061,6 +2125,10 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   flex: 1;
   overflow-y: auto;
   padding: 1.5rem 1.75rem;
+  /* El scroll no se propaga a la página de detrás. */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
 }
 
 /* ── Footer ── */
@@ -2102,10 +2170,16 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 /* ── Vue transition ── */
 .sp-modal-enter-active {
   transition: opacity 0.2s var(--sp-ease);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  will-change: opacity;
 }
 
 .sp-modal-leave-active {
   transition: opacity 0.15s var(--sp-ease);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  will-change: opacity;
 }
 
 .sp-modal-enter-from,
@@ -2117,6 +2191,7 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
   transition:
     transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
     opacity 0.2s var(--sp-ease);
+  will-change: transform, opacity;
 }
 
 .sp-modal-leave-active .sp-modal-box {
@@ -2224,4 +2299,412 @@ html:has(.smart-panel-admin)::-webkit-scrollbar-thumb:hover {
 .modal-leave-to .modal-box {
   transform: translateY(6px) scale(0.99);
   opacity: 0;
+}
+/* ============================================================
+   14. AUTENTICACIÓN  (.sp-auth)
+   Login y registro comparten el lenguaje del panel: son su
+   puerta de entrada, no una página de la tienda. Vive aquí y
+   no en cada página para que ambas no dupliquen 300 líneas.
+   ============================================================ */
+
+.sp-auth {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  background: var(--sp-surface-solid);
+}
+
+/* ── Costado de marca ──
+   La misma superficie navy de la barra lateral: al entrar, el
+   usuario ya está viendo el panel. ── */
+.sp-auth__aside {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem;
+  background: var(--sp-sidebar-bg);
+  overflow: hidden;
+}
+
+/* Retícula técnica tenue: textura sin introducir un color nuevo. */
+.sp-auth__aside::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(160deg, transparent 30%, #000 100%);
+  pointer-events: none;
+}
+
+.sp-auth__brand {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+/* El logo puede ser apaisado (logotipo con el nombre) o cuadrado
+   (isotipo): se fija el alto y se deja libre el ancho con un tope. */
+.sp-auth__brand img {
+  height: 40px;
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  object-position: left center;
+  /* Sobre la superficie navy un logotipo pensado para fondo claro
+     desaparece: se le da su propio respaldo. */
+  padding: 6px 10px;
+  border-radius: var(--sp-radius-xs);
+  background: #fff;
+}
+
+.sp-auth__brand-name {
+  font-size: var(--sp-text-md);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--sp-sidebar-brand-name);
+}
+
+.sp-auth__brand-role {
+  display: block;
+  font-size: var(--sp-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sp-accent);
+}
+
+.sp-auth__pitch {
+  position: relative;
+  z-index: 1;
+  max-width: 34ch;
+}
+
+.sp-auth__pitch-title {
+  font-size: var(--sp-text-2xl);
+  font-weight: 800;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  color: #fff;
+  margin-bottom: 0.6rem;
+}
+
+.sp-auth__pitch-text {
+  font-size: var(--sp-text-sm);
+  line-height: 1.6;
+  color: rgba(232, 246, 255, 0.7);
+}
+
+.sp-auth__foot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: var(--sp-text-xs);
+  color: rgba(232, 246, 255, 0.42);
+}
+
+.sp-auth__foot a {
+  color: rgba(232, 246, 255, 0.42);
+  text-decoration: none;
+  transition: color var(--sp-t) var(--sp-ease);
+}
+
+.sp-auth__foot a:hover {
+  color: var(--sp-accent);
+}
+
+/* ── Panel del formulario ── */
+.sp-auth__main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  background: var(--sp-surface-solid);
+}
+
+.sp-auth__card {
+  width: 100%;
+  max-width: 25rem;
+}
+
+/* Sacudida en error: el mensaje solo no siempre se nota. */
+.sp-auth__card--shake {
+  animation: sp-auth-shake 0.4s var(--sp-ease);
+}
+
+@keyframes sp-auth-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.sp-auth__mobile-brand {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+}
+
+.sp-auth__mobile-brand img {
+  height: 32px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* El logo ya trae el nombre: el texto de al lado lo repetía. */
+.sp-auth__mobile-brand span {
+  display: none;
+}
+
+.sp-auth__title {
+  font-size: var(--sp-text-2xl);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--sp-text-strong);
+  margin-bottom: 0.3rem;
+}
+
+.sp-auth__sub {
+  font-size: var(--sp-text-sm);
+  color: var(--sp-text-muted);
+  margin-bottom: 1.75rem;
+}
+
+.sp-auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sp-auth__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sp-auth__label {
+  font-size: var(--sp-text-xs);
+  font-weight: 700;
+  color: var(--sp-text);
+}
+
+.sp-auth__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sp-auth__icon {
+  position: absolute;
+  left: 0.85rem;
+  display: flex;
+  color: var(--sp-text-soft);
+  pointer-events: none;
+}
+
+.sp-auth__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.sp-auth__input {
+  width: 100%;
+  height: 2.875rem;
+  padding: 0 0.9rem 0 2.55rem;
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-surface-solid);
+  color: var(--sp-text-strong);
+  font-family: var(--sp-font);
+  font-size: var(--sp-text-base);
+  transition:
+    border-color var(--sp-t) var(--sp-ease),
+    box-shadow var(--sp-t) var(--sp-ease);
+}
+
+.sp-auth__input::placeholder {
+  color: var(--sp-text-soft);
+}
+
+.sp-auth__input:focus {
+  outline: none;
+  border-color: var(--sp-accent);
+  box-shadow: 0 0 0 3px var(--sp-primary-soft);
+}
+
+.sp-auth__input--pw {
+  padding-right: 2.75rem;
+}
+
+.sp-auth__toggle {
+  position: absolute;
+  right: 0.35rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--sp-radius-xs);
+  background: transparent;
+  color: var(--sp-text-soft);
+  cursor: pointer;
+  transition: color var(--sp-t) var(--sp-ease);
+}
+
+.sp-auth__toggle:hover {
+  color: var(--sp-text);
+}
+
+.sp-auth__toggle svg {
+  width: 17px;
+  height: 17px;
+}
+
+.sp-auth__hint {
+  font-size: var(--sp-text-xs);
+  color: var(--sp-text-soft);
+}
+
+.sp-auth__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-danger-soft);
+  color: #a81f1f;
+  font-size: var(--sp-text-sm);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.sp-auth__error svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.sp-auth__submit {
+  height: 2.875rem;
+  margin-top: 0.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-primary);
+  color: var(--sp-text-inverse);
+  font-family: var(--sp-font);
+  font-size: var(--sp-text-base);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background var(--sp-t) var(--sp-ease);
+}
+
+.sp-auth__submit:hover:not(:disabled) {
+  background: var(--sp-primary-hover);
+}
+
+.sp-auth__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sp-auth__spin {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: sp-auth-spin 0.7s linear infinite;
+}
+
+@keyframes sp-auth-spin {
+  to { transform: rotate(360deg); }
+}
+
+.sp-auth__alt {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sp-border);
+  font-size: var(--sp-text-sm);
+  color: var(--sp-text-muted);
+  text-align: center;
+}
+
+.sp-auth__alt a {
+  color: var(--sp-primary-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.sp-auth__alt a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.sp-auth__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  font-size: var(--sp-text-xs);
+  font-weight: 600;
+  color: var(--sp-text-soft);
+  text-decoration: none;
+  transition: color var(--sp-t) var(--sp-ease);
+}
+
+.sp-auth__back:hover {
+  color: var(--sp-text);
+}
+
+.sp-auth__back svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── Responsive ──
+   Por debajo de 900px el costado de marca desaparece: en móvil
+   robaría la mitad de la pantalla al formulario. ── */
+@media (max-width: 900px) {
+  .sp-auth {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sp-auth__aside {
+    display: none;
+  }
+
+  .sp-auth__mobile-brand {
+    display: flex;
+  }
+
+  .sp-auth__main {
+    padding: 2rem 1.25rem;
+    background: var(--sp-bg);
+  }
+
+  .sp-auth__card {
+    padding: 1.75rem 1.5rem;
+    border: 1px solid var(--sp-border);
+    border-radius: var(--sp-radius-lg);
+    background: var(--sp-surface-solid);
+    box-shadow: var(--sp-shadow-sm);
+  }
 }

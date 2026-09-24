@@ -141,19 +141,20 @@ export default defineEventHandler(async (event) => {
       slug: p.slug,
       description: p.description,
       price: p.price,
+      comparePrice: p.comparePrice ?? null,
       category: p.category,
       subcategory: p.subcategory,
       images: p.images || [],
+      // El catálogo necesita la disponibilidad para decidir la compra:
+      // sin esto la tarjeta no puede distinguir "hay" de "agotado".
+      stock: p.stock,
+      trackStock: p.trackStock === 1,
       isFeatured: p.isFeatured === 1,
       nuevoLanzamiento: p.nuevoLanzamiento === 1,
     }))
 
     return { data, page, limit, total }
-  } catch (error: any) {
-    console.error('❌ Error en /api/products:', error.message || error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: error.message || 'Error al cargar productos',
-    })
+  } catch (error) {
+    handleApiError('/api/products', error, 'Error al cargar productos')
   }
 })

@@ -1,396 +1,485 @@
 <template>
-  <div v-if="product" class="vf-card">
-    <NuxtLink :to="`/productos/${product.slug}`" class="vf-card__link">
-      <!-- Imagen -->
-      <div class="vf-card__img-wrap">
-        <img v-if="primaryImage" :src="primaryImage" :alt="product.name" class="vf-card__img" loading="lazy" />
-        <div v-else class="vf-card__img-placeholder">
-          <UIcon name="i-heroicons-photo" class="vf-card__placeholder-icon" />
-        </div>
+  <article v-if="product" class="pc" :class="{ 'pc--out': isOut }">
+    <!-- ── Imagen ──
+         contain sobre superficie tenue: recortar una pantalla o una
+         batería esconde justo la pieza que el comprador viene a mirar. -->
+    <div class="pc__media">
+      <NuxtLink :to="href" class="pc__media-link" :aria-label="product.name">
+        <SharedImagen :src="image" :alt="product.name" fit="contain" class="pc__img" />
+      </NuxtLink>
 
-        <div class="vf-card__overlay" />
-
-        <span v-if="product.isFeatured" class="vf-card__badge">
-          <span class="vf-card__badge-dot" />
-          Destacado
-        </span>
-
-        <span v-if="product.category" class="vf-card__category">
-          {{ product.category.name }}
-        </span>
+      <!-- Marcas: planas, una sola a la vez. El descuento manda sobre
+           "nuevo" porque es lo que decide la compra. -->
+      <div class="pc__tags">
+        <span v-if="hasDiscount" class="pc__tag pc__tag--sale">-{{ discountPct }}%</span>
+        <span v-else-if="product.nuevoLanzamiento" class="pc__tag pc__tag--new">Nuevo</span>
+        <span v-else-if="product.isFeatured" class="pc__tag pc__tag--quiet">Destacado</span>
       </div>
 
-      <!-- Info -->
-      <div class="vf-card__body">
-        <h3 class="vf-card__name">{{ product.name }}</h3>
-        <p class="vf-card__price">{{ formatPrice.format(product.price) }}</p>
-      </div>
-    </NuxtLink>
+      <!-- Favorito — esquina opuesta a la etiqueta para que nunca se pisen -->
+      <ClientOnly>
+        <button
+          type="button"
+          class="pc__fav"
+          :class="{ 'is-on': isFavorite }"
+          :aria-pressed="isFavorite"
+          :aria-label="isFavorite ? 'Quitar de favoritos' : 'Guardar en favoritos'"
+          :title="isFavorite ? 'Quitar de favoritos' : 'Guardar en favoritos'"
+          @click.stop.prevent="toggleFavorite"
+        >
+          <svg viewBox="0 0 24 24" :fill="isFavorite ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.8">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.7 1.1-1a5.5 5.5 0 0 0 0-7.9z" />
+          </svg>
+        </button>
+      </ClientOnly>
 
-    <!-- Botones -->
-    <div class="vf-card__footer">
-      <button class="vf-card__btn vf-card__btn--cart" :class="{ 'vf-card__btn--loading': adding }" :disabled="adding"
-        :title="adding ? 'Agregando...' : 'Agregar al carrito'" @click.prevent="addToCart">
-        <svg v-if="!adding" class="vf-card__btn-icon" viewBox="0 0 24 24" fill="none">
-          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" stroke="currentColor" stroke-width="1.8"
-            stroke-linejoin="round" />
-          <path d="M3 6h18M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M12 13v4M10 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        </svg>
-        <svg v-else class="vf-card__btn-icon vf-card__btn-spin" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.25)" stroke-width="2" />
-          <path d="M12 3a9 9 0 0 1 9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-        </svg>
-        <span class="vf-card__btn-text">{{ adding ? "Agregando..." : "Al carrito" }}</span>
-      </button>
-
-      <a class="vf-card__btn vf-card__btn--wa" :href="waLink(`Hola, me interesa el producto: ${product!.name}`)"
-        :title="`Consultar por ${product!.name}`" target="_blank" rel="noopener noreferrer" @click.stop>
-        <svg class="vf-card__btn-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
-        </svg>
-      </a>
+      <span v-if="isOut" class="pc__veil">Sin stock</span>
     </div>
-  </div>
+
+    <!-- ── Datos ── -->
+    <div class="pc__body">
+      <p v-if="typeLabel" class="pc__type">{{ typeLabel }}</p>
+
+      <h3 class="pc__name">
+        <NuxtLink :to="href" class="pc__name-link">{{ product.name }}</NuxtLink>
+      </h3>
+
+      <div class="pc__prices">
+        <span class="pc__price">{{ formatPrice.format(price) }}</span>
+        <span v-if="comparePrice" class="pc__was">{{ formatPrice.format(comparePrice) }}</span>
+      </div>
+
+      <p class="pc__stock" :class="`pc__stock--${stockTone}`">
+        <span class="pc__stock-dot" aria-hidden="true" />
+        {{ stockLabel }}
+      </p>
+    </div>
+
+    <!-- ── Acción ── -->
+    <div class="pc__foot">
+      <button
+        type="button"
+        class="pc__buy"
+        :disabled="adding || isOut"
+        @click.stop.prevent="addToCart"
+      >
+        <span v-if="adding" class="pc__spinner" aria-hidden="true" />
+        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="20" r="1.4" />
+          <circle cx="18" cy="20" r="1.4" />
+          <path d="M2 3h2.2l2.3 12.2a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21 7H5.3" />
+        </svg>
+        {{ isOut ? "No disponible" : adding ? "Agregando…" : "Añadir" }}
+      </button>
+    </div>
+  </article>
 </template>
 
 <script setup lang="ts">
-type CardProduct = {
-  id: number;
-  name: string;
-  slug: string;
-  price: number;
-  isFeatured?: boolean;
-  category?: { name: string } | null;
-  images?: Array<{ id: number; url: string; isPrimary: boolean }>;
-} | null;
+import { useCartStore } from "~/stores/cart";
+import { useFavoritesStore } from "~/stores/favorites";
+import { useFormatPrice } from "~/composables/useFormatPrice";
+import { useProductDisplay, type DisplayProduct } from "~/composables/useProductDisplay";
 
-const props = defineProps<{ product?: CardProduct }>();
+const props = defineProps<{ product?: DisplayProduct }>();
+
 const cartStore = useCartStore();
+const favorites = useFavoritesStore();
 const toast = useAppToast();
 const formatPrice = useFormatPrice();
-const { waLink } = useKite();
 const adding = ref(false);
 
-const primaryImage = computed(() => {
-  const primary = props.product?.images?.find((i) => i.isPrimary);
-  return primary?.url ?? props.product?.images?.[0]?.url ?? null;
-});
+const {
+  image,
+  typeLabel,
+  price,
+  comparePrice,
+  hasDiscount,
+  discountPct,
+  isOut,
+  stockLabel,
+  stockTone,
+} = useProductDisplay(() => props.product);
+
+const href = computed(() => `/productos/${props.product?.slug ?? ""}`);
+
+const isFavorite = computed(() =>
+  props.product ? favorites.has(props.product.id) : false,
+);
+
+function toggleFavorite() {
+  if (!props.product) return;
+  const added = favorites.toggle({
+    id: props.product.id,
+    name: props.product.name,
+    slug: props.product.slug,
+    price: props.product.price,
+    comparePrice: props.product.comparePrice ?? null,
+    image: image.value,
+  });
+  toast.add({
+    title: added ? "Guardado en favoritos" : "Quitado de favoritos",
+    description: props.product.name,
+    color: added ? "success" : "neutral",
+  });
+}
 
 async function addToCart() {
+  if (isOut.value || !props.product) return;
   adding.value = true;
   cartStore.add({
-    id: props.product!.id,
-    name: props.product!.name,
-    price: props.product!.price,
+    id: props.product.id,
+    name: props.product.name,
+    price: props.product.price,
+    originalPrice: comparePrice.value ?? undefined,
     quantity: 1,
-    image: primaryImage.value ?? undefined,
+    image: image.value ?? undefined,
+    stock: props.product.trackStock === false ? undefined : props.product.stock,
   });
   toast.add({
     title: "Agregado al carrito",
-    description: props.product!.name,
+    description: props.product.name,
     color: "success",
   });
-  await new Promise((r) => setTimeout(r, 500));
+  await new Promise((r) => setTimeout(r, 420));
   adding.value = false;
 }
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   PRODUCT CARD — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   TARJETA DE PRODUCTO — CELPARTS
 
-.vf-card {
+   Criterio: una tienda de repuestos se juzga por datos,
+   no por decoración. La foto se ve completa, el precio
+   pesa, y la disponibilidad se dice siempre.
+
+   La tarjeta no se levanta al pasar el cursor: en una
+   rejilla de veinte, veinte tarjetas flotando es ruido.
+   Se marca con el filete y una sombra corta.
+═══════════════════════════════════════════════════ */
+
+.pc {
   position: relative;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-lg);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--card-shadow);
-  transition:
-    transform var(--t-base) var(--ease-snappy),
-    box-shadow var(--t-base) var(--ease-smooth),
-    border-color var(--t-base) var(--ease-smooth);
-  cursor: pointer;
   height: 100%;
+  background: var(--surface-raised);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition:
+    border-color var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
-
-
-.vf-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-mid);
-  box-shadow: var(--card-shadow-hover);
+.pc:hover {
+  border-color: var(--line);
+  box-shadow: var(--shadow-md);
 }
 
-
-
-/* ── Link wrapper ── */
-.vf-card__link {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-  z-index: 1;
+.pc--out {
+  opacity: 0.78;
 }
 
 /* ── Imagen ── */
-.vf-card__img-wrap {
+.pc__media {
   position: relative;
   aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: var(--bg-alt);
+  background: var(--surface-media);
+  border-bottom: 1px solid var(--line-soft);
 }
 
-.vf-card__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform var(--t-slow) var(--ease-snappy);
-}
-
-.vf-card:hover .vf-card__img {
-  transform: scale(1.06);
-}
-
-.vf-card__img-placeholder {
-  width: 100%;
-  height: 100%;
+.pc__media-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--grad-hero);
+  width: 100%;
+  height: 100%;
+  padding: var(--sp-5);
 }
 
-.vf-card__placeholder-icon {
-  width: 3rem;
-  height: 3rem;
-  color: var(--border-mid);
+.pc__img {
+  width: 100%;
+  height: 100%;
+  transition: transform var(--t-slow) var(--ease-smooth);
 }
 
-/* Gradiente inferior sobre imagen */
-.vf-card__overlay {
+.pc:hover .pc__img {
+  transform: scale(1.035);
+}
+
+/* ── Marcas ── */
+.pc__tags {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom,
-      transparent 45%,
-      rgba(7, 30, 82, 0.35) 100%);
+  top: var(--sp-3);
+  left: var(--sp-3);
+  display: flex;
+  gap: var(--sp-1);
   pointer-events: none;
 }
 
-/* ── Badge destacado ── */
-.vf-card__badge {
-  position: absolute;
-  top: var(--space-2);
-  left: var(--space-2);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  height: 26px;
-  padding: 0 var(--space-3);
-  border-radius: var(--r-pill);
-  border: 1px solid var(--border-light);
-  background: rgba(255, 255, 255, 0.90);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--cp-navy);
-  font-size: 0.60rem;
-  font-weight: 800;
-  letter-spacing: 0.10em;
+.pc__tag {
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  box-shadow: var(--card-shadow-sm);
+  line-height: 1.55;
 }
 
-.vf-card__badge-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--cp-electric);
-  box-shadow: var(--glow-soft);
-  flex-shrink: 0;
-  animation: vf-pulse 2s ease-in-out infinite;
+.pc__tag--sale {
+  background: var(--cp-navy-900);
+  color: #fff;
 }
 
-@keyframes vf-pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.45;
-  }
+.pc__tag--new {
+  background: var(--cp-cyan-400);
+  color: var(--cp-navy-900);
 }
 
-/* ── Categoría ── */
-.vf-card__category {
+.pc__tag--quiet {
+  background: var(--surface-inset);
+  color: var(--ink-muted);
+}
+
+/* ── Favorito ── */
+.pc__fav {
   position: absolute;
-  bottom: var(--space-2);
-  right: var(--space-2);
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--cp-white);
-  background: rgba(7, 30, 82, 0.60);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 3px var(--space-3);
-  border-radius: var(--r-pill);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* ── Body ── */
-.vf-card__body {
-  padding: var(--space-4) var(--space-4) var(--space-2);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  flex: 1;
-  position: relative;
-  z-index: 1;
-}
-
-.vf-card__name {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-body);
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  transition: color var(--t-base) var(--ease-smooth);
-  margin: 0;
-  letter-spacing: -0.01em;
-  min-height: calc(0.875rem * 1.4 * 2);
-}
-
-.vf-card:hover .vf-card__name {
-  color: var(--text-primary);
-}
-
-.vf-card__price {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--cp-navy);
-  letter-spacing: -0.03em;
-  margin: 0;
-}
-
-/* ── Footer / botones ── */
-.vf-card__footer {
-  padding: 0 var(--space-3) var(--space-3);
-  display: flex;
-  gap: var(--space-2);
-  position: relative;
-  z-index: 1;
-}
-
-/* ── Botón base ── */
-.vf-card__btn {
+  top: var(--sp-2);
+  right: var(--sp-2);
+  width: 34px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-1);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--r-sm);
-  border: 1px solid transparent;
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  border: 1px solid var(--line-soft);
+  border-radius: 50%;
+  background: var(--surface-raised);
+  color: var(--ink-faint);
+  transition:
+    color var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth);
+}
+
+.pc__fav svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pc__fav:hover {
+  color: var(--cp-navy-900);
+  border-color: var(--line);
+}
+
+.pc__fav.is-on {
+  color: var(--cp-cyan-500);
+  border-color: var(--accent-line);
+  background: var(--accent-quiet);
+}
+
+/* ── Velo de agotado ── */
+.pc__veil {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--ink-muted);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
-  cursor: pointer;
-  text-decoration: none;
+  pointer-events: none;
+}
+
+/* ── Datos ── */
+.pc__body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+}
+
+/* Etiqueta técnica: minúscula, en versalitas, sin recuadro.
+   Informa sin competir con el nombre. */
+.pc__type {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.pc__name {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+  min-height: 2.4em;
+}
+
+.pc__name-link {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
+  color: inherit;
+}
+
+.pc__name-link::after {
+  /* El área clicable cubre la tarjeta; los botones se elevan por encima. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.pc:hover .pc__name-link {
+  color: var(--accent-strong);
+}
+
+/* ── Precio ── */
+.pc__prices {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin-top: var(--sp-1);
+}
+
+.pc__price {
+  font-size: 1.25rem;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.pc__was {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Disponibilidad ── */
+.pc__stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.pc__stock-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.pc__stock--ok {
+  color: var(--cp-success);
+}
+.pc__stock--low {
+  color: var(--cp-warning);
+}
+.pc__stock--none {
+  color: var(--ink-faint);
+}
+
+/* ── Acción ── */
+.pc__foot {
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--sp-4) var(--sp-4);
+}
+
+.pc__buy {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--action-bg);
+  border-radius: var(--radius-sm);
+  background: var(--action-bg);
+  color: var(--action-ink);
+  font-family: inherit;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
   transition:
     background var(--t-base) var(--ease-smooth),
     border-color var(--t-base) var(--ease-smooth),
-    box-shadow var(--t-base) var(--ease-smooth),
-    transform var(--t-fast) var(--ease-snappy),
-    opacity var(--t-fast) var(--ease-smooth);
+    color var(--t-base) var(--ease-smooth);
 }
 
-/* ── Botón carrito ── */
-.vf-card__btn--cart {
-  flex: 1;
-  min-width: 0;
-  background: var(--cp-navy);
-  border-color: var(--cp-navy);
-  color: var(--cp-white);
-  box-shadow: var(--card-shadow-sm);
-}
-
-.vf-card__btn--cart:hover:not(:disabled) {
-  background: var(--cp-blue);
-  border-color: var(--cp-blue);
-  box-shadow: var(--card-shadow);
-  transform: translateY(-1px);
-}
-
-.vf-card__btn--cart:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.vf-card__btn--loading,
-.vf-card__btn--cart:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* ── Botón WhatsApp ── */
-.vf-card__btn--wa {
-  flex-shrink: 0;
-  background: rgba(37, 211, 102, 0.10);
-  border-color: rgba(37, 211, 102, 0.25);
-  color: #25d366;
-}
-
-.vf-card__btn--wa:hover {
-  background: #25d366;
-  border-color: #25d366;
-  color: var(--cp-white);
-  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.30);
-  transform: translateY(-1px);
-}
-
-.vf-card__btn--wa:active {
-  transform: translateY(0);
-}
-
-/* ── Íconos ── */
-.vf-card__btn-icon {
+.pc__buy svg {
   width: 15px;
   height: 15px;
+}
+
+.pc__buy:hover:not(:disabled) {
+  background: var(--action-bg-hover);
+  border-color: var(--action-bg-hover);
+}
+
+.pc__buy:disabled {
+  background: var(--surface-inset);
+  border-color: var(--line-soft);
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+.pc__spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: pc-spin 0.7s linear infinite;
   flex-shrink: 0;
 }
 
-.vf-card__btn-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@keyframes vf-spin {
+@keyframes pc-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-.vf-card__btn-spin {
-  animation: vf-spin 0.75s linear infinite;
+/* ── Móvil — la tarjeta se compacta, no se recorta ── */
+@media (max-width: 640px) {
+  .pc__media-link {
+    padding: var(--sp-3);
+  }
+
+  .pc__body {
+    padding: var(--sp-3) var(--sp-3) var(--sp-2);
+  }
+
+  .pc__foot {
+    padding: 0 var(--sp-3) var(--sp-3);
+  }
+
+  .pc__price {
+    font-size: 1.0625rem;
+  }
+
+  .pc__buy {
+    height: 36px;
+  }
 }
 </style>

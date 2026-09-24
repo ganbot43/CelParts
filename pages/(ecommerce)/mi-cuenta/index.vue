@@ -1,289 +1,385 @@
 <template>
-  <div>
-    <h1 class="cp-portal-title">Resumen de mi cuenta</h1>
-    <p class="cp-portal-desc">
-      Hola, <strong>{{ user?.name }}</strong>. Desde el panel de control de tu cuenta puedes visualizar tu actividad reciente y gestionar tu información.
-    </p>
+  <div class="rs">
+    <header class="rs__head">
+      <h1 class="rs__title">Hola, {{ primerNombre }}</h1>
+      <p class="rs__sub">Aquí tienes el estado de tus pedidos y los datos de tu cuenta.</p>
+    </header>
 
-    <div class="cp-portal-dashboard-grid">
-      <div class="cp-portal-stat">
-        <div class="cp-stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-          </svg>
-        </div>
-        <div>
-          <p class="cp-stat-label">Pedidos Totales</p>
-          <p class="cp-stat-value" v-if="pending">{{ pending ? '-' : orders?.length || 0 }}</p>
-          <p class="cp-stat-value" v-else>{{ orders?.length || 0 }}</p>
-        </div>
-      </div>
-      
-      <div class="cp-portal-stat">
-        <div class="cp-stat-icon cp-stat-electric">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-          </svg>
-        </div>
-        <div>
-          <p class="cp-stat-label">Beneficios</p>
-          <p class="cp-stat-value">Activo</p>
-        </div>
-      </div>
-    </div>
+    <!-- ── Métricas ──
+         Tres cifras, no una rejilla de tarjetas con icono. Lo que
+         importa es el número; el recuadro decorado lo estorbaba. -->
+    <ul class="rs__stats">
+      <li>
+        <span class="rs__stat-num">{{ pending ? "—" : total }}</span>
+        <span class="rs__stat-label">Pedidos en total</span>
+      </li>
+      <li>
+        <span class="rs__stat-num">{{ pending ? "—" : enProceso }}</span>
+        <span class="rs__stat-label">En proceso</span>
+      </li>
+      <li>
+        <span class="rs__stat-num">{{ pending ? "—" : entregados }}</span>
+        <span class="rs__stat-label">Entregados</span>
+      </li>
+    </ul>
 
-    <div class="cp-portal-recent">
-      <div class="cp-recent-header">
-        <h2 class="cp-portal-subtitle">Pedidos Recientes</h2>
-        <NuxtLink to="/mi-cuenta/pedidos" class="cp-recent-link">Ver todos</NuxtLink>
-      </div>
+    <div class="rs__grid">
+      <!-- ── Último pedido ── -->
+      <section class="rs__card">
+        <div class="rs__card-head">
+          <h2 class="rs__card-title">Último pedido</h2>
+          <NuxtLink v-if="ultimo" to="/mi-cuenta/pedidos" class="rs__card-link">
+            Ver todos
+          </NuxtLink>
+        </div>
 
-      <div v-if="pending" class="cp-loading">
-        Cargando pedidos...
-      </div>
-      <div v-else-if="!orders?.length" class="cp-empty">
-        <p>Aún no has realizado ningún pedido.</p>
-        <NuxtLink to="/productos" class="cp-btn">Empezar a comprar</NuxtLink>
-      </div>
-      <div v-else class="cp-table-wrap">
-        <table class="cp-table">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Fecha</th>
-              <th>Total</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="order in orders.slice(0, 3)" :key="order.id">
-              <td>
-                <NuxtLink :to="`/mi-cuenta/pedidos/${order.orderCode}`" class="cp-order-link">
-                  {{ order.orderCode }}
-                </NuxtLink>
-              </td>
-              <td>{{ new Date(order.createdAt).toLocaleDateString() }}</td>
-              <td>{{ formatPrice.format(order.total) }}</td>
-              <td>
-                <span class="cp-badge" :class="`badge-${order.status}`">
-                  {{ traducirEstado(order.status) }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div v-if="pending" class="rs__loading">
+          <div class="cp-skeleton" style="height: 18px; width: 45%" />
+          <div class="cp-skeleton" style="height: 14px; width: 70%" />
+          <div class="cp-skeleton" style="height: 14px; width: 30%" />
+        </div>
+
+        <div v-else-if="!ultimo" class="rs__empty">
+          <p class="rs__empty-text">Todavía no has hecho ningún pedido.</p>
+          <NuxtLink to="/productos" class="btn btn-primary btn-sm">Ver catálogo</NuxtLink>
+        </div>
+
+        <div v-else class="rs__order">
+          <div class="rs__order-top">
+            <span class="rs__order-code">{{ ultimo.orderCode }}</span>
+            <EcommerceEstadoPedido :status="ultimo.status" />
+          </div>
+
+          <dl class="rs__order-meta">
+            <div>
+              <dt>Fecha</dt>
+              <dd>{{ formatearFecha(ultimo.createdAt) }}</dd>
+            </div>
+            <div>
+              <dt>Artículos</dt>
+              <dd>{{ contarArticulos(ultimo.items) }}</dd>
+            </div>
+            <div>
+              <dt>Total</dt>
+              <dd class="rs__order-total">{{ formatPrice.format(ultimo.total) }}</dd>
+            </div>
+          </dl>
+
+          <!-- Qué toca hacer ahora: un badge solo nombra el estado, no
+               dice si la pelota está en el tejado del cliente. -->
+          <p v-if="ayuda(ultimo.status)" class="rs__order-help">
+            {{ ayuda(ultimo.status) }}
+          </p>
+
+          <NuxtLink :to="`/mi-cuenta/pedidos/${ultimo.orderCode}`" class="rs__order-cta">
+            Ver detalle
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </NuxtLink>
+        </div>
+      </section>
+
+      <!-- ── Datos de la cuenta (editables) ── -->
+      <EcommerceFormularioPerfil />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 const { user } = useUserSession();
-const { data: orders, pending } = await useFetch<any[]>('/api/my-orders');
 const formatPrice = useFormatPrice();
+const { ayuda } = useEstadoPedido();
 
-useSeoMeta({ title: "Mi Cuenta — CelParts" });
+useSeoMeta({
+  title: "Mi cuenta — CelParts",
+  robots: "noindex, nofollow",
+});
 
-function traducirEstado(status: string) {
-  const map: Record<string, string> = {
-    pending: 'Pendiente',
-    voucher_sent: 'Comprobante Enviado',
-    payment_validated: 'Pago Validado',
-    in_preparation: 'En Preparación',
-    delivered: 'Entregado',
-    cancelled: 'Cancelado',
-  };
-  return map[status] || status;
-}
+const { data: orders, pending } = await useFetch<any[]>("/api/my-orders", {
+  default: () => [],
+});
+
+const lista = computed(() => orders.value ?? []);
+const total = computed(() => lista.value.length);
+const entregados = computed(
+  () => lista.value.filter((o) => o.status === "delivered").length,
+);
+const enProceso = computed(
+  () => lista.value.filter((o) => !["delivered", "cancelled"].includes(o.status)).length,
+);
+
+/* La API ya devuelve los pedidos del más reciente al más antiguo, pero
+   no conviene depender de ello para elegir "el último". */
+const ultimo = computed(() => {
+  const ordenados = [...lista.value].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
+  return ordenados[0] ?? null;
+});
+
+const primerNombre = computed(() => {
+  const nombre = String(user.value?.name ?? "").trim();
+  return nombre ? nombre.split(/\s+/)[0] : "bienvenido";
+});
+
+const contarArticulos = (items: any[] = []) =>
+  items.reduce((acc, i) => acc + Number(i.quantity ?? 0), 0);
+
+const formatearFecha = (valor: string) =>
+  new Date(valor).toLocaleDateString("es-PE", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
 </script>
 
 <style scoped>
-.cp-portal-title {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin: 0 0 8px;
-  letter-spacing: -0.02em;
+.rs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
 }
 
-.cp-portal-desc {
-  font-size: 0.95rem;
-  color: var(--text-body);
-  margin: 0 0 32px;
-  max-width: 600px;
+.rs__title {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-strong);
 }
 
-.cp-portal-subtitle {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
+.rs__sub {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  margin-top: 4px;
 }
 
-.cp-portal-dashboard-grid {
+/* ── Métricas ── */
+.rs__stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
-}
-
-.cp-portal-stat {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-md);
-}
-
-.cp-stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--r-sm);
-  background: rgba(0, 0, 0, 0.04);
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cp-stat-icon svg {
-  width: 24px;
-  height: 24px;
-}
-
-.cp-stat-electric {
-  background: rgba(0, 174, 239, 0.08);
-  color: var(--cp-electric);
-}
-
-.cp-stat-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 700;
-  margin: 0 0 2px;
-}
-
-.cp-stat-value {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--text-primary);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  overflow: hidden;
+}
+
+.rs__stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-5);
+}
+
+.rs__stats li + li {
+  border-left: 1px solid var(--line-soft);
+}
+
+.rs__stat-num {
+  font-size: 1.75rem;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-strong);
+  font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
-.cp-recent-header {
+.rs__stat-label {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ── Tarjetas ── */
+.rs__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  align-items: start;
+}
+
+.rs__card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-5);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+}
+
+.rs__card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: var(--sp-4);
+}
+
+.rs__card-title {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+}
+
+.rs__card-link {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.rs__loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.rs__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.rs__empty-text {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+}
+
+/* ── Último pedido ── */
+.rs__order {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.rs__order-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-4);
+  gap: var(--sp-3);
+  flex-wrap: wrap;
 }
 
-.cp-recent-link {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--cp-electric);
-  text-decoration: none;
+.rs__order-code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
 }
 
-.cp-recent-link:hover {
-  text-decoration: underline;
+.rs__order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
 }
 
-.cp-empty {
-  padding: var(--space-8);
-  text-align: center;
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: var(--r-md);
-  border: 1px dashed var(--border-light);
+.rs__order-meta > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
 }
 
-.cp-empty p {
-  color: var(--text-muted);
-  margin-bottom: var(--space-4);
+.rs__order-meta dt {
+  font-size: var(--fs-xs);
+  color: var(--ink-muted);
 }
 
-.cp-btn {
+.rs__order-meta dd {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--ink-strong);
+}
+
+.rs__order-total {
+  font-size: var(--fs-sm) !important;
+  font-weight: var(--fw-black) !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.rs__order-help {
+  padding: var(--sp-3);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-sm);
+  background: var(--accent-quiet);
+  font-size: var(--fs-2xs);
+  line-height: var(--leading-normal);
+  color: var(--accent-strong);
+}
+
+.rs__order-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--cp-electric);
-  color: white;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: var(--r-sm);
-  text-decoration: none;
-  transition: all var(--t-fast);
+  gap: 7px;
+  height: 40px;
+  margin-top: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--ink-strong);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  transition:
+    background var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth),
+    color var(--t-base) var(--ease-smooth);
 }
 
-.cp-btn:hover {
-  background: var(--cp-dark);
+.rs__order-cta svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--t-base) var(--ease-smooth);
 }
 
-.cp-table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-md);
+.rs__order-cta:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-quiet);
+  color: var(--accent-strong);
 }
 
-.cp-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  font-size: 0.9rem;
+.rs__order-cta:hover svg {
+  transform: translateX(2px);
 }
 
-.cp-table th {
-  background: rgba(0, 0, 0, 0.02);
-  padding: 12px 16px;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid var(--border-light);
+/* ═══ Responsive ═══ */
+@media (max-width: 820px) {
+  .rs__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-.cp-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border-light);
-  color: var(--text-primary);
-}
+@media (max-width: 560px) {
+  .rs__stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-.cp-table tr:last-child td {
-  border-bottom: none;
-}
+  .rs__stats li {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: var(--sp-3) var(--sp-4);
+  }
 
-.cp-order-link {
-  font-weight: 700;
-  color: var(--cp-electric);
-  text-decoration: none;
-}
+  .rs__stats li + li {
+    border-left: 0;
+    border-top: 1px solid var(--line-soft);
+  }
 
-.cp-order-link:hover {
-  text-decoration: underline;
+  .rs__stat-num {
+    font-size: 1.25rem;
+  }
 }
-
-.cp-badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.badge-pending { background: rgba(245, 158, 11, 0.1); color: #d97706; }
-.badge-voucher_sent { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
-.badge-payment_validated { background: rgba(99, 102, 241, 0.1); color: #4f46e5; }
-.badge-in_preparation { background: rgba(139, 92, 246, 0.1); color: #7c3aed; }
-.badge-delivered { background: rgba(16, 185, 129, 0.1); color: #059669; }
-.badge-cancelled { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
 </style>

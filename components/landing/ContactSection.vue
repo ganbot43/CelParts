@@ -2,7 +2,7 @@
 
 import { MessageCircle, Instagram, Facebook, Mail } from "lucide-vue-next";
 
-const { waLink } = useKite();
+const { waLink } = useWhatsapp();
 const businessState = useBusinessConfig();
 
 const channels = computed(() => {
@@ -179,7 +179,8 @@ function handleSubmit() {
 .contact {
   position: relative;
   overflow: hidden;
-  padding: clamp(80px, 8vw, 120px) 0;
+  /* Mismo ritmo que el resto: llevaba el doble de aire. */
+  padding-block: var(--section-y-sm);
   background: var(--bg-page);
 }
 

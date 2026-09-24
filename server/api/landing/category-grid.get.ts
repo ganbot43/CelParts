@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     const sectionId = Number(query.sectionId)
 
     if (!Number.isFinite(sectionId)) {
-      throw createError({ statusCode: 400, statusMessage: 'sectionId inválido' })
+      throw createError({ statusCode: 400, message: 'sectionId inválido' })
     }
 
     const rows = await db.query.categories.findMany({
@@ -24,11 +24,7 @@ export default defineEventHandler(async (event) => {
     }))
 
     return { data }
-  } catch (error: any) {
-    console.error('❌ Error en /api/landing/category-grid:', error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: error.message || 'Error al cargar categorías del grid',
-    })
+  } catch (error) {
+    handleApiError('/api/landing/category-grid', error, 'Error al cargar categorías del grid')
   }
 })

@@ -1,325 +1,234 @@
 <template>
-  <section class="kite-section" id="nosotros">
-    <!-- Blobs decorativos -->
-    <span class="blob blob--tr" aria-hidden="true" />
-    <span class="blob blob--bl" aria-hidden="true" />
+  <section class="about" id="nosotros">
+    <div class="about__container">
+      <!-- ── Declaración ── -->
+      <div class="about__statement">
+        <p class="about__label">Sobre CelParts</p>
 
-    <div class="kite-section__container">
-      <!-- Columna izquierda: contenido -->
-      <div class="kite-section__content">
-
-        <!-- Divisor -->
-        <div class="divider" aria-hidden="true">
-          <span class="divider__line" />
-          <span class="divider__gem">✦</span>
-          <span class="divider__line divider__line--short" />
-        </div>
-
-        <!-- Texto de bienvenida -->
-        <p class="welcome-text">
-          En <strong class="welcome-text__highlight">CelParts</strong> nos apasiona ofrecer repuestos y accesorios de alta calidad para celulares en Perú. Creemos que tu dispositivo merece lo mejor, y por eso nos esforzamos por brindarte productos confiables, duraderos y
-          <strong class="welcome-text__highlight">al precio justo</strong>.
+        <p class="about__lead">
+          Vendemos repuestos y accesorios para celulares en el Perú:
+          pantallas, baterías, conectores, flex y accesorios para las
+          marcas que la gente realmente usa.
         </p>
 
-        <!-- Valores / Pillars -->
-        <ul class="pillars" aria-label="Nuestros valores">
-          <li
-            v-for="pillar in pillars"
-            :key="pillar.label"
-            class="pillars__item"
-          >
-            <span class="pillars__check" aria-hidden="true">✔</span>
-            <span class="pillars__label">{{ pillar.label }}</span>
-          </li>
-        </ul>
+        <p class="about__body">
+          Nuestro criterio de compra es simple: preferimos un catálogo más
+          corto y bien descrito antes que uno enorme donde nadie sabe qué
+          está comprando. Cada pieza indica su tipo y el modelo al que
+          corresponde, y el precio es el que ves —sin sorpresas al final.
+        </p>
 
-        <!-- Botones -->
-        <div class="cta-row">
-          <NuxtLink to="/productos" class="btn btn--primary">
-            Ver productos
+        <div class="about__cta">
+          <NuxtLink to="/productos" class="about__btn about__btn--solid">
+            Ver catálogo
           </NuxtLink>
-          <NuxtLink to="/privacidad" class="btn btn--secondary">
+          <NuxtLink to="/sobre-nosotros" class="about__btn about__btn--quiet">
             Conocer más
           </NuxtLink>
         </div>
-
-        <!-- País de origen -->
-        <p class="origin-tag">
-          <span class="origin-tag__flag" aria-hidden="true">🇵🇪</span>
-          Hecho en Peru - 2026
-        </p>
       </div>
+
+      <!-- ── Pilares ──
+           Fila de términos separados por filete vertical: se leen
+           como una franja de datos, no como tarjetas con palomita. -->
+      <ul class="about__pillars">
+        <li v-for="p in pillars" :key="p.label" class="about__pillar">
+          <span class="about__pillar-label">{{ p.label }}</span>
+          <span class="about__pillar-note">{{ p.note }}</span>
+        </li>
+      </ul>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-interface Pillar {
-  label: string;
-}
-
-const pillars: Pillar[] = [
-  { label: "Repuestos de calidad" },
-  { label: "Atención personalizada" },
-  { label: "Precios competitivos" },
-  { label: "Compatibilidad garantizada" },
+const pillars = [
+  {
+    label: "Repuestos de calidad",
+    note: "Originales y equivalentes de fábrica, identificados como tales.",
+  },
+  {
+    label: "Compatibilidad declarada",
+    note: "Cada ficha indica marca y modelo antes de que compres.",
+  },
+  {
+    label: "Atención personalizada",
+    note: "Te ayudamos a identificar la pieza si no la reconoces.",
+  },
+  {
+    label: "Precio directo",
+    note: "El precio publicado es el final, sin recargos ocultos.",
+  },
 ];
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   ABOUT SECTION — CELPARTS
-   100% tokens de main.css — sin hardcode
-═══════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   SOBRE CELPARTS
 
-.kite-section {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding: clamp(80px, 8vw, 120px) 0;
+   Sin blobs, sin ornamentos unicode, sin palomitas.
+   El bloque vale por lo que dice y por cómo está
+   compuesto: una declaración ancha y una franja de
+   datos separada por filetes.
+═══════════════════════════════════════════════════ */
+
+.about {
   background: var(--bg-alt);
   border-top: 1px solid var(--border-light);
   border-bottom: 1px solid var(--border-light);
+  padding-block: var(--section-y-sm);
 }
 
-/* Línea técnica superior */
-.kite-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  display: none; /* background: var(--line-brand); */
-  z-index: 1;
-}
-
-/* BLOBS / DECORACIÓN */
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(80px);
-  z-index: 0;
-}
-
-.blob--tr {
-  top: -150px;
-  right: -150px;
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(circle, var(--cp-ice) 0%, transparent 60%);
-}
-
-.blob--bl {
-  bottom: -150px;
-  left: -150px;
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, var(--cp-frost) 0%, transparent 60%);
-}
-
-/* CONTAINER */
-.kite-section__container {
-  position: relative;
-  z-index: 2;
-  max-width: 920px;
+.about__container {
+  max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 var(--space-8);
+  padding: 0 var(--container-pad);
 }
 
-/* CONTENT */
-.kite-section__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--space-8);
+/* ── Declaración ── */
+.about__statement {
+  max-width: 68ch;
 }
 
-/* DIVIDER */
-.divider {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  width: 100%;
-  max-width: 520px;
-}
-
-.divider__line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-mid));
-}
-
-.divider__line--short {
-  flex: 0 0 60px;
-}
-
-.divider__gem {
+.about__label {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
   color: var(--cp-electric);
-  font-size: 11px;
+  margin-bottom: var(--space-5);
 }
 
-/* TEXT */
-.welcome-text {
-  max-width: 760px;
-  margin: 0;
-  color: var(--text-muted);
-  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
-  line-height: 1.8;
-}
-
-.welcome-text__highlight {
+/* La entrada lleva el peso: tamaño de titular, tono de párrafo.
+   Es lo primero que se lee de la marca. */
+.about__lead {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  line-height: 1.35;
+  letter-spacing: var(--tracking-tight);
   color: var(--text-primary);
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  margin-bottom: var(--space-5);
+  text-wrap: balance;
 }
 
-/* PILLS */
-.pillars {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.about__body {
+  font-size: var(--fs-body-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+  margin-bottom: var(--space-8);
+}
+
+.about__cta {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: var(--space-3);
 }
 
-.pillars__item {
+.about__btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-5);
-  border-radius: var(--r-pill);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--card-shadow-sm);
-  transition:
-    transform var(--t-fast) var(--ease-snappy),
-    border-color var(--t-base) var(--ease-smooth),
-    box-shadow var(--t-base) var(--ease-smooth),
-    background var(--t-base) var(--ease-smooth);
-}
-
-.pillars__item:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-mid);
-  background: var(--cp-frost);
-  box-shadow: var(--card-shadow);
-}
-
-.pillars__check {
-  color: var(--cp-electric);
-  font-size: 11px;
-}
-
-.pillars__label {
-  color: var(--text-body);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.pillars__item:hover .pillars__label {
-  color: var(--text-primary);
-}
-
-/* CTA */
-.cta-row {
-  display: flex;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: var(--space-2);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 170px;
-  padding: 0 var(--space-8);
-  height: 48px;
-  border-radius: var(--r-pill);
+  height: 44px;
+  padding: 0 var(--space-5);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
   text-decoration: none;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 700;
   transition:
-    transform var(--t-fast) var(--ease-snappy),
     background var(--t-base) var(--ease-smooth),
-    box-shadow var(--t-base) var(--ease-smooth),
-    border-color var(--t-base) var(--ease-smooth);
+    border-color var(--t-base) var(--ease-smooth),
+    color var(--t-base) var(--ease-smooth);
 }
 
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn--primary {
+.about__btn--solid {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
-  border: none;
-  box-shadow: 0 4px 14px rgba(7, 30, 82, 0.18);
+  border: 1px solid var(--btn-primary-bg);
 }
 
-.btn--primary:hover {
+.about__btn--solid:hover {
   background: var(--btn-primary-hover);
-  box-shadow: 0 8px 24px rgba(7, 30, 82, 0.26);
+  border-color: var(--btn-primary-hover);
   color: var(--btn-primary-text);
 }
 
-.btn--secondary {
-  background: var(--bg-surface);
+.about__btn--quiet {
+  background: transparent;
   color: var(--text-body);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--card-shadow-sm);
+  border: 1px solid var(--border-mid);
 }
 
-.btn--secondary:hover {
-  background: var(--bg-alt);
-  border-color: var(--border-mid);
+.about__btn--quiet:hover {
+  border-color: var(--cp-navy);
+  color: var(--cp-navy);
+}
+
+/* ── Pilares ── */
+.about__pillars {
+  list-style: none;
+  margin: var(--space-16) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border-mid);
+}
+
+.about__pillar {
+  padding: var(--space-6) var(--space-5) 0 0;
+  border-right: 1px solid var(--border-light);
+}
+
+.about__pillar:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.about__pillar-label {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
   color: var(--text-primary);
+  margin-bottom: var(--space-2);
 }
 
-/* ORIGIN */
-.origin-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-top: var(--space-8);
-  color: var(--text-faint);
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+.about__pillar-note {
+  display: block;
+  font-size: var(--fs-xs);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
 }
 
-.origin-tag__flag {
-  font-size: 14px;
-}
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .about__pillars {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .kite-section__container {
-    padding: 0 var(--space-5);
+  .about__pillar:nth-child(2n) {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .about__pillar:nth-child(n + 3) {
+    border-top: 1px solid var(--border-light);
+    margin-top: var(--space-6);
   }
 }
 
-@media (max-width: 480px) {
-  .cta-row {
-    width: 100%;
-    flex-direction: column;
+@media (max-width: 520px) {
+  .about__pillars {
+    grid-template-columns: 1fr;
   }
 
-  .btn {
-    width: 100%;
+  .about__pillar {
+    border-right: none;
+    padding-right: 0;
   }
 
-  .welcome-text {
-    font-size: 0.98rem;
+  .about__pillar + .about__pillar {
+    border-top: 1px solid var(--border-light);
+    margin-top: 0;
   }
 }
 </style>

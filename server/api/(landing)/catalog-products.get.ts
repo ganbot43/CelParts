@@ -33,11 +33,7 @@ export default defineEventHandler(async (event) => {
       data,
       total: filtered.length,
     }
-  } catch (error: any) {
-    console.error('❌ Error en /api/landing/catalog-products:', error.message || error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: error.message || 'Error al cargar productos del catálogo',
-    })
+  } catch (error) {
+    handleApiError('/api/landing/catalog-products', error, 'Error al cargar productos del catálogo')
   }
 })

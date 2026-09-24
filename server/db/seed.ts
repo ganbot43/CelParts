@@ -59,7 +59,7 @@ async function seed() {
   // 1. business_config
   await db.insert(schema.businessConfig).values({
     name:        'Cel Parts',
-    whatsapp:    process.env.NUXT_PUBLIC_WHATSAPP ?? '+51996111303',
+    whatsapp:    process.env.NUXT_PUBLIC_WHATSAPP ?? '+51923821520',
     plan:        'basic',
     socialLinks: JSON.stringify({ instagram: 'celparts', facebook: 'celparts', tiktok: 'celparts' }),
   }).execute()
@@ -100,8 +100,31 @@ async function seed() {
 
   // 5. banners
   await db.insert(schema.banners).values([
-    { imageUrl: 'https://loremflickr.com/1200/400/ecommerce?random=1', sortOrder: 0, isActive: 1 },
-    { imageUrl: 'https://loremflickr.com/1200/400/technology?random=2', sortOrder: 1, isActive: 1 },
+    /* Imágenes de relleno de picsum: loremflickr dejó de servir peticiones
+       anónimas (responde 401) y toda la portada quedaba con recuadros
+       rotos. Sustituir por las imágenes reales desde /admin/banners. */
+    {
+      imageUrl: 'https://picsum.photos/seed/celparts-banner-1/1680/720',
+      linkUrl: '/productos',
+      eyebrow: 'Repuestos con garantía',
+      title: 'La pieza correcta, a la primera',
+      subtitle: 'Catálogo ordenado por modelo, con el stock tal como está.',
+      ctaLabel: 'Ver catálogo',
+      align: 'left',
+      sortOrder: 0,
+      isActive: 1,
+    },
+    {
+      imageUrl: 'https://picsum.photos/seed/celparts-banner-2/1680/720',
+      linkUrl: '/productos?nuevoLanzamiento=1',
+      eyebrow: 'Novedades',
+      title: 'Lo último que entró al almacén',
+      subtitle: 'Pantallas, baterías y accesorios de los equipos que más se reparan.',
+      ctaLabel: 'Ver novedades',
+      align: 'left',
+      sortOrder: 1,
+      isActive: 1,
+    },
   ]).execute()
 
   // 6. products (12 productos de repuestos y accesorios de celulares)
@@ -136,7 +159,7 @@ async function seed() {
 
     await db.insert(schema.productImages).values({
       productId,
-      url:       `https://loremflickr.com/600/600/smartphone,repair?lock=${productId}`,
+      url:       `https://picsum.photos/seed/celparts-prod-${productId}/600/600`,
       sortOrder: 0,
       isPrimary: 1,
     }).execute()

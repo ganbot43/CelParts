@@ -1,283 +1,272 @@
 <template>
-  <div class="galeria-producto">
-    <!-- Imagen principal -->
-    <div class="galeria-imagen-principal-contenedor">
-      <img
-        v-if="imagenSeleccionada"
-        :src="imagenSeleccionada"
-        :alt="producto?.name"
-        class="galeria-imagen-principal"
+  <div class="gal">
+    <!-- ── Imagen principal ──
+         contain, no cover: en un repuesto el recorte esconde justo el
+         conector o el marco que el comprador vino a verificar. -->
+    <div class="gal__stage">
+      <SharedImagen
+        :key="current ?? 'sin-imagen'"
+        :src="current"
+        :alt="producto?.name ?? 'Producto'"
+        fit="contain"
+        eager
+        label="Sin imagen"
+        class="gal__img"
       />
-      <div v-else class="galeria-placeholder">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1"
-          stroke="currentColor"
-          class="galeria-placeholder-icono"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-          />
-        </svg>
-        <span class="galeria-placeholder-texto">Sin imagen</span>
+
+      <div class="gal__tags">
+        <span v-if="hasDiscount" class="gal__tag gal__tag--sale">-{{ discountPct }}%</span>
+        <span v-if="producto?.nuevoLanzamiento" class="gal__tag gal__tag--new">Nuevo</span>
+        <span v-else-if="producto?.isFeatured" class="gal__tag gal__tag--quiet">Destacado</span>
       </div>
 
-      <!-- Badge destacado -->
-      <span v-if="producto?.isFeatured" class="galeria-insignia">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="galeria-insignia-icono"
-        >
-          <path
-            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-          />
-        </svg>
-        Destacado
-      </span>
+      <!-- Flechas solo cuando hay más de una foto -->
+      <template v-if="images.length > 1">
+        <button type="button" class="gal__nav gal__nav--prev" aria-label="Imagen anterior" @click="step(-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 6-6 6 6 6" />
+          </svg>
+        </button>
+        <button type="button" class="gal__nav gal__nav--next" aria-label="Imagen siguiente" @click="step(1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 6 6 6-6 6" />
+          </svg>
+        </button>
 
-      <!-- Overlay gradiente -->
-      <div class="galeria-overlay" />
-
-      <!-- Categoría -->
-      <span v-if="producto?.category" class="galeria-categoria">
-        {{ producto.category.name }}
-      </span>
+        <span class="gal__counter">{{ index + 1 }} / {{ images.length }}</span>
+      </template>
     </div>
 
-    <!-- Miniaturas -->
-    <div v-if="producto?.images?.length > 1" class="galeria-miniaturas">
+    <!-- ── Miniaturas ── -->
+    <div v-if="images.length > 1" class="gal__thumbs">
       <button
-        v-for="(img, idx) in producto.images"
-        :key="idx"
-        @click="imagenSeleccionada = img.url"
-        class="galeria-miniatura-boton"
-        :class="{ activa: imagenSeleccionada === img.url }"
-        :aria-label="`Ver imagen ${(idx as number) + 1}`"
+        v-for="(img, i) in images"
+        :key="img.url"
+        type="button"
+        class="gal__thumb"
+        :class="{ 'is-active': i === index }"
+        :aria-label="`Ver imagen ${i + 1}`"
+        :aria-current="i === index"
+        @click="index = i"
       >
-        <img
-          :src="img.url"
-          :alt="`${producto.name} ${(idx as number) + 1}`"
-          class="galeria-miniatura-imagen"
-        />
+        <SharedImagen :src="img.url" :alt="`${producto?.name ?? 'Producto'} — imagen ${i + 1}`" fit="contain" />
       </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  producto: any;
-}>();
+import { useProductDisplay } from "~/composables/useProductDisplay";
 
-const imagenSeleccionada = ref<string | null>(null);
+const props = defineProps<{ producto: any }>();
 
+const { gallery, hasDiscount, discountPct } = useProductDisplay(() => props.producto);
+
+const images = computed(() => gallery.value);
+const index = ref(0);
+
+const current = computed(() => images.value[index.value]?.url ?? null);
+
+/* Al cambiar de producto se vuelve a la principal; si no, la ficha
+   nueva abría en la tercera foto de la anterior. */
 watch(
-  () => props.producto,
-  (nuevoProducto) => {
-    if (nuevoProducto?.images?.length) {
-      imagenSeleccionada.value =
-        nuevoProducto.images.find((i: any) => i.isPrimary)?.url ??
-        nuevoProducto.images[0].url;
-    } else {
-      imagenSeleccionada.value = null;
-    }
+  () => props.producto?.id,
+  () => {
+    index.value = 0;
   },
-  { immediate: true },
 );
+
+function step(delta: number) {
+  const total = images.value.length;
+  if (total < 2) return;
+  index.value = (index.value + delta + total) % total;
+}
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   GALERÍA PRODUCTO — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
-
-.galeria-producto {
+.gal {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--sp-3);
 }
 
-/* ── Imagen principal ── */
-.galeria-imagen-principal-contenedor {
+/* ── Escenario ── */
+.gal__stage {
   position: relative;
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-radius: var(--r-lg);
-  background: var(--bg-alt);
-  border: 1px solid var(--border-light);
-  transition:
-    border-color var(--t-base) var(--ease-smooth),
-    box-shadow var(--t-base) var(--ease-smooth);
-}
-
-.galeria-imagen-principal-contenedor:hover {
-  border-color: var(--border-mid);
-  box-shadow:
-    0 0 0 1px rgba(0, 174, 239, 0.15),
-    0 12px 40px rgba(7, 30, 82, 0.10);
-}
-
-.galeria-imagen-principal {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  display: block;
-}
-
-.galeria-imagen-principal-contenedor:hover .galeria-imagen-principal {
-  transform: scale(1.04);
-}
-
-/* ── Overlay ── */
-.galeria-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 45%,
-    rgba(7, 30, 82, 0.30) 100%
-  );
-  pointer-events: none;
-}
-
-/* ── Placeholder ── */
-.galeria-placeholder {
-  width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  color: var(--border-mid);
+  padding: var(--sp-8);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-media);
+  overflow: hidden;
 }
 
-.galeria-placeholder-icono {
-  width: 52px;
-  height: 52px;
+.gal__img {
+  width: 100%;
+  height: 100%;
+  animation: gal-in var(--t-base) var(--ease-smooth);
 }
 
-.galeria-placeholder-texto {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  letter-spacing: 0.02em;
+@keyframes gal-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-/* ── Badge destacado ── */
-.galeria-insignia {
+/* ── Etiquetas ── */
+.gal__tags {
   position: absolute;
-  top: var(--space-2);
-  left: var(--space-2);
+  top: var(--sp-4);
+  left: var(--sp-4);
+  display: flex;
+  gap: 6px;
+}
+
+.gal__tag {
+  padding: 4px 9px;
+  border-radius: var(--radius-xs);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+.gal__tag--sale {
+  background: var(--cp-navy-900);
+  color: #fff;
+}
+
+.gal__tag--new {
+  background: var(--cp-cyan-400);
+  color: var(--cp-navy-900);
+}
+
+.gal__tag--quiet {
+  background: var(--surface-raised);
+  color: var(--ink-muted);
+  border: 1px solid var(--line-soft);
+}
+
+/* ── Navegación ── */
+.gal__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--cp-navy);
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: var(--r-pill);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--card-shadow-sm);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  justify-content: center;
+  border: 1px solid var(--line-soft);
+  border-radius: 50%;
+  background: var(--surface-raised);
+  color: var(--ink-strong);
+  opacity: 0;
+  transition:
+    opacity var(--t-base) var(--ease-smooth),
+    border-color var(--t-base) var(--ease-smooth);
 }
 
-.galeria-insignia-icono {
-  width: 12px;
-  height: 12px;
-  color: var(--cp-electric);
-  flex-shrink: 0;
+.gal__nav svg {
+  width: 16px;
+  height: 16px;
 }
 
-/* ── Categoría ── */
-.galeria-categoria {
+.gal__nav--prev {
+  left: var(--sp-3);
+}
+.gal__nav--next {
+  right: var(--sp-3);
+}
+
+.gal__stage:hover .gal__nav,
+.gal__stage:focus-within .gal__nav {
+  opacity: 1;
+}
+
+.gal__nav:hover {
+  border-color: var(--accent-line);
+  color: var(--accent-strong);
+}
+
+@media (hover: none) {
+  .gal__nav {
+    opacity: 1;
+  }
+}
+
+.gal__counter {
   position: absolute;
-  bottom: var(--space-2);
-  right: var(--space-2);
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--cp-white);
-  background: rgba(7, 30, 82, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  right: var(--sp-4);
+  bottom: var(--sp-4);
   padding: 3px 9px;
-  border-radius: var(--r-pill);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  border-radius: var(--radius-pill);
+  background: rgba(7, 30, 82, 0.55);
+  color: #fff;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 /* ── Miniaturas ── */
-.galeria-miniaturas {
+.gal__thumbs {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--sp-2);
   overflow-x: auto;
   padding-bottom: 2px;
   scrollbar-width: none;
 }
 
-.galeria-miniaturas::-webkit-scrollbar {
+.gal__thumbs::-webkit-scrollbar {
   display: none;
 }
 
-.galeria-miniatura-boton {
+.gal__thumb {
   flex-shrink: 0;
-  width: 72px;
-  height: 72px;
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-sm);
+  width: 70px;
+  height: 70px;
+  padding: 5px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-media);
   overflow: hidden;
-  cursor: pointer;
-  background: var(--bg-alt);
   transition:
     border-color var(--t-fast) var(--ease-smooth),
-    transform var(--t-fast) var(--ease-snappy),
-    box-shadow var(--t-fast) var(--ease-smooth);
-  padding: 0;
+    background var(--t-fast) var(--ease-smooth);
 }
 
-.galeria-miniatura-boton:hover {
-  border-color: rgba(0, 174, 239, 0.35);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 174, 239, 0.15);
-}
-
-.galeria-miniatura-boton.activa {
-  border: 2px solid var(--cp-electric);
-  box-shadow: 0 0 0 1px rgba(0, 174, 239, 0.2);
-}
-
-.galeria-miniatura-imagen {
+.gal__thumb :deep(img) {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s var(--ease-snappy);
 }
 
-.galeria-miniatura-boton:hover .galeria-miniatura-imagen {
-  transform: scale(1.08);
+.gal__thumb:hover {
+  border-color: var(--line-strong);
+}
+
+.gal__thumb.is-active {
+  border-color: var(--accent);
+  background: var(--accent-quiet);
 }
 
 @media (max-width: 480px) {
-  .galeria-miniatura-boton {
-    width: 60px;
-    height: 60px;
+  .gal__stage {
+    padding: var(--sp-5);
+    border-radius: var(--radius);
+  }
+
+  .gal__thumb {
+    width: 58px;
+    height: 58px;
   }
 }
 </style>
-
-

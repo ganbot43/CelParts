@@ -61,7 +61,17 @@ export default defineEventHandler(async (event) => {
     await db.select().from(orders).where(eq(orders.id, id)).limit(1),
   ))[0]
 
-  await sendOrderNotification(order, data.status, data.note)
+  /* Mismo criterio que al crear: el estado ya cambió en la base. Si el
+     correo falla, el panel no debe mostrar un error sobre una operación
+     que sí se aplicó. */
+  try {
+    await sendOrderNotification(order, data.status, data.note)
+  } catch (err: any) {
+    console.error(
+      `⚠️  Estado de ${order?.orderCode ?? id} actualizado, pero falló la notificación:`,
+      err?.message || err,
+    )
+  }
 
   return order
 })

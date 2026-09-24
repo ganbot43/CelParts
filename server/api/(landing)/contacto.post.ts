@@ -54,7 +54,7 @@ function validateBody(body: Record<string, unknown>): FormBody {
         if (typeof value !== "string" || value.trim() === "") {
             throw createError({
                 statusCode: 400,
-                statusMessage: `El campo "${field}" es obligatorio`,
+                message: `El campo "${field}" es obligatorio`,
             });
         }
     }
@@ -77,7 +77,7 @@ async function validateRecaptcha(token: string, secretKey: string): Promise<void
     if (!verification.success || verification.score < CONFIG.recaptchaMinScore) {
         throw createError({
             statusCode: 403,
-            statusMessage: "Verificación reCAPTCHA fallida",
+            message: "Verificación reCAPTCHA fallida",
         });
     }
 }
@@ -85,13 +85,19 @@ async function validateRecaptcha(token: string, secretKey: string): Promise<void
 /** Valida que la configuración SMTP esté completa */
 function validateSmtpConfig(config: ReturnType<typeof useRuntimeConfig>): void {
     const required = ["smtpHost", "smtpPort", "smtpUser", "smtpPassword", "smtpFrom"] as const;
-    for (const key of required) {
-        if (!config[key]) {
-            throw createError({
-                statusCode: 500,
-                statusMessage: `Variable de entorno "${key}" no configurada`,
-            });
-        }
+    const faltantes = required.filter((key) => !config[key]);
+    if (faltantes.length) {
+        /* El nombre de la variable se registra, no se devuelve: decirle a
+           un visitante qué variables de entorno faltan describe la
+           configuración del servidor sin ninguna necesidad. */
+        console.error(
+            "❌ [/api/contacto] SMTP sin configurar. Faltan:",
+            faltantes.join(", "),
+        );
+        throw createError({
+            statusCode: 503,
+            message: "El formulario no está disponible ahora mismo. Escríbenos por WhatsApp.",
+        });
     }
 }
 
@@ -291,7 +297,7 @@ export default defineEventHandler(async (event) => {
         // 2. reCAPTCHA (solo en producción)
         if (process.env.NODE_ENV !== "development") {
             if (typeof rawBody.recaptchaToken !== "string" || rawBody.recaptchaToken.trim() === "") {
-                throw createError({ statusCode: 400, statusMessage: "Token reCAPTCHA requerido" });
+                throw createError({ statusCode: 400, message: "Token reCAPTCHA requerido" });
             }
             await validateRecaptcha(rawBody.recaptchaToken, config.recaptchaSecretKey as string);
         }
@@ -311,7 +317,7 @@ export default defineEventHandler(async (event) => {
         console.error("[sendEmail]", error);
         throw createError({
             statusCode: error.statusCode ?? 500,
-            statusMessage: error.statusMessage ?? "Error interno del servidor",
+            message: error.message ?? "Error interno del servidor",
         });
     }
 });

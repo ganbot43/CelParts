@@ -142,8 +142,20 @@ export default defineEventHandler(async (event) => {
   ))[0]
 
   if (order) {
-    await sendOrderNotification(order as any, 'created')
+    /* La notificación no puede tumbar la compra: el pedido ya está en la
+       base y el stock descontado. Si el SMTP falla (credenciales, red,
+       cuota) el endpoint devolvía 500 y el comprador veía "no se pudo
+       procesar" sobre un pedido que SÍ existía — y al reintentar creaba
+       un duplicado descontando stock otra vez. Se registra y se sigue. */
+    try {
+      await sendOrderNotification(order as any, 'created')
+    } catch (err: any) {
+      console.error(
+        ` Pedido ${order.orderCode} creado, pero falló la notificación:`,
+        err?.message || err,
+      )
+    }
   }
 
-  return order
+  return created(event, order)
 })

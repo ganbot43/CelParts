@@ -21,5 +21,5 @@ export default defineEventHandler(async (event) => {
   const id = await insertAndGetId(paymentMethods, data)
   const pm = await db.query.paymentMethods.findFirst({ where: eq(paymentMethods.id, id) })
   if (!pm) throw createError({ statusCode: 500, message: 'Error creating payment method' })
-  return { id: pm.id, type: pm.type, label: pm.label, qrUrl: pm.qrUrl, accountNumber: pm.accountNumber, accountName: pm.accountName, isActive: !!pm.isActive, sortOrder: pm.sortOrder }
+  return created(event, { id: pm.id, type: pm.type, label: pm.label, qrUrl: pm.qrUrl, accountNumber: pm.accountNumber, accountName: pm.accountName, isActive: !!pm.isActive, sortOrder: pm.sortOrder })
 })

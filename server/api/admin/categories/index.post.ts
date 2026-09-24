@@ -24,5 +24,5 @@ export default defineEventHandler(async (event) => {
     await db.select().from(categories).where(eq(categories.id, id)).limit(1),
   ))[0]
   if (!c) throw createError({ statusCode: 500, message: 'Error creating category' })
-  return { id: c.id, name: c.name, slug: c.slug, sortOrder: c.sortOrder, isActive: !!c.isActive, seccion: c.seccion, idProducto: c.idProducto, imagenBanner: c.imagenBanner, subcategories: (c.subcategories ?? []).map(s => ({ id: s.id, name: s.name, slug: s.slug })) }
+  return created(event, { id: c.id, name: c.name, slug: c.slug, sortOrder: c.sortOrder, isActive: !!c.isActive, seccion: c.seccion, idProducto: c.idProducto, imagenBanner: c.imagenBanner, subcategories: (c.subcategories ?? []).map(s => ({ id: s.id, name: s.name, slug: s.slug })) })
 })

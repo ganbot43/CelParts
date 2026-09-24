@@ -26,11 +26,10 @@
           <thead>
             <tr>
               <th class="sp-th" style="width: 140px">Preview</th>
-              <th class="sp-th">URL imagen</th>
+              <th class="sp-th">Contenido</th>
               <th class="sp-th">Enlace</th>
               <th class="sp-th sp-th--center" style="width: 80px">Orden</th>
               <th class="sp-th" style="width: 100px">Estado</th>
-              <th class="sp-th">Fecha</th>
               <th class="sp-th" style="width: 100px">Acciones</th>
             </tr>
           </thead>
@@ -68,9 +67,13 @@
               </td>
 
               <td class="sp-td">
-                <p class="banner-url" :title="banner.imageUrl">
-                  {{ banner.imageUrl }}
-                </p>
+                <div class="banner-content">
+                  <p v-if="banner.title" class="banner-content__title">{{ banner.title }}</p>
+                  <p v-else class="banner-content__title banner-content__title--none">
+                    Solo imagen (sin texto)
+                  </p>
+                  <p v-if="banner.subtitle" class="banner-content__sub">{{ banner.subtitle }}</p>
+                </div>
               </td>
 
               <td class="sp-td">
@@ -98,9 +101,6 @@
                   <span class="sp-badge__dot"></span>
                   {{ banner.isActive ? "Activo" : "Inactivo" }}
                 </span>
-              </td>
-              <td class="sp-td sp-td--muted">
-                <span class="sp-table-date">{{ formatDateTime(banner.createdAt) }}</span>
               </td>
               <td class="sp-td">
                 <div class="sp-table-actions">
@@ -214,60 +214,150 @@
           </div>
 
           <div class="sp-drawer-body">
-            <!-- Preview -->
-            <div class="banner-preview" v-if="form.imageUrl">
-              <img :src="form.imageUrl" alt="Preview" />
-            </div>
-            <div class="banner-preview-empty" v-else>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                <rect
-                  x="3"
-                  y="3"
-                  width="18"
-                  height="18"
-                  rx="3"
-                  stroke="currentColor"
-                  stroke-width="1.2"
-                />
-                <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
-                <path
-                  d="M3 15l5-5 4 4 3-3 6 6"
-                  stroke="currentColor"
-                  stroke-width="1.2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <span>Vista previa del banner</span>
+            <!-- Vista previa: reproduce la composición real de la portada
+                 (velo + texto según alineación), no solo la foto suelta. -->
+            <div class="bnr-preview">
+              <div class="bnr-preview__stage">
+                <img v-if="form.imageUrl" :src="form.imageUrl" alt="" class="bnr-preview__img" />
+                <div v-else class="bnr-preview__brand" />
+
+                <div v-if="hasText" class="bnr-preview__scrim" :class="`is-${form.align}`" />
+
+                <div v-if="hasText" class="bnr-preview__body" :class="`is-${form.align}`">
+                  <span v-if="form.eyebrow" class="bnr-preview__eyebrow">{{ form.eyebrow }}</span>
+                  <span v-if="form.title" class="bnr-preview__title">{{ form.title }}</span>
+                  <span v-if="form.subtitle" class="bnr-preview__sub">{{ form.subtitle }}</span>
+                  <span v-if="form.ctaLabel" class="bnr-preview__cta">{{ form.ctaLabel }}</span>
+                </div>
+              </div>
+              <p class="bnr-preview__note">
+                Vista previa aproximada · proporción 21:9 en escritorio
+              </p>
             </div>
 
+            <!-- ── Imagen ── -->
             <div class="sp-drawer-field">
-              <label class="sp-drawer-label"
-                >URL de imagen <span class="sp-drawer-req">*</span></label
-              >
+              <label class="sp-drawer-label">
+                Imagen <span class="sp-drawer-req">*</span>
+              </label>
+
+              <div class="bnr-upload">
+                <label class="bnr-upload__btn" :class="{ 'is-busy': uploading }">
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    hidden
+                    :disabled="uploading"
+                    @change="onPickFile"
+                  />
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 11V3M5 6l3-3 3 3M3 11v2h10v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  {{ uploading ? "Subiendo…" : "Subir imagen" }}
+                </label>
+
+                <button
+                  v-if="form.imageUrl"
+                  type="button"
+                  class="bnr-upload__clear"
+                  @click="form.imageUrl = ''"
+                >
+                  Quitar
+                </button>
+              </div>
+
               <input
                 v-model="form.imageUrl"
                 class="sp-drawer-input"
-                placeholder="https://..."
+                placeholder="…o pega una URL: https://…"
               />
-              <span class="sp-drawer-hint"
-                >Se recomienda proporción 3:1 (ej. 1200×400px)</span
-              >
+              <span class="sp-drawer-hint">
+                Proporción recomendada 21:9 (ej. 1680×720px). JPG, PNG o WebP.
+              </span>
+            </div>
+
+            <!-- ── Texto sobre la imagen ── -->
+            <div class="bnr-divider">
+              <span>Texto sobre la imagen</span>
+              <small>Deja todo vacío si la imagen ya trae el mensaje</small>
             </div>
 
             <div class="sp-drawer-field">
-              <label class="sp-drawer-label"
-                >URL de enlace
-                <span class="banner-optional">opcional</span></label
-              >
+              <label class="sp-drawer-label">
+                Etiqueta <span class="banner-optional">opcional</span>
+              </label>
+              <input
+                v-model="form.eyebrow"
+                class="sp-drawer-input"
+                maxlength="80"
+                placeholder="Ej. Oferta de temporada"
+              />
+              <span class="sp-drawer-hint">Línea pequeña en mayúsculas sobre el titular</span>
+            </div>
+
+            <div class="sp-drawer-field">
+              <label class="sp-drawer-label">
+                Titular <span class="banner-optional">opcional</span>
+              </label>
+              <input
+                v-model="form.title"
+                class="sp-drawer-input"
+                maxlength="160"
+                placeholder="Ej. Pantallas con 20% de descuento"
+              />
+            </div>
+
+            <div class="sp-drawer-field">
+              <label class="sp-drawer-label">
+                Bajada <span class="banner-optional">opcional</span>
+              </label>
+              <textarea
+                v-model="form.subtitle"
+                class="sp-drawer-input bnr-textarea"
+                maxlength="300"
+                rows="2"
+                placeholder="Una o dos líneas explicando la promoción"
+              />
+            </div>
+
+            <div class="sp-drawer-row">
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">
+                  Texto del botón <span class="banner-optional">opcional</span>
+                </label>
+                <input
+                  v-model="form.ctaLabel"
+                  class="sp-drawer-input"
+                  maxlength="60"
+                  placeholder="Ej. Ver ofertas"
+                />
+              </div>
+
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">Posición del texto</label>
+                <select v-model="form.align" class="sp-drawer-input sp-drawer-select">
+                  <option value="left">Izquierda</option>
+                  <option value="center">Centro</option>
+                  <option value="right">Derecha</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- ── Destino y orden ── -->
+            <div class="bnr-divider"><span>Destino y orden</span></div>
+
+            <div class="sp-drawer-field">
+              <label class="sp-drawer-label">
+                Enlace <span class="banner-optional">opcional</span>
+              </label>
               <input
                 v-model="form.linkUrl"
                 class="sp-drawer-input"
-                placeholder="https://..."
+                placeholder="/productos?categoria=pantallas  o  https://…"
               />
-              <span class="sp-drawer-hint"
-                >Página a la que redirige al hacer clic en el banner</span
-              >
+              <span class="sp-drawer-hint">
+                Ruta interna (empieza con /) o URL completa. Vacío = el banner no es clicable.
+              </span>
             </div>
 
             <div class="sp-drawer-field">
@@ -359,21 +449,32 @@ useSeoMeta({ title: "Banners — Admin" });
 
 const { data, refresh } = await useFetch<{ data: any[] }>("/api/admin/banners");
 const banners = computed(() => data.value?.data ?? []);
-const { formatDateTime } = useFormatDateTime();
 
 const drawerOpen = ref(false);
 const editingId = ref<number | null>(null);
 const isEditing = computed(() => !!editingId.value);
 const saving = ref(false);
+const uploading = ref(false);
 const formError = ref("");
 
 const emptyForm = () => ({
   imageUrl: "",
   linkUrl: "",
+  eyebrow: "",
+  title: "",
+  subtitle: "",
+  ctaLabel: "",
+  align: "left" as "left" | "center" | "right",
   sortOrder: 0,
   isActive: true,
 });
 const form = reactive(emptyForm());
+
+/* La portada solo dibuja el velo y el bloque de texto si hay algo que
+   escribir; la vista previa tiene que reflejar exactamente esa regla. */
+const hasText = computed(() =>
+  Boolean(form.eyebrow || form.title || form.subtitle || form.ctaLabel),
+);
 
 function openDrawer(banner?: any) {
   formError.value = "";
@@ -382,6 +483,11 @@ function openDrawer(banner?: any) {
     Object.assign(form, {
       imageUrl: banner.imageUrl ?? "",
       linkUrl: banner.linkUrl ?? "",
+      eyebrow: banner.eyebrow ?? "",
+      title: banner.title ?? "",
+      subtitle: banner.subtitle ?? "",
+      ctaLabel: banner.ctaLabel ?? "",
+      align: banner.align ?? "left",
       sortOrder: banner.sortOrder ?? 0,
       isActive: banner.isActive ?? true,
     });
@@ -396,21 +502,69 @@ function closeDrawer() {
   drawerOpen.value = false;
 }
 
-async function save() {
-  if (!form.imageUrl) {
-    formError.value = "La URL de imagen es requerida";
+const MAX_UPLOAD_MB = 5;
+
+async function onPickFile(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+
+  /* Se valida antes de enviar: el servidor devolvería el mismo error
+     pero después de subir varios megabytes por la red. */
+  if (file.size > MAX_UPLOAD_MB * 1024 * 1024) {
+    formError.value = `La imagen supera los ${MAX_UPLOAD_MB} MB`;
+    input.value = "";
     return;
   }
+
+  uploading.value = true;
+  formError.value = "";
+  try {
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("folder", "banners");
+    const res: any = await $fetch("/api/upload/image", { method: "POST", body: fd });
+    form.imageUrl = res.url;
+  } catch (e: any) {
+    formError.value = e?.data?.message ?? "No se pudo subir la imagen";
+  } finally {
+    uploading.value = false;
+    /* Limpiar el input permite volver a elegir el mismo archivo si el
+       primer intento falló. */
+    input.value = "";
+  }
+}
+
+async function save() {
+  if (!form.imageUrl) {
+    formError.value = "La imagen es requerida";
+    return;
+  }
+
+  const link = form.linkUrl.trim();
+  if (link && !/^https?:\/\//i.test(link) && !link.startsWith("/")) {
+    formError.value = "El enlace debe empezar con / (ruta interna) o con http(s)://";
+    return;
+  }
+
   saving.value = true;
   formError.value = "";
   try {
+    const body = {
+      ...form,
+      linkUrl: link || null,
+      /* Cadenas vacías a null: guardar "" haría que la portada pinte un
+         bloque de texto sin contenido que igual desplaza la imagen. */
+      eyebrow: form.eyebrow.trim() || null,
+      title: form.title.trim() || null,
+      subtitle: form.subtitle.trim() || null,
+      ctaLabel: form.ctaLabel.trim() || null,
+    };
+
     if (isEditing.value) {
-      await $fetch(`/api/admin/banners/${editingId.value}`, {
-        method: "PUT",
-        body: form,
-      });
+      await $fetch(`/api/admin/banners/${editingId.value}`, { method: "PUT", body });
     } else {
-      await $fetch("/api/admin/banners", { method: "POST", body: form });
+      await $fetch("/api/admin/banners", { method: "POST", body });
     }
     useAppToast().add({
       title: isEditing.value ? "Banner actualizado" : "Banner creado",
@@ -489,36 +643,213 @@ async function deleteBanner(id: number) {
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Preview en drawer ── */
-.banner-preview {
+/* ── Contenido en tabla ── */
+.banner-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 22rem;
+}
+.banner-content__title {
+  margin: 0;
+  font-size: var(--sp-text-sm);
+  font-weight: 700;
+  color: var(--sp-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.banner-content__title--none {
+  font-weight: 500;
+  font-style: italic;
+  color: var(--sp-text-soft);
+}
+.banner-content__sub {
+  margin: 0;
+  font-size: var(--sp-text-xs);
+  color: var(--sp-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Vista previa del banner ──
+   Replica la composición de la portada (velo + bloque de texto según
+   alineación) para que el administrador vea el resultado real y no
+   tenga que publicar para descubrir que el titular no se lee. ── */
+.bnr-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.bnr-preview__stage {
+  position: relative;
   width: 100%;
-  aspect-ratio: 3 / 1;
+  aspect-ratio: 21 / 9;
   border-radius: var(--sp-radius-lg);
   overflow: hidden;
   border: 1px solid var(--sp-border);
   background: var(--sp-surface-subtle);
 }
-.banner-preview img {
+
+.bnr-preview__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.banner-preview-empty {
+.bnr-preview__brand {
   width: 100%;
-  aspect-ratio: 3 / 1;
-  border-radius: var(--sp-radius-lg);
-  border: 1.5px dashed var(--sp-border);
-  background: var(--sp-surface-muted);
+  height: 100%;
+  background: linear-gradient(135deg, #071e52 0%, #0077c8 100%);
+}
+
+.bnr-preview__scrim {
+  position: absolute;
+  inset: 0;
+}
+.bnr-preview__scrim.is-left {
+  background: linear-gradient(90deg, rgba(7,30,82,.88) 0%, rgba(7,30,82,.66) 38%, rgba(7,30,82,.12) 72%, transparent 100%);
+}
+.bnr-preview__scrim.is-right {
+  background: linear-gradient(270deg, rgba(7,30,82,.88) 0%, rgba(7,30,82,.66) 38%, rgba(7,30,82,.12) 72%, transparent 100%);
+}
+.bnr-preview__scrim.is-center {
+  background: linear-gradient(180deg, rgba(7,30,82,.5) 0%, rgba(7,30,82,.72) 100%);
+}
+
+.bnr-preview__body {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
+  padding: 1.1rem 1.3rem;
+}
+.bnr-preview__body.is-left {
+  align-items: flex-start;
+  text-align: left;
+  padding-right: 38%;
+}
+.bnr-preview__body.is-right {
+  align-items: flex-end;
+  text-align: right;
+  padding-left: 38%;
+}
+.bnr-preview__body.is-center {
+  align-items: center;
+  text-align: center;
+}
+
+.bnr-preview__eyebrow {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #50d0ff;
+}
+.bnr-preview__title {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.bnr-preview__sub {
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: rgba(232, 246, 255, 0.85);
+}
+.bnr-preview__cta {
+  margin-top: 0.3rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  background: #00aeef;
+  color: #071e52;
+  font-size: 0.6rem;
+  font-weight: 800;
+}
+
+.bnr-preview__note {
+  margin: 0;
+  font-size: var(--sp-text-xs);
   color: var(--sp-text-soft);
+}
+
+/* ── Subida de imagen ── */
+.bnr-upload {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.bnr-upload__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.25rem;
+  padding: 0 0.9rem;
+  border-radius: var(--sp-radius-xs);
+  border: 1px solid var(--sp-border);
+  background: var(--sp-surface-subtle);
+  color: var(--sp-text);
+  font-size: var(--sp-text-xs);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.bnr-upload__btn:hover {
+  background: var(--sp-surface-muted);
+}
+.bnr-upload__btn.is-busy {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.bnr-upload__clear {
+  border: 0;
+  background: transparent;
+  padding: 0;
   font-size: var(--sp-text-xs);
   font-weight: 600;
+  color: var(--sp-text-muted);
+  cursor: pointer;
+}
+.bnr-upload__clear:hover {
+  color: var(--sp-danger, #dc2626);
+}
+
+/* ── Separador de bloque en el formulario ── */
+.bnr-divider {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-top: 0.9rem;
+  margin-top: 0.3rem;
+  border-top: 1px solid var(--sp-border);
+}
+.bnr-divider span {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sp-text-muted);
+}
+.bnr-divider small {
+  font-size: var(--sp-text-xs);
+  color: var(--sp-text-soft);
+}
+
+.bnr-textarea {
+  min-height: 4.5rem;
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+  resize: vertical;
+  line-height: 1.5;
 }
 
 /* ── Input orden (ancho reducido) ── */

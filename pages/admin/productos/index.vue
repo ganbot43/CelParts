@@ -183,6 +183,19 @@
                   placeholder="0.00" />
               </div>
               <div class="sp-drawer-field">
+                <label class="sp-drawer-label">Precio antes (S/)</label>
+                <input v-model.number="form.comparePrice" type="number" step="0.01" min="0" class="sp-drawer-input"
+                  placeholder="Opcional" />
+                <p class="sp-drawer-hint">
+                  <template v-if="descuentoPct">
+                    Se mostrará <strong>-{{ descuentoPct }}%</strong> en la tienda.
+                  </template>
+                  <template v-else>
+                    Déjalo vacío si no hay rebaja. Debe ser mayor al precio actual.
+                  </template>
+                </p>
+              </div>
+              <div class="sp-drawer-field">
                 <label class="sp-drawer-label">Stock</label>
                 <input v-model.number="form.stock" type="number" min="0" class="sp-drawer-input" placeholder="0" />
               </div>
@@ -366,6 +379,7 @@ function removeImageByUrl(index: number) {
 const emptyForm = () => ({
   name: "",
   price: 0,
+  comparePrice: null as number | null,
   stock: 0,
   description: "",
   categoryId: null as number | null,
@@ -386,6 +400,7 @@ function openDrawer(product?: any) {
     Object.assign(form, {
       name: product.name,
       price: product.price,
+      comparePrice: product.comparePrice ?? null,
       stock: product.stock,
       description: product.description ?? "",
       categoryId: product.categoryId ?? null,
@@ -421,6 +436,13 @@ const subcategoryOptions = computed(() =>
     .map((s: any) => ({ label: s.name, value: s.id }))
 )
 
+const descuentoPct = computed(() => {
+  const antes = Number(form.comparePrice)
+  const ahora = Number(form.price)
+  if (!antes || !ahora || antes <= ahora) return 0
+  return Math.round(((antes - ahora) / antes) * 100)
+})
+
 async function save() {
   if (!form.name || !form.price) { formError.value = "Nombre y precio son requeridos"; return }
   saving.value = true
@@ -431,6 +453,12 @@ async function save() {
     const finalUrls = [...images.value, ...uploadedUrls].slice(0, MAX_IMAGES)
     const body: any = {
       ...form,
+      /* Un "precio antes" que no supera al actual no es una rebaja: se
+         envía null para que la tienda no pinte un descuento de 0%. */
+      comparePrice:
+        Number(form.comparePrice) > Number(form.price)
+          ? Number(form.comparePrice)
+          : null,
       images: finalUrls.map((u: string, i: number) => ({ url: u, isPrimary: i === 0 })),
     }
     if (isEditing.value) {

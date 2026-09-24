@@ -55,14 +55,14 @@ const chartData = computed(() => {
         backgroundColor: (context: any) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 350);
-          gradient.addColorStop(0, 'rgba(53, 109, 255, 0.45)');
-          gradient.addColorStop(1, 'rgba(53, 109, 255, 0.0)');
+          gradient.addColorStop(0, 'rgba(0, 174, 239, 0.45)');
+          gradient.addColorStop(1, 'rgba(0, 174, 239, 0.0)');
           return gradient;
         },
-        borderColor: '#356dff',
+        borderColor: '#00aeef',
         pointBackgroundColor: '#ffffff',
-        pointBorderColor: '#356dff',
-        pointHoverBackgroundColor: '#356dff',
+        pointBorderColor: '#00aeef',
+        pointHoverBackgroundColor: '#00aeef',
         pointHoverBorderColor: '#ffffff',
         pointRadius: 4,
         pointHoverRadius: 6,

@@ -1,4 +1,4 @@
-const DEFAULT_WHATSAPP_PHONE = "51996111303";
+const DEFAULT_WHATSAPP_PHONE = "51923821520";
 const DEFAULT_WHATSAPP_MESSAGE =
   "Hola, estoy interesado en sus fuegos artificiales. ¿Podrían brindarme información sobre los productos disponibles, precios y promociones?";
 

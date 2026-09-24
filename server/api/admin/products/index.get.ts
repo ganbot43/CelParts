@@ -24,6 +24,7 @@ export default defineEventHandler(async (event) => {
     slug: p.slug,
     description: p.description,
     price: p.price,
+    comparePrice: p.comparePrice ?? null,
     stock: p.stock,
     trackStock: !!p.trackStock,
     isFeatured: !!p.isFeatured,

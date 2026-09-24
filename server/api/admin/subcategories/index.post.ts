@@ -22,5 +22,5 @@ export default defineEventHandler(async (event) => {
     await db.select().from(subcategories).where(eq(subcategories.id, id)).limit(1),
   ))[0]
   if (!s) throw createError({ statusCode: 500, message: 'Error creating subcategory' })
-  return { id: s.id, categoryId: s.categoryId, name: s.name, slug: s.slug, sortOrder: s.sortOrder, isActive: !!s.isActive, category: s.category ? { id: s.category.id, name: s.category.name } : null }
+  return created(event, { id: s.id, categoryId: s.categoryId, name: s.name, slug: s.slug, sortOrder: s.sortOrder, isActive: !!s.isActive, category: s.category ? { id: s.category.id, name: s.category.name } : null })
 })

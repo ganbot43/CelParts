@@ -197,8 +197,8 @@ function getStatusBadgeClass(estado) {
 
 /* Badges */
 .sp-badge--info {
-  background: rgba(53, 109, 255, 0.1);
-  color: #1a44d4;
-  border: 1px solid rgba(53, 109, 255, 0.18);
+  background: rgba(0, 174, 239, 0.1);
+  color: #003f8a;
+  border: 1px solid rgba(0, 174, 239, 0.18);
 }
 </style>

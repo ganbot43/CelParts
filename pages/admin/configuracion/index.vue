@@ -449,9 +449,9 @@ async function uploadLogo(event: Event) {
   align-items: center;
   justify-content: center;
   padding: 8px 14px;
-  background-color: var(--jm-surface2);
+  background-color: var(--surface-sunken);
   border: 1px solid var(--border-light);
-  color: var(--jm-text-light);
+  color: var(--ink-faint);
   border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 500;
@@ -460,8 +460,8 @@ async function uploadLogo(event: Event) {
 }
 
 .cfg-upload-btn:hover:not(:disabled) {
-  background-color: var(--jm-surface3);
-  color: var(--jm-text-main);
+  background-color: var(--surface-section);
+  color: var(--ink-strong);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -649,11 +649,11 @@ async function uploadLogo(event: Event) {
 
 .cfg-module-row--on {
   background: var(--sp-primary-soft);
-  border-color: rgba(53, 109, 255, 0.22);
+  border-color: rgba(0, 174, 239, 0.22);
 }
 
 .cfg-module-row--on:hover {
-  background: rgba(53, 109, 255, 0.13);
+  background: rgba(0, 174, 239, 0.13);
 }
 
 .cfg-module-icon {
@@ -669,7 +669,7 @@ async function uploadLogo(event: Event) {
 .cfg-module-icon :deep(svg),
 .cfg-module-icon span { display: flex; }
 
-.cfg-module-icon--blue   { background: rgba(53, 109, 255, 0.12); color: var(--sp-primary); }
+.cfg-module-icon--blue   { background: rgba(0, 174, 239, 0.12); color: var(--sp-primary); }
 .cfg-module-icon--green  { background: var(--sp-success-soft);   color: var(--sp-success); }
 .cfg-module-icon--amber  { background: var(--sp-warning-soft);   color: var(--sp-warning); }
 .cfg-module-icon--purple { background: rgba(109, 40, 217, 0.1);  color: #6d28d9; }
@@ -719,7 +719,7 @@ async function uploadLogo(event: Event) {
 
 .cfg-access-item--info {
   background: var(--sp-primary-soft);
-  border-color: rgba(53, 109, 255, 0.15);
+  border-color: rgba(0, 174, 239, 0.15);
   color: var(--sp-primary);
   align-items: flex-start;
   justify-content: flex-start;
@@ -809,13 +809,13 @@ async function uploadLogo(event: Event) {
   gap: 0.5rem;
   padding: 0.65rem 1.4rem;
   border-radius: var(--sp-radius-pill);
-  background: linear-gradient(155deg, var(--sp-blue-400) 0%, var(--sp-primary) 55%, var(--sp-primary-hover) 100%);
+  background: var(--sp-action);
   color: #fff;
   font-size: var(--sp-text-sm);
   font-weight: 700;
   border: none;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(53, 109, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 6px rgba(15, 45, 107, 0.16);
   transition:
     transform var(--sp-t-fast) var(--sp-ease),
     box-shadow var(--sp-t-fast) var(--sp-ease),
@@ -824,8 +824,9 @@ async function uploadLogo(event: Event) {
 }
 
 .cfg-save-btn:hover:not(:disabled) {
+  background: var(--sp-action-hover);
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(53, 109, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 12px rgba(15, 45, 107, 0.22);
 }
 
 .cfg-save-btn:disabled {

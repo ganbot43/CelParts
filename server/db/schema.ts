@@ -32,6 +32,10 @@ export const users = mysqlTable('users', {
   name:         text('name').notNull(),
   email:        varchar('email', { length: 191 }).notNull().unique(),
   phone:        varchar('phone', { length: 20 }),
+  /* Dirección habitual de entrega. El checkout la usa como valor por
+     defecto: antes había que reescribirla en cada compra. */
+  address:      text('address'),
+  addressReference: text('address_reference'),
   passwordHash: text('password_hash').notNull(),
   role:         varchar('role', { length: 20 }).notNull().default('admin'),
   isActive:     int('is_active').notNull().default(1),
@@ -75,6 +79,10 @@ export const products = mysqlTable('products', {
   slug:          varchar('slug', { length: 191 }).notNull().unique(),
   description:   text('description'),
   price:         double('price').notNull(),
+  /* Precio "antes" — solo se llena cuando hay una rebaja real. Si es
+     null o <= price la ficha no muestra descuento: el badge de % debe
+     corresponder a un precio que existió, no a un adorno. */
+  comparePrice:  double('compare_price'),
   stock:         int('stock').notNull().default(0),
   trackStock:    int('track_stock').notNull().default(1),
   isFeatured:    int('is_featured').notNull().default(0),
@@ -175,6 +183,15 @@ export const banners = mysqlTable('banners', {
   id:        int('id').autoincrement().primaryKey(),
   imageUrl:  text('image_url').notNull(),
   linkUrl:   text('link_url'),
+  /* Texto que se compone SOBRE la imagen. Todo opcional: un banner
+     puede ser solo arte (la imagen ya trae el mensaje) o imagen de
+     fondo + titular editable desde el panel. */
+  eyebrow:   varchar('eyebrow', { length: 80 }),
+  title:     varchar('title', { length: 160 }),
+  subtitle:  varchar('subtitle', { length: 300 }),
+  ctaLabel:  varchar('cta_label', { length: 60 }),
+  /* Dónde se ancla el bloque de texto: left | center | right */
+  align:     varchar('align', { length: 10 }).notNull().default('left'),
   sortOrder: int('sort_order').notNull().default(0),
   isActive:  int('is_active').notNull().default(1),
 })

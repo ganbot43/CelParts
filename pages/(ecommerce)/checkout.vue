@@ -1,372 +1,423 @@
 <template>
-  <div class="checkout-pagina">
-    <div class="checkout-encabezado">
-      <h1 class="checkout-titulo">Finalizar pedido</h1>
-      <p class="checkout-subtitulo">
-        Completa tus datos para confirmar tu compra
-      </p>
-    </div>
+  <div class="ck">
+    <div class="cp-container">
+      <nav class="ck__crumb" aria-label="Ubicación">
+        <NuxtLink to="/">Inicio</NuxtLink>
+        <span aria-hidden="true">/</span>
+        <NuxtLink to="/productos">Catálogo</NuxtLink>
+        <span aria-hidden="true">/</span>
+        <span class="ck__crumb-now">Finalizar pedido</span>
+      </nav>
 
-    <div class="checkout-grid">
-      <!-- ── Columna izquierda ─────────────────────────────── -->
-      <div class="checkout-formulario">
-        <!-- Datos personales -->
-        <div class="checkout-card">
-          <div class="checkout-card-header">
-            <div class="checkout-card-icono-wrap">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h2 class="checkout-card-titulo">Tus datos</h2>
-              <p class="checkout-card-sub">Información de contacto y entrega</p>
-            </div>
-          </div>
-
-          <div class="checkout-campos">
-            <div class="checkout-fila-2">
-              <div class="checkout-campo">
-                <label class="checkout-label" for="customerName"
-                  >Nombre completo
-                  <span class="checkout-requerido">*</span></label
-                >
-                <input
-                  id="customerName"
-                  name="customerName"
-                  v-model="form.customerName"
-                  type="text"
-                  placeholder="Juan García"
-                  autocomplete="name"
-                  class="checkout-input"
-                  :class="{
-                    'checkout-input-error':
-                      intentoEnviar && !form.customerName.trim(),
-                  }"
-                />
-                <span
-                  v-if="intentoEnviar && !form.customerName.trim()"
-                  class="checkout-error-msg"
-                  >Este campo es requerido</span
-                >
-              </div>
-              <div class="checkout-campo">
-                <label class="checkout-label" for="customerPhone"
-                  >Teléfono</label
-                >
-                <input
-                  id="customerPhone"
-                  name="customerPhone"
-                  v-model="form.customerPhone"
-                  type="tel"
-                  inputmode="tel"
-                  placeholder="+51 996 111 303"
-                  autocomplete="tel"
-                  class="checkout-input"
-                />
-              </div>
-            </div>
-
-            <div class="checkout-campo">
-              <label class="checkout-label" for="customerAddress"
-                >Dirección de entrega</label
-              >
-              <input
-                id="customerAddress"
-                name="customerAddress"
-                v-model="form.customerAddress"
-                type="text"
-                placeholder="Av. Principal 123, Lima"
-                autocomplete="address-line1"
-                class="checkout-input"
-              />
-            </div>
-
-            <div class="checkout-campo">
-              <label class="checkout-label" for="customerReference"
-                >Referencia</label
-              >
-              <input
-                id="customerReference"
-                name="customerReference"
-                v-model="form.customerReference"
-                type="text"
-                placeholder="Cerca al parque, edificio azul..."
-                autocomplete="address-line2"
-                class="checkout-input"
-              />
-            </div>
-
-            <div class="checkout-campo">
-              <label class="checkout-label" for="customerNotes"
-                >Notas adicionales</label
-              >
-              <textarea
-                id="customerNotes"
-                name="customerNotes"
-                v-model="form.customerNotes"
-                placeholder="Hora de entrega preferida, instrucciones especiales..."
-                autocomplete="off"
-                class="checkout-input checkout-textarea"
-                rows="3"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Métodos de pago -->
-        <div class="checkout-card">
-          <div class="checkout-card-header">
-            <div class="checkout-card-icono-wrap">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h2 class="checkout-card-titulo">Método de pago</h2>
-              <p class="checkout-card-sub">Selecciona cómo quieres pagar</p>
-            </div>
-          </div>
-
-          <div class="checkout-metodos">
-            <button
-              v-for="pm in paymentMethods?.data"
-              :key="pm.id"
-              @click="form.paymentMethodId = pm.id"
-              class="checkout-metodo-boton"
-              :class="{ activo: form.paymentMethodId === pm.id }"
-            >
-              <div class="checkout-metodo-radio">
-                <div class="checkout-metodo-radio-inner" />
-              </div>
-              <div class="checkout-metodo-info">
-                <p class="checkout-metodo-label">{{ pm.label }}</p>
-                <p v-if="pm.accountNumber" class="checkout-metodo-cuenta">
-                  {{ pm.accountNumber }}
-                </p>
-              </div>
-              <svg
-                v-if="form.paymentMethodId === pm.id"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="checkout-metodo-check"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-
-            <p
-              v-if="intentoEnviar && !form.paymentMethodId"
-              class="checkout-error-msg"
-              style="margin-top: 4px"
-            >
-              Selecciona un método de pago
-            </p>
-          </div>
-        </div>
-
-        <!-- Error global -->
-        <div v-if="error" class="checkout-error-global">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="checkout-error-icono"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
-            />
-          </svg>
-          {{ error }}
-        </div>
-
-        <!-- Botón confirmar -->
-        <button
-          class="checkout-boton-confirmar"
-          @click="submitOrder"
-          :disabled="submitting"
-        >
-          <svg
-            v-if="!submitting"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            class="checkout-boton-icono"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-          <svg
-            v-else
-            class="checkout-spinner"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            />
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-          <span>
-            {{ submitting ? "Procesando pedido..." : "Confirmar pedido" }}
-            <ClientOnly v-if="!submitting">
-              &nbsp;— {{ formatPrice.format(cartStore.total) }}
-            </ClientOnly>
+      <ClientOnly>
+        <!-- ── Carrito vacío ──
+             Antes esto redirigía a /carrito, una ruta que no existe: el
+             comprador caía en un 404 al recargar el checkout. -->
+        <div v-if="cartStore.isEmpty && !justOrdered" class="ck__empty">
+          <span class="ck__empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="20" r="1.4" />
+              <circle cx="18" cy="20" r="1.4" />
+              <path d="M2 3h2.2l2.3 12.2a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21 7H5.3" />
+            </svg>
           </span>
-        </button>
+          <h1 class="ck__empty-title">No hay nada que confirmar</h1>
+          <p class="ck__empty-text">
+            Tu carrito está vacío. Agrega las piezas que necesitas y vuelve
+            para finalizar el pedido.
+          </p>
+          <NuxtLink to="/productos" class="btn btn-primary">Ver catálogo</NuxtLink>
+        </div>
 
-        <!-- Insignias de seguridad -->
-        <!-- <div class="checkout-seguridad">
-          <div class="checkout-seguridad-item">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="checkout-seguridad-icono"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-              />
-            </svg>
-            Pago seguro
-          </div>
-          <div class="checkout-seguridad-punto" />
-          <div class="checkout-seguridad-item">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="checkout-seguridad-icono"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
-              />
-            </svg>
-            Datos protegidos
-          </div>
-          <div class="checkout-seguridad-punto" />
-          <div class="checkout-seguridad-item">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="checkout-seguridad-icono"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
-              />
-            </svg>
-            Envío confirmado
-          </div>
-        </div> -->
-      </div>
+        <!-- ── Checkout ── -->
+        <template v-else>
+          <header class="ck__head">
+            <h1 class="ck__title">Finalizar pedido</h1>
+            <p class="ck__sub">
+              Revisa tus datos y elige cómo pagar. Te confirmamos el pedido por
+              WhatsApp.
+            </p>
+          </header>
 
-      <!-- ── Resumen ─────────────────────────────────────────── -->
-      <div class="checkout-resumen-wrap">
-        <ClientOnly>
-          <EcommerceResumenCarrito />
-        </ClientOnly>
-      </div>
+          <form class="ck__grid" @submit.prevent="submitOrder">
+            <!-- ═══ Columna del formulario ═══ -->
+            <div class="ck__main">
+              <!-- ① Datos -->
+              <section class="ck__block">
+                <div class="ck__block-head">
+                  <span class="ck__step" aria-hidden="true">1</span>
+                  <div>
+                    <h2 class="ck__block-title">Datos de entrega</h2>
+                    <p class="ck__block-sub">A dónde llevamos el pedido y con quién coordinamos.</p>
+                  </div>
+                </div>
+
+                <div class="ck__fields">
+                  <div class="ck__row">
+                    <div class="ck__field">
+                      <label class="ck__label" for="ck-name">
+                        Nombre completo <span class="ck__req">*</span>
+                      </label>
+                      <input
+                        id="ck-name"
+                        v-model="form.customerName"
+                        type="text"
+                        class="ck__input"
+                        :class="{ 'is-invalid': touched && !nameOk }"
+                        placeholder="Juan García"
+                        autocomplete="name"
+                        required
+                      />
+                      <span v-if="touched && !nameOk" class="ck__hint ck__hint--error">
+                        Escribe tu nombre (al menos 2 caracteres).
+                      </span>
+                    </div>
+
+                    <div class="ck__field">
+                      <label class="ck__label" for="ck-phone">
+                        Teléfono <span class="ck__req">*</span>
+                      </label>
+                      <input
+                        id="ck-phone"
+                        v-model="form.customerPhone"
+                        type="tel"
+                        inputmode="tel"
+                        class="ck__input"
+                        :class="{ 'is-invalid': touched && !phoneOk }"
+                        placeholder="999 999 999"
+                        autocomplete="tel"
+                        required
+                      />
+                      <span
+                        class="ck__hint"
+                        :class="{ 'ck__hint--error': touched && !phoneOk }"
+                      >
+                        Por aquí te confirmamos el pedido.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="ck__field">
+                    <label class="ck__label" for="ck-address">
+                      Dirección de entrega <span class="ck__req">*</span>
+                    </label>
+                    <input
+                      id="ck-address"
+                      v-model="form.customerAddress"
+                      type="text"
+                      class="ck__input"
+                      :class="{ 'is-invalid': touched && !addressOk }"
+                      placeholder="Av. Principal 123, distrito, ciudad"
+                      autocomplete="street-address"
+                      required
+                    />
+                    <span v-if="touched && !addressOk" class="ck__hint ck__hint--error">
+                      Necesitamos una dirección para coordinar el envío.
+                    </span>
+                  </div>
+
+                  <div class="ck__field">
+                    <label class="ck__label" for="ck-reference">
+                      Referencia <span class="ck__opt">opcional</span>
+                    </label>
+                    <input
+                      id="ck-reference"
+                      v-model="form.customerReference"
+                      type="text"
+                      class="ck__input"
+                      placeholder="Cerca al parque, edificio azul, portón negro…"
+                      autocomplete="address-line2"
+                    />
+                  </div>
+
+                  <p v-if="usandoGuardados" class="ck__saved">
+                    Usamos los datos de tu cuenta. Cámbialos aquí solo para este
+                    pedido, o edítalos en
+                    <NuxtLink to="/mi-cuenta">mi cuenta</NuxtLink>.
+                  </p>
+
+                  <div class="ck__field">
+                    <label class="ck__label" for="ck-notes">
+                      Notas <span class="ck__opt">opcional</span>
+                    </label>
+                    <textarea
+                      id="ck-notes"
+                      v-model="form.customerNotes"
+                      class="ck__input ck__textarea"
+                      rows="3"
+                      maxlength="500"
+                      placeholder="Horario preferido, modelo exacto de tu equipo, instrucciones…"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <!-- ② Pago -->
+              <section class="ck__block">
+                <div class="ck__block-head">
+                  <span class="ck__step" aria-hidden="true">2</span>
+                  <div>
+                    <h2 class="ck__block-title">Método de pago</h2>
+                    <p class="ck__block-sub">Elige uno; te mostramos los datos para transferir.</p>
+                  </div>
+                </div>
+
+                <div v-if="methods.length" class="ck__methods">
+                  <label
+                    v-for="pm in methods"
+                    :key="pm.id"
+                    class="ck__method"
+                    :class="{ 'is-on': form.paymentMethodId === pm.id }"
+                  >
+                    <input
+                      v-model="form.paymentMethodId"
+                      type="radio"
+                      name="paymentMethod"
+                      :value="pm.id"
+                      class="ck__method-input"
+                    />
+
+                    <span class="ck__method-dot" aria-hidden="true" />
+
+                    <span class="ck__method-body">
+                      <span class="ck__method-label">{{ pm.label }}</span>
+                      <span v-if="pm.accountNumber" class="ck__method-meta">
+                        {{ pm.accountNumber }}
+                      </span>
+                    </span>
+                  </label>
+
+                  <!-- Datos de la cuenta elegida: sin esto el comprador
+                       confirma y no sabe a dónde transferir. -->
+                  <div v-if="selectedMethod" class="ck__payinfo">
+                    <p class="ck__payinfo-title">Datos para el pago</p>
+
+                    <dl class="ck__payinfo-list">
+                      <div>
+                        <dt>Medio</dt>
+                        <dd>{{ selectedMethod.label }}</dd>
+                      </div>
+                      <div v-if="selectedMethod.accountNumber">
+                        <dt>Número / cuenta</dt>
+                        <dd class="ck__payinfo-copy">
+                          <span>{{ selectedMethod.accountNumber }}</span>
+                          <button type="button" @click="copyAccount">
+                            {{ copied ? "Copiado" : "Copiar" }}
+                          </button>
+                        </dd>
+                      </div>
+                      <div v-if="selectedMethod.accountName">
+                        <dt>Titular</dt>
+                        <dd>{{ selectedMethod.accountName }}</dd>
+                      </div>
+                    </dl>
+
+                    <div v-if="selectedMethod.qrUrl" class="ck__qr">
+                      <SharedImagen
+                        :src="selectedMethod.qrUrl"
+                        :alt="`Código QR de ${selectedMethod.label}`"
+                        fit="contain"
+                      />
+                    </div>
+
+                    <p class="ck__payinfo-note">
+                      Paga después de confirmar el pedido y envíanos la constancia
+                      por WhatsApp para despacharlo.
+                    </p>
+                  </div>
+
+                  <p v-if="touched && !form.paymentMethodId" class="ck__hint ck__hint--error">
+                    Elige un método de pago.
+                  </p>
+                </div>
+
+                <!-- Sin métodos configurados no hay forma de cobrar: se dice
+                     y se ofrece la salida por WhatsApp. -->
+                <p v-else class="ck__nomethods">
+                  No hay métodos de pago disponibles en este momento.
+                  <a :href="waLink('Hola, quiero coordinar el pago de un pedido')" target="_blank" rel="noopener noreferrer">
+                    Escríbenos por WhatsApp
+                  </a>
+                  y lo coordinamos.
+                </p>
+              </section>
+            </div>
+
+            <!-- ═══ Resumen ═══ -->
+            <div class="ck__aside">
+              <EcommerceResumenCarrito>
+                <template #acciones>
+                  <p v-if="error" class="ck__error" role="alert">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 8v5M12 16.5v.01" />
+                    </svg>
+                    {{ error }}
+                  </p>
+
+                  <button type="submit" class="ck__submit" :disabled="submitting">
+                    <span v-if="submitting" class="ck__spin" aria-hidden="true" />
+                    {{ submitting ? "Procesando…" : "Confirmar pedido" }}
+                  </button>
+
+                  <NuxtLink to="/productos" class="ck__keep">Seguir comprando</NuxtLink>
+                </template>
+              </EcommerceResumenCarrito>
+            </div>
+          </form>
+        </template>
+
+        <!-- El checkout depende del carrito, que vive en el navegador: el
+             servidor no puede saber qué hay dentro. El esqueleto copia la
+             silueta real para que el contenido no salte al hidratar. -->
+        <template #fallback>
+          <div class="ck__loading">
+            <div class="cp-skeleton ck__loading-title" />
+            <div class="ck__loading-grid">
+              <div class="ck__loading-col">
+                <div class="cp-skeleton ck__loading-block" />
+                <div class="cp-skeleton ck__loading-block ck__loading-block--sm" />
+              </div>
+              <div class="cp-skeleton ck__loading-aside" />
+            </div>
+          </div>
+        </template>
+      </ClientOnly>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: "landing", middleware: "auth-customer" });
-useSeoMeta({ title: "Checkout — CelParts" });
+definePageMeta({ layout: "default", middleware: "auth-customer" });
 
 const cartStore = useCartStore();
-const formatPrice = useFormatPrice();
-const router = useRouter();
-
-onMounted(() => {
-  if (cartStore.isEmpty) router.replace("/carrito");
-});
-
-const { data: paymentMethods } = await useFetch("/api/payment-methods", {
-  query: { active: true },
-});
-
 const { user } = useUserSession();
+const { waLink } = useWhatsapp();
+
+useSeoMeta({
+  title: "Finalizar pedido — CelParts",
+  description: "Confirma tus datos de entrega y método de pago.",
+  robots: "noindex, nofollow",
+});
+
+type PaymentMethod = {
+  id: number;
+  type: string;
+  label: string;
+  qrUrl: string | null;
+  accountNumber: string | null;
+  accountName: string | null;
+};
+
+const { data: paymentData } = await useFetch<{ data: PaymentMethod[] }>(
+  "/api/payment-methods",
+  { query: { active: true }, default: () => ({ data: [] }) },
+);
+
+const methods = computed(() => paymentData.value?.data ?? []);
+
+/* Datos guardados del cliente, para no pedir en cada compra lo que ya
+   nos dijo una vez. Se editan en /mi-cuenta. */
+const { data: perfil } = await useFetch<{
+  name: string;
+  phone: string | null;
+  address: string | null;
+  addressReference: string | null;
+}>("/api/mi-perfil", { default: () => null });
 
 const form = reactive({
-  customerName: user.value?.name || "",
-  customerPhone: user.value?.phone || "",
+  customerName: "",
+  customerPhone: "",
   customerAddress: "",
   customerReference: "",
   customerNotes: "",
   paymentMethodId: null as number | null,
 });
 
-const submitting = ref(false);
-const error = ref("");
-const intentoEnviar = ref(false);
-
-const canSubmit = computed(
-  () => form.customerName.trim().length >= 2 && form.paymentMethodId !== null,
+/* Se rellena cuando llega el perfil, sin pisar lo que el usuario ya
+   haya escrito: puede querer enviar este pedido a otra dirección. */
+watch(
+  perfil,
+  (p) => {
+    if (!p) return;
+    if (!form.customerName) form.customerName = p.name ?? user.value?.name ?? "";
+    if (!form.customerPhone) form.customerPhone = p.phone ?? "";
+    if (!form.customerAddress) form.customerAddress = p.address ?? "";
+    if (!form.customerReference) form.customerReference = p.addressReference ?? "";
+  },
+  { immediate: true },
 );
 
+/* Con un solo método configurado, obligar a elegirlo es un clic sin
+   decisión detrás. */
+watch(
+  methods,
+  (list) => {
+    if (list.length === 1 && form.paymentMethodId === null) {
+      form.paymentMethodId = list[0].id;
+    }
+  },
+  { immediate: true },
+);
+
+const selectedMethod = computed(
+  () => methods.value.find((m) => m.id === form.paymentMethodId) ?? null,
+);
+
+const submitting = ref(false);
+const error = ref("");
+const touched = ref(false);
+const copied = ref(false);
+
+/* Tras confirmar, el store se vacía antes de que termine la navegación.
+   Sin esta bandera la página pintaría "carrito vacío" durante ese
+   instante, justo después de una compra correcta. */
+const justOrdered = ref(false);
+
+/* Solo se avisa si el perfil aportó realmente una dirección. */
+const usandoGuardados = computed(
+  () => Boolean(perfil.value?.address) && form.customerAddress === perfil.value?.address,
+);
+
+const nameOk = computed(() => form.customerName.trim().length >= 2);
+/* Los móviles peruanos son 9 dígitos; se aceptan prefijos y separadores
+   y se cuenta solo lo numérico. */
+const phoneOk = computed(() => form.customerPhone.replace(/\D/g, "").length >= 9);
+const addressOk = computed(() => form.customerAddress.trim().length >= 5);
+
+const canSubmit = computed(
+  () => nameOk.value && phoneOk.value && addressOk.value && form.paymentMethodId !== null,
+);
+
+async function copyAccount() {
+  const value = selectedMethod.value?.accountNumber;
+  if (!value) return;
+  try {
+    await navigator.clipboard.writeText(value);
+    copied.value = true;
+    setTimeout(() => (copied.value = false), 1800);
+  } catch {
+    /* Sin permiso de portapapeles el número sigue visible para copiarlo
+       a mano; no vale la pena molestar con un error. */
+  }
+}
+
 async function submitOrder() {
-  intentoEnviar.value = true;
-  if (!canSubmit.value) return;
-  submitting.value = true;
+  touched.value = true;
   error.value = "";
+
+  if (!canSubmit.value) {
+    error.value = "Revisa los campos marcados antes de confirmar.";
+    return;
+  }
+
+  if (cartStore.isEmpty) {
+    error.value = "Tu carrito está vacío.";
+    return;
+  }
+
+  submitting.value = true;
+
   try {
     const order = await $fetch<any>("/api/orders", {
       method: "POST",
@@ -374,15 +425,18 @@ async function submitOrder() {
         ...form,
         items: cartStore.items.map((i) => ({
           productId: Number(i.id),
-          quantity: Number((i as any).qty ?? (i as any).quantity ?? 0),
+          quantity: Number(i.qty ?? 0),
         })),
       },
     });
+
+    justOrdered.value = true;
     cartStore.clear();
     await navigateTo(`/pedido/${order.orderCode}`);
   } catch (e: any) {
+    justOrdered.value = false;
     error.value =
-      e?.data?.message ?? "Error al procesar el pedido. Intenta nuevamente.";
+      e?.data?.message ?? "No se pudo procesar el pedido. Inténtalo nuevamente.";
   } finally {
     submitting.value = false;
   }
@@ -390,426 +444,579 @@ async function submitOrder() {
 </script>
 
 <style scoped>
-/* ═══════════════════════════════════
-   CHECKOUT — CELPARTS
-   100% tokens de main.css
-═══════════════════════════════════ */
-
-/* ─── Página ────────────────────────────────────────────────── */
-.checkout-pagina {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 40px 20px 60px;
+.ck {
+  padding-block: var(--sp-6) var(--section-y);
 }
 
-/* ─── Encabezado ───────────────────────────────────────────── */
-.checkout-encabezado {
-  margin-bottom: 32px;
+/* ── Migas y cabecera ── */
+.ck__crumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-medium);
+  color: var(--ink-faint);
+  margin-bottom: var(--sp-5);
 }
 
-.checkout-titulo {
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 4vw, 1.75rem);
-  font-weight: 800;
-  color: var(--text-primary);
-  margin: 0 0 6px;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
+.ck__crumb a:hover {
+  color: var(--accent-strong);
 }
 
-.checkout-subtitulo {
-  font-size: 0.9rem;
-  color: var(--text-body);
-  margin: 0;
+.ck__crumb-now {
+  color: var(--ink-body);
+  font-weight: var(--fw-semibold);
 }
 
-/* ─── Grid ──────────────────────────────────────────────────── */
-.checkout-grid {
+.ck__head {
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: var(--sp-6);
+}
+
+.ck__title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-strong);
+}
+
+.ck__sub {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  margin-top: 4px;
+  max-width: 56ch;
+}
+
+/* ── Disposición ── */
+.ck__grid {
   display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: var(--sp-8);
   align-items: start;
 }
 
-@media (max-width: 900px) {
-  .checkout-grid {
-    grid-template-columns: 1fr;
-  }
-  .checkout-resumen-wrap {
-    order: -1;
-  }
-}
-
-/* ─── Columna formulario ───────────────────────────────────── */
-.checkout-formulario {
+.ck__main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sp-4);
+  min-width: 0;
 }
 
-/* ─── Card base ─────────────────────────────────────────────── */
-.checkout-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-lg);
-  padding: var(--space-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--card-shadow-sm);
+/* El resumen acompaña el scroll: el total y el botón no deben perderse
+   mientras se rellena un formulario largo. */
+.ck__aside {
+  position: sticky;
+  top: calc(var(--header-total) + var(--sp-4));
+  min-width: 0;
 }
 
-.checkout-card-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
+/* ── Bloques ── */
+.ck__block {
+  padding: var(--sp-6);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
 }
 
-.checkout-card-icono-wrap {
-  width: 38px;
-  height: 38px;
-  border-radius: var(--r-sm);
-  background: rgba(0, 174, 239, 0.06);
-  border: 1px solid rgba(0, 174, 239, 0.14);
+.ck__block-head {
   display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: var(--sp-5);
+}
+
+/* Número en lugar de icono: numera los pasos, que es lo que el
+   comprador quiere saber (cuánto falta). */
+.ck__step {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  color: var(--cp-electric);
+  border-radius: 50%;
+  background: var(--cp-navy-900);
+  color: #fff;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
 }
 
-.checkout-card-icono-wrap svg {
-  width: 18px;
-  height: 18px;
+.ck__block-title {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
 }
 
-.checkout-card-titulo {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin: 0 0 2px;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+.ck__block-sub {
+  font-size: var(--fs-xs);
+  color: var(--ink-muted);
+  margin-top: 2px;
 }
 
-.checkout-card-sub {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  margin: 0;
-}
-
-/* ─── Campos ────────────────────────────────────────────────── */
-.checkout-campos {
+/* ── Campos ── */
+.ck__fields {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--sp-4);
 }
 
-.checkout-fila-2 {
+.ck__row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
 }
 
-@media (max-width: 520px) {
-  .checkout-fila-2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-.checkout-campo {
+.ck__field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
+  min-width: 0;
 }
 
-.checkout-label {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+.ck__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--ink-strong);
 }
 
-.checkout-requerido {
-  color: var(--cp-electric);
-  margin-left: 2px;
+.ck__req {
+  color: var(--cp-danger);
 }
 
-.checkout-input {
+.ck__opt {
+  font-weight: var(--fw-regular);
+  color: var(--ink-faint);
+}
+
+.ck__input {
   width: 100%;
-  height: 42px;
-  padding: 0 12px;
-  border: 1px solid var(--border-light);
-  border-radius: var(--r-sm);
-  background: var(--bg-surface);
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  outline: none;
-  transition:
-    border-color var(--t-fast) var(--ease-smooth),
-    box-shadow var(--t-fast) var(--ease-smooth);
-  box-sizing: border-box;
+  height: 44px;
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--ink-strong);
   font-family: inherit;
+  font-size: var(--fs-sm);
+  transition:
+    border-color var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
-.checkout-input::placeholder {
-  color: var(--text-muted);
+.ck__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--shadow-focus);
 }
 
-.checkout-input:focus {
-  border-color: rgba(0, 174, 239, 0.5);
-  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.10);
+.ck__input.is-invalid {
+  border-color: var(--cp-danger);
 }
 
-.checkout-input-error {
-  border-color: rgba(220, 38, 38, 0.5) !important;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08) !important;
-}
-
-.checkout-textarea {
+.ck__textarea {
   height: auto;
-  padding: 10px 12px;
+  padding: var(--sp-3) var(--sp-4);
+  line-height: var(--leading-normal);
   resize: vertical;
-  min-height: 80px;
 }
 
-.checkout-error-msg {
-  font-size: 0.72rem;
-  color: #dc2626;
-  font-weight: 600;
+.ck__hint {
+  font-size: var(--fs-2xs);
+  color: var(--ink-faint);
 }
 
-/* ─── Métodos de pago ───────────────────────────────────────── */
-.checkout-metodos {
+.ck__hint--error {
+  color: var(--cp-danger);
+  font-weight: var(--fw-semibold);
+}
+
+.ck__saved {
+  padding: var(--sp-3);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  font-size: var(--fs-2xs);
+  line-height: var(--leading-normal);
+  color: var(--ink-muted);
+}
+
+.ck__saved a {
+  color: var(--accent-strong);
+  font-weight: var(--fw-bold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Métodos de pago ── */
+.ck__methods {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--sp-2);
 }
 
-.checkout-metodo-boton {
+.ck__method {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: 14px 16px;
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--r-sm);
-  background: var(--bg-surface);
-  cursor: pointer;
-  text-align: left;
-  transition:
-    border-color var(--t-fast) var(--ease-smooth),
-    background var(--t-fast) var(--ease-smooth);
-  position: relative;
-}
-
-.checkout-metodo-boton:hover {
-  border-color: rgba(0, 174, 239, 0.3);
-  background: rgba(0, 174, 239, 0.04);
-}
-
-.checkout-metodo-boton.activo {
-  border-color: var(--cp-electric);
-  background: rgba(0, 174, 239, 0.06);
-}
-
-.checkout-metodo-radio {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border-mid);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: border-color var(--t-fast) var(--ease-smooth);
-}
-
-.checkout-metodo-boton.activo .checkout-metodo-radio {
-  border-color: var(--cp-electric);
-}
-
-.checkout-metodo-radio-inner {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: transparent;
-  transition: background var(--t-fast) var(--ease-smooth);
-}
-
-.checkout-metodo-boton.activo .checkout-metodo-radio-inner {
-  background: var(--cp-electric);
-}
-
-.checkout-metodo-info {
-  flex: 1;
-}
-
-.checkout-metodo-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1.3;
-}
-
-.checkout-metodo-cuenta {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin: 3px 0 0;
-  font-family: monospace;
-  letter-spacing: 0.04em;
-}
-
-.checkout-metodo-check {
-  width: 18px;
-  height: 18px;
-  color: var(--cp-electric);
-  flex-shrink: 0;
-}
-
-/* ─── Error global ──────────────────────────────────────────── */
-.checkout-error-global {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  background: rgba(220, 38, 38, 0.05);
-  border: 1px solid rgba(220, 38, 38, 0.2);
-  border-radius: var(--r-sm);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #dc2626;
-}
-
-.checkout-error-icono {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-
-/* ─── Botón confirmar ───────────────────────────────────────── */
-.checkout-boton-confirmar {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 14px 20px;
-  border: none;
-  border-radius: var(--r-sm);
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
   cursor: pointer;
   transition:
-    background var(--t-fast) var(--ease-smooth),
-    transform var(--t-fast) var(--ease-snappy),
-    box-shadow var(--t-fast) var(--ease-smooth);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(7, 30, 82, 0.15);
+    border-color var(--t-base) var(--ease-smooth),
+    background var(--t-base) var(--ease-smooth);
 }
 
-.checkout-boton-confirmar::before {
-  content: "";
+.ck__method:hover {
+  border-color: var(--line-strong);
+}
+
+.ck__method.is-on {
+  border-color: var(--accent);
+  background: var(--accent-quiet);
+}
+
+/* El radio nativo se oculta pero se conserva: da navegación por teclado
+   y agrupación accesible gratis. */
+.ck__method-input {
   position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.12);
   opacity: 0;
-  transition: opacity var(--t-fast) var(--ease-smooth);
-}
-.checkout-boton-confirmar:hover:not(:disabled)::before {
-  opacity: 1;
+  width: 0;
+  height: 0;
 }
 
-.checkout-boton-confirmar:hover:not(:disabled) {
-  background: var(--btn-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(7, 30, 82, 0.22);
-  color: var(--btn-primary-text);
+.ck__method-dot {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2px solid var(--line-strong);
+  border-radius: 50%;
+  transition:
+    border-color var(--t-base) var(--ease-smooth),
+    box-shadow var(--t-base) var(--ease-smooth);
 }
 
-.checkout-boton-confirmar:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: none;
+.ck__method.is-on .ck__method-dot {
+  border-color: var(--accent-strong);
+  box-shadow: inset 0 0 0 4px var(--surface-raised),
+    inset 0 0 0 10px var(--accent-strong);
 }
 
-.checkout-boton-confirmar:disabled {
-  opacity: 0.65;
+.ck__method-input:focus-visible + .ck__method-dot {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ck__method-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ck__method-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--ink-strong);
+}
+
+.ck__method-meta {
+  font-size: var(--fs-2xs);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Datos de pago ── */
+.ck__payinfo {
+  margin-top: var(--sp-2);
+  padding: var(--sp-4);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-sm);
+  background: var(--accent-quiet);
+}
+
+.ck__payinfo-title {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--accent-strong);
+  margin-bottom: var(--sp-3);
+}
+
+.ck__payinfo-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.ck__payinfo-list > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.ck__payinfo-list dt {
+  font-size: var(--fs-xs);
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+
+.ck__payinfo-list dd {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink-strong);
+  text-align: right;
+}
+
+.ck__payinfo-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.ck__payinfo-copy button {
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-xs);
+  background: var(--surface-raised);
+  padding: 2px 8px;
+  font-family: inherit;
+  font-size: 0.625rem;
+  font-weight: var(--fw-bold);
+  color: var(--accent-strong);
+  white-space: nowrap;
+}
+
+.ck__payinfo-copy button:hover {
+  background: var(--accent-soft);
+}
+
+.ck__qr {
+  width: 150px;
+  height: 150px;
+  margin: var(--sp-4) auto 0;
+  padding: var(--sp-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+}
+
+.ck__payinfo-note {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-2xs);
+  line-height: var(--leading-normal);
+  color: var(--ink-muted);
+}
+
+.ck__nomethods {
+  padding: var(--sp-5);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.ck__nomethods a {
+  color: var(--accent-strong);
+  font-weight: var(--fw-bold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Acciones del resumen ── */
+.ck__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  padding: var(--sp-3);
+  border: 1px solid var(--cp-error-border);
+  border-radius: var(--radius-sm);
+  background: var(--cp-error-bg);
+  color: var(--cp-error-text);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  line-height: var(--leading-snug);
+}
+
+.ck__error svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ck__submit {
+  width: 100%;
+  height: 50px;
+  margin-top: var(--sp-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--action-bg);
+  color: var(--action-ink);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
+  transition: background var(--t-base) var(--ease-smooth);
+}
+
+.ck__submit:hover:not(:disabled) {
+  background: var(--action-bg-hover);
+}
+
+.ck__submit:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-.checkout-boton-icono {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
+.ck__spin {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ck-spin 0.7s linear infinite;
 }
 
-.checkout-spinner {
-  width: 17px;
-  height: 17px;
-  animation: spin 0.75s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes spin {
+@keyframes ck-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* ─── Seguridad ─────────────────────────────────────────────── */
-.checkout-seguridad {
+.ck__keep {
+  display: block;
+  margin-top: var(--sp-3);
+  text-align: center;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--ink-muted);
+}
+
+.ck__keep:hover {
+  color: var(--accent-strong);
+}
+
+/* ── Estados ── */
+.ck__empty {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: var(--sp-16) var(--sp-5);
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
 }
 
-.checkout-seguridad-item {
+.ck__empty-icon {
+  color: var(--ink-faint);
+}
+
+.ck__empty-icon svg {
+  width: 44px;
+  height: 44px;
+}
+
+.ck__empty-title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-strong);
+}
+
+.ck__empty-text {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  max-width: 44ch;
+  margin-bottom: var(--sp-3);
+}
+
+.ck__loading {
   display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text2);
+  flex-direction: column;
+  gap: var(--sp-6);
 }
 
-.checkout-seguridad-icono {
-  width: 13px;
-  height: 13px;
-  color: var(--green);
-  flex-shrink: 0;
+.ck__loading-title {
+  height: 34px;
+  width: 38%;
+  max-width: 20rem;
 }
 
-.checkout-seguridad-punto {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(226, 224, 217, 0.9);
-  flex-shrink: 0;
+.ck__loading-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: var(--sp-8);
+  align-items: start;
 }
 
-/* ─── Resumen sticky ────────────────────────────────────────── */
-.checkout-resumen-wrap {
-  position: sticky;
-  top: 24px;
+.ck__loading-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
 }
 
-@media (max-width: 900px) {
-  .checkout-resumen-wrap {
+.ck__loading-block {
+  height: 24rem;
+  border-radius: var(--radius);
+}
+
+.ck__loading-block--sm {
+  height: 14rem;
+}
+
+.ck__loading-aside {
+  height: 30rem;
+  border-radius: var(--radius);
+}
+
+@media (max-width: 1000px) {
+  .ck__loading-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-5);
+  }
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 1000px) {
+  .ck__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-5);
+  }
+
+  /* Deja de acompañar el scroll: apilado quedaría flotando sobre el
+     propio formulario. */
+  .ck__aside {
     position: static;
   }
-  .checkout-pagina {
-    padding: 24px 16px 48px;
+}
+
+@media (max-width: 560px) {
+  .ck__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ck__block {
+    padding: var(--sp-4);
   }
 }
 </style>

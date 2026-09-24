@@ -10,6 +10,19 @@ export default defineEventHandler(async (event) => {
     orderBy: (b, { asc }) => [asc(b.sortOrder)],
   })
 
-  const data = itemsResult.map(b => ({ id: b.id, imageUrl: b.imageUrl, linkUrl: b.linkUrl, sortOrder: b.sortOrder, isActive: !!b.isActive }))
+  const data = itemsResult.map(b => ({
+    id: b.id,
+    imageUrl: b.imageUrl,
+    linkUrl: b.linkUrl,
+    // El texto se compone sobre la imagen en el carrusel de portada.
+    eyebrow: b.eyebrow,
+    title: b.title,
+    subtitle: b.subtitle,
+    ctaLabel: b.ctaLabel,
+    align: b.align ?? 'left',
+    sortOrder: b.sortOrder,
+    isActive: !!b.isActive,
+  }))
+
   return { data }
 })

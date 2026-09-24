@@ -1,4 +1,4 @@
-# ESPECIFICACIONES TÉCNICAS - Joymar Utensilios
+# ESPECIFICACIONES TÉCNICAS - CelParts
 
 ## 📋 STACK TECNOLÓGICO
 
@@ -67,10 +67,10 @@ G_RECAPTCHA_SECRET_KEY=6LfGjJIsAAAAACVqxB1LrIHo7Is-vh3i__i3njo2
 ```env
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=joymar.peru@gmail.com
+SMTP_USER=info@celparts.pe
 SMTP_PASSWORD=your-app-password
 SMTP_SECURE=false
-SMTP_FROM="Joymar Utensilios <joymar.peru@gmail.com>"
+SMTP_FROM="CelParts <info@celparts.pe>"
 ```
 
 

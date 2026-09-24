@@ -586,7 +586,7 @@ const stats = computed(() => {
 
 .dash-action-btn--accent {
   background: var(--sp-primary-soft);
-  border-color: rgba(53, 109, 255, 0.18);
+  border-color: rgba(0, 174, 239, 0.18);
   color: var(--sp-primary-ink);
 }
 
@@ -748,7 +748,7 @@ const stats = computed(() => {
   font-weight: 700;
   color: var(--sp-primary);
   background: var(--sp-primary-soft);
-  border: 1px solid rgba(53, 109, 255, 0.15);
+  border: 1px solid rgba(0, 174, 239, 0.15);
   border-radius: var(--sp-radius-pill);
   padding: 0.35rem 0.75rem;
   transition: background var(--sp-t-fast) var(--sp-ease);
@@ -757,14 +757,14 @@ const stats = computed(() => {
 }
 
 .dash-view-all:hover {
-  background: rgba(53, 109, 255, 0.15);
+  background: rgba(0, 174, 239, 0.15);
   color: var(--sp-primary-hover);
 }
 
 /* ── Order code link ── */
 .dash-order-code {
   background: var(--sp-primary-soft);
-  border: 1px solid rgba(53, 109, 255, 0.14);
+  border: 1px solid rgba(0, 174, 239, 0.14);
   border-radius: var(--sp-radius-xs);
   padding: 0.2rem 0.5rem;
   text-decoration: none;
@@ -778,7 +778,7 @@ const stats = computed(() => {
 }
 
 .dash-order-code:hover {
-  background: rgba(53, 109, 255, 0.15);
+  background: rgba(0, 174, 239, 0.15);
 }
 
 /* ── Customer cell ── */
@@ -792,9 +792,7 @@ const stats = computed(() => {
   width: 1.9rem;
   height: 1.9rem;
   border-radius: 50%;
-  background: linear-gradient(135deg,
-      var(--sp-blue-400),
-      var(--sp-primary-hover));
+  background: var(--sp-action);
   color: #fff;
   font-size: 0.62rem;
   font-weight: 800;

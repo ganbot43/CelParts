@@ -281,9 +281,9 @@ async function save() {
 }
 
 .rd-card--action {
-  border-color: rgba(53, 109, 255, 0.14);
+  border-color: rgba(0, 174, 239, 0.14);
   background: linear-gradient(135deg,
-    rgba(53, 109, 255, 0.02) 0%,
+    rgba(0, 174, 239, 0.02) 0%,
     var(--sp-surface-solid) 100%);
   margin-bottom: 0;
 }
@@ -360,7 +360,7 @@ async function save() {
   padding: 4px 10px;
   background: var(--sp-primary-soft);
   color: var(--sp-primary);
-  border: 1px solid rgba(53, 109, 255, 0.15);
+  border: 1px solid rgba(0, 174, 239, 0.15);
   border-radius: var(--sp-radius-pill);
   font-size: var(--sp-text-xs);
   font-weight: 600;
@@ -410,8 +410,8 @@ async function save() {
   align-items: flex-start;
   gap: 8px;
   padding: 8px 12px;
-  background: rgba(53, 109, 255, 0.05);
-  border: 1px solid rgba(53, 109, 255, 0.15);
+  background: rgba(0, 174, 239, 0.05);
+  border: 1px solid rgba(0, 174, 239, 0.15);
   border-radius: var(--sp-radius-sm);
   font-size: var(--sp-text-xs);
   color: var(--sp-text-soft);
@@ -433,9 +433,9 @@ async function save() {
 
 /* Badges */
 .sp-badge--info {
-  background: rgba(53, 109, 255, 0.1);
-  color: #1a44d4;
-  border: 1px solid rgba(53, 109, 255, 0.18);
+  background: rgba(0, 174, 239, 0.1);
+  color: #003f8a;
+  border: 1px solid rgba(0, 174, 239, 0.18);
 }
 
 /* Spinner */

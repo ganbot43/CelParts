@@ -36,8 +36,8 @@ Relaciones: 1 fila única; referenciado lógicamente por la app, no por FK.
 Ejemplo:
 {
   "id": 1,
-  "name": "Joymar Utensilios",
-  "whatsapp": "+51996111303",
+  "name": "CelParts",
+  "whatsapp": "+51923821520",
   "plan": "basic",
   "social_links": "{\"facebook\":\"url\"}",
   "stock_enabled": 1
@@ -58,7 +58,7 @@ Columnas:
 PK: `id`
 Índices: `email` (UNIQUE)
 Relaciones: puede relacionar cambios de estado de pedidos (order_status_logs.changed_by).
-Ejemplo: {"id":2,"name":"Admin","email":"joymar.peru@gmail.com","role":"admin"}
+Ejemplo: {"id":2,"name":"Admin","email":"info@celparts.pe","role":"admin"}
 
 ---
 

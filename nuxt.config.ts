@@ -36,6 +36,10 @@ export default defineNuxtConfig({
     s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
     s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     s3RootPrefix: process.env.S3_ROOT_PREFIX ?? "celparts",
+    // PayPal integration
+    paypalClientId: process.env.PAYPAL_CLIENT_ID ?? "sb",
+    paypalClientSecret: process.env.PAYPAL_CLIENT_SECRET ?? "",
+    paypalMode: process.env.PAYPAL_MODE ?? "sandbox",
     public: {
       recaptchaSiteKey: process.env.G_RECAPTCHA_SITE_KEY,
       appName: process.env.NUXT_PUBLIC_APP_NAME ?? "CelParts SAC",
@@ -46,6 +50,9 @@ export default defineNuxtConfig({
       watsonIntegrationId: process.env.WATSON_INTEGRATION_ID,
       watsonRegion: process.env.WATSON_REGION,
       watsonServiceInstanceId: process.env.WATSON_SERVICE_INSTANCE_ID,
+      paypalClientId: process.env.PAYPAL_CLIENT_ID ?? "sb",
+      paypalCurrency: process.env.PAYPAL_CURRENCY ?? "USD",
+      paypalExchangeRate: Number(process.env.PAYPAL_EXCHANGE_RATE ?? "3.75"),
     },
   },
 

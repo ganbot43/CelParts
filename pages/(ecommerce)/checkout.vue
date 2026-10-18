@@ -187,9 +187,26 @@
                     </span>
                   </label>
 
+                  <!-- Si es PayPal: Pasarela de pago en línea -->
+                  <div v-if="selectedMethod && selectedMethod.type === 'paypal'" class="ck__payinfo ck__payinfo--paypal">
+                    <p class="ck__payinfo-title">Pagar en línea con PayPal</p>
+                    <p class="ck__payinfo-desc">
+                      Paga de forma rápida y 100% segura con tu saldo PayPal o tarjeta de crédito/débito internacional. Tu pedido quedará confirmado de inmediato.
+                    </p>
+
+                    <EcommercePayPalButton
+                      :amount-pen="cartStore.total"
+                      :can-submit="canSubmit"
+                      :customer-data="form"
+                      :items="cartStore.items.map((i) => ({ productId: Number(i.id), quantity: Number(i.qty ?? 0) }))"
+                      @success="onPayPalSuccess"
+                      @error="onPayPalError"
+                    />
+                  </div>
+
                   <!-- Datos de la cuenta elegida: sin esto el comprador
                        confirma y no sabe a dónde transferir. -->
-                  <div v-if="selectedMethod" class="ck__payinfo">
+                  <div v-else-if="selectedMethod" class="ck__payinfo">
                     <p class="ck__payinfo-title">Datos para el pago</p>
 
                     <dl class="ck__payinfo-list">
@@ -255,7 +272,13 @@
                     {{ error }}
                   </p>
 
-                  <button type="submit" class="ck__submit" :disabled="submitting">
+                  <!-- Si es PayPal, se orienta al botón oficial en el paso 2 -->
+                  <div v-if="selectedMethod?.type === 'paypal'" class="ck__paypal-aside-box">
+                    <p class="ck__paypal-aside-text">
+                      Utiliza el botón amarillo de <strong>PayPal</strong> en el paso 2 para completar tu pago seguro.
+                    </p>
+                  </div>
+                  <button v-else type="submit" class="ck__submit" :disabled="submitting">
                     <span v-if="submitting" class="ck__spin" aria-hidden="true" />
                     {{ submitting ? "Procesando…" : "Confirmar pedido" }}
                   </button>
@@ -440,6 +463,16 @@ async function submitOrder() {
   } finally {
     submitting.value = false;
   }
+}
+
+async function onPayPalSuccess(payload: { orderCode: string; captureId?: string }) {
+  justOrdered.value = true;
+  cartStore.clear();
+  await navigateTo(`/pedido/${payload.orderCode}?payment=paypal_success`);
+}
+
+function onPayPalError(msg: string) {
+  error.value = msg;
 }
 </script>
 
@@ -748,6 +781,37 @@ async function submitOrder() {
   text-transform: uppercase;
   color: var(--accent-strong);
   margin-bottom: var(--sp-3);
+}
+
+.ck__payinfo--paypal {
+  border-color: #0079C1;
+  background: rgba(0, 121, 193, 0.04);
+}
+
+.ck__payinfo--paypal .ck__payinfo-title {
+  color: #0079C1;
+}
+
+.ck__payinfo-desc {
+  font-size: var(--fs-xs);
+  color: var(--ink-muted);
+  line-height: 1.5;
+  margin-bottom: var(--sp-3);
+}
+
+.ck__paypal-aside-box {
+  padding: var(--sp-3) var(--sp-4);
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.ck__paypal-aside-text {
+  font-size: var(--fs-xs);
+  color: #0369a1;
+  line-height: 1.4;
+  margin: 0;
 }
 
 .ck__payinfo-list {

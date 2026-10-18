@@ -6,9 +6,9 @@ import { validateBody } from '~/server/utils/validate'
 import { z } from 'zod'
 
 const schema = z.object({
-  type:          z.enum(['yape', 'plin', 'bank_transfer', 'culqi', 'mercado_pago']),
+  type:          z.enum(['yape', 'plin', 'bank_transfer', 'paypal', 'culqi', 'mercado_pago']),
   label:         z.string().min(2),
-  qrUrl:         z.string().url().optional().nullable(),
+  qrUrl:         z.string().optional().nullable(),
   accountNumber: z.string().optional().nullable(),
   accountName:   z.string().optional().nullable(),
   isActive:      z.boolean().default(true),
@@ -18,7 +18,11 @@ const schema = z.object({
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const data = validateBody(schema, body)
-  const id = await insertAndGetId(paymentMethods, data)
+  const insertPayload = {
+    ...data,
+    isActive: data.isActive ? 1 : 0,
+  }
+  const id = await insertAndGetId(paymentMethods, insertPayload as any)
   const pm = await db.query.paymentMethods.findFirst({ where: eq(paymentMethods.id, id) })
   if (!pm) throw createError({ statusCode: 500, message: 'Error creating payment method' })
   return created(event, { id: pm.id, type: pm.type, label: pm.label, qrUrl: pm.qrUrl, accountNumber: pm.accountNumber, accountName: pm.accountName, isActive: !!pm.isActive, sortOrder: pm.sortOrder })

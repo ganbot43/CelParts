@@ -25,8 +25,8 @@
             <tr>
               <th class="sp-th">Método</th>
               <th class="sp-th">Tipo</th>
-              <th class="sp-th">Número de cuenta</th>
-              <th class="sp-th">Titular</th>
+              <th class="sp-th">Cuenta / Celular / Email</th>
+              <th class="sp-th">Titular / Razón Social</th>
               <th class="sp-th sp-th--center">Estado</th>
               <th class="sp-th sp-th--center">Acciones</th>
             </tr>
@@ -172,6 +172,7 @@
               <label class="sp-drawer-label">Tipo de método</label>
 
               <!-- Selector -->
+              <!-- Selector -->
               <div v-if="!editItem" class="pm-type-grid">
                 <button
                   v-for="opt in typeOptions"
@@ -187,7 +188,8 @@
                         }
                       : {}
                   "
-                  @click="form.type = opt.value"
+                  type="button"
+                  @click="selectType(opt.value)"
                 >
                   <span class="pm-type-icon"><component :is="typeIcon(opt.value)" class="w-4 h-4" /></span>
                   <span class="pm-type-opt-label">{{ opt.label }}</span>
@@ -214,35 +216,148 @@
                 Etiqueta <span class="sp-drawer-req">*</span>
               </label>
               <p class="sp-drawer-hint">
-                Nombre visible para los clientes al pagar
+                {{ labelHint }}
               </p>
               <input
                 v-model="form.label"
                 class="sp-drawer-input"
-                placeholder="Ej: Yape — 999 999 999"
+                :placeholder="labelPlaceholder"
                 @keyup.enter="save"
               />
             </div>
 
-            <!-- Número de cuenta -->
-            <div class="sp-drawer-field">
-              <label class="sp-drawer-label">Número de cuenta</label>
-              <input
-                v-model="form.accountNumber"
-                class="sp-drawer-input"
-                placeholder="Número de cuenta o teléfono"
-              />
-            </div>
+            <!-- ============================================== -->
+            <!-- CASO 1: YAPE / PLIN (Billeteras Móviles)       -->
+            <!-- ============================================== -->
+            <template v-if="form.type === 'yape' || form.type === 'plin'">
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">
+                  Número de celular <span class="sp-drawer-req">*</span>
+                </label>
+                <p class="sp-drawer-hint">Número de 9 dígitos para recibir dinero vía {{ typeLabel(form.type) }}</p>
+                <input
+                  v-model="form.accountNumber"
+                  class="sp-drawer-input"
+                  type="tel"
+                  placeholder="Ej: 999 999 999"
+                />
+              </div>
 
-            <!-- Titular -->
-            <div class="sp-drawer-field">
-              <label class="sp-drawer-label">Titular</label>
-              <input
-                v-model="form.accountName"
-                class="sp-drawer-input"
-                placeholder="Nombre del titular"
-              />
-            </div>
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">
+                  Titular del número <span class="sp-drawer-req">*</span>
+                </label>
+                <p class="sp-drawer-hint">Nombre de la persona o negocio que figura en el app</p>
+                <input
+                  v-model="form.accountName"
+                  class="sp-drawer-input"
+                  placeholder="Ej: Juan Pérez / Cel Parts SAC"
+                />
+              </div>
+
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">URL del Código QR (Opcional)</label>
+                <p class="sp-drawer-hint">Enlace a la imagen del QR para que el cliente la escanee</p>
+                <input
+                  v-model="form.qrUrl"
+                  class="sp-drawer-input"
+                  placeholder="https://... o /images/qr-yape.png"
+                />
+                <div v-if="form.qrUrl" class="pm-qr-preview">
+                  <p class="pm-qr-preview__label">Vista previa QR:</p>
+                  <img :src="form.qrUrl" alt="Vista previa QR" class="pm-qr-img" />
+                </div>
+              </div>
+            </template>
+
+            <!-- ============================================== -->
+            <!-- CASO 2: TRANSFERENCIA BANCARIA                 -->
+            <!-- ============================================== -->
+            <template v-else-if="form.type === 'bank_transfer'">
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">
+                  Número de cuenta bancaria <span class="sp-drawer-req">*</span>
+                </label>
+                <p class="sp-drawer-hint">Número de cuenta de ahorros o corriente</p>
+                <input
+                  v-model="form.accountNumber"
+                  class="sp-drawer-input"
+                  placeholder="Ej: 191-12345678-0-12 (BCP Soles)"
+                />
+              </div>
+
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">Código Interbancario (CCI)</label>
+                <p class="sp-drawer-hint">Para transferencias desde otros bancos (20 dígitos)</p>
+                <input
+                  v-model="extraCci"
+                  class="sp-drawer-input"
+                  placeholder="Ej: 002-191-001234567801-55"
+                />
+              </div>
+
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">
+                  Titular de la cuenta <span class="sp-drawer-req">*</span>
+                </label>
+                <p class="sp-drawer-hint">Razón social de la empresa o nombre del titular bancario</p>
+                <input
+                  v-model="form.accountName"
+                  class="sp-drawer-input"
+                  placeholder="Ej: Cel Parts S.A.C."
+                />
+              </div>
+
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">URL del Código QR del Banco (Opcional)</label>
+                <input
+                  v-model="form.qrUrl"
+                  class="sp-drawer-input"
+                  placeholder="https://... o ruta de imagen"
+                />
+              </div>
+            </template>
+
+            <!-- ============================================== -->
+            <!-- CASO 3: PAYPAL (Pasarela en Línea)             -->
+            <!-- ============================================== -->
+            <template v-else-if="form.type === 'paypal'">
+              <!-- Tarjeta informativa de pasarela automática -->
+              <div class="pm-paypal-card">
+                <div class="pm-paypal-card__header">
+                  <CreditCard class="w-4 h-4 text-sky-600" />
+                  <span class="pm-paypal-card__title">Pasarela de Pago Automática</span>
+                </div>
+                <p class="pm-paypal-card__text">
+                  El cliente pagará en tiempo real con tarjeta de crédito/débito o saldo PayPal. El pedido se aprueba automáticamente sin requerir comprobante por WhatsApp.
+                </p>
+              </div>
+
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">
+                  Correo comercial de PayPal <span class="sp-drawer-req">*</span>
+                </label>
+                <p class="sp-drawer-hint">Email corporativo registrado en tu cuenta de PayPal Business</p>
+                <input
+                  v-model="form.accountNumber"
+                  class="sp-drawer-input"
+                  type="email"
+                  placeholder="Ej: pagos@celparts.pe"
+                />
+              </div>
+
+              <div class="sp-drawer-field">
+                <label class="sp-drawer-label">
+                  Razón social o Nombre comercial (Opcional)
+                </label>
+                <p class="sp-drawer-hint">Nombre que se mostrará como receptor del pago</p>
+                <input
+                  v-model="form.accountName"
+                  class="sp-drawer-input"
+                  placeholder="Ej: Cel Parts S.A.C."
+                />
+              </div>
+            </template>
 
             <!-- Estado -->
             <div class="sp-drawer-field">
@@ -364,6 +479,7 @@ const typeOptions = [
   { label: "Yape", value: "yape" },
   { label: "Plin", value: "plin" },
   { label: "Transferencia", value: "bank_transfer" },
+  { label: "PayPal", value: "paypal" },
   // { label: "Culqi", value: "culqi" },
   // { label: "Mercado Pago", value: "mercado_pago" },
 ];
@@ -373,6 +489,7 @@ function typeColor(type: string) {
     yape: "#6d28d9",
     plin: "#0891b2",
     bank_transfer: "#0f766e",
+    paypal: "#0079C1",
     culqi: "#d97706",
     mercado_pago: "#0284c7",
   };
@@ -388,6 +505,7 @@ function typeIcon(type: string) {
     yape: Smartphone,
     plin: Smartphone,
     bank_transfer: Landmark,
+    paypal: CreditCard,
     culqi: CreditCard,
     mercado_pago: MonitorSmartphone,
   };
@@ -396,17 +514,65 @@ function typeIcon(type: string) {
 
 const defaultForm = () => ({
   type: "yape",
-  label: "",
+  label: "Yape",
   accountNumber: "",
   accountName: "",
+  qrUrl: "",
   isActive: true,
 });
 const form = reactive(defaultForm());
+const extraCci = ref("");
+
+const labelHint = computed(() => {
+  if (form.type === "yape" || form.type === "plin") return "Nombre visible con el número (ej: Yape — 999 999 999)";
+  if (form.type === "bank_transfer") return "Nombre del banco y moneda (ej: Transferencia BCP — Soles)";
+  if (form.type === "paypal") return "Nombre de la opción de pago en línea para el cliente";
+  return "Nombre visible para los clientes al pagar";
+});
+
+const labelPlaceholder = computed(() => {
+  if (form.type === "yape") return "Ej: Yape — 999 999 999";
+  if (form.type === "plin") return "Ej: Plin — 999 999 999";
+  if (form.type === "bank_transfer") return "Ej: Transferencia BCP Soles";
+  if (form.type === "paypal") return "Ej: PayPal";
+  return "Nombre visible";
+});
+
+function selectType(typeValue: string) {
+  form.type = typeValue;
+  const prevLabels = ["Yape", "Plin", "Transferencia", "PayPal"];
+  if (!form.label || prevLabels.some((l) => form.label.startsWith(l))) {
+    if (typeValue === "yape") form.label = "Yape";
+    else if (typeValue === "plin") form.label = "Plin";
+    else if (typeValue === "bank_transfer") form.label = "Transferencia Bancaria";
+    else if (typeValue === "paypal") form.label = "PayPal";
+  }
+}
 
 function openForm(item?: any) {
   editItem.value = item ?? null;
   saveError.value = "";
-  Object.assign(form, item ? { ...item } : defaultForm());
+  if (item) {
+    Object.assign(form, {
+      type: item.type ?? "yape",
+      label: item.label ?? "",
+      accountNumber: item.accountNumber ?? "",
+      accountName: item.accountName ?? "",
+      qrUrl: item.qrUrl ?? "",
+      isActive: Boolean(item.isActive),
+    });
+
+    if (item.type === "bank_transfer" && item.accountNumber?.includes("CCI:")) {
+      const parts = item.accountNumber.split("CCI:");
+      form.accountNumber = parts[0].replace(/\|/g, "").trim();
+      extraCci.value = parts[1]?.trim() ?? "";
+    } else {
+      extraCci.value = "";
+    }
+  } else {
+    Object.assign(form, defaultForm());
+    extraCci.value = "";
+  }
   showDrawer.value = true;
 }
 
@@ -426,16 +592,31 @@ async function save() {
   if (!form.label) return;
   saving.value = true;
   saveError.value = "";
+
+  const payload: any = {
+    type: form.type,
+    label: form.label,
+    accountName: form.accountName || null,
+    qrUrl: form.qrUrl || null,
+    isActive: form.isActive,
+  };
+
+  if (form.type === "bank_transfer" && extraCci.value.trim()) {
+    payload.accountNumber = `${form.accountNumber?.trim() || ""} | CCI: ${extraCci.value.trim()}`;
+  } else {
+    payload.accountNumber = form.accountNumber?.trim() || null;
+  }
+
   try {
     if (editItem.value) {
       await $fetch(`/api/admin/payment-methods/${editItem.value.id}`, {
         method: "PUT",
-        body: { ...form },
+        body: payload,
       });
     } else {
       await $fetch("/api/admin/payment-methods", {
         method: "POST",
-        body: { ...form },
+        body: payload,
       });
     }
     await refresh();
@@ -773,5 +954,59 @@ async function doDelete() {
   .pm-type-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ── Estilos específicos para PayPal y QR ── */
+.pm-paypal-card {
+  padding: 0.875rem 1rem;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: var(--sp-radius-md, 8px);
+  margin-bottom: 0.5rem;
+}
+
+.pm-paypal-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.pm-paypal-card__title {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+.pm-paypal-card__text {
+  font-size: 0.775rem;
+  color: #0284c7;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.pm-qr-preview {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: var(--sp-surface-2, #f8fafc);
+  border: 1px dashed var(--sp-border, #cbd5e1);
+  border-radius: var(--sp-radius-sm, 6px);
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pm-qr-preview__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--sp-text-muted, #64748b);
+  margin: 0;
+}
+
+.pm-qr-img {
+  max-width: 110px;
+  max-height: 110px;
+  object-fit: contain;
+  border-radius: 4px;
 }
 </style>

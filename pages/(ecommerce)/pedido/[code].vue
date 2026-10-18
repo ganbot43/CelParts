@@ -85,8 +85,23 @@
             </dl>
           </section>
 
-          <!-- ── Pago ── -->
-          <section v-if="order.paymentMethodLabel" class="cf__card cf__card--pay">
+          <!-- ── Pago con PayPal confirmado ── -->
+          <section v-if="order.paymentMethodType === 'paypal' && order.status === 'payment_validated'" class="cf__card cf__card--pay">
+            <h2 class="cf__card-title" style="color: #059669;">Pago confirmado</h2>
+            <p class="cf__pay-method" style="color: #059669;">PayPal</p>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-block: 0.5rem; padding: 0.75rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; font-size: 0.875rem; color: #065f46;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 1.25rem; height: 1.25rem; flex-shrink: 0;">
+                <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>Tu pago fue recibido y procesado con éxito vía <strong>PayPal</strong>.</span>
+            </div>
+            <p class="cf__pay-note" style="margin-top: 0.5rem;">
+              No necesitas enviar comprobante. Tu pedido está validado y pasará a preparación y despacho.
+            </p>
+          </section>
+
+          <!-- ── Pago pendiente o manual ── -->
+          <section v-else-if="order.paymentMethodLabel" class="cf__card cf__card--pay">
             <h2 class="cf__card-title">Cómo pagar</h2>
 
             <p class="cf__pay-method">{{ order.paymentMethodLabel }}</p>

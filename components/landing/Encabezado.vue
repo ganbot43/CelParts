@@ -503,7 +503,7 @@ onUnmounted(() => {
 .hd {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 999;
   background: var(--surface-raised);
   border-bottom: 1px solid var(--line-soft);
   transition: box-shadow var(--t-base) var(--ease-smooth);
@@ -1065,7 +1065,7 @@ onUnmounted(() => {
 .hd__scrim {
   position: fixed;
   inset: 0;
-  z-index: 110;
+  z-index: 1010;
   background: var(--overlay);
 }
 
@@ -1074,7 +1074,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   bottom: 0;
-  z-index: 120;
+  z-index: 1020;
   width: min(330px, 86vw);
   display: flex;
   flex-direction: column;

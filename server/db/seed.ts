@@ -96,6 +96,8 @@ async function seed() {
     { type: 'plin',          label: 'Plin',                         isActive: 1, sortOrder: 2 },
     { type: 'bank_transfer', label: 'Transferencia Bancaria (BCP)', isActive: 1, sortOrder: 3,
       accountName: 'Cel Parts SAC', accountNumber: '123-456789-0-12' },
+    { type: 'paypal',        label: 'PayPal', isActive: 1, sortOrder: 4,
+      accountName: 'pagos@celparts.pe', accountNumber: 'paypal@celparts.pe' },
   ]).execute()
 
   // 5. banners

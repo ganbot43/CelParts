@@ -7,7 +7,7 @@ import { relations, sql } from 'drizzle-orm'
 // NOTA: MySQL 5.7 no soporta DEFAULT en columnas text/blob
 // → campos con default usan varchar en lugar de text
 
-// 1. business_config — siempre 1 sola fila
+// Siempre 1 sola fila.
 export const businessConfig = mysqlTable('business_config', {
   id:                 int('id').autoincrement().primaryKey(),
   name:               text('name').notNull(),
@@ -26,7 +26,6 @@ export const businessConfig = mysqlTable('business_config', {
   updatedAt:          timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// 2. users
 export const users = mysqlTable('users', {
   id:           int('id').autoincrement().primaryKey(),
   name:         text('name').notNull(),
@@ -42,7 +41,6 @@ export const users = mysqlTable('users', {
   createdAt:    timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// 3. categories
 export const categories = mysqlTable('categories', {
   id:            int('id').autoincrement().primaryKey(),
   name:          text('name').notNull(),
@@ -55,7 +53,6 @@ export const categories = mysqlTable('categories', {
   createdAt:     timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// 4. subcategories
 export const subcategories = mysqlTable('subcategories', {
   id:         int('id').autoincrement().primaryKey(),
   categoryId: int('category_id').notNull()
@@ -68,7 +65,6 @@ export const subcategories = mysqlTable('subcategories', {
   updatedAt:  timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// 5. products
 export const products = mysqlTable('products', {
   id:            int('id').autoincrement().primaryKey(),
   categoryId:    int('category_id')
@@ -92,7 +88,6 @@ export const products = mysqlTable('products', {
   updatedAt:     timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// 6. product_images
 export const productImages = mysqlTable('product_images', {
   id:        int('id').autoincrement().primaryKey(),
   productId: int('product_id').notNull()
@@ -102,7 +97,6 @@ export const productImages = mysqlTable('product_images', {
   isPrimary: int('is_primary').notNull().default(0),
 })
 
-// 7. payment_methods
 export const paymentMethods = mysqlTable('payment_methods', {
   id:            int('id').autoincrement().primaryKey(),
   type:          varchar('type', { length: 30 }).notNull(),
@@ -114,7 +108,6 @@ export const paymentMethods = mysqlTable('payment_methods', {
   sortOrder:     int('sort_order').notNull().default(0),
 })
 
-// 8. orders
 export const orders = mysqlTable('orders', {
   id:                     int('id').autoincrement().primaryKey(),
   orderCode:              varchar('order_code', { length: 191 }).notNull().unique(),
@@ -139,7 +132,6 @@ export const orders = mysqlTable('orders', {
   updatedAt:              timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// 9. order_items
 export const orderItems = mysqlTable('order_items', {
   id:          int('id').autoincrement().primaryKey(),
   orderId:     int('order_id').notNull()
@@ -152,7 +144,6 @@ export const orderItems = mysqlTable('order_items', {
   subtotal:    double('subtotal').notNull(),
 })
 
-// 10. order_status_logs
 export const orderStatusLogs = mysqlTable('order_status_logs', {
   id:        int('id').autoincrement().primaryKey(),
   orderId:   int('order_id').notNull()
@@ -164,7 +155,6 @@ export const orderStatusLogs = mysqlTable('order_status_logs', {
   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// 13. inventory_movements
 export const inventoryMovements = mysqlTable('inventory_movements', {
   id:            int('id').autoincrement().primaryKey(),
   productId:     int('product_id').notNull().references(() => products.id, { onDelete: 'cascade' }),
@@ -178,7 +168,6 @@ export const inventoryMovements = mysqlTable('inventory_movements', {
   createdAt:     timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// 11. banners
 export const banners = mysqlTable('banners', {
   id:        int('id').autoincrement().primaryKey(),
   imageUrl:  text('image_url').notNull(),
@@ -196,7 +185,7 @@ export const banners = mysqlTable('banners', {
   isActive:  int('is_active').notNull().default(1),
 })
 
-// 12. complaints / libro de reclamaciones
+// Libro de reclamaciones.
 export const complaints = mysqlTable('complaints', {
   id:               int('id').autoincrement().primaryKey(),
   codigo:           varchar('codigo', { length: 100 }).notNull().default(''),
@@ -227,7 +216,7 @@ export const complaints = mysqlTable('complaints', {
   createdAt:        timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-// ─── RELACIONES ──────────────────────────────────────────────────
+// Relaciones
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
   subcategories: many(subcategories),

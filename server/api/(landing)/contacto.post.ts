@@ -1,11 +1,9 @@
 import nodemailer from "nodemailer";
 
-// ══════════════════════════════════════════════════════
-//  CONFIGURACIÓN — cambiar aquí para cada proyecto
-// ══════════════════════════════════════════════════════
+// Ajustar al dar de alta otro proyecto.
 const CONFIG = {
     // Nombre del remitente que aparece en el correo
-    senderName: "A & D Estudio Contable y de Auditoría",
+    senderName: "CelParts S.A.C.",
 
     // Asunto del correo (el nombre del lead se agrega automáticamente)
     emailSubject: "Nuevo lead web",
@@ -17,9 +15,6 @@ const CONFIG = {
     requiredFields: ["nombre", "correo", "telefono", "tipo_servicio", "mensaje"] as const,
 } as const;
 
-// ══════════════════════════════════════════════════════
-//  TIPOS
-// ══════════════════════════════════════════════════════
 type FormBody = {
     nombre: string;
     correo: string;
@@ -34,10 +29,6 @@ type RecaptchaResponse = {
     success: boolean;
     score: number;
 };
-
-// ══════════════════════════════════════════════════════
-//  FUNCIONES
-// ══════════════════════════════════════════════════════
 
 /** Escapa caracteres HTML para evitar inyección */
 function escapeHtml(value: string): string {
@@ -116,14 +107,13 @@ function createTransporter(config: ReturnType<typeof useRuntimeConfig>) {
 }
 
 /** Construye el cuerpo HTML del correo con diseño profesional */
-function buildHtml(body: FormBody): string {
+function buildHtml(body: FormBody, senderEmail: string): string {
     const nombre = escapeHtml(body.nombre);
     const correo = escapeHtml(body.correo);
     const telefono = escapeHtml(body.telefono);
     const servicio = escapeHtml(body.tipo_servicio);
     const mensaje = escapeHtml(body.mensaje).replace(/\n/g, "<br>");
     const year = new Date().getFullYear();
-    const senderEmail = CONFIG.adminEmail;
 
     return `<!DOCTYPE html>
 <html lang="es">
@@ -271,30 +261,28 @@ async function sendEmail(
     const transporter = createTransporter(config);
     const from = config.smtpFrom as string;
 
+    const adminEmail = config.smtpUser as string;
+
     await transporter.sendMail({
-        from: `${CONFIG.senderName} <${from}>`,
-        to: from,
+        from,
+        to: adminEmail,
         replyTo: body.correo,
         subject: `${CONFIG.emailSubject} - ${body.nombre}`,
         text: buildText(body),
-        html: buildHtml(body),
+        html: buildHtml(body, adminEmail),
     });
 }
 
-// ══════════════════════════════════════════════════════
-//  HANDLER PRINCIPAL
-// ══════════════════════════════════════════════════════
 export default defineEventHandler(async (event) => {
     try {
         const rawBody = await readBody(event);
         const config = useRuntimeConfig();
 
-        // 1. Honeypot anti-spam
+        // Honeypot anti-spam
         if (typeof rawBody.honeypot === "string" && rawBody.honeypot.trim() !== "") {
             return { status: 200, message: "Solicitud procesada" };
         }
 
-        // 2. reCAPTCHA (solo en producción)
         if (process.env.NODE_ENV !== "development") {
             if (typeof rawBody.recaptchaToken !== "string" || rawBody.recaptchaToken.trim() === "") {
                 throw createError({ statusCode: 400, message: "Token reCAPTCHA requerido" });
@@ -302,13 +290,10 @@ export default defineEventHandler(async (event) => {
             await validateRecaptcha(rawBody.recaptchaToken, config.recaptchaSecretKey as string);
         }
 
-        // 3. Validar campos del formulario
         const body = validateBody(rawBody);
 
-        // 4. Validar configuración SMTP
         validateSmtpConfig(config);
 
-        // 5. Enviar correo
         await sendEmail(body, config);
 
         return { status: 200, message: "Mensaje enviado correctamente" };

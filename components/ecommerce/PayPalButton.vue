@@ -120,7 +120,7 @@ async function initPayPal() {
       createOrder: async (_data: any, actions: any) => {
         try {
           sdkError.value = ''
-          // 1. Guardar la orden en la BD de CelParts
+          // La orden se persiste antes de abrir el popup de PayPal.
           const res = await $fetch<{
             paypalOrderId: string
             orderCode: string

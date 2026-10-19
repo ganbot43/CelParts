@@ -56,7 +56,6 @@ async function seed() {
 
   await clearSeedData()
 
-  // 1. business_config
   await db.insert(schema.businessConfig).values({
     name:        'Cel Parts',
     whatsapp:    process.env.NUXT_PUBLIC_WHATSAPP ?? '+51923821520',
@@ -64,14 +63,12 @@ async function seed() {
     socialLinks: JSON.stringify({ instagram: 'celparts', facebook: 'celparts', tiktok: 'celparts' }),
   }).execute()
 
-  // 2. users
   const hash = await bcrypt.hash('admin123', 10)
   await db.insert(schema.users).values([
     { name: 'Gerente de tienda',    email: 'owner@celparts.com', passwordHash: hash, role: 'superadmin' },
     { name: 'Encargado de tienda', email: 'admin@celparts.com',  passwordHash: hash, role: 'admin' },
   ]).execute()
 
-  // 3. categorías de repuestos y accesorios de celulares
   const cats = [
     { name: 'Pantallas y Displays',      slug: makeSlug('Pantallas y Displays') },
     { name: 'Baterías y Cargadores',     slug: makeSlug('Baterías y Cargadores') },
@@ -90,7 +87,6 @@ async function seed() {
     subcategoryIds.push(subcategoryPremiumId, subcategoryStandardId)
   }
 
-  // 4. payment_methods
   await db.insert(schema.paymentMethods).values([
     { type: 'yape',          label: 'Yape',                         isActive: 1, sortOrder: 1 },
     { type: 'plin',          label: 'Plin',                         isActive: 1, sortOrder: 2 },
@@ -100,7 +96,6 @@ async function seed() {
       accountName: 'pagos@celparts.pe', accountNumber: 'paypal@celparts.pe' },
   ]).execute()
 
-  // 5. banners
   await db.insert(schema.banners).values([
     /* Imágenes de relleno de picsum: loremflickr dejó de servir peticiones
        anónimas (responde 401) y toda la portada quedaba con recuadros
@@ -129,7 +124,6 @@ async function seed() {
     },
   ]).execute()
 
-  // 6. products (12 productos de repuestos y accesorios de celulares)
   const productNames = [
     'Pantalla LCD iPhone 13 Original',
     'Pantalla OLED Samsung S22 Premium',

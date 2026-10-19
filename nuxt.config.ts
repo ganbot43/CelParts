@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     appManifest: false,
   },
   runtimeConfig: {
-    // ─── Existentes (landing) ────────────────────────────────────
+    // Landing
     recaptchaSecretKey: process.env.G_RECAPTCHA_SECRET_KEY,
     smtpHost: process.env.SMTP_HOST,
     smtpPort: process.env.SMTP_PORT,
@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     smtpPassword: process.env.SMTP_PASSWORD,
     smtpSecure: process.env.SMTP_SECURE,
     smtpFrom: process.env.SMTP_FROM,
-    // ─── Nuevos (ecommerce) ──────────────────────────────────────
+    // Ecommerce
     session: {
       password: process.env.NUXT_SESSION_PASSWORD ?? "",
     },

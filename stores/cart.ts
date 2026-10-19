@@ -29,7 +29,6 @@ export const useCartStore = defineStore('cart', () => {
     return Number.isFinite(num) ? num : 0
   }
 
-  // ── Getters ──────────────────────────────────────────────────────────────────
   const isEmpty = computed(() => items.value.length === 0)
 
   const itemCount = computed(() =>
@@ -61,7 +60,6 @@ export const useCartStore = defineStore('cart', () => {
     parseFloat((subtotal.value).toFixed(2))
   )
 
-  // ── Actions ───────────────────────────────────────────────────────────────────
   function addItem(newItem: Omit<CartItem, 'qty'>, qty = 1) {
     const safeQty = Math.max(1, Math.floor(n(qty)))
     const existing = items.value.find(i => i.id === newItem.id)

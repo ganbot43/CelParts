@@ -270,7 +270,9 @@ async function sendAutomationEmail(subject: string, html: string, configEmailOve
     return false
   }
   
-  const toEmail = configEmailOverride || transporter.mailer.from
+  /* Sin email configurado en business_config, el aviso va a la cuenta que
+     autentica el SMTP: SMTP_FROM puede apuntar a un dominio sin buzon. */
+  const toEmail = configEmailOverride || transporter.mailer.user
 
   await transporter.transporter.sendMail({
     from: transporter.mailer.from,

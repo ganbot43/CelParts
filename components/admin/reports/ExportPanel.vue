@@ -46,8 +46,7 @@
 import { ref } from 'vue';
 import { FileSpreadsheet, FileText, Loader2 } from 'lucide-vue-next';
 
-// Nota: Importaciones dinámicas para no inflar el bundle inicial
-// Se cargarán cuando se haga clic
+// Importaciones dinámicas para no inflar el bundle inicial.
 const loading = ref(false);
 const currentTask = ref('');
 
